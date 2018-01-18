@@ -343,3 +343,10 @@ around point as the initial input."
   :commands (describe-keymap)
   :init
   (evil-leader/set-key "hdK" 'describe-keymap))
+
+(use-package with-editor
+  :straight t
+  :commands (with-editor-mode)
+  :hook (git-commit-mode-hook . with-editor-hook)
+  :init
+  (evil-leader/set-key "hdK" 'describe-keymap))
