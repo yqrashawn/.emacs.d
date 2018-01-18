@@ -22,6 +22,7 @@
 (straight-use-package 'use-package)
 
 (toggle-debug-on-error)
+(setq indent-tabs-mode nil)
 (add-hook 'prog-mode-hook 'hs-minor-mode)
 (use-package git-commit
   :straight t)
@@ -311,6 +312,16 @@ around point as the initial input."
         company-dabbrev-ignore-case nil
         company-dabbrev-downcase nil)
   :config
+  (setq company-backends '(company-capf
+                           (company-dabbrev-code
+                            company-gtags
+                            company-etags
+                            company-keywords)
+                           company-files
+                           company-dabbrev))
+  (define-key company-active-map (kbd "C-j") 'company-select-next)
+  (define-key company-active-map (kbd "C-k") 'company-select-previous)
+  (define-key company-active-map (kbd "C-l") 'company-complete-selection)
   (add-hook 'after-init-hook 'global-company-mode))
 
 (use-package flycheck
