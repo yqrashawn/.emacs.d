@@ -1,12 +1,8 @@
-(require 'package)
 (defvar yq-emacs-cache-dir (concat user-emacs-directory ".cache/"))
 (defvar yq-emacs-dotfile-dir (concat user-emacs-directory "init.el"))
 (defun yq/edit-dotfile ()
   (interactive)
   (find-file-existing yq-emacs-dotfile-dir))
-
-(package-initialize)
-
 
 (let ((bootstrap-file (concat user-emacs-directory "straight/repos/straight.el/bootstrap.el"))
       (bootstrap-version 3))
@@ -18,7 +14,6 @@
       (goto-char (point-max))
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
-
 
 ;; C-h key as BS
 (keyboard-translate ?\C-h ?\C-?)
@@ -62,21 +57,19 @@
     yaml-mode)
   "Modes for which auto-indenting is suppressed.")
 
-
 (defun yq/indent-region-or-buffer ()
   "Indent a region if selected, otherwise the whole buffer."
   (interactive)
   (unless (member major-mode yq-indent-sensitive-modes)
     (save-excursion
-      (if (region-active-p)))
-    (progn
-      (indent-region (region-beginning) (region-end))
-      (message "Indented selected region.")))
-  (progn
-    (evil-indent (point-min) (point-max))
-    (message "Indented buffer."
-             (whitespace-cleanup))))
-
+      (if (region-active-p)
+          (progn
+            (indent-region (region-beginning) (region-end))
+            (message "Indented selected region."))
+        (progn
+          (evil-indent (point-min) (point-max))
+          (message "Indented buffer.")))
+      (whitespace-cleanup))))
 
 (defun yq/kill-this-buffer (&optional arg)
   "Kill the current buffer.
@@ -84,9 +77,9 @@ If the universal prefix argument is used then kill also the window."
   (interactive "P")
   (if (window-minibuffer-p)
       (abort-recursive-edit)
-    (if (equal '(4) arg)))
-  (kill-buffer-and-window
-   (kill-buffer)))
+    (if (equal '(4) arg)
+        (kill-buffer-and-window)
+      (kill-buffer))))
 
 (defun yq/delete-window (&optional arg)
   "Delete the current window.
@@ -96,16 +89,32 @@ If the universal prefix argument is used then kill the buffer too."
       (kill-buffer-and-window)
     (delete-window)))
 
+
 (defun yq/swiper-region-or-symbol ()
   "Run `swiper' with the selected region or the symbol
 around point as the initial input."
   (interactive)
-  (let ((input (if (region-active-p))))
-    (buffer-substring-no-properties
-     (region-beginning) (region-end))
-    (thing-at-point 'symbol t)
+  (let ((input (if (region-active-p)
+                   (buffer-substring-no-properties
+                    (region-beginning) (region-end))
+                 (thing-at-point 'symbol t))))
     (swiper input)))
 
+(defun yq/swiper-all-region-or-symbol ()
+  "Run `swiper-all' with the selected region or the symbol
+around point as the initial input."
+  (interactive)
+  (ivy-read "Swiper: " (swiper--multi-candidates
+                        (cl-remove-if-not
+                         #'buffer-file-name
+                         (buffer-list)))
+            :initial-input (if (region-active-p)
+                               (buffer-substring-no-properties
+                                (region-beginning) (region-end))
+                             (thing-at-point 'symbol t))
+            :action 'swiper-multi-action-2
+            :unwind #'swiper--cleanup
+            :caller 'swiper-multi))
 
 (defun yq/backward-kill-word-or-region (&optional arg)
   "Calls `kill-region' when a region is active and
@@ -148,7 +157,8 @@ around point as the initial input."
   (setq evil-want-C-u-scroll t)
   (setq evil-want-Y-yank-to-eol t)
   :config
-  (define-key evil-insert-state-map "zl" 'hs-hide-level)
+  (define-key evil-normal-state-map "zl" 'hs-hide-level)
+  (define-key evil-normal-state-map (kbd "C-k") 'evil-toggle-fold)
   (define-key evil-normal-state-map "s" nil)
   (define-key evil-normal-state-map "sk" 'yq/kill-this-buffer)
   (define-key evil-normal-state-map "sc" 'yq/delete-window)
@@ -165,6 +175,8 @@ around point as the initial input."
   (evil-leader/set-key "wj" 'evil-window-down)
   (evil-leader/set-key "wk" 'evil-window-up)
   (evil-leader/set-key "wl" 'evil-window-right)
+  (evil-leader/set-key "r" nil)
+  (evil-leader/set-key "rl" 'ivy-resume)
   (evil-leader/set-key "j" nil)
   (evil-leader/set-key "j=" 'yq/indent-region-or-buffer)
   (evil-mode 1))
@@ -209,10 +221,10 @@ around point as the initial input."
       (ivy-read "Evil Registers:"))
     (cl-loop for (key . val) in (evil-register-list)
              collect (eval `(format "%s : %s" (propertize ,(char-to-string key) 'face 'font-lock-builtin-face)))
-             ,(or (and val)
-                  (stringp val)
-                  (replace-regexp-in-string "\n" "^J" val
-                                            "")))
+             ,(or (and val))
+             (stringp val)
+             (replace-regexp-in-string "\n" "^J" val
+                                       ""))
     :action #'yq/ivy-insert-evil-register)
 
   (defun yq/ivy-insert-evil-register (candidate)
@@ -226,14 +238,11 @@ around point as the initial input."
   :init
   (setq-default smex-history-length 32)
   (setq-default smex-save-file (concat yq-emacs-cache-dir ".smex-items")))
- (use-package iedit
-                                                                                                                                              :straight t)
+ (use-package iedit :straight t)
 
-(use-package evil-iedit-state
-  :straight t)
+(use-package evil-iedit-state :straight t)
 
-(use-package evil-magit
-  :straight t)
+(use-package evil-magit :straight t)
 
 (use-package evil-args
   :straight t
@@ -294,7 +303,15 @@ around point as the initial input."
   (define-key evil-outer-text-objects-map "f" 'evil-textobj-anyblock-a-block))
 
 (use-package company
-  :straight t)
+  :straight t
+  :init
+  (setq company-idle-delay 0
+        company-minimum-prefix-length 2
+        company-require-match nil
+        company-dabbrev-ignore-case nil
+        company-dabbrev-downcase nil)
+  :config
+  (add-hook 'after-init-hook 'global-company-mode))
 
 (use-package flycheck
   :straight t)
@@ -302,10 +319,16 @@ around point as the initial input."
 (use-package parinfer
   :straight t
   :defer t
+  ;; :hook (emacs-lisp-mode . parinfer-mode)
   :init
-  (add-hook 'emacs-lisp-mode 'parinfer-mode)
-  (setq parinfer-auto-switch-indent-mode t)
+  ;; (setq parinfer-auto-switch-indent-mode t)
   (setq parinfer-lighters '("Par:I" . "Par:P"))
   (setq parinfer-extensions '(defaults pretty-parens evil smart-yank))
   :config
   (define-key parinfer-mode-map (kbd "C-,") 'parinfer-toggle-mode))
+
+(use-package help-fns+
+  :straight t
+  :commands (describe-keymap)
+  :init
+  (evil-leader/set-key "hdK" 'describe-keymap))
