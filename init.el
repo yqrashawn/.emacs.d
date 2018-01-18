@@ -15,14 +15,16 @@
 (straight-use-package 'use-package)
 
 (defun yq/get-modules (module-dir)
-  (concat user-emacs-directory module-dir))
+  (concat user-emacs-directory "modules/" module-dir))
 
-(load-file (yq/get-modules "modules/evil-core.el" ))
-(load-file (yq/get-modules "modules/better-default.el" ))
-(load-file (yq/get-modules "modules/swiper.el" ))
-(load-file (yq/get-modules "modules/edit.el" ))
-(load-file (yq/get-modules "modules/version-control.el" ))
-(load-file (yq/get-modules "modules/prog.el" ))
-(load-file (yq/get-modules "modules/dev.el"))
-(load-file (yq/get-modules "modules/visual.el"))
-(load-file (yq/get-modules "modules/lang.el"))
+(load-file (yq/get-modules "evil-core.el" ))
+(load-file (yq/get-modules "better-default.el" ))
+(load-file (yq/get-modules "swiper.el" ))
+(load-file (yq/get-modules "edit.el" ))
+(load-file (yq/get-modules "version-control.el" ))
+(load-file (yq/get-modules "prog.el" ))
+(load-file (yq/get-modules "dev.el"))
+(load-file (yq/get-modules "visual.el"))
+(load-file (yq/get-modules "lang.el"))
+
+;; TODO: better defaults

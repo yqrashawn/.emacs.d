@@ -39,6 +39,9 @@
 	yas-wrap-around-region t)
   (setq yas-prompt-functions '(yas-completing-prompt))
   (setq yas-minor-mode-map (make-sparse-keymap))
-  (push 'yas-installed-snippets-dir yas-snippet-dirs)
   (define-key yas-minor-mode-map (kbd "M-s-/") 'yas-next-field)
-  :config (push 'yas-hippie-try-expand hippie-expand-try-functions-list))
+  :config
+  (push 'yas-hippie-try-expand hippie-expand-try-functions-list)
+  (push 'yas-installed-snippets-dir yas-snippet-dirs))
+
+;; TODO: auto-yas

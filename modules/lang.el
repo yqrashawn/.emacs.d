@@ -1,1 +1,1 @@
-(load-file (yq/get-modules "modules/lang/elisp.el"))
+(load-file (yq/get-modules "lang/elisp.el"))

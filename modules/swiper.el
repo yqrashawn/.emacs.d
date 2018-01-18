@@ -34,6 +34,8 @@ around point as the initial input."
 (use-package counsel
   :straight t
   :config
+  (define-key ivy-minibuffer-map (kbd "C-n") 'ivy-next-history-element)
+  (define-key ivy-minibuffer-map (kbd "C-p") 'ivy-previous-history-element)
   (define-key ivy-minibuffer-map (kbd "C-l") 'ivy-alt-done)
   (define-key ivy-minibuffer-map (kbd "C-j") 'ivy-next-line)
   (define-key ivy-minibuffer-map (kbd "C-k") 'ivy-previous-line)
@@ -81,3 +83,25 @@ around point as the initial input."
   :init
   (setq-default smex-history-length 32)
   (setq-default smex-save-file (concat yq-emacs-cache-dir ".smex-items")))
+
+(use-package projectile
+  :straight t)
+
+;; TODO: config action
+(use-package counsel-projectile
+  :straight t
+  :config
+  (counsel-projectile-mode)
+  (evil-leader/set-key "p" nil)
+  (evil-leader/set-key "pb" 'counsel-projectile) 
+  (evil-leader/set-key "pf" 'counsel-projectile-find-file)
+  (evil-leader/set-key "pd" 'counsel-projectile-find-dir)
+  (evil-leader/set-key "pl" 'counsel-projectile-switch-project)
+  (evil-leader/set-key "ps" 'counsel-projectile-rg))
+
+(load-file (yq/get-modules "counsel-funcs.el"))
+(evil-leader/set-key "s" nil)
+(evil-leader/set-key "sf" 'spacemacs/search-auto)
+(evil-leader/set-key "sF" 'spacemacs/search-auto-region-or-symbol)
+(define-key evil-normal-state-map "sf" 'spacemacs/search-auto)
+(define-key evil-normal-state-map "sF" 'spacemacs/search-auto-region-or-symbol)
