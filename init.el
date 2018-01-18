@@ -33,6 +33,7 @@
 (straight-use-package 'use-package)
 
 (toggle-debug-on-error)
+(add-hook 'prog-mode-hook 'hs-minor-mode)
 (use-package magit
   :straight t)
 (use-package ivy
@@ -129,6 +130,7 @@ around point as the initial input."
   (setq evil-want-C-u-scroll t)
   (setq evil-want-Y-yank-to-eol t)
   :config
+  (define-key evil-insert-state-map "zl" 'hs-hide-level)
   (define-key evil-normal-state-map "s" nil)
   (define-key evil-normal-state-map "sk" 'yq/kill-this-buffer)
   (define-key evil-normal-state-map "sc" 'yq/delete-window)
