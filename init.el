@@ -34,8 +34,6 @@
 
 (toggle-debug-on-error)
 (add-hook 'prog-mode-hook 'hs-minor-mode)
-(use-package magit
-  :straight t)
 (use-package ivy
   :straight t)
 (use-package flycheck
@@ -135,6 +133,7 @@ around point as the initial input."
   (define-key evil-normal-state-map "sk" 'yq/kill-this-buffer)
   (define-key evil-normal-state-map "sc" 'yq/delete-window)
   (define-key evil-normal-state-map "sh" 'save-buffer)
+  (define-key evil-normal-state-map (kbd "C-e") 'mwim-end-of-code-or-line)
   (evil-leader/set-key "w" nil)
   (evil-leader/set-key "wh" 'evil-window-left)
   (evil-leader/set-key "wj" 'evil-window-down)
@@ -144,6 +143,12 @@ around point as the initial input."
 
 
 ;; ;; ( evil-set-initial-state MODE STATE)
+
+(use-package magit
+  :straight t
+  :config
+  (evil-leader/set-key "g" nil)
+  (evil-leader/set-key "gs" 'magit-status))
 
 (use-package counsel
   :straight t
