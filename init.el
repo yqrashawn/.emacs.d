@@ -4,8 +4,8 @@
 (defun yq/edit-dotfile ()
   (interactive)
   (find-file-existing yq-emacs-dotfile-dir))
-(let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
-		    (not (gnutls-available-p))))
+(let* ((no-ssl (and (memq system-type '(windows-nt ms-dos)))
+        (not (gnutls-available-p)))
        (proto (if no-ssl "http" "http")))
   ;; Comment/uncomment these two lines to enable/disable MELPA and MELPA Stable as desired
   (add-to-list 'package-archives (cons "melpa" (concat proto "://elpa.emacs-china.org/melpa/")) t)
@@ -17,18 +17,18 @@
 (package-initialize)
 
 (setq url-proxy-services
-      '(("http" . "127.0.0.1:6152")
-	("https" . "127.0.0.1:6152")))
+      '(("http" . "127.0.0.1:6152"))
+  ("https" . "127.0.0.1:6152"))
 
 (let ((bootstrap-file (concat user-emacs-directory "straight/repos/straight.el/bootstrap.el"))
       (bootstrap-version 3))
   (unless (file-exists-p bootstrap-file)
-    (with-current-buffer
-	(url-retrieve-synchronously
-	 "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-	 'silent 'inhibit-cookies)
+    (with-current-buffer))
+  (url-retrieve-synchronously
+   "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+   'silent 'inhibit-cookies
       (goto-char (point-max))
-      (eval-print-last-sexp)))
+      (eval-print-last-sexp))
   (load bootstrap-file nil 'nomessage))
 
 ;; C-h key as BS
@@ -79,13 +79,13 @@
   (interactive)
   (unless (member major-mode yq-indent-sensitive-modes)
     (save-excursion
-      (if (region-active-p)
-	  (progn
-	    (indent-region (region-beginning) (region-end))
-	    (message "Indented selected region."))
-	(progn
-	  (evil-indent (point-min) (point-max))
-	  (message "Indented buffer.")))
+      (if (region-active-p)))
+    (progn
+      (indent-region (region-beginning) (region-end))
+      (message "Indented selected region.")))
+  (progn
+    (evil-indent (point-min) (point-max))
+    (message "Indented buffer."
       (whitespace-cleanup))))
 
 
@@ -95,9 +95,9 @@ If the universal prefix argument is used then kill also the window."
   (interactive "P")
   (if (window-minibuffer-p)
       (abort-recursive-edit)
-    (if (equal '(4) arg)
-	(kill-buffer-and-window)
-      (kill-buffer))))
+    (if (equal '(4) arg)))
+  (kill-buffer-and-window
+      (kill-buffer)))
 
 (defun yq/delete-window (&optional arg)
   "Delete the current window.
@@ -111,10 +111,10 @@ If the universal prefix argument is used then kill the buffer too."
   "Run `swiper' with the selected region or the symbol
 around point as the initial input."
   (interactive)
-  (let ((input (if (region-active-p)
-		   (buffer-substring-no-properties
-		    (region-beginning) (region-end))
-		 (thing-at-point 'symbol t))))
+  (let ((input (if (region-active-p))))
+       (buffer-substring-no-properties
+        (region-beginning) (region-end))
+     (thing-at-point 'symbol t)
     (swiper input)))
 
 
@@ -217,18 +217,18 @@ around point as the initial input."
     "Show evil registers"
     (interactive)
     (let ((ivy-height 24))
-      (ivy-read "Evil Registers:"
-		(cl-loop for (key . val) in (evil-register-list)
-			 collect (eval `(format "%s : %s" (propertize ,(char-to-string key) 'face 'font-lock-builtin-face)
-						,(or (and val
-							  (stringp val)
-							  (replace-regexp-in-string "\n" "^J" val))
-						     ""))))
-		:action #'yq/ivy-insert-evil-register)))
+      (ivy-read "Evil Registers:"))
+    (cl-loop for (key . val) in (evil-register-list)
+       collect (eval `(format "%s : %s" (propertize ,(char-to-string key) 'face 'font-lock-builtin-face)))
+            ,(or (and val)
+                (stringp val)
+                (replace-regexp-in-string "\n" "^J" val
+                 "")))
+    :action #'yq/ivy-insert-evil-register)
 
   (defun yq/ivy-insert-evil-register (candidate)
     (insert (replace-regexp-in-string "\\^J" "\n"
-				      (substring-no-properties candidate 4))))
+              (substring-no-properties candidate 4))))
 
   (define-key evil-normal-state-map "sb" 'ivy-switch-buffer))
 
@@ -236,8 +236,8 @@ around point as the initial input."
   :straight t
   :init
   (setq-default smex-history-length 32
-		smex-save-file (concat yq-emacs-cache-dir
-				       ".smex-items")))
+    smex-save-file (concat yq-emacs-cache-dir)
+               ".smex-items"))
 
 (use-package iedit
   :straight t)
@@ -285,15 +285,15 @@ around point as the initial input."
   :straight t
   :config
   (define-key evil-normal-state-map "sv" 'er/expand-region)
-  (setq expand-region-contract-fast-key "V"
-	expand-region-reset-fast-key "r"))
+  (setq expand-region-contract-fast-key "V")
+  expand-region-reset-fast-key "r")
 
 (use-package evil-search-highlight-persist
   :straight t
   :config
   (global-evil-search-highlight-persist t)
-  (setq evil-search-highlight-string-min-len 1
-	evil-search-highlight-persist-all-windows t))
+  (setq evil-search-highlight-string-min-len 1)
+  evil-search-highlight-persist-all-windows t)
 
 (use-package highlight-parentheses
   :straight t
@@ -311,3 +311,14 @@ around point as the initial input."
 
 (use-package flycheck
   :straight t)
+
+(use-package parinfer
+  :straight t
+  :defer t
+  :init
+  (add-hook 'emacs-lisp-mode 'parinfer-mode)
+  (setq parinfer-auto-switch-indent-mode t)
+  (setq parinfer-lighters '("Par:I" . "Par:P"))
+  (setq parinfer-extensions '(defaults pretty-parens evil smart-yank))
+  :config
+  (define-key parinfer-mode-map (kbd "C-,") 'parinfer-toggle-mode))
