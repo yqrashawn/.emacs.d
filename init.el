@@ -4,32 +4,21 @@
 (defun yq/edit-dotfile ()
   (interactive)
   (find-file-existing yq-emacs-dotfile-dir))
-(let* ((no-ssl (and (memq system-type '(windows-nt ms-dos)))
-        (not (gnutls-available-p)))
-       (proto (if no-ssl "http" "http")))
-  ;; Comment/uncomment these two lines to enable/disable MELPA and MELPA Stable as desired
-  (add-to-list 'package-archives (cons "melpa" (concat proto "://elpa.emacs-china.org/melpa/")) t)
-  (add-to-list 'package-archives (cons "org-elpa" (concat proto "://elpa.emacs-china.org/org/")) t)
-  ;;(add-to-list 'package-archives (cons "melpa-stable" (concat proto "://stable.melpa.org/packages/")) t)
-  (when (< emacs-major-version 24)
-    ;; For important compatibility libraries like cl-lib
-    (add-to-list 'package-archives '("elpa" . (concat proto "://elpa.emacs-china.org/gnu/")))))
+
 (package-initialize)
 
-(setq url-proxy-services
-      '(("http" . "127.0.0.1:6152"))
-  ("https" . "127.0.0.1:6152"))
 
 (let ((bootstrap-file (concat user-emacs-directory "straight/repos/straight.el/bootstrap.el"))
       (bootstrap-version 3))
   (unless (file-exists-p bootstrap-file)
-    (with-current-buffer))
-  (url-retrieve-synchronously
-   "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
-   'silent 'inhibit-cookies
+    (with-current-buffer
+        (url-retrieve-synchronously
+         "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+         'silent 'inhibit-cookies)
       (goto-char (point-max))
-      (eval-print-last-sexp))
+      (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
+
 
 ;; C-h key as BS
 (keyboard-translate ?\C-h ?\C-?)
@@ -86,7 +75,7 @@
   (progn
     (evil-indent (point-min) (point-max))
     (message "Indented buffer."
-      (whitespace-cleanup))))
+             (whitespace-cleanup))))
 
 
 (defun yq/kill-this-buffer (&optional arg)
@@ -97,7 +86,7 @@ If the universal prefix argument is used then kill also the window."
       (abort-recursive-edit)
     (if (equal '(4) arg)))
   (kill-buffer-and-window
-      (kill-buffer)))
+   (kill-buffer)))
 
 (defun yq/delete-window (&optional arg)
   "Delete the current window.
@@ -112,9 +101,9 @@ If the universal prefix argument is used then kill the buffer too."
 around point as the initial input."
   (interactive)
   (let ((input (if (region-active-p))))
-       (buffer-substring-no-properties
-        (region-beginning) (region-end))
-     (thing-at-point 'symbol t)
+    (buffer-substring-no-properties
+     (region-beginning) (region-end))
+    (thing-at-point 'symbol t)
     (swiper input)))
 
 
@@ -219,28 +208,26 @@ around point as the initial input."
     (let ((ivy-height 24))
       (ivy-read "Evil Registers:"))
     (cl-loop for (key . val) in (evil-register-list)
-       collect (eval `(format "%s : %s" (propertize ,(char-to-string key) 'face 'font-lock-builtin-face)))
-            ,(or (and val)
-                (stringp val)
-                (replace-regexp-in-string "\n" "^J" val
-                 "")))
+             collect (eval `(format "%s : %s" (propertize ,(char-to-string key) 'face 'font-lock-builtin-face)))
+             ,(or (and val)
+                  (stringp val)
+                  (replace-regexp-in-string "\n" "^J" val
+                                            "")))
     :action #'yq/ivy-insert-evil-register)
 
   (defun yq/ivy-insert-evil-register (candidate)
     (insert (replace-regexp-in-string "\\^J" "\n"
-              (substring-no-properties candidate 4))))
+                                      (substring-no-properties candidate 4))))
 
   (define-key evil-normal-state-map "sb" 'ivy-switch-buffer))
 
 (use-package smex
   :straight t
   :init
-  (setq-default smex-history-length 32
-    smex-save-file (concat yq-emacs-cache-dir)
-               ".smex-items"))
-
-(use-package iedit
-  :straight t)
+  (setq-default smex-history-length 32)
+  (setq-default smex-save-file (concat yq-emacs-cache-dir ".smex-items")))
+ (use-package iedit
+                                                                                                                                              :straight t)
 
 (use-package evil-iedit-state
   :straight t)
