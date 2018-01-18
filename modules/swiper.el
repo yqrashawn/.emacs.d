@@ -3,9 +3,9 @@
 around point as the initial input."
   (interactive)
   (let ((input (if (region-active-p)
-                   (buffer-substring-no-properties
-                    (region-beginning) (region-end))
-                 (thing-at-point 'symbol t))))
+		   (buffer-substring-no-properties
+		    (region-beginning) (region-end))
+		 (thing-at-point 'symbol t))))
     (swiper input)))
 
 (defun yq/swiper-all-region-or-symbol ()
@@ -13,16 +13,16 @@ around point as the initial input."
 around point as the initial input."
   (interactive)
   (ivy-read "Swiper: " (swiper--multi-candidates
-                        (cl-remove-if-not
-                         #'buffer-file-name
-                         (buffer-list)))
-            :initial-input (if (region-active-p)
-                               (buffer-substring-no-properties
-                                (region-beginning) (region-end))
-                             (thing-at-point 'symbol t))
-            :action 'swiper-multi-action-2
-            :unwind #'swiper--cleanup
-            :caller 'swiper-multi))
+			(cl-remove-if-not
+			 #'buffer-file-name
+			 (buffer-list)))
+	    :initial-input (if (region-active-p)
+			       (buffer-substring-no-properties
+				(region-beginning) (region-end))
+			     (thing-at-point 'symbol t))
+	    :action 'swiper-multi-action-2
+	    :unwind #'swiper--cleanup
+	    :caller 'swiper-multi))
 
 (use-package swiper
   :straight t
@@ -61,18 +61,18 @@ around point as the initial input."
     "Show evil registers"
     (interactive)
     (let ((ivy-height 24))
-      (ivy-read "Evil Registers:"))
-    (cl-loop for (key . val) in (evil-register-list)
-             collect (eval `(format "%s : %s" (propertize ,(char-to-string key) 'face 'font-lock-builtin-face)))
-             ,(or (and val))
-             (stringp val)
-             (replace-regexp-in-string "\n" "^J" val
-                                       ""))
-    :action #'yq/ivy-insert-evil-register)
+      (ivy-read "Evil Registers:"
+		(cl-loop for (key . val) in (evil-register-list)
+			 collect (eval `(format "%s : %s" (propertize ,(char-to-string key) 'face 'font-lock-builtin-face)
+						,(or (and val
+							  (stringp val)
+							  (replace-regexp-in-string "\n" "^J" val))
+						     ""))))
+		:action #'yq/ivy-insert-evil-register)))
 
   (defun yq/ivy-insert-evil-register (candidate)
     (insert (replace-regexp-in-string "\\^J" "\n"
-                                      (substring-no-properties candidate 4))))
+				      (substring-no-properties candidate 4))))
 
   (define-key evil-normal-state-map "sb" 'ivy-switch-buffer))
 
