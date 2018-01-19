@@ -1,15 +1,17 @@
+(customize-set-variable 'inhibit-startup-screen t)
+(customize-set-variable 'inhibit-startup-message t)
 (defvar dotspacemacs-auto-save-file-location 'cache
   "Location where to auto-save files. Possible values are `original' to
 auto-save the file in-place, `cache' to auto-save the file to another
 file stored in the cache directory and `nil' to disable auto-saving.")
 (defconst spacemacs-auto-save-directory
-  (expand-file-name (concat yq-cache-directory "auto-save/"))
+  (expand-file-name (concat yq-emacs-cache-dir "auto-save/"))
   "Spacemacs auto-save directory")
 (defconst spacemacs-assets-directory
-  (expand-file-name (concat yq-start-directory "assets/"))
+  (expand-file-name (concat user-emacs-directory "assets/"))
   "Spacemacs assets directory.")
 (defconst spacemacs-test-directory
-  (expand-file-name (concat yq-start-directory "tests/"))
+  (expand-file-name (concat user-emacs-directory "tests/"))
   "Spacemacs tests directory.")
 (defconst user-home-directory
   (expand-file-name "~/")
@@ -38,7 +40,7 @@ file stored in the cache directory and `nil' to disable auto-saving.")
   (define-key comint-mode-map (kbd "C-d") nil))
 (setq window-combination-resize t)
 (setq column-number-mode t)
-(blink-cursor-mode 0))
+(blink-cursor-mode 0)
 (setq x-underline-at-descent-line t)
 ;; don't let the cursor go into minibuffer prompt
 ;; Tip taken from Xah Lee: http://ergoemacs.org/emacs/emacs_stop_cursor_enter_prompt.html
@@ -68,8 +70,8 @@ It runs `tabulated-list-revert-hook', then calls `tabulated-list-print'."
               tab-width 2)
 (fset 'yes-or-no-p 'y-or-n-p)
 (tool-bar-mode -1)
-(toggle-scroll-bar -1) 
-(menu-bar-mode -1) 
+(toggle-scroll-bar -1)
+(menu-bar-mode -1)
 
 ;; Auto-save file
 (setq auto-save-default (not (null dotspacemacs-auto-save-file-location)))
@@ -197,3 +199,9 @@ If the universal prefix argument is used then kill the buffer too."
 (add-hook 'auto-revert-mode-hook '(lambda () (diminish 'auto-revert-mode)))
 
 (electric-indent-mode)
+
+(yq/add-toggle visual-line :mode visual-line-mode)
+(setq org-confirm-babel-evaluate nil)
+(setq vc-follow-symlinks nil)
+(yq/add-toggle show-paren :mode show-paren-mode)
+(add-hook 'prog-mode-hook 'show-paren-mode)

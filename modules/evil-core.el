@@ -1,4 +1,5 @@
 (yq/get-modules "evil-core-funcs.el")
+(yq/get-modules "core-jump.el")
 (global-set-key (kbd "C-g") 'keyboard-quit)
 
 (use-package undo-tree
@@ -30,6 +31,8 @@
   (customize-set-variable 'evil-show-paren-range 1)
   :config
   (define-key evil-normal-state-map "gn" 'evil-search-word-forward)
+  (define-key evil-normal-state-map "gd" 'spacemacs/jump-to-definition)
+  (define-key evil-normal-state-map "gD" 'spacemacs/jump-to-definition-other-window)
   (define-key evil-normal-state-map "zl" 'hs-hide-level)
   (define-key evil-normal-state-map (kbd "C-k") 'evil-toggle-fold)
   (define-key evil-normal-state-map "s" nil)
@@ -49,12 +52,15 @@
   (evil-leader/set-key "w" nil)
   (evil-leader/set-key "a" nil)
   (evil-leader/set-key "t" nil)
-  (evil-leader/set-key "tv" 'yq/toggle-visual-line-mode)
+  (evil-leader/set-key "e" nil)
+  (evil-leader/set-key "b" nil)
+  (evil-leader/set-key "r" nil)
+  (evil-leader/set-key "i" nil)
+  (evil-leader/set-key "tv" 'yq/toggle-visual-line)
   (evil-leader/set-key "wh" 'evil-window-left)
   (evil-leader/set-key "wj" 'evil-window-down)
   (evil-leader/set-key "wk" 'evil-window-up)
   (evil-leader/set-key "wl" 'evil-window-right)
-  (evil-leader/set-key "r" nil)
   (evil-leader/set-key "rl" 'ivy-resume)
   (evil-leader/set-key "j" nil)
   (evil-leader/set-key "j=" 'yq/indent-region-or-buffer)

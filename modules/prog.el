@@ -1,28 +1,147 @@
-(show-paren-mode 1)
 (use-package company
   :straight t
   :diminish company-mode
   :init
   (setq company-idle-delay 0
-	company-minimum-prefix-length 2
-	company-require-match nil
-	company-dabbrev-ignore-case nil
-	company-dabbrev-downcase nil)
+        company-minimum-prefix-length 2
+        company-require-match nil
+        company-dabbrev-ignore-case nil
+        company-dabbrev-downcase nil)
   :config
   (setq company-backends '(company-capf
-			   (company-dabbrev-code
-			    company-gtags
-			    company-etags
-			    company-keywords)
-			   company-files
-			   company-dabbrev))
+                           (company-dabbrev-code
+                            company-gtags
+                            company-etags
+                            company-keywords)
+                           company-files
+                           company-dabbrev))
   (define-key company-active-map (kbd "C-j") 'company-select-next)
   (define-key company-active-map (kbd "C-k") 'company-select-previous)
   (define-key company-active-map (kbd "C-l") 'company-complete-selection)
   (add-hook 'after-init-hook 'global-company-mode))
 
+(use-package company-flx
+  :straight t
+  :init
+  (add-hook 'emacs-lisp-mode-hook 'company-flx-mode)
+  :config
+  (company-flx-mode +1))
+
+(setq syntax-checking-enable-by-default t)
+
+(defun spacemacs/enable-flycheck (mode)
+  "Use flycheck in MODE by default, if `syntax-checking-enable-by-default' is
+true."
+  (when (and syntax-checking-enable-by-default
+             (listp flycheck-global-modes)
+             (not (eq 'not (car flycheck-global-modes))))
+    (add-to-list 'flycheck-global-modes mode)))
+
+(defun spacemacs/toggle-flycheck-error-list ()
+  "Toggle flycheck's error list window.
+If the error list is visible, hide it.  Otherwise, show it."
+  (interactive)
+  (-if-let (window (flycheck-get-error-list-window))
+      (quit-window nil window)
+    (flycheck-list-errors)))
+
+(defun spacemacs/goto-flycheck-error-list ()
+  "Open and go to the error list buffer."
+  (interactive)
+  (unless (get-buffer-window (get-buffer flycheck-error-list-buffer))
+    (flycheck-list-errors)
+    (switch-to-buffer-other-window flycheck-error-list-buffer)))
+
 (use-package flycheck
-  :straight t)
+  :straight t
+  :defer t
+  :diminish flycheck-mode " ⓢ"
+  :init
+  (setq flycheck-standard-error-navigation nil
+        flycheck-global-modes nil)
+  (yq/add-toggle syntax-checking
+    :mode flycheck-mode)
+  (evil-leader/set-key "ts" 'yq/toggle-syntax-checking)
+  (global-flycheck-mode 1)
+
+  ;; Custom fringe indicator
+  (define-fringe-bitmap 'my-flycheck-fringe-indicator
+    (vector #b00000000
+            #b00000000
+            #b00000000
+            #b00000000
+            #b00000000
+            #b00000000
+            #b00000000
+            #b00011100
+            #b00111110
+            #b00111110
+            #b00111110
+            #b00011100
+            #b00000000
+            #b00000000
+            #b00000000
+            #b00000000
+            #b00000000))
+
+  (let ((bitmap 'my-flycheck-fringe-indicator))
+    (flycheck-define-error-level 'error
+      :severity 2
+      :overlay-category 'flycheck-error-overlay
+      :fringe-bitmap bitmap
+      :fringe-face 'flycheck-fringe-error)
+    (flycheck-define-error-level 'warning
+      :severity 1
+      :overlay-category 'flycheck-warning-overlay
+      :fringe-bitmap bitmap
+      :fringe-face 'flycheck-fringe-warning)
+    (flycheck-define-error-level 'info
+      :severity 0
+      :overlay-category 'flycheck-info-overlay
+      :fringe-bitmap bitmap
+      :fringe-face 'flycheck-fringe-info))
+  (defun spacemacs/error-delegate ()
+    "Decide which error API to delegate to.
+
+Delegates to flycheck if it is enabled and the next-error buffer
+is not visible. Otherwise delegates to regular Emacs next-error."
+    (if (and (bound-and-true-p flycheck-mode)
+             (let ((buf (ignore-errors (next-error-find-buffer))))
+               (not (and buf (get-buffer-window buf)))))
+        'flycheck
+      'emacs))
+
+  (defun spacemacs/next-error (&optional n reset)
+    "Dispatch to flycheck or standard emacs error."
+    (interactive "P")
+    (let ((sys (spacemacs/error-delegate)))
+      (cond
+       ((eq 'flycheck sys) (call-interactively 'flycheck-next-error))
+       ((eq 'emacs sys) (call-interactively 'next-error)))))
+
+  (defun spacemacs/previous-error (&optional n reset)
+    "Dispatch to flycheck or standard emacs error."
+    (interactive "P")
+    (let ((sys (spacemacs/error-delegate)))
+      (cond
+       ((eq 'flycheck sys) (call-interactively 'flycheck-previous-error))
+       ((eq 'emacs sys) (call-interactively 'previous-error)))))
+
+  (define-key flycheck-error-list-mode-map (kbd "j") #'next-line)
+  (define-key flycheck-error-list-mode-map (kbd "k") #'previous-line)
+  (add-to-list 'evil-insert-state-modes 'flycheck-error-list-mode)
+
+  (evil-leader/set-key "en" 'spacemacs/next-error)
+  (evil-leader/set-key "ep" 'spacemacs/previous-error)
+  (evil-leader/set-key "eb" 'flycheck-buffer)
+  (evil-leader/set-key "ec" 'flycheck-clear)
+  (evil-leader/set-key "eh" 'flycheck-describe-checker)
+  (evil-leader/set-key "el" 'spacemacs/toggle-flycheck-error-list)
+  (evil-leader/set-key "eL" 'spacemacs/goto-flycheck-error-list)
+  (evil-leader/set-key "es" 'flycheck-select-checker)
+  (evil-leader/set-key "eS" 'flycheck-set-checker-executable)
+  (evil-leader/set-key "ev" 'flycheck-verify-setup)
+  (evil-leader/set-key "ex" 'flycheck-explain-error-at-point))
 
 (use-package smartparens
   :straight t
@@ -32,14 +151,15 @@
   (define-key evil-normal-state-map "sd" 'sp-kill-sexp)
   (use-package smartparens-config))
 
-(use-package yasnippets
-  :straight yasnippet
+(use-package yasnippet
+  :straight t
   :diminish yas-global-mode
+  :diminish yas-minor-mode
   :commands (yas-global-mode yas-minor-mode)
-  :hook (prog-mode-hook . yas-minor-mode)
   :init
+  (add-hook 'prog-mode-hook 'yas-minor-mode)
   (setq yas-triggers-in-field t
-	yas-wrap-around-region t)
+        yas-wrap-around-region t)
   (setq yas-prompt-functions '(yas-completing-prompt))
   (setq yas-minor-mode-map (make-sparse-keymap))
   (define-key yas-minor-mode-map (kbd "M-s-/") 'yas-next-field)

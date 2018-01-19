@@ -47,6 +47,8 @@
 
 (use-package server)
 (unless (server-running-p) (server-start))
-;; TODO: better defaults
-
 (setq gc-cons-threshold 8388608)
+
+;;TODO popwin tide react vue ediff company C-w C-m lispy org noderepl js default hl-todo
+;;TODO typescript web-mode rust
+;;TODO restart-emacs

@@ -1,3 +1,4 @@
+(yq/add-toggle parinfer :mode parinfer-mode)
 (defun yq/toggle-parinfer-mode ()
   (interactive)
   (if (bound-and-true-p parinfer-mode)
@@ -8,8 +9,10 @@
   :mode ("\\.el\\'" . emacs-lisp-mode)
   :commands (emacs-lisp-mode)
   :config
+  (spacemacs|define-jump-handlers emacs-lisp-mode)
+  (spacemacs|define-jump-handlers lisp-interaction-mode)
   (evil-define-key 'normal 'emacs-lisp-mode-map "," nil)
-  (evil-define-key 'normal 'emacs-lisp-mode-map ",m" 'yq/toggle-parinfer-mode)
+  (evil-define-key 'normal 'emacs-lisp-mode-map ",m" 'yq/toggle-parinfer)
   (evil-define-key 'normal 'emacs-lisp-mode-map ",cc" 'emacs-lisp-byte-compile)
   (evil-define-key 'normal 'emacs-lisp-mode-map ",cc" 'emacs-lisp-byte-compile)
   (evil-define-key 'normal 'emacs-lisp-mode-map ",eb" 'eval-buffer)
@@ -17,6 +20,17 @@
   (evil-define-key 'normal 'emacs-lisp-mode-map ",ef" 'eval-defun)
   (evil-define-key 'normal 'emacs-lisp-mode-map ",el" 'lisp-state-eval-sexp-end-of-line)
   (evil-define-key 'visual 'emacs-lisp-mode-map ",er" 'eval-region))
+
+(use-package elisp-slime-nav
+  :straight t
+  :diminish elisp-slime-nav-mode
+  :defer t
+  :init
+  (add-hook 'emacs-lisp-mode-hook 'elisp-slime-nav-mode)
+  (dolist (mode '(emacs-lisp-mode lisp-interaction-mode))
+    (evil-leader/set-key-for-mode 'emacs-lisp-mode "mhh" 'elisp-slime-nav-describe-elisp-thing-at-point)
+    (let ((jumpl (intern (format "spacemacs-jump-handlers-%S" mode))))
+      (add-to-list jumpl 'elisp-slime-nav-find-elisp-thing-at-point))))
 
 (use-package parinfer
   :straight t

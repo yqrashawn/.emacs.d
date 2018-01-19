@@ -1,4 +1,4 @@
- (use-package iedit :straight t)
+(use-package iedit :straight t)
 
 (use-package expand-region
   :straight t
@@ -37,5 +37,8 @@
 
 (use-package aggressive-indent
   :straight t
-  :init (add-hook 'prog-mode #'aggressive-indent-mode)
-  :diminish aggressive-indent-mode)
+  :init (add-hook 'prog-mode 'aggressive-indent-mode)
+  :diminish aggressive-indent-mode
+  :config
+  (yq/add-toggle aggressive-indent :mode aggressive-indent-mode)
+  (evil-leader/set-key "tI" 'yq/toggle-aggressive-indent))
