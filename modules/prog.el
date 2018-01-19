@@ -1,3 +1,4 @@
+(show-paren-mode 1)
 (use-package company
   :straight t
   :diminish company-mode
@@ -27,7 +28,6 @@
   :straight t
   :diminish smartparens-mode
   :config
-  ;; (add-hook 'prog-mode #'smartparens-mode)
   (smartparens-global-mode t)
   (define-key evil-normal-state-map "sd" 'sp-kill-sexp)
   (use-package smartparens-config))
