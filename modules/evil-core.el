@@ -29,6 +29,7 @@
   (customize-set-variable 'evil-shift-width 2)
   (customize-set-variable 'evil-show-paren-range 1)
   :config
+  (define-key evil-normal-state-map "gn" 'evil-search-word-forward)
   (define-key evil-normal-state-map "zl" 'hs-hide-level)
   (define-key evil-normal-state-map (kbd "C-k") 'evil-toggle-fold)
   (define-key evil-normal-state-map "s" nil)
@@ -98,6 +99,10 @@
   :straight t
   :diminish global-highlight-parentheses-mode
   :config
+  (set-face-attribute 'evil-search-highlight-persist-highlight-face nil
+		      :inherit 'lazy-highlight
+		      :background nil
+		      :foreground nil)
   (global-evil-search-highlight-persist t)
   (setq evil-search-highlight-string-min-len 1)
   evil-search-highlight-persist-all-windows t)

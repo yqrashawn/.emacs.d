@@ -30,7 +30,7 @@
   ;; (add-hook 'prog-mode #'smartparens-mode)
   (smartparens-global-mode t)
   (define-key evil-normal-state-map "sd" 'sp-kill-sexp)
-  (require 'smartparens-config))
+  (use-package smartparens-config))
 
 (use-package yasnippets
   :straight yasnippet

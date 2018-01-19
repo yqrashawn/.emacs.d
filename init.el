@@ -1,12 +1,15 @@
-(require 'package)
+;; (require 'package)
 (defvar yq-emacs-cache-dir (concat user-emacs-directory ".cache/"))
 (defvar yq-emacs-dotfile-dir (concat user-emacs-directory "init.el"))
+(setq custom-file (concat yq-emacs-cache-dir ".custom-settings"))
+(load-file custom-file)
+
 
 (setq url-proxy-services
       '(("http" . "127.0.0.1:6152")
         ("https" . "127.0.0.1:6152")))
 (setq gc-cons-threshold 100000000)
-(package-initialize)
+;; (package-initialize)
 
 (defun my-minibuffer-setup-hook ()
   (setq gc-cons-threshold most-positive-fixnum))
@@ -42,7 +45,7 @@
 (yq/get-modules "visual.el")
 (yq/get-modules "lang.el")
 
-(require 'server)
+(use-package server)
 (unless (server-running-p) (server-start))
 ;; TODO: better defaults
 
