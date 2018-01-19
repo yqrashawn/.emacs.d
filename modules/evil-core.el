@@ -1,4 +1,5 @@
 (yq/get-modules "evil-core-funcs.el")
+(global-set-key (kbd "C-g") 'keyboard-quit)
 
 (use-package undo-tree
   :straight (:host github :repo "emacsmirror/undo-tree")
@@ -71,10 +72,10 @@
   ;; remap s
   ;; use t as evil-snipe-s in normal mode
   (evil-define-key* '(normal motion) evil-snipe-local-mode-map
-        "s" nil
-        "S" nil
-        "t" #'evil-snipe-s
-        "T" #'evil-snipe-S)
+		    "s" nil
+		    "S" nil
+		    "t" #'evil-snipe-s
+		    "T" #'evil-snipe-S)
   (setq evil-snipe-auto-disable-substitute nil)
   (evil-snipe-mode 1)
   (setq evil-snipe-repeat-scope 'whole-buffer)
@@ -112,8 +113,13 @@
   :diminish evil-mc-mode
   :init
   (setq evil-mc-one-cursor-show-mode-line-text nil)
+  (global-evil-mc-mode t)
+  :init (add-hook 'after-init-hook #'global-evil-mc-mode)
   :config
-  (global-evil-mc-mode  1)
+  ;; this is ugly
+  (evil-define-key 'normal evil-mc-key-map (kbd "C-g") 'evil-mc-undo-all-cursors)
+  (evil-define-key 'visual evil-mc-key-map (kbd "C-g") 'keyboard-quit)
+  (setq evil-mc-mode-line-text-cursor-color t)
   (define-key evil-normal-state-map (kbd "C-n") 'evil-mc-make-and-goto-next-match)
   (define-key evil-normal-state-map (kbd "C-p") 'evil-mc-make-and-goto-prev-match)
   (define-key evil-normal-state-map (kbd "C-S-n") 'evil-mc-skip-and-goto-next-match)
@@ -123,10 +129,31 @@
 
 (use-package evil-matchit
   :straight t
-  :defer t)
+  :init (add-hook 'after-init-hook #'global-evil-matchit-mode))
+
+(use-package anzu
+  :straight t
+  :diminish anzu-mode
+  :init
+  (global-anzu-mode t)
+  :config
+  (defun yq/anzu-update-func (here total)
+    (when anzu--state
+      (let ((status (cl-case anzu--state
+		      (search (format "<%d/%d>" here total))
+		      (replace-query (format "(%d Replaces)" total))
+		      (replace (format "<%d/%d>" here total)))))
+	(propertize status 'face 'anzu-mode-line))))
+
+  (custom-set-variables
+   '(anzu-mode-line-update-function #'yq/anzu-update-func))
+  (setq anzu-cons-mode-line-p nil)
+  (setcar (cdr (assq 'isearch-mode minor-mode-alist))
+	  '(:eval (anzu--update-mode-line))))
 
 (use-package evil-anzu
   :straight t
+  :diminish anzu-mode
   :init
   (global-anzu-mode t)
   :config

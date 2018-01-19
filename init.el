@@ -46,5 +46,4 @@
 (unless (server-running-p) (server-start))
 ;; TODO: better defaults
 
-
 (setq gc-cons-threshold 8388608)
