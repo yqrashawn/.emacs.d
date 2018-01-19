@@ -79,3 +79,6 @@ If the universal prefix argument is used then kill the buffer too."
   :config
   (global-set-key (kbd "C-a") 'mwim-beginning-of-code-or-line)
   (global-set-key (kbd "C-e") 'mwim-end-of-code-or-line))
+
+(add-hook 'hs-minor-mode-hook '(lambda () (diminish 'hs-minor-mode)))
+(add-hook 'auto-revert-mode-hook '(lambda () (diminish 'auto-revert-mode)))

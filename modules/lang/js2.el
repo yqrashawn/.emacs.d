@@ -2,6 +2,7 @@
   :straight t
   :mode "\\.js\\'"
   :init
+  (add-hook 'js2-mode-hook 'turn-on-evil-matchit-mode)
   (add-hook 'js2-mode-hook 'js2-imenu-extras-mode)
   :config
   (evil-define-key 'normal 'js2-mode-map "," nil)

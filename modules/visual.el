@@ -12,5 +12,6 @@
 
 (use-package highlight-parentheses
   :straight t
+  :diminish highlight-parentheses-mode
   :config
   (add-hook 'prog-mode-hook 'highlight-parentheses-mode))

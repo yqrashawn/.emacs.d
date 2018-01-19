@@ -2,6 +2,7 @@
 
 (use-package undo-tree
   :straight (:host github :repo "emacsmirror/undo-tree")
+  :diminish undo-tree-mode
   :config (global-undo-tree-mode))
 
 (use-package goto-chg
@@ -27,15 +28,7 @@
   (customize-set-variable 'evil-shift-width 2)
   (customize-set-variable 'evil-show-paren-range 1)
   :config
-  ;; (setq evil-show-paren-range 1)
-  ;; (setq evil-shift-width 2)
-  ;; (setq evil-esc-delay 0)
-  ;; (setq evil-kill-on-visual-paste nil)
-  ;; (setq evil-symbol-word-search t)
-  ;; (setq evil-want-Y-yank-to-eol t)
-  ;; (setq evil-want-C-u-scroll t)
-  ;; (setq evil-move-cursor-back nil)
-  ;; (define-key evil-normal-state-map "zl" 'hs-hide-level)
+  (define-key evil-normal-state-map "zl" 'hs-hide-level)
   (define-key evil-normal-state-map (kbd "C-k") 'evil-toggle-fold)
   (define-key evil-normal-state-map "s" nil)
   (define-key evil-normal-state-map "sk" 'yq/kill-this-buffer)
@@ -44,10 +37,12 @@
   (define-key evil-normal-state-map (kbd "C-e") 'mwim-end-of-code-or-line)
   (define-key evil-normal-state-map (kbd "C-m") 'evil-jump-item)
   (define-key evil-visual-state-map (kbd "C-m") 'evil-jump-item)
-  (define-key evil-insert-state-map (kbd "C-e") 'mwim-end-of-code-or-line)
-  (define-key evil-insert-state-map (kbd "C-a") 'mwim-beginning-of-code-or-line)
   (define-key evil-visual-state-map (kbd "C-e") 'evil-end-of-line)
   (define-key evil-visual-state-map (kbd "C-a") 'evil-first-non-blank)
+  (define-key evil-insert-state-map (kbd "C-e") 'mwim-end-of-code-or-line)
+  (define-key evil-insert-state-map (kbd "C-a") 'mwim-beginning-of-code-or-line)
+  (define-key evil-insert-state-map (kbd "C-n") 'next-line)
+  (define-key evil-insert-state-map (kbd "C-p") 'previous-line)
   (evil-leader/set-key "w" nil)
   (evil-leader/set-key "wh" 'evil-window-left)
   (evil-leader/set-key "wj" 'evil-window-down)
@@ -59,49 +54,81 @@
   (evil-leader/set-key "j=" 'yq/indent-region-or-buffer)
   (evil-mode 1))
 ;; ;; ( evil-set-initial-state MODE STATE)
-
+
 (use-package evil-snipe
   :straight t
+  :diminish evil-snipe-mode
+  :diminish evil-snipe-override-mode
+  :diminish evil-snipe-local-mode
   :init
-  (setq evil-snipe-scope 'whole-buffer
-	evil-snipe-enable-highlight t
-	evil-snipe-enable-incremental-highlight t
-	evil-snipe-auto-disable-substitute t
-	evil-snipe-show-prompt nil
-	evil-snipe-smart-case t)
+  (setq evil-snipe-scope 'whole-buffer)
+  (setq evil-snipe-enable-highlight t)
+  (setq evil-snipe-enable-incremental-highlight t)
+  (setq evil-snipe-auto-disable-substitute t)
+  (setq evil-snipe-show-prompt nil)
+  (setq evil-snipe-smart-case t)
   :config
   ;; remap s
   ;; use t as evil-snipe-s in normal mode
   (evil-define-key* '(normal motion) evil-snipe-local-mode-map
-		    "s" nil
-		    "S" nil
-		    "t" #'evil-snipe-s
-		    "T" #'evil-snipe-S)
+        "s" nil
+        "S" nil
+        "t" #'evil-snipe-s
+        "T" #'evil-snipe-S)
   (setq evil-snipe-auto-disable-substitute nil)
   (evil-snipe-mode 1)
   (setq evil-snipe-repeat-scope 'whole-buffer)
   (evil-snipe-override-mode 1))
-
+
 (use-package evil-surround
   :straight t
   :config
-  (global-evil-surround-mode 1))
-
+  (global-evil-surround-mode 1)
+  (evil-define-key 'visual evil-surround-mode-map "s" 'evil-surround-region)
+  (evil-define-key 'visual evil-surround-mode-map "S" 'evil-substitute))
+
 (use-package evil-args
   :straight t
   :config ;; bind evil-args text objects
   (define-key evil-inner-text-objects-map "a" 'evil-inner-arg)
   (define-key evil-outer-text-objects-map "a" 'evil-outer-arg))
-
+
 (use-package evil-search-highlight-persist
   :straight t
+  :diminish global-highlight-parentheses-mode
   :config
   (global-evil-search-highlight-persist t)
   (setq evil-search-highlight-string-min-len 1)
   evil-search-highlight-persist-all-windows t)
-
+
 (use-package evil-textobj-anyblock
   :straight t
   :config
   (define-key evil-inner-text-objects-map "f" 'evil-textobj-anyblock-inner-block)
   (define-key evil-outer-text-objects-map "f" 'evil-textobj-anyblock-a-block))
+
+(use-package evil-mc
+  :straight t
+  :diminish evil-mc-mode
+  :init
+  (setq evil-mc-one-cursor-show-mode-line-text nil)
+  :config
+  (global-evil-mc-mode  1)
+  (define-key evil-normal-state-map (kbd "C-n") 'evil-mc-make-and-goto-next-match)
+  (define-key evil-normal-state-map (kbd "C-p") 'evil-mc-make-and-goto-prev-match)
+  (define-key evil-normal-state-map (kbd "C-S-n") 'evil-mc-skip-and-goto-next-match)
+  (define-key evil-normal-state-map (kbd "M-j") 'evil-mc-make-cursor-move-next-line)
+  (define-key evil-normal-state-map (kbd "M-k") 'evil-mc-make-cursor-move-prev-line)
+  (define-key evil-normal-state-map (kbd "<C-return>") 'evil-mc-make-all-cursors))
+
+(use-package evil-matchit
+  :straight t
+  :defer t)
+
+(use-package evil-anzu
+  :straight t
+  :init
+  (global-anzu-mode t)
+  :config
+  (setq anzu-search-threshold 1000)
+  (setq anzu-cons-mode-line-p nil))

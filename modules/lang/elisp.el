@@ -23,13 +23,13 @@
   ;; :hook (emacs-lisp-mode . parinfer-mode)
   :commands (parinfer-mode parinfer-mode-enable parinfer-toggle-mode)
   :init
-  (setq parinfer-lighters '("Par:I" . "Par:P"))
+  (setq parinfer-lighters '(" Par:I" . " Par:P"))
   (setq parinfer-extensions '(defaults pretty-parens evil smart-yank))
   :config
   (define-key parinfer-mode-map (kbd "C-,") 'parinfer-toggle-mode))
 
 (use-package eldoc
-  :defer t
+  :diminish eldoc-mode
   :commands (eldoc-mode)
   :hook (emacs-lisp-mode . eldoc-mode)
   :config

@@ -1,5 +1,6 @@
 (use-package company
   :straight t
+  :diminish company-mode
   :init
   (setq company-idle-delay 0
 	company-minimum-prefix-length 2
@@ -24,6 +25,7 @@
 
 (use-package smartparens
   :straight t
+  :diminish smartparens-mode
   :config
   ;; (add-hook 'prog-mode #'smartparens-mode)
   (smartparens-global-mode t)
@@ -32,6 +34,7 @@
 
 (use-package yasnippets
   :straight yasnippet
+  :diminish yas-global-mode
   :commands (yas-global-mode yas-minor-mode)
   :hook (prog-mode-hook . yas-minor-mode)
   :init

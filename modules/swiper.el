@@ -33,7 +33,9 @@ around point as the initial input."
 
 (use-package counsel
   :straight t
+  :diminish counsel-mode
   :config
+  (counsel-mode 1)
   (define-key ivy-minibuffer-map (kbd "C-n") 'ivy-next-history-element)
   (define-key ivy-minibuffer-map (kbd "C-p") 'ivy-previous-history-element)
   (define-key ivy-minibuffer-map (kbd "C-l") 'ivy-alt-done)
@@ -57,7 +59,9 @@ around point as the initial input."
 
 (use-package ivy
   :straight t
+  :diminish ivy-mode
   :config
+  (ivy-mode 1)
   (setq ivy-height 16)
   (defun yq/ivy-evil-registers ()
     "Show evil registers"
@@ -85,7 +89,8 @@ around point as the initial input."
   (setq-default smex-save-file (concat yq-emacs-cache-dir ".smex-items")))
 
 (use-package projectile
-  :straight t)
+  :straight t
+  :diminish projectile-mode)
 
 ;; TODO: config action
 (use-package counsel-projectile
