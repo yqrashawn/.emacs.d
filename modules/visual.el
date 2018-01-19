@@ -1,3 +1,12 @@
+(defun yq/toggle-default-font ()
+  "font for large screen"
+  (interactive)
+  (if (string= yq/default-font-kind "small")
+      (progn (setq yq/default-font-kind "large")
+        (spacemacs/set-default-font yq/large-screen-default-font))
+    (progn (setq yq/default-font-kind "small")
+      (spacemacs/set-default-font yq/small-screen-default-font))))
+
 (use-package golden-ratio-scroll-screen
   :straight t
   :config

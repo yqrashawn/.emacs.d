@@ -33,3 +33,9 @@
 	try-complete-lisp-symbol-partially
 	;; Try to complete word as an Emacs Lisp symbol.
 	try-complete-lisp-symbol))
+(define-key evil-insert-state-map (kbd "C-l") 'hippie-expand)
+
+(use-package aggressive-indent
+  :straight t
+  :init (add-hook 'prog-mode #'aggressive-indent-mode)
+  :diminish aggressive-indent-mode)

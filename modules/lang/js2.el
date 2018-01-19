@@ -37,10 +37,11 @@
   (spacemacs//tern-detect)
   :config
   (add-to-list 'tern-command "--no-port-file" 'append)
-  (evil-define-key 'normal 'js2-mode-map ",t" nil)
-  (evil-define-key 'normal 'js2-mode-map ",tr" 'tern-rename-variable)
-  (evil-define-key 'normal 'js2-mode-map ",td" 'tern-get-docs)
-  (evil-define-key 'normal 'js2-mode-map ",tt" 'tern-get-type))
+  (evil-define-key 'normal js2-mode-map ",t" nil)
+  (evil-define-key 'normal js2-mode-map ",tr" 'tern-rename-variable)
+  (evil-define-key 'normal js2-mode-map ",tf" 'tern-find-definition)
+  (evil-define-key 'normal js2-mode-map ",td" 'tern-get-docs)
+  (evil-define-key 'normal js2-mode-map ",tt" 'tern-get-type))
 
 (use-package company-tern
   :straight t
@@ -62,5 +63,5 @@
   :straight t
   :commands (prettier-js-mode prettier-js)
   :init
-  (evil-define-key 'normal 'js2-mode-map ",=" 'prettier-js)
-  (evil-define-key 'normal 'js2-mode-map ",tp" 'yq/toggle-prettier-js-mode))
+  (evil-define-key 'normal js2-mode-map ",=" 'prettier-js)
+  (evil-define-key 'normal js2-mode-map ",tp" 'yq/toggle-prettier-js-mode))

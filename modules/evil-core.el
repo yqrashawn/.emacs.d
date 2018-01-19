@@ -45,7 +45,11 @@
   (define-key evil-insert-state-map (kbd "C-a") 'mwim-beginning-of-code-or-line)
   (define-key evil-insert-state-map (kbd "C-n") 'next-line)
   (define-key evil-insert-state-map (kbd "C-p") 'previous-line)
+  (evil-leader/set-key "TAB" 'spacemacs/alternate-buffer)
   (evil-leader/set-key "w" nil)
+  (evil-leader/set-key "a" nil)
+  (evil-leader/set-key "t" nil)
+  (evil-leader/set-key "tv" 'yq/toggle-visual-line-mode)
   (evil-leader/set-key "wh" 'evil-window-left)
   (evil-leader/set-key "wj" 'evil-window-down)
   (evil-leader/set-key "wk" 'evil-window-up)
@@ -54,7 +58,14 @@
   (evil-leader/set-key "rl" 'ivy-resume)
   (evil-leader/set-key "j" nil)
   (evil-leader/set-key "j=" 'yq/indent-region-or-buffer)
+  (evil-leader/set-key "fj" 'dired-jump)
+  (evil-leader/set-key "jd" 'dired-jump)
+  (evil-leader/set-key "jD" 'dired-jump-other-window)
+  (evil-leader/set-key "j=" 'yq/indent-region-or-buffer)
+  (evil-define-minor-mode-key 'motion 'visual-line-mode "j" 'evil-next-visual-line)
+  (evil-define-minor-mode-key 'motion 'visual-line-mode "k" 'evil-previous-visual-line)
   (evil-mode 1))
+
 ;; ;; ( evil-set-initial-state MODE STATE)
 
 (use-package evil-snipe

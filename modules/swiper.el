@@ -110,3 +110,9 @@ around point as the initial input."
 (evil-leader/set-key "sF" 'spacemacs/search-auto-region-or-symbol)
 (define-key evil-normal-state-map "sf" 'spacemacs/search-auto)
 (define-key evil-normal-state-map "sF" 'spacemacs/search-auto-region-or-symbol)
+
+(use-package dired-x
+  :straight
+  :commands (dired-jump
+             dired-jump-other-window
+             dired-omit-mode))
