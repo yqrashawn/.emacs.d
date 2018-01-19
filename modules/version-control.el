@@ -6,6 +6,10 @@
 (use-package magit
   :straight t
   :config
+  (add-hook 'magit-mode-hook 'turn-off-evil-snipe-mode)
+  (add-hook 'git-rebase-mode-hook 'turn-off-evil-snipe-mode)
+  (add-hook 'magit-mode-hook 'turn-off-evil-snipe-override-mode)
+  (add-hook 'git-rebase-mode-hook 'turn-off-evil-snipe-override-mode)
   (evil-leader/set-key "g" nil)
   (evil-leader/set-key "gs" 'magit-status))
 

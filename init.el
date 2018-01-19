@@ -1,5 +1,12 @@
+(require 'package)
 (defvar yq-emacs-cache-dir (concat user-emacs-directory ".cache/"))
 (defvar yq-emacs-dotfile-dir (concat user-emacs-directory "init.el"))
+
+(setq url-proxy-services
+      '(("http" . "127.0.0.1:6152")
+        ("https" . "127.0.0.1:6152")))
+(setq gc-cons-threshold 100000000)
+(package-initialize)
 
 (let ((bootstrap-file (concat user-emacs-directory "straight/repos/straight.el/bootstrap.el"))
       (bootstrap-version 3))
@@ -27,4 +34,6 @@
 (load-file (yq/get-modules "visual.el"))
 (load-file (yq/get-modules "lang.el"))
 
+(require 'server)
+(unless (server-running-p) (server-start))
 ;; TODO: better defaults

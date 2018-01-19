@@ -21,7 +21,7 @@
 
 (use-package flycheck
   :straight t)
-
+
 (use-package smartparens
   :straight t
   :config
@@ -29,7 +29,7 @@
   (smartparens-global-mode t)
   (define-key evil-normal-state-map "sd" 'sp-kill-sexp)
   (require 'smartparens-config))
-
+
 (use-package yasnippets
   :straight yasnippet
   :commands (yas-global-mode yas-minor-mode)

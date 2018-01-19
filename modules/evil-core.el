@@ -50,6 +50,33 @@
   (evil-mode 1))
 ;; ;; ( evil-set-initial-state MODE STATE)
 
+(use-package evil-snipe
+  :straight t
+  :init
+  (setq evil-snipe-scope 'whole-buffer
+	evil-snipe-enable-highlight t
+	evil-snipe-enable-incremental-highlight t
+	evil-snipe-auto-disable-substitute t
+	evil-snipe-show-prompt nil
+	evil-snipe-smart-case t)
+  :config
+  ;; remap s
+  ;; use t as evil-snipe-s in normal mode
+  (evil-define-key* '(normal motion) evil-snipe-local-mode-map
+		    "s" nil
+		    "S" nil
+		    "t" #'evil-snipe-s
+		    "T" #'evil-snipe-S)
+  (setq evil-snipe-auto-disable-substitute nil)
+  (evil-snipe-mode 1)
+  (setq evil-snipe-repeat-scope 'whole-buffer)
+  (evil-snipe-override-mode 1))
+
+(use-package evil-surround
+  :straight t
+  :config
+  (global-evil-surround-mode 1))
+
 (use-package evil-args
   :straight t
   :config ;; bind evil-args text objects
