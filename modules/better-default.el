@@ -1,4 +1,9 @@
 (setq indent-tabs-mode nil)
+(fset 'yes-or-no-p 'y-or-n-p)
+(tool-bar-mode -1)
+(toggle-scroll-bar -1) 
+(menu-bar-mode -1) 
+
 (add-hook 'prog-mode-hook 'hs-minor-mode)
 
 (defun yq/edit-dotfile ()
