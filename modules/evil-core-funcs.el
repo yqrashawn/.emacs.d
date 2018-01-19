@@ -5,5 +5,5 @@ to `evil-lookup'"
   (interactive)
   (let ((binding (key-binding (kbd (concat "SPC" " mhh")))))
     (if (commandp binding)
-        (call-interactively binding)
+	(call-interactively binding)
       (evil-lookup))))

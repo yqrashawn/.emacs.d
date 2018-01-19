@@ -1,3 +1,5 @@
+(yq/get-modules "evil-core-funcs.el")
+
 (use-package undo-tree
   :straight (:host github :repo "emacsmirror/undo-tree")
   :config (global-undo-tree-mode))
@@ -19,12 +21,12 @@
   (setq evil-move-cursor-back nil)
   (setq evil-want-C-u-scroll t)
   (setq evil-want-Y-yank-to-eol t)
-  :config
   (setq evil-symbol-word-search t)
   (setq evil-kill-on-visual-paste nil)
   (setq evil-esc-delay 0)
   (setq evil-shift-width 2)
   (setq evil-show-paren-range 1)
+  :config
   (define-key evil-normal-state-map "zl" 'hs-hide-level)
   (define-key evil-normal-state-map (kbd "C-k") 'evil-toggle-fold)
   (define-key evil-normal-state-map "s" nil)

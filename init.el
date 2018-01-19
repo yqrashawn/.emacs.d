@@ -8,6 +8,13 @@
 (setq gc-cons-threshold 100000000)
 (package-initialize)
 
+(defun my-minibuffer-setup-hook ()
+  (setq gc-cons-threshold most-positive-fixnum))
+(defun my-minibuffer-exit-hook ()
+  (setq gc-cons-threshold (* 8 1024 1024)))
+(add-hook 'minibuffer-setup-hook #'my-minibuffer-setup-hook)
+(add-hook 'minibuffer-exit-hook #'my-minibuffer-exit-hook)
+
 (let ((bootstrap-file (concat user-emacs-directory "straight/repos/straight.el/bootstrap.el"))
       (bootstrap-version 3))
   (unless (file-exists-p bootstrap-file)
@@ -22,18 +29,21 @@
 (straight-use-package 'use-package)
 
 (defun yq/get-modules (module-dir)
-  (concat user-emacs-directory "modules/" module-dir))
+  (load-file (concat user-emacs-directory "modules/" module-dir)))
 
-(load-file (yq/get-modules "evil-core.el" ))
-(load-file (yq/get-modules "better-default.el" ))
-(load-file (yq/get-modules "swiper.el" ))
-(load-file (yq/get-modules "edit.el" ))
-(load-file (yq/get-modules "version-control.el" ))
-(load-file (yq/get-modules "prog.el" ))
-(load-file (yq/get-modules "dev.el"))
-(load-file (yq/get-modules "visual.el"))
-(load-file (yq/get-modules "lang.el"))
+(yq/get-modules "evil-core.el")
+(yq/get-modules "better-default.el")
+(yq/get-modules "swiper.el")
+(yq/get-modules "edit.el")
+(yq/get-modules "version-control.el")
+(yq/get-modules "prog.el")
+(yq/get-modules "dev.el")
+(yq/get-modules "visual.el")
+(yq/get-modules "lang.el")
 
 (require 'server)
 (unless (server-running-p) (server-start))
 ;; TODO: better defaults
+
+
+(setq gc-cons-threshold 8388608)

@@ -99,7 +99,7 @@ around point as the initial input."
   (evil-leader/set-key "pl" 'counsel-projectile-switch-project)
   (evil-leader/set-key "ps" 'counsel-projectile-rg))
 
-(load-file (yq/get-modules "counsel-funcs.el"))
+(yq/get-modules "counsel-funcs.el")
 (evil-leader/set-key "s" nil)
 (evil-leader/set-key "sf" 'spacemacs/search-auto)
 (evil-leader/set-key "sF" 'spacemacs/search-auto-region-or-symbol)
