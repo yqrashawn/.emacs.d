@@ -18,6 +18,10 @@
   (define-key company-active-map (kbd "C-j") 'company-select-next)
   (define-key company-active-map (kbd "C-k") 'company-select-previous)
   (define-key company-active-map (kbd "C-l") 'company-complete-selection)
+  (define-key company-active-map (kbd "C-w") 'evil-delete-backward-word)
+  (define-key company-active-map (kbd "C-d") 'company-show-location)
+  (define-key company-active-map (kbd "C-m") 'newline-and-indent)
+  (define-key company-active-map (kbd "C-r") 'company-show-doc-buffer)
   (add-hook 'after-init-hook 'global-company-mode))
 
 (use-package company-flx
@@ -167,4 +171,17 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   (push 'yas-hippie-try-expand hippie-expand-try-functions-list)
   (push 'yas-installed-snippets-dir yas-snippet-dirs))
 
+(use-package ediff
+  :defer t
+  :init
+  (progn
+    ;; first we set some sane defaults
+    (setq-default
+     ediff-window-setup-function 'ediff-setup-windows-plain
+     ;; emacs is evil and decrees that vertical shall henceforth be horizontal
+     ediff-split-window-function 'split-window-horizontally
+     ediff-merge-split-window-function 'split-window-horizontally)
+    (add-hook 'ediff-prepare-buffer-hook #'show-all)
+    ;; restore window layout when done
+    (add-hook 'ediff-quit-hook #'winner-undo)))
 ;; TODO: auto-yas

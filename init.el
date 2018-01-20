@@ -1,6 +1,8 @@
 ;; (require 'package)
 (defvar yq-emacs-cache-dir (concat user-emacs-directory ".cache/"))
+(defvar spacemacs-cache-directory (concat user-emacs-directory ".cache/"))
 (defvar yq-emacs-dotfile-dir (concat user-emacs-directory "init.el"))
+(setq url-configuration-directory (concat spacemacs-cache-directory "url/"))
 (setq custom-file (concat yq-emacs-cache-dir ".custom-settings"))
 (load-file custom-file)
 
@@ -43,12 +45,13 @@
 (yq/get-modules "prog.el")
 (yq/get-modules "dev.el")
 (yq/get-modules "visual.el")
+(yq/get-modules "osx.el")
 (yq/get-modules "lang.el")
 
 (use-package server)
 (unless (server-running-p) (server-start))
 (setq gc-cons-threshold 8388608)
 
-;;TODO popwin tide react vue ediff company C-w C-m lispy org noderepl js default hl-todo
+;;TODO popwin tide react vue ediff lispy org noderepl js default hl-todo
 ;;TODO typescript web-mode rust
 ;;TODO restart-emacs

@@ -1,12 +1,5 @@
-(defun yq/toggle-default-font ()
-  "font for large screen"
-  (interactive)
-  (if (string= yq/default-font-kind "small")
-      (progn (setq yq/default-font-kind "large")
-        (spacemacs/set-default-font yq/large-screen-default-font))
-    (progn (setq yq/default-font-kind "small")
-      (spacemacs/set-default-font yq/small-screen-default-font))))
-
+(yq/get-modules "visual-funcs.el")
+(evil-leader/set-key "tf" 'yq/toggle-default-font)
 (use-package golden-ratio-scroll-screen
   :straight t
   :config
@@ -102,4 +95,8 @@ has been changed to THEME."
 	 do (spacemacs/add-evil-cursor state color shape))
 (add-hook 'spacemacs-post-theme-change-hook 'spacemacs/set-state-faces)
 
-
+(use-package page-break-lines
+  :straight t
+  :diminish page-break-lines-mode
+  :init
+  (global-page-break-lines-mode t))

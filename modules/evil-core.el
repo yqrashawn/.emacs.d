@@ -15,6 +15,7 @@
   :init
   (setq evil-leader/in-all-states t)
   :config
+  (defalias 'spacemacs/set-leader-keys 'evil-leader/set-key)
   (evil-leader/set-leader "<SPC>" "M-")
   (global-evil-leader-mode))
 
@@ -48,6 +49,9 @@
   (define-key evil-insert-state-map (kbd "C-a") 'mwim-beginning-of-code-or-line)
   (define-key evil-insert-state-map (kbd "C-n") 'next-line)
   (define-key evil-insert-state-map (kbd "C-p") 'previous-line)
+  (define-key evil-insert-state-map (kbd "C-d") 'delete-forward-char)
+  (define-key evil-insert-state-map (kbd "C-m") 'newline-and-indent)
+  (define-key evil-insert-state-map (kbd "C-j") 'evil-ret-and-indent)
   (evil-leader/set-key "TAB" 'spacemacs/alternate-buffer)
   (evil-leader/set-key "w" nil)
   (evil-leader/set-key "a" nil)
@@ -181,3 +185,9 @@
   :config
   (setq anzu-search-threshold 1000)
   (setq anzu-cons-mode-line-p nil))
+
+(straight-use-package 'bind-map)
+(yq/get-modules "evil-evilified-state.el")
+
+(evilified-state-evilify-map occur-mode-map
+  :mode occur-mode)

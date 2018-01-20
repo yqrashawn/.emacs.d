@@ -100,5 +100,3 @@ The return value is nil if no font was found, truthy otherwise."
         (spacemacs/set-default-font yq/large-screen-default-font))
     (progn (setq yq/default-font-kind "small")
       (spacemacs/set-default-font yq/small-screen-default-font))))
-
-(yq/toggle-default-font)

@@ -51,8 +51,6 @@ file stored in the cache directory and `nil' to disable auto-saving.")
 (setq auto-save-default (not (null dotspacemacs-auto-save-file-location)))
 (setq auto-save-list-file-prefix (concat spacemacs-auto-save-directory))
 
-
-
 ;; Hack to fix a bug with tabulated-list.el
 ;; see: http://redd.it/2dgy52
 (defun tabulated-list-revert (&rest ignored)
@@ -205,3 +203,158 @@ If the universal prefix argument is used then kill the buffer too."
 (setq vc-follow-symlinks nil)
 (yq/add-toggle show-paren :mode show-paren-mode)
 (add-hook 'prog-mode-hook 'show-paren-mode)
+
+(use-package windmove
+  :bind( ("C-x 7 w h" . 'windmove-left)
+         ("C-x 7 w l" . 'windmove-right)
+         ("C-x 7 w j" . 'windmove-down)
+         ("C-x 7 w k" . 'windmove-up)))
+
+(use-package winner
+  :init
+  (winner-mode t)
+  (setq spacemacs/winner-boring-buffers '("*Completions*"
+                                          "*Compile-Log*"
+                                          "*inferior-lisp*"
+                                          "*Fuzzy Completions*"
+                                          "*Apropos*"
+                                          "*Help*"
+                                          "*cvs*"
+                                          "*Buffer List*"
+                                          "*Ibuffer*"
+                                          "*esh command on file*"
+                                          ))
+  (setq winner-boring-buffers
+        (append winner-boring-buffers spacemacs/winner-boring-buffers))
+  (winner-mode t))
+
+(use-package eldoc
+  :defer t
+  :config
+  ;; enable eldoc in `eval-expression'
+  (add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode)
+  ;; enable eldoc in IELM
+  (add-hook 'ielm-mode-hook #'eldoc-mode))
+
+(with-eval-after-load 'hi-lock
+  (diminish 'hi-lock-mode))
+
+(use-package linum
+  :init
+  (progn
+    (setq linum-format "%4d")
+    (yq/add-toggle line-numbers :mode linum-mode)
+    (evil-leader/set-key "tn" 'yq/toggle-line-numbers)
+    (defun spacemacs//linum-update-window-scale-fix (win)
+      "Fix linum for scaled text in the window WIN."
+      (when (display-multi-font-p)
+        (unless (boundp 'text-scale-mode-step)
+          (setq window-initial-margins (window-margins win)))
+        (set-window-margins win
+                            (ceiling (* (if (boundp 'text-scale-mode-step)
+                                            (expt text-scale-mode-step
+                                                  text-scale-mode-amount)
+                                          1)
+                                        (or (car (if (boundp 'window-initial-margins)
+                                                     window-initial-margins
+                                                   (window-margins win)))
+                                            1))))))
+    (advice-add #'linum-update-window
+                :after #'spacemacs//linum-update-window-scale-fix)))
+
+(use-package savehist
+  :init
+  ;; Minibuffer history
+  (setq savehist-file (concat spacemacs-cache-directory "savehist")
+        enable-recursive-minibuffers t ; Allow commands in minibuffers
+        history-length 1000
+        savehist-additional-variables '(mark-ring
+                                        global-mark-ring
+                                        search-ring
+                                        regexp-search-ring
+                                        extended-command-history)
+        savehist-autosave-interval 60)
+  (savehist-mode t))
+
+(use-package recentf
+  :defer t
+  :init
+  ;; lazy load recentf
+  (add-hook 'find-file-hook (lambda () (unless recentf-mode
+                                         (recentf-mode)
+                                         (recentf-track-opened-file))))
+  (setq recentf-save-file (concat spacemacs-cache-directory "recentf")
+        recentf-max-saved-items 1000
+        recentf-auto-cleanup 'never
+        recentf-auto-save-timer (run-with-idle-timer 600 t
+                                                     'recentf-save-list))
+  :config
+  (add-to-list 'recentf-exclude
+               (file-truename spacemacs-cache-directory))
+  (add-to-list 'recentf-exclude (file-truename package-user-dir))
+  (add-to-list 'recentf-exclude "COMMIT_EDITMSG\\'"))
+
+(use-package saveplace
+  :init
+  (if (fboundp 'save-place-mode)
+      ;; Emacs 25 has a proper mode for `save-place'
+      (save-place-mode)
+    (setq save-place t))
+  ;; Save point position between sessions
+  (setq save-place-file (concat spacemacs-cache-directory "places")))
+
+(use-package uniquify
+  :config
+  (setq uniquify-buffer-name-style 'post-forward-angle-brackets
+        ;; don't screw special buffers
+        uniquify-ignore-buffers-re "^\\*"))
+
+(use-package whitespace
+  :defer t
+  :diminish whitespace-mode
+  :diminish whitespace-global-modes
+  :init
+  (setq spacemacs-show-trailing-whitespace t)
+  (defun spacemacs//show-trailing-whitespace ()
+    (when spacemacs-show-trailing-whitespace
+      (set-face-attribute 'trailing-whitespace nil
+                          :background
+                          (face-attribute 'font-lock-comment-face
+                                          :foreground))
+      (setq show-trailing-whitespace 1)))
+  (add-hook 'prog-mode-hook 'spacemacs//show-trailing-whitespace)
+
+  (yq/add-toggle whitespace :mode whitespace-mode)
+  (evil-leader/set-key "tw" 'yq/toggle-whitespace)
+
+  (defun spacemacs//set-whitespace-style-for-diff ()
+    "Whitespace configuration for `diff-mode'"
+    (setq-local whitespace-style '(face
+                                   tabs
+                                   tab-mark
+                                   spaces
+                                   space-mark
+                                   trailing
+                                   indentation::space
+                                   indentation::tab
+                                   newline
+                                   newline-mark)))
+  (add-hook 'diff-mode-hook 'whitespace-mode)
+  (add-hook 'diff-mode-hook 'spacemacs//set-whitespace-style-for-diff)
+  :config
+  (set-face-attribute 'whitespace-space nil
+                      :background nil
+                      :foreground (face-attribute 'font-lock-warning-face
+                                                  :foreground))
+  (set-face-attribute 'whitespace-tab nil
+                      :background nil)
+  (set-face-attribute 'whitespace-indentation nil
+                      :background nil))
+
+(use-package bookmark
+  :defer t
+  :init
+  (setq bookmark-default-file (concat spacemacs-cache-directory "bookmarks")
+        ;; autosave each change
+        bookmark-save-flag 1)
+  (spacemacs/set-leader-keys "fb" 'bookmark-jump))
