@@ -291,7 +291,6 @@ If the universal prefix argument is used then kill the buffer too."
   :config
   (add-to-list 'recentf-exclude
                (file-truename spacemacs-cache-directory))
-  (add-to-list 'recentf-exclude (file-truename package-user-dir))
   (add-to-list 'recentf-exclude "COMMIT_EDITMSG\\'"))
 
 (use-package saveplace
