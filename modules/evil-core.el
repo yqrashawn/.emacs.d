@@ -81,8 +81,6 @@
   (evil-define-minor-mode-key 'motion 'visual-line-mode "j" 'evil-next-visual-line)
   (evil-define-minor-mode-key 'motion 'visual-line-mode "k" 'evil-previous-visual-line)
   (evil-mode 1))
-
-;; ;; ( evil-set-initial-state MODE STATE)
 
 (use-package evil-snipe
   :straight t

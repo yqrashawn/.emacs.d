@@ -225,13 +225,6 @@ If the universal prefix argument is used then kill the buffer too."
         (append winner-boring-buffers spacemacs/winner-boring-buffers))
   (winner-mode t))
 
-(use-package eldoc
-  :defer t
-  :config
-  ;; enable eldoc in `eval-expression'
-  (add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode)
-  ;; enable eldoc in IELM
-  (add-hook 'ielm-mode-hook #'eldoc-mode))
 
 (with-eval-after-load 'hi-lock
   (diminish 'hi-lock-mode))

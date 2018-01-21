@@ -1,3 +1,87 @@
+(defmacro spacemacs|add-company-backends (&rest props)
+  "Add and enable company backends.
+This function should be called exclusively in `post-init-company' functions or
+`init-company-xxx' function where xxx is company backend package.
+
+Available PROPS:
+
+`:backends BACKENDS'
+   One or several symbols or lists representing a company backend or a list of
+   company backends.
+
+`:modes MODES'
+    One or several modes where BACKENDS will be added.
+
+`:variables VAR VALUE'
+    One or several VAR VALUE pairs (similar to layer variables).
+    These variables are made buffer local so their values are set only for
+    the given MODES.
+
+`:from SYMBOL'
+    Advanced property aimed at avoiding hook function name conflicts when
+    `:variables' property is used in several calls to this macro for the same
+    MODES.
+
+`:hook BOOLEAN'
+    Advanced property to control whether hooks functions are hooked or not,
+    if non-nil hook functions are appended to modes hooks passed as `:modes'."
+  (declare (indent 0))
+  (let* ((backends (spacemacs/mplist-get props :backends))
+         (modes (spacemacs/mplist-get props :modes))
+         (variables (spacemacs/mplist-get props :variables))
+         (from (plist-get props :from))
+         (hooks (if (memq :hooks props)
+                    (plist-get props :hooks)
+                  t))
+         (result '(progn)))
+    (dolist (mode modes)
+      (let ((backends-var-name (intern (format "company-backends-%S" mode)))
+            (init-func-name (intern (format "spacemacs//init-company-%S" mode)))
+            (vars-func-name (intern
+                             (format "spacemacs//init-company-vars-%S%s" mode
+                                     (if from (format "-%S" from) ""))))
+            (mode-hook-name (intern (format "%S-hook" mode))))
+        ;; declare buffer local company-backends variable
+        (push `(defvar ,backends-var-name
+                 spacemacs-default-company-backends
+                 ,(format "Company backend list for %S." mode)) result)
+        ;; add backends
+        (dolist (backend backends)
+          (push `(add-to-list ',backends-var-name ',backend) result))
+        ;; define initialization hook function
+        (push `(defun ,init-func-name ()
+                ,(format "Initialize company for %S." mode)
+                (when auto-completion-enable-snippets-in-popup
+                  (setq ,backends-var-name
+                        (mapcar 'spacemacs//show-snippets-in-company
+                                ,backends-var-name)))
+                (set (make-variable-buffer-local 'auto-completion-front-end)
+                     'company)
+                (set (make-variable-buffer-local 'company-backends)
+                     ,backends-var-name)) result)
+        (when hooks
+          (push `(add-hook ',mode-hook-name ',init-func-name t) result))
+        ;; define variables hook function
+        (when variables
+          (let ((vars-func `(defun ,vars-func-name ()
+                              ,(format "Define company local variables for %S."
+                                       mode)))
+                vars)
+            (while variables
+              (let* ((var (pop variables))
+                     (forms
+                      (when (consp variables)
+                        `(set (make-variable-buffer-local ',var)
+                              ,(eval (pop variables))))))
+                (when forms (push forms vars))))
+            (push (append vars-func vars) result))
+          (when hooks
+            (push `(add-hook ',mode-hook-name ',vars-func-name t) result)))
+        (when hooks
+          (push `(add-hook ',mode-hook-name 'company-mode t) result))))
+    ;; return the expanded macro in correct order
+    (reverse result)))
+
 (use-package company
   :straight t
   :diminish company-mode
@@ -206,5 +290,15 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   ;; the time of writing it is the only default jump handler. (gtags remains
   ;; mode-local)
   (add-to-list 'spacemacs-default-jump-handlers 'dumb-jump-go 'append))
+
+(use-package eldoc
+  :diminish eldoc-mode
+  :commands (eldoc-mode)
+  :hook (emacs-lisp-mode . eldoc-mode)
+  :config
+  ;; enable eldoc in `eval-expression'
+  (add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode)
+  ;; enable eldoc in IELM
+  (add-hook 'ielm-mode-hook #'eldoc-mode))
 
 ;; TODO: auto-yas

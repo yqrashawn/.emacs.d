@@ -5,15 +5,15 @@
   :init
   (add-hook 'js2-mode-hook 'js2-imenu-extras-mode)
   :config
-  (evil-define-key 'normal 'js2-mode-map "," nil)
-  (evil-define-key 'normal 'js2-mode-map ",d" nil)
-  (evil-define-key 'normal 'js2-mode-map ",zc" 'js2-mode-hide-element)
-  (evil-define-key 'normal 'js2-mode-map ",zo" 'js2-mode-show-element)
-  (evil-define-key 'normal 'js2-mode-map ",zr" 'js2-mode-show-all)
-  (evil-define-key 'normal 'js2-mode-map ",ze" 'js2-mode-toggle-element)
-  (evil-define-key 'normal 'js2-mode-map ",zf" 'js2-mode-toggle-hide-functions)
-  (evil-define-key 'normal 'js2-mode-map ",zC" 'js2-mode-toggle-hide-comments)
-  (evil-define-key 'normal 'js2-mode-map ",w" 'js2-mode-toggle-warnings-and-errors))
+  (evil-define-key 'normal js2-mode-map "," nil)
+  (evil-define-key 'normal js2-mode-map ",d" nil)
+  (evil-define-key 'normal js2-mode-map ",zc" 'js2-mode-hide-element)
+  (evil-define-key 'normal js2-mode-map ",zo" 'js2-mode-show-element)
+  (evil-define-key 'normal js2-mode-map ",zr" 'js2-mode-show-all)
+  (evil-define-key 'normal js2-mode-map ",ze" 'js2-mode-toggle-element)
+  (evil-define-key 'normal js2-mode-map ",zf" 'js2-mode-toggle-hide-functions)
+  (evil-define-key 'normal js2-mode-map ",zC" 'js2-mode-toggle-hide-comments)
+  (evil-define-key 'normal js2-mode-map ",w" 'js2-mode-toggle-warnings-and-errors))
 
 (use-package js-doc
   :straight t

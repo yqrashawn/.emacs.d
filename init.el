@@ -11,7 +11,6 @@
 (setq custom-file (concat yq-emacs-cache-dir ".custom-settings"))
 (load-file custom-file)
 
-
 (setq url-proxy-services
       '(("http" . "127.0.0.1:6152")
         ("https" . "127.0.0.1:6152")))
