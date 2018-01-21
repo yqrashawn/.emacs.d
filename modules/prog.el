@@ -65,7 +65,7 @@ If the error list is visible, hide it.  Otherwise, show it."
         flycheck-global-modes nil)
   (yq/add-toggle syntax-checking
     :mode flycheck-mode)
-  (evil-leader/set-key "ts" 'yq/toggle-syntax-checking)
+  (spacemacs/set-leader-keys "ts" 'yq/toggle-syntax-checking)
   (global-flycheck-mode 1)
 
   ;; Custom fringe indicator
@@ -135,17 +135,26 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   (define-key flycheck-error-list-mode-map (kbd "k") #'previous-line)
   (add-to-list 'evil-insert-state-modes 'flycheck-error-list-mode)
 
-  (evil-leader/set-key "en" 'spacemacs/next-error)
-  (evil-leader/set-key "ep" 'spacemacs/previous-error)
-  (evil-leader/set-key "eb" 'flycheck-buffer)
-  (evil-leader/set-key "ec" 'flycheck-clear)
-  (evil-leader/set-key "eh" 'flycheck-describe-checker)
-  (evil-leader/set-key "el" 'spacemacs/toggle-flycheck-error-list)
-  (evil-leader/set-key "eL" 'spacemacs/goto-flycheck-error-list)
-  (evil-leader/set-key "es" 'flycheck-select-checker)
-  (evil-leader/set-key "eS" 'flycheck-set-checker-executable)
-  (evil-leader/set-key "ev" 'flycheck-verify-setup)
-  (evil-leader/set-key "ex" 'flycheck-explain-error-at-point))
+  (push '("^\\*Flycheck.+\\*$"
+          :regexp t
+          :dedicated t
+          :position bottom
+          :stick t
+          :noselect t)
+        popwin:special-display-config)
+  (spacemacs/set-leader-keys
+    "eb" 'flycheck-buffer
+    "ec" 'flycheck-clear
+    "eh" 'flycheck-describe-checker
+    "el" 'spacemacs/toggle-flycheck-error-list
+    "eL" 'spacemacs/goto-flycheck-error-list
+    "es" 'flycheck-select-checker
+    "eS" 'flycheck-set-checker-executable
+    "ev" 'flycheck-verify-setup
+    "ex" 'flycheck-explain-error-at-point
+    "en" 'spacemacs/next-error
+    "ep" 'spacemacs/previous-error
+    ))
 
 (use-package smartparens
   :straight t
@@ -174,14 +183,28 @@ is not visible. Otherwise delegates to regular Emacs next-error."
 (use-package ediff
   :defer t
   :init
-  (progn
     ;; first we set some sane defaults
     (setq-default
      ediff-window-setup-function 'ediff-setup-windows-plain
      ;; emacs is evil and decrees that vertical shall henceforth be horizontal
      ediff-split-window-function 'split-window-horizontally
      ediff-merge-split-window-function 'split-window-horizontally)
-    (add-hook 'ediff-prepare-buffer-hook #'show-all)
+  ;; (add-hook 'ediff-prepare-buffer-hook #'show-all)
     ;; restore window layout when done
-    (add-hook 'ediff-quit-hook #'winner-undo)))
+  (add-hook 'ediff-quit-hook #'winner-undo))
+
+(use-package dumb-jump
+  :straight t
+  :config
+  (spacemacs/set-leader-keys "jq" #'dumb-jump-quick-look)
+  (define-key evil-normal-state-map "gl" 'dumb-jump-go)
+  (define-key evil-normal-state-map "gL" 'dumb-jump-go-other-window)
+  (setq dumb-jump-prefer-searcher 'rg)
+  (setq dumb-jump-force-searcher 'rg)
+  (setq dumb-jump-selector 'ivy)
+  ;; Since it's dumb, we add it to the end of the default jump handlers. At
+  ;; the time of writing it is the only default jump handler. (gtags remains
+  ;; mode-local)
+  (add-to-list 'spacemacs-default-jump-handlers 'dumb-jump-go 'append))
+
 ;; TODO: auto-yas

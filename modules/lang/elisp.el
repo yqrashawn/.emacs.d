@@ -28,7 +28,7 @@
   :init
   (add-hook 'emacs-lisp-mode-hook 'elisp-slime-nav-mode)
   (dolist (mode '(emacs-lisp-mode lisp-interaction-mode))
-    (evil-leader/set-key-for-mode 'emacs-lisp-mode "mhh" 'elisp-slime-nav-describe-elisp-thing-at-point)
+    (spacemacs/set-leader-keys-for-major-mode 'emacs-lisp-mode "mhh" 'elisp-slime-nav-describe-elisp-thing-at-point)
     (let ((jumpl (intern (format "spacemacs-jump-handlers-%S" mode))))
       (add-to-list jumpl 'elisp-slime-nav-find-elisp-thing-at-point))))
 

@@ -491,3 +491,17 @@ around point as the initial input."
 	    :action 'swiper-multi-action-2
 	    :unwind #'swiper--cleanup
 	    :caller 'swiper-multi))
+
+(defun spacemacs//counsel-occur ()
+  "Generate a custom occur buffer for `counsel-git-grep'."
+  (ivy-occur-grep-mode)
+  (setq default-directory (ivy-state-directory ivy-last))
+  (let ((cands ivy--old-cands))
+    ;; Need precise number of header lines for `wgrep' to work.
+    (insert (format "-*- mode:grep; default-directory: %S -*-\n\n\n"
+		                default-directory))
+    (insert (format "%d candidates:\n" (length cands)))
+    (ivy--occur-insert-lines
+     (mapcar
+      (lambda (cand) (concat "./" cand))
+      ivy--old-cands))))

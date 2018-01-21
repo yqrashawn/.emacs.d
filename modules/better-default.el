@@ -241,7 +241,7 @@ If the universal prefix argument is used then kill the buffer too."
   (progn
     (setq linum-format "%4d")
     (yq/add-toggle line-numbers :mode linum-mode)
-    (evil-leader/set-key "tn" 'yq/toggle-line-numbers)
+    (spacemacs/set-leader-keys "tn" 'yq/toggle-line-numbers)
     (defun spacemacs//linum-update-window-scale-fix (win)
       "Fix linum for scaled text in the window WIN."
       (when (display-multi-font-p)
@@ -321,7 +321,7 @@ If the universal prefix argument is used then kill the buffer too."
   (add-hook 'prog-mode-hook 'spacemacs//show-trailing-whitespace)
 
   (yq/add-toggle whitespace :mode whitespace-mode)
-  (evil-leader/set-key "tw" 'yq/toggle-whitespace)
+  (spacemacs/set-leader-keys "tw" 'yq/toggle-whitespace)
 
   (defun spacemacs//set-whitespace-style-for-diff ()
     "Whitespace configuration for `diff-mode'"
@@ -354,3 +354,27 @@ If the universal prefix argument is used then kill the buffer too."
         ;; autosave each change
         bookmark-save-flag 1)
   (spacemacs/set-leader-keys "fb" 'bookmark-jump))
+
+(use-package popwin
+  :straight t
+  :config
+  (popwin-mode 1)
+  (spacemacs/set-leader-keys "bm" 'popwin:messages)
+  (spacemacs/set-leader-keys "bc" 'popwin:close-popup-window)
+  (setq popwin:special-display-config nil)
+
+  ;; https://github.com/m2ym/popwin-el/tree/95dea14c60019d6cccf9a3b33e0dec4e1f22c304#special-display-config
+  ;; buffers that we manage
+  (push '("*Help*"                 :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config)
+  (push '("*Backtrace*"            :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config)
+  (push '("*Warnings*"            :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config)
+  (push '("*compilation*"          :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config)
+  (push '("*Shell Command Output*" :dedicated t :position bottom :stick t :noselect t            ) popwin:special-display-config)
+  (push '("*Async Shell Command*"  :dedicated t :position bottom :stick t :noselect nil            ) popwin:special-display-config)
+  (push '(" *undo-tree*"           :dedicated t :position right  :stick t :noselect nil :width   60) popwin:special-display-config)
+  (push '("*undo-tree Diff*"       :dedicated t :position bottom :stick t :noselect nil :height 0.3) popwin:special-display-config)
+  (push '("*ert*"                  :dedicated t :position bottom :stick t :noselect nil            ) popwin:special-display-config)
+  (push '("*grep*"                 :dedicated t :position bottom :stick t :noselect nil            ) popwin:special-display-config)
+  (push '("*nosetests*"            :dedicated t :position bottom :stick t :noselect nil            ) popwin:special-display-config)
+  (push '("^\*WoMan.+\*$" :regexp t             :position bottom                                   ) popwin:special-display-config)
+  (define-key evil-normal-state-map (kbd "C-z") popwin:keymap))

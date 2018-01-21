@@ -41,4 +41,4 @@
   :diminish aggressive-indent-mode
   :config
   (yq/add-toggle aggressive-indent :mode aggressive-indent-mode)
-  (evil-leader/set-key "tI" 'yq/toggle-aggressive-indent))
+  (spacemacs/set-leader-keys "tI" 'yq/toggle-aggressive-indent))

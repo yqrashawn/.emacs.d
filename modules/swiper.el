@@ -43,17 +43,17 @@ around point as the initial input."
   (define-key ivy-minibuffer-map (kbd "C-k") 'ivy-previous-line)
   (define-key ivy-minibuffer-map (kbd "<escape>") 'minibuffer-keyboard-quit)
   (global-set-key (kbd "C-x C-f") 'counsel-find-file)
-  (evil-leader/set-key "<SPC>" 'counsel-M-x)
-  (evil-leader/set-key "f" nil)
-  (evil-leader/set-key "fe" nil)
-  (evil-leader/set-key "fed" 'yq/edit-dotfile)
-  (evil-leader/set-key "ff" 'counsel-find-file)
-  (evil-leader/set-key "h" nil)
-  (evil-leader/set-key "hd" nil)
-  (evil-leader/set-key "hdf" 'counsel-describe-function)
-  (evil-leader/set-key "hdv" 'counsel-describe-variable)
-  (evil-leader/set-key "hdk" 'describe-key)
-  (evil-leader/set-key "hdh" 'counsel-describe-symbol-history)
+  (spacemacs/set-leader-keys "<SPC>" 'counsel-M-x)
+  (spacemacs/set-leader-keys "f" nil)
+  (spacemacs/set-leader-keys "fe" nil)
+  (spacemacs/set-leader-keys "fed" 'yq/edit-dotfile)
+  (spacemacs/set-leader-keys "ff" 'counsel-find-file)
+  (spacemacs/set-leader-keys "h" nil)
+  (spacemacs/set-leader-keys "hd" nil)
+  (spacemacs/set-leader-keys "hdf" 'counsel-describe-function)
+  (spacemacs/set-leader-keys "hdv" 'counsel-describe-variable)
+  (spacemacs/set-leader-keys "hdk" 'describe-key)
+  (spacemacs/set-leader-keys "hdh" 'counsel-describe-symbol-history)
   (define-key evil-normal-state-map "sl" 'counsel-imenu)
   (define-key evil-normal-state-map "sj" 'counsel-recentf))
 
@@ -80,6 +80,10 @@ around point as the initial input."
     (insert (replace-regexp-in-string "\\^J" "\n"
 				      (substring-no-properties candidate 4))))
 
+  (setq ivy-use-selectable-prompt t)
+  (ivy-set-occur 'spacemacs/counsel-search
+                 'spacemacs//counsel-occur)
+  (evil-make-overriding-map ivy-occur-mode-map 'normal)
   (define-key evil-normal-state-map "sb" 'ivy-switch-buffer))
 
 (use-package smex
@@ -97,17 +101,17 @@ around point as the initial input."
   :straight t
   :config
   (counsel-projectile-mode)
-  (evil-leader/set-key "p" nil)
-  (evil-leader/set-key "pb" 'counsel-projectile) 
-  (evil-leader/set-key "pf" 'counsel-projectile-find-file)
-  (evil-leader/set-key "pd" 'counsel-projectile-find-dir)
-  (evil-leader/set-key "pl" 'counsel-projectile-switch-project)
-  (evil-leader/set-key "ps" 'counsel-projectile-rg))
+  (spacemacs/set-leader-keys "p" nil)
+  (spacemacs/set-leader-keys "pb" 'counsel-projectile)
+  (spacemacs/set-leader-keys "pf" 'counsel-projectile-find-file)
+  (spacemacs/set-leader-keys "pd" 'counsel-projectile-find-dir)
+  (spacemacs/set-leader-keys "pl" 'counsel-projectile-switch-project)
+  (spacemacs/set-leader-keys "ps" 'counsel-projectile-rg))
 
 (yq/get-modules "counsel-funcs.el")
-(evil-leader/set-key "s" nil)
-(evil-leader/set-key "sf" 'spacemacs/search-auto)
-(evil-leader/set-key "sF" 'spacemacs/search-auto-region-or-symbol)
+(spacemacs/set-leader-keys "s" nil)
+(spacemacs/set-leader-keys "sf" 'spacemacs/search-auto)
+(spacemacs/set-leader-keys "sF" 'spacemacs/search-auto-region-or-symbol)
 (define-key evil-normal-state-map "sf" 'spacemacs/search-auto)
 (define-key evil-normal-state-map "sF" 'spacemacs/search-auto-region-or-symbol)
 

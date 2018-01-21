@@ -2,4 +2,4 @@
   :straight t
   :commands (describe-keymap)
   :init
-  (evil-leader/set-key "hdK" 'describe-keymap))
+  (spacemacs/set-leader-keys "hdK" 'describe-keymap))

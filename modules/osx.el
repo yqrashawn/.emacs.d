@@ -3,7 +3,7 @@
   :if (spacemacs/system-is-mac)
   :commands reveal-in-osx-finder
   :init
-  (evil-leader/set-key "bf" 'reveal-in-osx-finder))
+  (spacemacs/set-leader-keys "bf" 'reveal-in-osx-finder))
 
 (use-package osx-trash
   :straight t

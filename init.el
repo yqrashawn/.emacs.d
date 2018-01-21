@@ -1,6 +1,9 @@
 (tool-bar-mode -1)
 (toggle-scroll-bar -1)
 (menu-bar-mode -1)
+(setq scroll-bar-background nil)
+(add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
+(add-to-list 'default-frame-alist '(ns-appearance . 'dark)) ; or 'dark, to switch to white title text
 (defvar yq-emacs-cache-dir (concat user-emacs-directory ".cache/"))
 (defvar spacemacs-cache-directory (concat user-emacs-directory ".cache/"))
 (defvar yq-emacs-dotfile-dir (concat user-emacs-directory "init.el"))
@@ -53,6 +56,6 @@
 (unless (server-running-p) (server-start))
 (setq gc-cons-threshold 8388608)
 
-;;TODO popwin tide react vue ediff lispy org noderepl js default hl-todo
+;;TODO tide react vue  lispy org noderepl  hl-todo
 ;;TODO typescript web-mode rust
 ;;TODO restart-emacs

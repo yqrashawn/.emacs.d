@@ -1,5 +1,5 @@
 (yq/get-modules "visual-funcs.el")
-(evil-leader/set-key "tf" 'yq/toggle-default-font)
+(spacemacs/set-leader-keys "tf" 'yq/toggle-default-font)
 (use-package golden-ratio-scroll-screen
   :straight t
   :config

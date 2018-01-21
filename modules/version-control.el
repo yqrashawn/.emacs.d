@@ -10,8 +10,8 @@
   (add-hook 'git-rebase-mode-hook 'turn-off-evil-snipe-mode)
   (add-hook 'magit-mode-hook 'turn-off-evil-snipe-override-mode)
   (add-hook 'git-rebase-mode-hook 'turn-off-evil-snipe-override-mode)
-  (evil-leader/set-key "g" nil)
-  (evil-leader/set-key "gs" 'magit-status))
+  (spacemacs/set-leader-keys "g" nil)
+  (spacemacs/set-leader-keys "gs" 'magit-status))
 
 (use-package evil-magit :straight t)
 
@@ -20,4 +20,4 @@
   :commands (with-editor-mode)
   :hook (git-commit-mode-hook . with-editor-hook)
   :init
-  (evil-leader/set-key "hdK" 'describe-keymap))
+  (spacemacs/set-leader-keys "hdK" 'describe-keymap))
