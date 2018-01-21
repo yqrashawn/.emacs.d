@@ -1,4 +1,6 @@
-;; (require 'package)
+(tool-bar-mode -1)
+(toggle-scroll-bar -1)
+(menu-bar-mode -1)
 (defvar yq-emacs-cache-dir (concat user-emacs-directory ".cache/"))
 (defvar spacemacs-cache-directory (concat user-emacs-directory ".cache/"))
 (defvar yq-emacs-dotfile-dir (concat user-emacs-directory "init.el"))
@@ -11,7 +13,6 @@
       '(("http" . "127.0.0.1:6152")
         ("https" . "127.0.0.1:6152")))
 (setq gc-cons-threshold 100000000)
-;; (package-initialize)
 
 (defun my-minibuffer-setup-hook ()
   (setq gc-cons-threshold most-positive-fixnum))

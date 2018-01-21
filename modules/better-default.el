@@ -67,9 +67,6 @@ It runs `tabulated-list-revert-hook', then calls `tabulated-list-print'."
 (setq-default indent-tabs-mode nil
               tab-width 2)
 (fset 'yes-or-no-p 'y-or-n-p)
-(tool-bar-mode -1)
-(toggle-scroll-bar -1)
-(menu-bar-mode -1)
 
 ;; Auto-save file
 (setq auto-save-default (not (null dotspacemacs-auto-save-file-location)))
