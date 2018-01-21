@@ -34,7 +34,6 @@
   (customize-set-variable 'evil-shift-width 2)
   (customize-set-variable 'evil-show-paren-range 1)
   :config
-  (yq/get-modules "evil-evilified-state.el")
   ;; (define-key evil-evilified-state-map (kbd dotspacemacs-leader-key)
   ;;   spacemacs-default-map)
   (define-key evil-normal-state-map "gn" 'evil-search-word-forward)
@@ -193,6 +192,8 @@
   (setq anzu-search-threshold 1000)
   (setq anzu-cons-mode-line-p nil))
 
+(straight-use-package 'bind-map)
+(yq/get-modules "evil-evilified-state.el")
 (evilified-state-evilify-map occur-mode-map
   :mode occur-mode)
 
