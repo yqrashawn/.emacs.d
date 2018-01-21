@@ -68,7 +68,6 @@
   (if (bound-and-true-p prettier-js-mode)
       (prettier-js-mode -1)
     (prettier-js-mode 1)))
-
 (use-package prettier-js
   :straight t
   :commands (prettier-js-mode prettier-js)

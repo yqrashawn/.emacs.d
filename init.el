@@ -55,6 +55,6 @@
 (unless (server-running-p) (server-start))
 (setq gc-cons-threshold 8388608)
 
-;;TODO tide react vue  lispy org noderepl  hl-todo
-;;TODO typescript web-mode rust
+;;TODO react vue  lispy org noderepl  hl-todo
+;;TODO web-mode rust
 ;;TODO restart-emacs
