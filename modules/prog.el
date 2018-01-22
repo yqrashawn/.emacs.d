@@ -1,3 +1,11 @@
+(defvar spacemacs-default-company-backends
+  '((company-dabbrev-code company-gtags company-etags company-keywords)
+    company-files company-dabbrev)
+  "The list of default company backends used by spacemacs.
+This variable is used to configure mode-specific company backends in spacemacs.
+Backends in this list will always be active in these modes, as well as any
+backends added by individual spacemacs layers.")
+
 (defmacro spacemacs|add-company-backends (&rest props)
   "Add and enable company backends.
 This function should be called exclusively in `post-init-company' functions or
@@ -50,15 +58,15 @@ Available PROPS:
           (push `(add-to-list ',backends-var-name ',backend) result))
         ;; define initialization hook function
         (push `(defun ,init-func-name ()
-                ,(format "Initialize company for %S." mode)
-                (when auto-completion-enable-snippets-in-popup
-                  (setq ,backends-var-name
-                        (mapcar 'spacemacs//show-snippets-in-company
-                                ,backends-var-name)))
-                (set (make-variable-buffer-local 'auto-completion-front-end)
-                     'company)
-                (set (make-variable-buffer-local 'company-backends)
-                     ,backends-var-name)) result)
+                 ,(format "Initialize company for %S." mode)
+                 (when auto-completion-enable-snippets-in-popup
+                   (setq ,backends-var-name
+                         (mapcar 'spacemacs//show-snippets-in-company
+                                 ,backends-var-name)))
+                 (set (make-variable-buffer-local 'auto-completion-front-end)
+                      'company)
+                 (set (make-variable-buffer-local 'company-backends)
+                      ,backends-var-name)) result)
         (when hooks
           (push `(add-hook ',mode-hook-name ',init-func-name t) result))
         ;; define variables hook function
