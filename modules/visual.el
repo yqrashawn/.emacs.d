@@ -29,16 +29,16 @@
   "If non nil the cursor color matches the state color in GUI Emacs.")
 
 (defvar spacemacs-evil-cursors '(("normal" "DarkGoldenrod2" box)
-				 ("insert" "chartreuse3" (bar . 2))
-				 ("emacs" "SkyBlue2" box)
-				 ("hybrid" "SkyBlue2" (bar . 2))
-				 ("replace" "chocolate" (hbar . 2))
-				 ("evilified" "LightGoldenrod3" box)
-				 ("visual" "gray" (hbar . 2))
-				 ("motion" "plum3" box)
-				 ("lisp" "HotPink1" box)
-				 ("iedit" "firebrick1" box)
-				 ("iedit-insert" "firebrick1" (bar . 2)))
+                                 ("insert" "chartreuse3" (bar . 2))
+                                 ("emacs" "SkyBlue2" box)
+                                 ("hybrid" "SkyBlue2" (bar . 2))
+                                 ("replace" "chocolate" (hbar . 2))
+                                 ("evilified" "LightGoldenrod3" box)
+                                 ("visual" "gray" (hbar . 2))
+                                 ("motion" "plum3" box)
+                                 ("lisp" "HotPink1" box)
+                                 ("iedit" "firebrick1" box)
+                                 ("iedit-insert" "firebrick1" (bar . 2)))
   "Colors assigned to evil states with cursor definitions.
 To add your own, use `spacemacs/add-evil-curosr'.")
 
@@ -52,7 +52,7 @@ For evil states that do not need an evil cursor use
   (spacemacs/define-evil-state-face state color)
   (set (intern (format "evil-%s-state-cursor" state))
        (list (when dotspacemacs-colorize-cursor-according-to-state color)
-	     shape)))
+             shape)))
 
 (defun spacemacs/define-evil-state-face (state color)
   "Define a face for an evil state.
@@ -64,11 +64,11 @@ For evil states that also need an entry to `spacemacs-evil-cursors' use
   ;; and having an evil cursor defined anyway leads to the cursor sometimes
   ;; visibly flashing in treemacs buffers
   (eval `(defface ,(intern (format "spacemacs-%s-face" state))
-	   `((t (:background ,color
-			     :foreground ,(face-background 'mode-line)
-			     :inherit 'mode-line)))
-	   (format "%s state face." state)
-	   :group 'spacemacs)))
+           `((t (:background ,color
+                             :foreground ,(face-background 'mode-line)
+                             :inherit 'mode-line)))
+           (format "%s state face." state)
+           :group 'spacemacs)))
 
 (defvar spacemacs--cur-theme nil
   "Internal variable storing currently loaded theme.")
@@ -92,7 +92,7 @@ has been changed to THEME."
   (run-hooks 'spacemacs-post-theme-change-hook))
 
 (cl-loop for (state color shape) in spacemacs-evil-cursors
-	 do (spacemacs/add-evil-cursor state color shape))
+         do (spacemacs/add-evil-cursor state color shape))
 (add-hook 'spacemacs-post-theme-change-hook 'spacemacs/set-state-faces)
 
 (use-package page-break-lines
@@ -100,3 +100,13 @@ has been changed to THEME."
   :diminish page-break-lines-mode
   :init
   (global-page-break-lines-mode t))
+
+(use-package ivy-rich
+  :straight t
+  :defer t
+  :init
+  (setq ivy-rich-abbreviate-paths t
+        ivy-virtual-abbreviate 'full
+        ivy-rich-switch-buffer-align-virtual-buffer t)
+  (ivy-set-display-transformer 'ivy-switch-buffer
+                               'ivy-rich-switch-buffer-transformer))
