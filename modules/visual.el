@@ -24,7 +24,6 @@
 (use-package zenburn-theme
   :straight t)
 
-
 (defvar dotspacemacs-colorize-cursor-according-to-state t
   "If non nil the cursor color matches the state color in GUI Emacs.")
 

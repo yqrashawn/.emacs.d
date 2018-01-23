@@ -117,7 +117,14 @@ around point as the initial input."
 
 (use-package dired-narrow
   :straight t
+  :after dired
   :commands (dired-narrow-fuzzy))
+
+;; (use-package dired-quick-sort
+;;   :straight t
+;;   :commands (hydra-dired-quick-sort/body)
+;;   :config
+;;   (dired-quick-sort-setup))
 
 (use-package dired
   :config
@@ -130,3 +137,69 @@ around point as the initial input."
   :commands (dired-jump
              dired-jump-other-window
              dired-omit-mode))
+
+
+(defcustom counsel-fd-base-command "fd -L -I --hidden -a --color never "
+  "Alternative to `counsel-fd-base-command' using ripgrep."
+  :type 'string
+  :group 'ivy)
+;; (setq counsel-fd-base-command "fd -L -I --hidden -p --color never ")
+
+(defun counsel-fd-function (string base-cmd)
+  "Grep in the current directory for STRING using BASE-CMD.
+If non-nil, append EXTRA-fd-ARGS to BASE-CMD."
+
+  (if (< (length string) 3)
+      (counsel-more-chars 3)
+    (let ((default-directory counsel-fd-current-dir)
+          (regex (counsel-unquote-regex-parens
+                  (setq ivy--old-re
+                        (ivy--regex-plus string)))))
+      (let* ((fd-cmd (concat (format base-cmd) (concat " " (s-wrap regex "'")))))
+        (counsel--async-command fd-cmd)
+        nil))))
+
+(defun my-insert-fd-full-path (path)
+  (insert (concat counsel-fd-current-dir path)))
+
+(defun my-insert-tsfile-path (path)
+  (insert (concat (concat "[[tsfile:" (f-filename path)) "][]]")))
+
+(defun counsel-fd (&optional initial-input initial-directory fd-prompt)
+  "Grep for a string in the current directory using fd.
+INITIAL-INPUT can be given as the initial minibuffer input.
+INITIAL-DIRECTORY, if non-nil, is used as the root directory for search.
+EXTRA-FD-ARGS string, if non-nil, is appended to `counsel-fd-base-command'.
+FD-PROMPT, if non-nil, is passed as `ivy-read' prompt argument."
+  (interactive
+   (list nil
+         (when current-prefix-arg
+           (read-directory-name (concat
+                                 (car (split-string counsel-fd-base-command))
+                                 " in directory: ")))))
+  (counsel-require-program (car (split-string counsel-fd-base-command)))
+  (ivy-set-prompt 'counsel-fd counsel-prompt-function)
+  (setq counsel-fd-current-dir (or initial-directory default-directory))
+  (ivy-read (or fd-prompt (car (split-string counsel-fd-base-command)))
+            (lambda (string)
+              (counsel-fd-function string counsel-fd-base-command))
+            :initial-input initial-input
+            :dynamic-collection t
+            ;; :keymap counsel-ag-map
+            :history 'counsel-git-grep-history
+            :action '(1 ("z" (lambda (file)
+                               (with-ivy-window
+                                 (when file
+                                   (find-file  file)))))
+                        ("o" (lambda (path)
+                               (my-insert-tsfile-path path)
+                               (backward-char)
+                               (backward-char)) "insert tsfile path")
+                        )
+            :unwind (lambda ()
+                      (counsel-delete-process)
+                      (swiper--cleanup))
+            :caller 'counsel-fd))
+
+(spacemacs/set-leader-keys "skd" 'counsel-fd)
+(spacemacs/set-leader-keys "sm" 'counsel-fd)

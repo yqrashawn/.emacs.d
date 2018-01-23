@@ -125,6 +125,7 @@ Available PROPS:
 
 (use-package company-childframe
   :straight t
+  :diminish company-childframe-mode
   :config
   (company-childframe-mode 1))
 
