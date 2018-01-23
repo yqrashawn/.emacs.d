@@ -277,8 +277,8 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   :config
   (setq yas--default-user-snippets-dir (concat user-emacs-directory "private/snippets/"))
   (push 'yas-installed-snippets-dir yas-snippet-dirs)
-  (push 'yas-hippie-try-expand hippie-expand-try-functions-list)
-  (push 'yas-installed-snippets-dir yas-snippet-dirs))
+  (push 'yas--default-user-snippets-dir yas-snippet-dirs)
+  (push 'yas-hippie-try-expand hippie-expand-try-functions-list))
 
 (use-package ediff
   :defer t
