@@ -57,14 +57,14 @@
 (yq/get-modules "visual.el")
 (yq/get-modules "osx.el")
 (yq/get-modules "lang.el")
+(yq/get-modules "org-agenda.el")
 
 (use-package server)
 (unless (server-running-p) (server-start))
 (setq gc-cons-threshold 8388608)
 
-;;TODO react vue  lispy org noderepl  hl-todo
+;;TODO react vue lispy noderepl hl-todo
 ;;TODO web-mode rust
-;;TODO restart-emacs
 
 (use-package playground
   :straight (:host github :repo "akirak/emacs-playground"))

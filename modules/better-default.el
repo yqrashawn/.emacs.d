@@ -430,3 +430,12 @@ If the universal prefix argument is used then will the windows too."
     (mapc 'kill-buffer (delq (current-buffer) (buffer-list)))
     (when (equal '(4) arg) (delete-other-windows))))
 (evil-leader/set-key (kbd "b C-d") 'spacemacs/kill-other-buffers)
+
+(setq require-final-newline nil)
+(setq mode-require-final-newline nil)
+
+(use-package restart-emacs
+  :straight t
+  :commands (restart-emacs)
+  :init
+  (spacemacs/set-leader-keys "qr" 'restart-emacs))

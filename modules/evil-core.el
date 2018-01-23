@@ -36,6 +36,13 @@
   :config
   ;; (define-key evil-evilified-state-map (kbd dotspacemacs-leader-key)
   ;;   spacemacs-default-map)
+  (defun yq/duplicate-line ()
+    "Duplicate current line."
+    (interactive)
+    (kill-whole-line)
+    (yank)
+    (yank))
+  (define-key evil-normal-state-map (kbd "gy") 'yq/duplicate-line)
   (define-key evil-normal-state-map "gn" 'evil-search-word-forward)
   (define-key evil-normal-state-map "gd" 'spacemacs/jump-to-definition)
   (define-key evil-normal-state-map "gD" 'spacemacs/jump-to-definition-other-window)
@@ -82,6 +89,66 @@
   (evil-define-minor-mode-key 'motion 'visual-line-mode "k" 'evil-previous-visual-line)
   (evil-mode 1))
 
+(use-package evil-nerd-commenter
+  :straight t
+  :commands evilnc-comment-operator
+  :init
+  (progn
+    ;; double all the commenting functions so that the inverse operations
+    ;; can be called without setting a flag
+    (defun spacemacs/comment-or-uncomment-lines-inverse (&optional arg)
+      (interactive "p")
+      (let ((evilnc-invert-comment-line-by-line t))
+        (evilnc-comment-or-uncomment-lines arg)))
+
+    (defun spacemacs/comment-or-uncomment-lines (&optional arg)
+      (interactive "p")
+      (let ((evilnc-invert-comment-line-by-line nil))
+        (evilnc-comment-or-uncomment-lines arg)))
+
+    (defun spacemacs/copy-and-comment-lines-inverse (&optional arg)
+      (interactive "p")
+      (let ((evilnc-invert-comment-line-by-line t))
+        (evilnc-copy-and-comment-lines arg)))
+
+    (defun spacemacs/copy-and-comment-lines (&optional arg)
+      (interactive "p")
+      (let ((evilnc-invert-comment-line-by-line nil))
+        (evilnc-copy-and-comment-lines arg)))
+
+    (defun spacemacs/quick-comment-or-uncomment-to-the-line-inverse
+        (&optional arg)
+      (interactive "p")
+      (let ((evilnc-invert-comment-line-by-line t))
+        (evilnc-comment-or-uncomment-to-the-line arg)))
+
+    (defun spacemacs/quick-comment-or-uncomment-to-the-line (&optional arg)
+      (interactive "p")
+      (let ((evilnc-invert-comment-line-by-line nil))
+        (evilnc-comment-or-uncomment-to-the-line arg)))
+
+    (defun spacemacs/comment-or-uncomment-paragraphs-inverse (&optional arg)
+      (interactive "p")
+      (let ((evilnc-invert-comment-line-by-line t))
+        (evilnc-comment-or-uncomment-paragraphs arg)))
+
+    (defun spacemacs/comment-or-uncomment-paragraphs (&optional arg)
+      (interactive "p")
+      (let ((evilnc-invert-comment-line-by-line nil))
+        (evilnc-comment-or-uncomment-paragraphs arg)))
+    (define-key evil-normal-state-map "gc" 'evilnc-comment-operator)
+    (define-key evil-normal-state-map "gY" 'spacemacs/copy-and-comment-lines)
+    (spacemacs/set-leader-keys
+      ";"  'evilnc-comment-operator
+      "cl" 'spacemacs/comment-or-uncomment-lines
+      "cL" 'spacemacs/comment-or-uncomment-lines-inverse
+      "cp" 'spacemacs/comment-or-uncomment-paragraphs
+      "cP" 'spacemacs/comment-or-uncomment-paragraphs-inverse
+      "ct" 'spacemacs/quick-comment-or-uncomment-to-the-line
+      "cT" 'spacemacs/quick-comment-or-uncomment-to-the-line-inverse
+      "cy" 'spacemacs/copy-and-comment-lines
+      "cY" 'spacemacs/copy-and-comment-lines-inverse)))
+
 (use-package evil-snipe
   :straight t
   :diminish evil-snipe-mode
@@ -98,10 +165,10 @@
   ;; remap s
   ;; use t as evil-snipe-s in normal mode
   (evil-define-key* '(normal motion) evil-snipe-local-mode-map
-		    "s" nil
-		    "S" nil
-		    "t" #'evil-snipe-s
-		    "T" #'evil-snipe-S)
+                    "s" nil
+                    "S" nil
+                    "t" #'evil-snipe-s
+                    "T" #'evil-snipe-S)
   (setq evil-snipe-auto-disable-substitute nil)
   (evil-snipe-mode 1)
   (setq evil-snipe-repeat-scope 'whole-buffer)
@@ -125,9 +192,9 @@
   :diminish global-highlight-parentheses-mode
   :config
   (set-face-attribute 'evil-search-highlight-persist-highlight-face nil
-		      :inherit 'lazy-highlight
-		      :background nil
-		      :foreground nil)
+                      :inherit 'lazy-highlight
+                      :background nil
+                      :foreground nil)
   (global-evil-search-highlight-persist t)
   (setq evil-search-highlight-string-min-len 1)
   evil-search-highlight-persist-all-windows t)
@@ -170,16 +237,16 @@
   (defun yq/anzu-update-func (here total)
     (when anzu--state
       (let ((status (cl-case anzu--state
-		      (search (format "<%d/%d>" here total))
-		      (replace-query (format "(%d Replaces)" total))
-		      (replace (format "<%d/%d>" here total)))))
-	(propertize status 'face 'anzu-mode-line))))
+                      (search (format "<%d/%d>" here total))
+                      (replace-query (format "(%d Replaces)" total))
+                      (replace (format "<%d/%d>" here total)))))
+        (propertize status 'face 'anzu-mode-line))))
 
   (custom-set-variables
    '(anzu-mode-line-update-function #'yq/anzu-update-func))
   (setq anzu-cons-mode-line-p nil)
   (setcar (cdr (assq 'isearch-mode minor-mode-alist))
-	  '(:eval (anzu--update-mode-line))))
+          '(:eval (anzu--update-mode-line))))
 
 (use-package evil-anzu
   :straight t
@@ -194,4 +261,3 @@
 (yq/get-modules "evil-evilified-state.el")
 (evilified-state-evilify-map occur-mode-map
   :mode occur-mode)
-

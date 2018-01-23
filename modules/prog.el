@@ -279,7 +279,7 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   (push 'yas-installed-snippets-dir yas-snippet-dirs)
   (push 'yas--default-user-snippets-dir yas-snippet-dirs)
   (push 'yas-hippie-try-expand hippie-expand-try-functions-list))
-
+
 (use-package ediff
   :defer t
   :init
@@ -292,7 +292,7 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   ;; (add-hook 'ediff-prepare-buffer-hook #'show-all)
   ;; restore window layout when done
   (add-hook 'ediff-quit-hook #'winner-undo))
-
+
 (use-package dumb-jump
   :straight t
   :config
@@ -306,7 +306,7 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   ;; the time of writing it is the only default jump handler. (gtags remains
   ;; mode-local)
   (add-to-list 'spacemacs-default-jump-handlers 'dumb-jump-go 'append))
-
+
 (use-package eldoc
   :diminish eldoc-mode
   :commands (eldoc-mode)
@@ -316,5 +316,11 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   (add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode)
   ;; enable eldoc in IELM
   (add-hook 'ielm-mode-hook #'eldoc-mode))
-
+
+(use-package magithub
+  :straight t
+  :after magit
+  :config (setq magithub-features t
+                magithub-feature-autoinject t
+                magithub-dir "~/Dropbox/sync/magithub"))
 ;; TODO: auto-yas
