@@ -1,10 +1,13 @@
 (spacemacs|define-jump-handlers js2-mode)
+(setq js-indent-level 2)
 (use-package js2-mode
   :straight t
   :mode "\\.js\\'"
   :init
   (add-hook 'js2-mode-hook 'js2-imenu-extras-mode)
   :config
+  (setq js2-mode-show-parse-errors t)
+  (setq js2-mode-show-strict-warnings nil)
   (evil-define-key 'normal js2-mode-map "," nil)
   (evil-define-key 'normal js2-mode-map ",d" nil)
   (evil-define-key 'normal js2-mode-map ",zc" 'js2-mode-hide-element)
@@ -42,11 +45,12 @@
   (evil-define-key 'normal js2-mode-map ",tn" 'tern-find-definition-by-name)
   (evil-define-key 'normal js2-mode-map ",tp" 'tern-pop-find-definition)
   (evil-define-key 'normal js2-mode-map ",tt" 'tern-get-type))
+
 (use-package tern
   :defer t
   :commands (tern-mode)
-  :hook (js2-mode . tern-mode)
   :init
+  (add-hook 'js2-mode-hook 'tern-mode)
   (spacemacs//tern-detect)
   :config
   (yq//set-tern-key-bindings 'js2-mode)
@@ -68,9 +72,11 @@
   (if (bound-and-true-p prettier-js-mode)
       (prettier-js-mode -1)
     (prettier-js-mode 1)))
+
 (use-package prettier-js
   :straight t
   :commands (prettier-js-mode prettier-js)
   :init
+  (add-hook 'js2-mode-hook 'prettier-js-mode)
   (evil-define-key 'normal js2-mode-map ",=" 'prettier-js)
   (evil-define-key 'normal js2-mode-map ",tp" 'yq/toggle-prettier-js-mode))

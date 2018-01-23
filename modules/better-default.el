@@ -371,3 +371,23 @@ If the universal prefix argument is used then kill the buffer too."
   (push '("*nosetests*"            :dedicated t :position bottom :stick t :noselect nil            ) popwin:special-display-config)
   (push '("^\*WoMan.+\*$" :regexp t             :position bottom                                   ) popwin:special-display-config)
   (define-key evil-normal-state-map (kbd "C-z") popwin:keymap))
+
+(setq standard-indent 2)
+
+(defvar dotspacemacs-scratch-mode 'text-mode
+  "Default major mode of the scratch buffer.")
+
+(defun spacemacs/switch-to-scratch-buffer (&optional arg)
+  "Switch to the `*scratch*' buffer, creating it first if needed.
+if prefix argument ARG is given, switch to it in an other, possibly new window."
+  (interactive "P")
+  (let ((exists (get-buffer "*scratch*")))
+    (if arg
+        (switch-to-buffer-other-window (get-buffer-create "*scratch*"))
+      (switch-to-buffer (get-buffer-create "*scratch*")))
+    (when (and (not exists)
+               (not (eq major-mode dotspacemacs-scratch-mode))
+               (fboundp dotspacemacs-scratch-mode))
+      (funcall dotspacemacs-scratch-mode))))
+
+(evil-leader/set-key "bs" 'spacemacs/switch-to-scratch-buffer)

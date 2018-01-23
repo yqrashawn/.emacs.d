@@ -115,6 +115,10 @@ around point as the initial input."
 (define-key evil-normal-state-map "sf" 'spacemacs/search-auto)
 (define-key evil-normal-state-map "sF" 'spacemacs/search-auto-region-or-symbol)
 
+(use-package dired-narrow
+  :straight t
+  :commands (dired-narrow-fuzzy))
+
 (use-package dired
   :config
   (evil-define-key 'normal dired-mode-map
