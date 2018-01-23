@@ -29,6 +29,7 @@ and 'typescript-formatter .")
 (use-package tide
   :straight t
   :defer t
+  :diminish tide-mode
   :commands (typescript/jump-to-type-def)
   :init
   (add-hook 'typescript-mode-hook 'eldoc-mode)

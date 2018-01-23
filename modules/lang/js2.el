@@ -49,10 +49,12 @@
 (use-package tern
   :defer t
   :commands (tern-mode)
+  :diminish tern-mode
   :init
   (add-hook 'js2-mode-hook 'tern-mode)
   (spacemacs//tern-detect)
   :config
+  (add-to-list 'tern-command "--no-port-file" 'append)
   (yq//set-tern-key-bindings 'js2-mode)
   (dolist (mode '(js2-mode json-mode))
     (spacemacs/enable-flycheck mode)))
@@ -60,7 +62,9 @@
 (use-package company-tern
   :straight t
   :init
-  (add-to-list 'company-backends 'company-tern))
+  (spacemacs|add-company-backends
+    :backends company-tern
+    :modes js2-mode))
 
 (use-package json-mode
   :straight t
@@ -75,6 +79,7 @@
 
 (use-package prettier-js
   :straight t
+  :diminish prettier-js-mode
   :commands (prettier-js-mode prettier-js)
   :init
   (add-hook 'js2-mode-hook 'prettier-js-mode)

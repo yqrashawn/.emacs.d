@@ -275,7 +275,7 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   (setq yas-minor-mode-map (make-sparse-keymap))
   (define-key yas-minor-mode-map (kbd "M-s-/") 'yas-next-field)
   :config
-  (setq yas--default-user-snippets-dir (concat user-emacs-directory "private/snippets/"))
+  (setq yas--default-user-snippets-dir (concat user-home-directory ".emacs.d/private/snippets/"))
   (push 'yas-installed-snippets-dir yas-snippet-dirs)
   (push 'yas--default-user-snippets-dir yas-snippet-dirs)
   (push 'yas-hippie-try-expand hippie-expand-try-functions-list))

@@ -37,6 +37,13 @@
 (straight-use-package 'diminish)
 (straight-use-package 'use-package)
 
+(use-package exec-path-from-shell
+  :straight t
+  :config
+  (when (memq window-system '(mac ns x))
+    (exec-path-from-shell-initialize)))
+
+
 (defun yq/get-modules (module-dir)
   (load-file (concat user-emacs-directory "modules/" module-dir)))
 
