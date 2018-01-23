@@ -92,6 +92,7 @@ The return value is nil if no font was found, truthy otherwise."
                                      :width normal
                                      :powerline-scale 1.1))
 
+(spacemacs/set-default-font yq/large-screen-default-font)
 (defun yq/toggle-default-font ()
   "font for large screen"
   (interactive)
