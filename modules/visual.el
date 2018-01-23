@@ -18,11 +18,12 @@
   :config
   (add-hook 'prog-mode-hook 'highlight-parentheses-mode))
 
+(use-package color-theme-sanityinc-tomorrow
+  :straight t)
+
 (use-package zenburn-theme
   :straight t)
 
-(use-package solarized-theme
-  :straight t)
 
 (defvar dotspacemacs-colorize-cursor-according-to-state t
   "If non nil the cursor color matches the state color in GUI Emacs.")
@@ -109,3 +110,7 @@ For evil states that also need an entry to `spacemacs-evil-cursors' use
         ivy-rich-switch-buffer-align-virtual-buffer t)
   (ivy-set-display-transformer 'ivy-switch-buffer
                                'ivy-rich-switch-buffer-transformer))
+(use-package evil-visual-mark-mode
+  :straight t
+  :config
+  (evil-visual-mark-mode 1))

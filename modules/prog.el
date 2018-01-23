@@ -123,6 +123,11 @@ Available PROPS:
   :config
   (company-flx-mode +1))
 
+(use-package company-childframe
+  :straight t
+  :config
+  (company-childframe-mode 1))
+
 (setq syntax-checking-enable-by-default t)
 
 (defun spacemacs/enable-flycheck (mode)
@@ -269,6 +274,8 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   (setq yas-minor-mode-map (make-sparse-keymap))
   (define-key yas-minor-mode-map (kbd "M-s-/") 'yas-next-field)
   :config
+  (setq yas--default-user-snippets-dir (concat user-emacs-directory "private/snippets/"))
+  (push 'yas-installed-snippets-dir yas-snippet-dirs)
   (push 'yas-hippie-try-expand hippie-expand-try-functions-list)
   (push 'yas-installed-snippets-dir yas-snippet-dirs))
 
