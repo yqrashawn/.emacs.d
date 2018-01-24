@@ -18,7 +18,7 @@
   :config
   (add-hook 'prog-mode-hook 'highlight-parentheses-mode))
 
-(use-package color-theme-sanityinc-tomorrow
+(use-package color-theme-sanityinc-solarized
   :straight t)
 
 (use-package zenburn-theme
