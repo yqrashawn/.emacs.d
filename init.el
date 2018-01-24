@@ -43,7 +43,6 @@
   (when (memq window-system '(mac ns x))
     (exec-path-from-shell-initialize)))
 
-
 (defun yq/get-modules (module-dir)
   (load-file (concat user-emacs-directory "modules/" module-dir)))
 
@@ -63,8 +62,8 @@
 (unless (server-running-p) (server-start))
 (setq gc-cons-threshold 8388608)
 
-;;TODO react vue lispy noderepl hl-todo
-;;TODO web-mode rust
+;; TODO react vue lispy noderepl hl-todo
+;; TODO web-mode rust
 
 (use-package playground
   :straight (:host github :repo "akirak/emacs-playground"))

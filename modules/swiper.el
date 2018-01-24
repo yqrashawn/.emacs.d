@@ -57,6 +57,7 @@ around point as the initial input."
   (spacemacs/set-leader-keys "hdh" 'counsel-describe-symbol-history)
   (define-key evil-normal-state-map "sf" 'counsel-rg)
   (define-key evil-normal-state-map "sl" 'counsel-imenu)
+  (define-key evil-normal-state-map "sL" 'spacemacs/swiper-all-region-or-symbol)
   (define-key evil-normal-state-map "sj" 'counsel-recentf))
 
 (use-package ivy
