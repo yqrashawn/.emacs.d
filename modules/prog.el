@@ -320,7 +320,9 @@ is not visible. Otherwise delegates to regular Emacs next-error."
 (use-package magithub
   :straight t
   :after magit
-  :config (setq magithub-features t
-                magithub-feature-autoinject t
-                magithub-dir "~/Dropbox/sync/magithub"))
+  :config
+  (setq magithub-enabled-by-default nil)
+  (setq magithub-features t
+        magithub-feature-autoinject t
+        magithub-dir "~/Dropbox/sync/magithub"))
 ;; TODO: auto-yas
