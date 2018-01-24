@@ -260,6 +260,7 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   :config
   (smartparens-global-mode t)
   (define-key evil-normal-state-map "sd" 'sp-kill-sexp)
+  (define-key evil-normal-state-map "s," 'sp-copy-sexp)
   (use-package smartparens-config))
 
 (use-package yasnippet
