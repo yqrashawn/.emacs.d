@@ -208,14 +208,28 @@ that directory."
 ;; Define search functions for each tool
 (cl-loop
  for (tools tool-name) in '((dotspacemacs-search-tools "auto")
-			    ((list "rg") "rg")
-			    ((list "ag") "ag")
-			    ((list "pt") "pt")
-			    ((list "ack") "ack")
-			    ((list "grep") "grep"))
+			    ((list "rg") "rg"))
  do
  (eval
   `(progn
+     (defun ,(intern (format "spacemacs/search-%s-region-or-symbol-direct"
+			                       tool-name)) ()
+       ,(format
+	       "Use `spacemacs/counsel-search' to search for
+ the selected region or the symbol around point in the current
+ directory with %s." (if (string= tool-name "auto")
+			                   "a tool selected from `dotspacemacs-search-tools'."
+		                   tool-name))
+       (interactive)
+       (spacemacs/counsel-search ,tools t (locate-dominating-file default-directory ".git")))
+     (defun ,(intern (format "spacemacs/search-%s-direct" tool-name)) ()
+       ,(format
+	       "Use `spacemacs/counsel-search' to search in the current
+ directory with %s." (if (string= tool-name "auto")
+			                   "a tool selected from `dotspacemacs-search-tools'."
+		                   tool-name))
+       (interactive)
+       (spacemacs/counsel-search ,tools nil (locate-dominating-file default-directory ".git")))
      (defun ,(intern (format "spacemacs/search-%s" tool-name)) ()
        ,(format
 	 "Use `spacemacs/counsel-search' to search in the current

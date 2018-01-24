@@ -55,6 +55,7 @@ around point as the initial input."
   (spacemacs/set-leader-keys "hdv" 'counsel-describe-variable)
   (spacemacs/set-leader-keys "hdk" 'describe-key)
   (spacemacs/set-leader-keys "hdh" 'counsel-describe-symbol-history)
+  (define-key evil-normal-state-map "sf" 'counsel-rg)
   (define-key evil-normal-state-map "sl" 'counsel-imenu)
   (define-key evil-normal-state-map "sj" 'counsel-recentf))
 
@@ -113,8 +114,8 @@ around point as the initial input."
 (spacemacs/set-leader-keys "s" nil)
 (spacemacs/set-leader-keys "sf" 'spacemacs/search-auto)
 (spacemacs/set-leader-keys "sF" 'spacemacs/search-auto-region-or-symbol)
-(define-key evil-normal-state-map "sf" 'spacemacs/search-auto)
-(define-key evil-normal-state-map "sF" 'spacemacs/search-auto-region-or-symbol)
+;; (define-key evil-normal-state-map "sf" 'spacemacs/search-rg-direct)
+(define-key evil-normal-state-map "sF" 'spacemacs/search-auto-region-or-symbol-direct)
 
 (use-package dired-narrow
   :straight t
@@ -138,7 +139,6 @@ around point as the initial input."
   :commands (dired-jump
              dired-jump-other-window
              dired-omit-mode))
-
 
 (defcustom counsel-fd-base-command "fd -L -I --hidden -a --color never "
   "Alternative to `counsel-fd-base-command' using ripgrep."
