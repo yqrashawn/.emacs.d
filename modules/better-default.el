@@ -438,4 +438,5 @@ If the universal prefix argument is used then will the windows too."
   :straight t
   :commands (restart-emacs)
   :init
+  (spacemacs/set-leader-keys "qq" 'save-buffers-kill-emacs)
   (spacemacs/set-leader-keys "qr" 'restart-emacs))

@@ -54,7 +54,6 @@
   (define-key evil-normal-state-map "sh" 'save-buffer)
   (define-key evil-normal-state-map (kbd "C-e") 'mwim-end-of-code-or-line)
   (define-key evil-normal-state-map (kbd "C-m") 'evil-jump-item)
-  (define-key evil-visual-state-map (kbd "C-x C-;") 'comment-region)
   (define-key evil-visual-state-map (kbd "C-m") 'evil-jump-item)
   (define-key evil-visual-state-map (kbd "C-e") 'evil-end-of-line)
   (define-key evil-visual-state-map (kbd "C-a") 'evil-first-non-blank)
@@ -136,6 +135,7 @@
       (interactive "p")
       (let ((evilnc-invert-comment-line-by-line nil))
         (evilnc-comment-or-uncomment-paragraphs arg)))
+    (define-key evil-visual-state-map (kbd "C-x C-;") 'evilnc-comment-or-uncomment-lines)
     (define-key evil-normal-state-map "gc" 'evilnc-comment-operator)
     (define-key evil-normal-state-map "gY" 'spacemacs/copy-and-comment-lines)
     (spacemacs/set-leader-keys
