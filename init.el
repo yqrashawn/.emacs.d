@@ -63,8 +63,8 @@
 (unless (server-running-p) (server-start))
 (setq gc-cons-threshold 8388608)
 
-;;TODO react vue lispy noderepl hl-todo
-;;TODO web-mode rust
+;; TODO react vue lispy noderepl hl-todo
+;; TODO web-mode rust
 
 (use-package playground
   :straight (:host github :repo "akirak/emacs-playground"))
