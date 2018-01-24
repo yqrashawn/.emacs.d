@@ -49,6 +49,7 @@ around point as the initial input."
   (spacemacs/set-leader-keys "fe" nil)
   (spacemacs/set-leader-keys "fed" 'yq/edit-dotfile)
   (spacemacs/set-leader-keys "ff" 'counsel-find-file)
+  (spacemacs/set-leader-keys "fF" 'find-file-other-window)
   (spacemacs/set-leader-keys "h" nil)
   (spacemacs/set-leader-keys "hd" nil)
   (spacemacs/set-leader-keys "hdf" 'counsel-describe-function)
