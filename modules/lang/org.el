@@ -243,7 +243,6 @@ Will work on both org-mode and any mode that accepts plain html."
                              additional)))
 
 (use-package org-agenda
-  :straight t
   :defer t
   :init
   (setq org-agenda-restore-windows-after-quit t)

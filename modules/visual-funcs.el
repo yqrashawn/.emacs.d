@@ -82,6 +82,7 @@ The return value is nil if no font was found, truthy otherwise."
                                      :weight normal
                                      :width normal
                                      :powerline-scale 1.1))
+
 (setq yq/large-screen-default-font '("Hack"
                                      ;;"Menlo"
                                      ;; "Anonymous Pro for Powerline"
