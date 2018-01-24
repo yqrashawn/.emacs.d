@@ -102,3 +102,11 @@ The return value is nil if no font was found, truthy otherwise."
     (if (string= yq/default-font-kind "large")
         (progn (setq yq/default-font-kind "small")
                (spacemacs/set-default-font yq/small-screen-default-font)))))
+
+(defun disable-all-themes ()
+  "disable all custom enabled themes"
+  (dolist (i custom-enabled-themes)
+    (disable-theme i)))
+
+(defadvice load-theme (before theme-dont-propagate activate)
+  (disable-all-themes))

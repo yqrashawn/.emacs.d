@@ -43,7 +43,6 @@
   (when (memq window-system '(mac ns x))
     (exec-path-from-shell-initialize)))
 
-
 (defun yq/get-modules (module-dir)
   (load-file (concat user-emacs-directory "modules/" module-dir)))
 
