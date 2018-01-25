@@ -61,6 +61,8 @@ around point as the initial input."
   (define-key evil-normal-state-map "sL" 'spacemacs/swiper-all-region-or-symbol)
   (define-key evil-normal-state-map "sj" 'counsel-recentf))
 
+(straight-use-package 'counsel-tramp)
+
 (use-package ivy
   :straight t
   :diminish ivy-mode
@@ -118,29 +120,41 @@ around point as the initial input."
 (spacemacs/set-leader-keys "sF" 'spacemacs/search-auto-region-or-symbol)
 ;; (define-key evil-normal-state-map "sf" 'spacemacs/search-rg-direct)
 (define-key evil-normal-state-map "sF" 'spacemacs/search-auto-region-or-symbol-direct)
-
+
 (use-package dired-narrow
   :straight t
   :after dired
   :commands (dired-narrow-fuzzy))
 
-;; (use-package dired-quick-sort
-;;   :straight t
-;;   :commands (hydra-dired-quick-sort/body)
-;;   :config
-;;   (dired-quick-sort-setup))
-
 (use-package dired
   :config
   (evil-define-key 'normal dired-mode-map
-    "l" 'dired-find-file
-    "f" 'dired-narrow-fuzzy
-    "h" 'dired-up-directory))
+    "s" 'nil
+    "sk" 'yq/kill-this-buffer
+    "sf" 'counsel-rg
+    "ss" 'dired-sort-toggle-or-edit
+    "sc" 'yq/delete-window
+    "f" 'dired-narrow-fuzzy))
+
+(use-package dired+
+  :straight t
+  :init
+  (setq diredp-hide-details-initially-flag nil)
+  (evil-leader/set-key "fj" 'diredp-dired-recent-dirs)
+  (evil-leader/set-key "fJ" 'diredp-dired-recent-dirs-other-window)
+  (evil-define-key 'normal dired-mode-map "h" 'diredp-up-directory-reuse-dir-buffer)
+  (evil-define-key 'normal dired-mode-map "j" 'diredp-next-line)
+  (evil-define-key 'normal dired-mode-map "k" 'diredp-previous-line)
+  (evil-define-key 'normal dired-mode-map "l" 'diredp-find-file-reuse-dir-buffer))
 
 (use-package dired-x
+  :hook (dired-mode . dired-omit-mode)
   :commands (dired-jump
              dired-jump-other-window
-             dired-omit-mode))
+             dired-omit-mode)
+  :config
+  (setq dired-omit-files
+        (concat dired-omit-files "\\|^\\.DS_Store$\\|^__MACOSX$\\|^\\.localized$")))
 
 (defcustom counsel-fd-base-command "fd -L -I --hidden -a --color never "
   "Alternative to `counsel-fd-base-command' using ripgrep."
@@ -197,12 +211,11 @@ FD-PROMPT, if non-nil, is passed as `ivy-read' prompt argument."
                         ("o" (lambda (path)
                                (my-insert-tsfile-path path)
                                (backward-char)
-                               (backward-char)) "insert tsfile path")
-                        )
+                               (backward-char)) "insert tsfile path"))
+            
             :unwind (lambda ()
                       (counsel-delete-process)
                       (swiper--cleanup))
             :caller 'counsel-fd))
 
-(spacemacs/set-leader-keys "skd" 'counsel-fd)
 (spacemacs/set-leader-keys "sm" 'counsel-fd)
