@@ -19,10 +19,12 @@
   (add-hook 'prog-mode-hook 'highlight-parentheses-mode))
 
 (use-package color-theme-sanityinc-solarized
-  :straight t)
+  :straight t
+  :defer t)
 
 (use-package zenburn-theme
-  :straight t)
+  :straight t
+  :defer t)
 
 (defvar dotspacemacs-colorize-cursor-according-to-state t
   "If non nil the cursor color matches the state color in GUI Emacs.")

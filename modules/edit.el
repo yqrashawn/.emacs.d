@@ -11,7 +11,7 @@
 
 (global-set-key (kbd "M-/") 'hippie-expand)
 (setq hippie-expand-try-functions-list
-      '()
+      '(
       ;; Try to expand word "dynamically", searching the current buffer.
       try-expand-dabbrev
       ;; Try to expand word "dynamically", searching all other buffers.
@@ -32,7 +32,7 @@
       ;; unique.
       try-complete-lisp-symbol-partially
       ;; Try to complete word as an Emacs Lisp symbol.
-      try-complete-lisp-symbol)
+      try-complete-lisp-symbol))
 (define-key evil-insert-state-map (kbd "C-l") 'hippie-expand)
 
 (use-package aggressive-indent
