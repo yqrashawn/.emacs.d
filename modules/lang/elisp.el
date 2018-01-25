@@ -4,7 +4,7 @@
   (if (bound-and-true-p parinfer-mode)
       (parinfer-mode -1)
     (parinfer-mode 1)))
-
+
 (use-package elisp-mode
   :mode ("\\.el\\'" . emacs-lisp-mode)
   :commands (emacs-lisp-mode)
@@ -20,7 +20,7 @@
   (evil-define-key 'normal emacs-lisp-mode-map ",ef" 'eval-defun)
   (evil-define-key 'normal emacs-lisp-mode-map ",el" 'lisp-state-eval-sexp-end-of-line)
   (evil-define-key 'visual emacs-lisp-mode-map ",er" 'eval-region))
-
+
 (use-package elisp-slime-nav
   :straight t
   :diminish elisp-slime-nav-mode
@@ -31,7 +31,7 @@
     (spacemacs/set-leader-keys-for-major-mode 'emacs-lisp-mode "mhh" 'elisp-slime-nav-describe-elisp-thing-at-point)
     (let ((jumpl (intern (format "spacemacs-jump-handlers-%S" mode))))
       (add-to-list jumpl 'elisp-slime-nav-find-elisp-thing-at-point))))
-
+
 (use-package parinfer
   :straight t
   ;; :hook (emacs-lisp-mode . parinfer-mode)
@@ -41,3 +41,16 @@
   (setq parinfer-extensions '(defaults pretty-parens evil smart-yank))
   :config
   (define-key parinfer-mode-map (kbd "C-,") 'parinfer-toggle-mode))
+
+(use-package lispy
+  :straight t
+  :diminish lispy " ʪ"
+  :commands (lispy-mode)
+  :init
+  (customize-set-variable 'lispy-visit-method 'projectile)
+  (yq/add-toggle lispy :mode lispy-mode)
+  (define-key evil-normal-state-map ",," 'yq/toggle-lispy)
+  :config
+  (evil-define-key 'insert lispy-mode-map (kbd "C-k") 'lispy-kill)
+  (evil-define-key 'insert lispy-mode-map (kbd "C-r") 'undo-tree-redo)
+  (evil-define-key 'insert lispy-mode-map (kbd "C-e") 'lispy-move-end-of-line))

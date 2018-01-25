@@ -7,7 +7,9 @@
 (use-package undo-tree
   :straight (:host github :repo "emacsmirror/undo-tree")
   :diminish undo-tree-mode
-  :config (global-undo-tree-mode))
+  :config
+  (global-undo-tree-mode)
+  (global-set-key (kbd "s-y") 'undo-tree-redo))
 
 (use-package goto-chg
   :straight (:host github :repo "emacs-evil/goto-chg"))
@@ -87,6 +89,8 @@
   (evil-define-minor-mode-key 'motion 'visual-line-mode "j" 'evil-next-visual-line)
   (evil-define-minor-mode-key 'motion 'visual-line-mode "k" 'evil-previous-visual-line)
   (evil-mode 1))
+
+
 
 (use-package evil-nerd-commenter
   :straight t

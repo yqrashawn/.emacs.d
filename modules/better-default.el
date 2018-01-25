@@ -17,6 +17,8 @@ file stored in the cache directory and `nil' to disable auto-saving.")
   (expand-file-name "~/")
   "User home directory (~/).")
 
+(setq source-directory (concat user-home-directory "emacs"))
+
 
 (add-hook 'prog-mode-hook 'goto-address-prog-mode)
 (add-hook 'prog-mode-hook 'bug-reference-prog-mode)
