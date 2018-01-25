@@ -50,6 +50,7 @@
   (customize-set-variable 'lispy-visit-method 'projectile)
   (yq/add-toggle lispy :mode lispy-mode)
   (define-key evil-normal-state-map ",," 'yq/toggle-lispy)
+  (add-hook 'emacs-lisp-mode-hook 'lispy-mode)
   :config
   (evil-define-key 'insert lispy-mode-map (kbd "C-k") 'lispy-kill)
   (evil-define-key 'insert lispy-mode-map (kbd "C-r") 'undo-tree-redo)

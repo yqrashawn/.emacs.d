@@ -64,6 +64,7 @@
 
 ;; TODO react vue lispy noderepl hl-todo
 ;; TODO web-mode rust
+;; TODO general.el?
 
 (use-package playground
   :straight (:host github :repo "akirak/emacs-playground"))

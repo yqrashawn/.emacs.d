@@ -117,6 +117,7 @@ It runs `tabulated-list-revert-hook', then calls `tabulated-list-print'."
 (add-hook 'server-visit-hook 'server-remove-kill-buffer-hook)
 
 (add-hook 'prog-mode-hook 'hs-minor-mode)
+(add-hook 'org-mode-hook 'hs-minor-mode)
 
 (defun yq/edit-dotfile ()
   (interactive)

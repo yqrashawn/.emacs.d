@@ -3,6 +3,7 @@
   :defer t
   :commands (orgtbl-mode)
   :init
+  (customize-set-variable 'org-startup-indented t)
   (setq org-clock-persist-file (concat spacemacs-cache-directory
                                        "org-clock-save.el")
         org-id-locations-file (concat spacemacs-cache-directory
@@ -69,109 +70,109 @@ Will work on both org-mode and any mode that accepts plain html."
                     ("mtt" . "toggle")
                     ("mx" . "text"))))
   (evil-define-key 'normal org-mode-map
-        "'" 'org-edit-special
-        "c" 'org-capture
-        "Cc" 'org-clock-cancel
-        "Ci" 'org-clock-in
-        "Co" 'org-clock-out
-        "Cr" 'org-resolve-clocks
-        "dd" 'org-deadline
-        "ds" 'org-schedule
-        "dt" 'org-time-stamp
-        "dT" 'org-time-stamp-inactive
-        "ee" 'org-export-dispatch
+    "'" 'org-edit-special
+    "c" 'org-capture
+    "Cc" 'org-clock-cancel
+    "Ci" 'org-clock-in
+    "Co" 'org-clock-out
+    "Cr" 'org-resolve-clocks
+    "dd" 'org-deadline
+    "ds" 'org-schedule
+    "dt" 'org-time-stamp
+    "dT" 'org-time-stamp-inactive
+    "ee" 'org-export-dispatch
 
-        "a" 'org-agenda
+    "a" 'org-agenda
 
-        "Te" 'org-toggle-pretty-entities
-        "Ti" 'org-toggle-inline-images
-        "Tl" 'org-toggle-link-display
-        "Tt" 'org-show-todo-tree
-        "TT" 'org-todo
-        "TV" 'space-doc-mode
-        "Tx" 'org-toggle-latex-fragment
+    "Te" 'org-toggle-pretty-entities
+    "Ti" 'org-toggle-inline-images
+    "Tl" 'org-toggle-link-display
+    "Tt" 'org-show-todo-tree
+    "TT" 'org-todo
+    "TV" 'space-doc-mode
+    "Tx" 'org-toggle-latex-fragment
 
-        ;; More cycling options (timestamps, headlines, items, properties)
-        "L" 'org-shiftright
-        "H" 'org-shiftleft
-        "J" 'org-shiftdown
-        "K" 'org-shiftup
+    ;; More cycling options (timestamps, headlines, items, properties)
+    "L" 'org-shiftright
+    "H" 'org-shiftleft
+    "J" 'org-shiftdown
+    "K" 'org-shiftup
 
-        ;; Change between TODO sets
-        "C-S-l" 'org-shiftcontrolright
-        "C-S-h" 'org-shiftcontrolleft
-        "C-S-j" 'org-shiftcontroldown
-        "C-S-k" 'org-shiftcontrolup
+    ;; Change between TODO sets
+    "C-S-l" 'org-shiftcontrolright
+    "C-S-h" 'org-shiftcontrolleft
+    "C-S-j" 'org-shiftcontroldown
+    "C-S-k" 'org-shiftcontrolup
 
-        ;; Subtree editing
-        "sa" 'org-archive-subtree
-        "sb" 'org-tree-to-indirect-buffer
-        "sh" 'org-promote-subtree
-        "sj" 'org-move-subtree-down
-        "sk" 'org-move-subtree-up
-        "sl" 'org-demote-subtree
-        "sn" 'org-narrow-to-subtree
-        "sN" 'widen
-        "sr" 'org-refile
-        "ss" 'org-sparse-tree
-        "sS" 'org-sort
+    ;; Subtree editing
+    "sa" 'org-archive-subtree
+    "sb" 'org-tree-to-indirect-buffer
+    "sh" 'org-promote-subtree
+    "sj" 'org-move-subtree-down
+    "sk" 'org-move-subtree-up
+    "sl" 'org-demote-subtree
+    "sn" 'org-narrow-to-subtree
+    "sN" 'widen
+    "sr" 'org-refile
+    "ss" 'org-sparse-tree
+    "sS" 'org-sort
 
-        ;; tables
-        "ta" 'org-table-align
-        "tb" 'org-table-blank-field
-        "tc" 'org-table-convert
-        "tdc" 'org-table-delete-column
-        "tdr" 'org-table-kill-row
-        "te" 'org-table-eval-formula
-        "tE" 'org-table-export
-        "th" 'org-table-previous-field
-        "tH" 'org-table-move-column-left
-        "tic" 'org-table-insert-column
-        "tih" 'org-table-insert-hline
-        "tiH" 'org-table-hline-and-move
-        "tir" 'org-table-insert-row
-        "tI" 'org-table-import
-        "tj" 'org-table-next-row
-        "tJ" 'org-table-move-row-down
-        "tK" 'org-table-move-row-up
-        "tl" 'org-table-next-field
-        "tL" 'org-table-move-column-right
-        "tn" 'org-table-create
-        "tN" 'org-table-create-with-table.el
-        "tr" 'org-table-recalculate
-        "ts" 'org-table-sort-lines
-        "ttf" 'org-table-toggle-formula-debugger
-        "tto" 'org-table-toggle-coordinate-overlays
-        "tw" 'org-table-wrap-region
+    ;; tables
+    "ta" 'org-table-align
+    "tb" 'org-table-blank-field
+    "tc" 'org-table-convert
+    "tdc" 'org-table-delete-column
+    "tdr" 'org-table-kill-row
+    "te" 'org-table-eval-formula
+    "tE" 'org-table-export
+    "th" 'org-table-previous-field
+    "tH" 'org-table-move-column-left
+    "tic" 'org-table-insert-column
+    "tih" 'org-table-insert-hline
+    "tiH" 'org-table-hline-and-move
+    "tir" 'org-table-insert-row
+    "tI" 'org-table-import
+    "tj" 'org-table-next-row
+    "tJ" 'org-table-move-row-down
+    "tK" 'org-table-move-row-up
+    "tl" 'org-table-next-field
+    "tL" 'org-table-move-column-right
+    "tn" 'org-table-create
+    "tN" 'org-table-create-with-table.el
+    "tr" 'org-table-recalculate
+    "ts" 'org-table-sort-lines
+    "ttf" 'org-table-toggle-formula-debugger
+    "tto" 'org-table-toggle-coordinate-overlays
+    "tw" 'org-table-wrap-region
 
-        ;; Multi-purpose keys
-        "*" 'org-ctrl-c-star
-        "-" 'org-ctrl-c-minus
-        "#" 'org-update-statistics-cookies
-        "RET"   'org-ctrl-c-ret
-        "M-RET" 'org-meta-return
-        ;; attachments
-        "A" 'org-attach
-        ;; insertion
-        "id" 'org-insert-drawer
-        "ie" 'org-set-effort
-        "if" 'org-footnote-new
-        "ih" 'org-insert-heading
-        "iH" 'org-insert-heading-after-current
-        "iK" 'spacemacs/insert-keybinding-org
-        "il" 'org-insert-link
-        "ip" 'org-set-property
-        "is" 'org-insert-subheading
-        "it" 'org-set-tags
-        ;; region manipulation
-        "xb" (spacemacs|org-emphasize spacemacs/org-bold ?*)
-        "xc" (spacemacs|org-emphasize spacemacs/org-code ?~)
-        "xi" (spacemacs|org-emphasize spacemacs/org-italic ?/)
-        "xo" 'org-open-at-point
-        "xr" (spacemacs|org-emphasize spacemacs/org-clear ? )
-        "xs" (spacemacs|org-emphasize spacemacs/org-strike-through ?+)
-        "xu" (spacemacs|org-emphasize spacemacs/org-underline ?_)
-        "xv" (spacemacs|org-emphasize spacemacs/org-verbatim ?=))
+    ;; Multi-purpose keys
+    "*" 'org-ctrl-c-star
+    "-" 'org-ctrl-c-minus
+    "#" 'org-update-statistics-cookies
+    "RET"   'org-ctrl-c-ret
+    "M-RET" 'org-meta-return
+    ;; attachments
+    "A" 'org-attach
+    ;; insertion
+    "id" 'org-insert-drawer
+    "ie" 'org-set-effort
+    "if" 'org-footnote-new
+    "ih" 'org-insert-heading
+    "iH" 'org-insert-heading-after-current
+    "iK" 'spacemacs/insert-keybinding-org
+    "il" 'org-insert-link
+    "ip" 'org-set-property
+    "is" 'org-insert-subheading
+    "it" 'org-set-tags
+    ;; region manipulation
+    "xb" (spacemacs|org-emphasize spacemacs/org-bold ?*)
+    "xc" (spacemacs|org-emphasize spacemacs/org-code ?~)
+    "xi" (spacemacs|org-emphasize spacemacs/org-italic ?/)
+    "xo" 'org-open-at-point
+    "xr" (spacemacs|org-emphasize spacemacs/org-clear ? )
+    "xs" (spacemacs|org-emphasize spacemacs/org-strike-through ?+)
+    "xu" (spacemacs|org-emphasize spacemacs/org-underline ?_)
+    "xv" (spacemacs|org-emphasize spacemacs/org-verbatim ?=))
 
   ;; Add global evil-leader mappings. Used to access org-agenda
   ;; functionalities – and a few others commands – from any other mode.
