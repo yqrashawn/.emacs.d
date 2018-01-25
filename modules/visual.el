@@ -26,6 +26,8 @@
   :straight t
   :defer t)
 
+(load-theme 'yq-default-emacs-theme)
+
 (defvar dotspacemacs-colorize-cursor-according-to-state t
   "If non nil the cursor color matches the state color in GUI Emacs.")
 
