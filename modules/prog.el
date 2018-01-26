@@ -1,3 +1,13 @@
+(defvar auto-completion-enable-snippets-in-popup t
+  "If non nil show snippets in the auto-completion popup.")
+
+(defun spacemacs//show-snippets-in-company (backend)
+  (if (or (not auto-completion-enable-snippets-in-popup)
+          (and (listp backend) (member 'company-yasnippet backend)))
+      backend
+    (append (if (consp backend) backend (list backend))
+            '(:with company-yasnippet))))
+
 (defvar spacemacs-default-company-backends
   '((company-dabbrev-code company-gtags company-etags company-keywords)
     company-files company-dabbrev)

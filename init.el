@@ -10,6 +10,7 @@
 (setq url-configuration-directory (concat spacemacs-cache-directory "url/"))
 (setq custom-file (concat yq-emacs-cache-dir ".custom-settings"))
 (load-file custom-file)
+(package-initialize)
 
 (setq url-proxy-services
       '(("http" . "127.0.0.1:6152")

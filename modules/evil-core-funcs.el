@@ -222,3 +222,8 @@ Avaiblabe PROPS:
     (progn
       (window-configuration-to-register ?_)
       (delete-other-windows))))
+
+(defun spacemacs/add-to-hooks (fun hooks)
+  "Add function to hooks"
+  (dolist (hook hooks)
+    (add-hook hook fun)))
