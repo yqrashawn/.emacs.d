@@ -328,12 +328,5 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   ;; enable eldoc in IELM
   (add-hook 'ielm-mode-hook #'eldoc-mode))
 
-(use-package magithub
-  :straight t
-  :after magit
-  :config
-  (setq magithub-enabled-by-default nil)
-  (setq magithub-features t
-        magithub-feature-autoinject t
-        magithub-dir "~/Dropbox/sync/magithub"))
+
 ;; TODO: auto-yas

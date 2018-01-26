@@ -443,3 +443,7 @@ If the universal prefix argument is used then will the windows too."
   :init
   (spacemacs/set-leader-keys "qq" 'save-buffers-kill-emacs)
   (spacemacs/set-leader-keys "qr" 'restart-emacs))
+
+(yq/add-toggle hl-line :mode hl-line-mode)
+(spacemacs/set-leader-keys "tL" 'yq/toggle-hl-line)
+(spacemacs/set-leader-keys "Ts" 'load-theme)

@@ -22,3 +22,12 @@
   :hook (git-commit-mode-hook . with-editor-hook)
   :init
   (spacemacs/set-leader-keys "hdK" 'describe-keymap))
+
+(use-package magithub
+  :straight t
+  :after magit
+  :config
+  (setq magithub-enabled-by-default nil)
+  (setq magithub-features t
+        magithub-feature-autoinject t
+        magithub-dir "~/Dropbox/sync/magithub"))

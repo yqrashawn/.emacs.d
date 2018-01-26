@@ -199,6 +199,7 @@ Will work on both org-mode and any mode that accepts plain html."
   (define-key global-map "\C-ca" 'org-agenda)
   (define-key global-map "\C-cc" 'org-capture)
   :config
+  (add-to-list 'org-babel-load-languages '(shell . t))
   ;; We add this key mapping because an Emacs user can change
   ;; `dotspacemacs-major-mode-emacs-leader-key' to `C-c' and the key binding
   ;; C-c ' is shadowed by `spacemacs/default-pop-shell', effectively making

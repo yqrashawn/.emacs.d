@@ -70,6 +70,7 @@
   (spacemacs/set-leader-keys "w" nil)
   (spacemacs/set-leader-keys "a" nil)
   (spacemacs/set-leader-keys "t" nil)
+  (spacemacs/set-leader-keys "T" nil)
   (spacemacs/set-leader-keys "e" nil)
   (spacemacs/set-leader-keys "b" nil)
   (spacemacs/set-leader-keys "r" nil)
