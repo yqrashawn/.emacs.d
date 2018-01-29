@@ -33,7 +33,7 @@ using `cargo-process-run'."
 (use-package cargo
   :straight t
   :defer t
-  :config
+  :init
   (evil-define-key 'normal rust-mode-map
     ",c." 'cargo-process-repeat
     ",cC" 'cargo-process-clean

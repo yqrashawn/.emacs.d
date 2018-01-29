@@ -241,7 +241,6 @@ is not visible. Otherwise delegates to regular Emacs next-error."
 
   (define-key flycheck-error-list-mode-map (kbd "j") #'next-line)
   (define-key flycheck-error-list-mode-map (kbd "k") #'previous-line)
-  (add-to-list 'evil-insert-state-modes 'flycheck-error-list-mode)
 
   (push '("^\\*Flycheck.+\\*$"
           :regexp t
