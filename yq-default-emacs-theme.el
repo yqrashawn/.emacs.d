@@ -1,8 +1,8 @@
-(deftheme yq-default-emacs-theme
+(deftheme yq-default-emacs
   "Created 2018-01-25.")
 
 (custom-theme-set-faces
- 'yq-default-emacs-theme
+ 'yq-default-emacs
  '(default ((t (:family "Hack" :foundry "nil" :width normal :height 130 :weight normal :slant normal :underline nil :overline nil :strike-through nil :box nil :inverse-video nil :foreground "Black" :background "Gray86" :stipple nil :inherit nil))))
  '(cursor ((t (:background "DarkGoldenrod2"))))
  '(fixed-pitch ((t (:family "Monospace"))))
@@ -48,4 +48,4 @@
  '(next-error ((t (:inherit (region)))))
  '(query-replace ((t (:inherit (isearch))))))
 
-(provide-theme 'yq-default-emacs-theme)
+(provide-theme 'yq-default-emacs)
