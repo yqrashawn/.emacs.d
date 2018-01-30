@@ -85,6 +85,7 @@
   (spacemacs/set-leader-keys "j=" 'yq/indent-region-or-buffer)
   (spacemacs/set-leader-keys "fj" 'dired-jump)
   (spacemacs/set-leader-keys "jd" 'dired-jump)
+  (spacemacs/set-leader-keys "tD" 'toggle-debug-on-error)
   (spacemacs/set-leader-keys "jD" 'dired-jump-other-window)
   (spacemacs/set-leader-keys "j=" 'yq/indent-region-or-buffer)
   (evil-define-minor-mode-key 'motion 'visual-line-mode "j" 'evil-next-visual-line)

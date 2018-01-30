@@ -26,6 +26,7 @@ using `cargo-process-run'."
                (shell-quote-argument input-file-name)
                (shell-quote-argument output-file-name)))))
   :config
+  (rust-enable-format-on-save)
   (evil-define-key 'normal rust-mode-map
     ",=" 'rust-format-buffer
     ",q" 'spacemacs/rust-quick-run))
@@ -34,6 +35,9 @@ using `cargo-process-run'."
   :straight t
   :defer t
   :init
+  (push '("*Cargo Run*"          :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config)
+  (push '("*Cargo Test*"          :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config)
+  (push '("*Cargo Clippy*"          :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config)
   (evil-define-key 'normal rust-mode-map
     ",c." 'cargo-process-repeat
     ",cC" 'cargo-process-clean
@@ -51,6 +55,7 @@ using `cargo-process-run'."
     ",cs" 'cargo-process-search
     ",cu" 'cargo-process-update
     ",cx" 'cargo-process-run
+    ",x" 'cargo-process-run
     ",t" 'cargo-process-test))
 
 (use-package flycheck-rust
@@ -72,6 +77,7 @@ using `cargo-process-run'."
   :defer t
   :diminish racer-mode
   :init
+  (push '("*Racer Help*"          :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config)
   (defun spacemacs/racer-describe ()
     "Show a *Racer Help* buffer for the function or type at point.
 If `help-window-select' is non-nil, also select the help window."
@@ -82,7 +88,7 @@ If `help-window-select' is non-nil, also select the help window."
   (spacemacs/add-to-hook 'rust-mode-hook '(racer-mode))
   (add-to-list 'spacemacs-jump-handlers-rust-mode 'racer-find-definition)
   (evil-define-key 'normal rust-mode-map
-    "hh" 'spacemacs/racer-describe)
+    ",hh" 'spacemacs/racer-describe)
   :config
   (evilified-state-evilify-map racer-help-mode-map
     :mode racer-help-mode))
