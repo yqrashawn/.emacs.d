@@ -56,6 +56,7 @@ around point as the initial input."
   (spacemacs/set-leader-keys "hdv" 'counsel-describe-variable)
   (spacemacs/set-leader-keys "hdk" 'describe-key)
   (spacemacs/set-leader-keys "hdh" 'counsel-describe-symbol-history)
+  (spacemacs/set-leader-keys "fJ" 'spacemacs/open-junk-file)
   (define-key evil-normal-state-map "sf" 'counsel-rg)
   (define-key evil-normal-state-map "sl" 'counsel-imenu)
   (define-key evil-normal-state-map "sL" 'spacemacs/swiper-all-region-or-symbol)
@@ -212,10 +213,33 @@ FD-PROMPT, if non-nil, is passed as `ivy-read' prompt argument."
                                (my-insert-tsfile-path path)
                                (backward-char)
                                (backward-char)) "insert tsfile path"))
-            
             :unwind (lambda ()
                       (counsel-delete-process)
                       (swiper--cleanup))
             :caller 'counsel-fd))
 
 (spacemacs/set-leader-keys "sm" 'counsel-fd)
+
+(use-package open-junk-file
+  :straight t
+  :defer t
+  :commands (open-junk-file)
+  :init
+  (setq open-junk-file-format (concat spacemacs-cache-directory "junk/%Y/%m/%d-%H%M%S."))
+  (defun spacemacs/open-junk-file (&optional arg)
+    "Open junk file using helm or ivy.
+
+Interface choice depends on whether the `ivy' layer is used or
+not.
+
+When ARG is non-nil search in junk files."
+    (interactive "P")
+    (let* ((fname (format-time-string open-junk-file-format (current-time)))
+           (rel-fname (file-name-nondirectory fname))
+           (junk-dir (file-name-directory fname))
+           (default-directory junk-dir))
+      (cond ((and arg (configuration-layer/layer-used-p 'ivy))
+             (spacemacs/counsel-search dotspacemacs-search-tools nil junk-dir))
+            (t
+             (counsel-find-file rel-fname)))))
+  (spacemacs/set-leader-keys "fJ" 'spacemacs/open-junk-file))
