@@ -519,3 +519,4 @@ around point as the initial input."
      (mapcar
       (lambda (cand) (concat "./" cand))
       ivy--old-cands))))
+

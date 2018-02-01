@@ -232,3 +232,4 @@ Avaiblabe PROPS:
   "Add list of functions to hook."
   (dolist (fun funs)
     (add-hook hook fun)))
+
