@@ -48,11 +48,11 @@ and 'typescript-formatter .")
   :config
   (spacemacs/enable-flycheck 'typescript-mode)
   (spacemacs|add-company-backends
-   :backends company-tide
-   :modes typescript-mode web-mode js2-mode)
-  (evil-define-key 'normal typescript-mode-map ",gb" tide-jump-back)
-  (evil-define-key 'normal typescript-mode-map ",gt" typescript/jump-to-type-def)
-  (evil-define-key 'normal typescript-mode-map ",gu" tide-references)
-  (evil-define-key 'normal typescript-mode-map ",hh" tide-documentation-at-point)
-  (evil-define-key 'normal typescript-mode-map ",rr" tide-rename-symbol)
-  (evil-define-key 'normal typescript-mode-map ",sr" tide-restart-server))
+    :backends company-tide
+    :modes typescript-mode web-mode js2-mode)
+  (evil-define-key 'normal typescript-mode-map ",gb" 'tide-jump-back)
+  (evil-define-key 'normal typescript-mode-map ",gt" 'typescript/jump-to-type-def)
+  (evil-define-key 'normal typescript-mode-map ",gu" 'tide-references)
+  (evil-define-key 'normal typescript-mode-map ",hh" 'tide-documentation-at-point)
+  (evil-define-key 'normal typescript-mode-map ",rr" 'tide-rename-symbol)
+  (evil-define-key 'normal typescript-mode-map ",sr" 'tide-restart-server))
