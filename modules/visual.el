@@ -118,3 +118,11 @@ For evil states that also need an entry to `spacemacs-evil-cursors' use
   :straight t
   :config
   (evil-visual-mark-mode 1))
+
+(defun spacemacs//adaptive-evil-highlight-persist-face ()
+  (set-face-attribute 'evil-search-highlight-persist-highlight-face nil
+                      :inherit 'lazy-highlight
+                      :background nil
+                      :foreground nil))
+(spacemacs//adaptive-evil-highlight-persist-face)
+(add-hook 'spacemacs-post-theme-change-hook 'spacemacs//adaptive-evil-highlight-persist-face)

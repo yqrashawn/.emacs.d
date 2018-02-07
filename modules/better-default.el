@@ -448,6 +448,9 @@ If the universal prefix argument is used then will the windows too."
 (spacemacs/set-leader-keys "tL" 'yq/toggle-hl-line)
 (spacemacs/set-leader-keys "Ts" 'load-theme)
 
-(use-package edit-server
+;; (use-package edit-server
+;;   :straight t
+;;   :config (edit-server-start))
+(use-package atomic-chrome
   :straight t
-  :config (edit-server-start))
+  :config (atomic-chrome-start-server))
