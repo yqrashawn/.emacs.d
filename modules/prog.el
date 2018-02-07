@@ -263,27 +263,43 @@ is not visible. Otherwise delegates to regular Emacs next-error."
     "ep" 'spacemacs/previous-error
     ))
 
-(use-package smartparens
-  :straight t
-  :diminish smartparens-mode
-  :config
-  (smartparens-global-mode t)
-  (define-key evil-normal-state-map "sd" 'sp-kill-sexp)
-  (define-key evil-normal-state-map "s," 'sp-copy-sexp)
-  (use-package smartparens-config))
-
 (use-package yasnippet
   :straight t
   :diminish yas-global-mode
   :diminish yas-minor-mode
   :commands (yas-global-mode yas-minor-mode)
   :init
+  (defvar spacemacs--smartparens-enabled-initially t
+    "Stored whether smartparens is originally enabled or not.")
+  (defvar spacemacs--yasnippet-expanding nil
+    "Whether the snippet expansion is in progress.")
+
+  (defun spacemacs//smartparens-disable-before-expand-snippet ()
+    "Handler for `yas-before-expand-snippet-hook'.
+Disable smartparens and remember its initial state."
+    ;; Remember the initial smartparens state only once, when expanding a top-level snippet.
+    (unless spacemacs--yasnippet-expanding
+      (setq spacemacs--yasnippet-expanding t
+            spacemacs--smartparens-enabled-initially smartparens-mode))
+    (smartparens-mode -1))
+
+  (defun spacemacs//smartparens-restore-after-exit-snippet ()
+    "Handler for `yas-after-exit-snippet-hook'.
+ Restore the initial state of smartparens."
+    (setq spacemacs--yasnippet-expanding nil)
+    (when spacemacs--smartparens-enabled-initially
+      (smartparens-mode 1)))
   (add-hook 'prog-mode-hook 'yas-minor-mode)
   (setq yas-triggers-in-field t
         yas-wrap-around-region t)
   (setq yas-prompt-functions '(yas-completing-prompt))
   (setq yas-minor-mode-map (make-sparse-keymap))
   (define-key yas-minor-mode-map (kbd "M-s-/") 'yas-next-field)
+  (with-eval-after-load 'smartparens
+    (add-hook 'yas-before-expand-snippet-hook
+              #'spacemacs//smartparens-disable-before-expand-snippet)
+    (add-hook 'yas-after-exit-snippet-hook
+              #'spacemacs//smartparens-restore-after-exit-snippet))
   :config
   (setq yas-snippet-dirs '())
   (setq yas--default-user-snippets-dir (concat user-home-directory ".emacs.d/private/snippets/"))
@@ -293,6 +309,15 @@ is not visible. Otherwise delegates to regular Emacs next-error."
 (use-package yasnippet-snippets
   :straight t
   :after yasnippet)
+
+(use-package smartparens
+  :straight t
+  :diminish smartparens-mode
+  :config
+  (smartparens-global-mode t)
+  (define-key evil-normal-state-map "sd" 'sp-kill-sexp)
+  (define-key evil-normal-state-map "s," 'sp-copy-sexp)
+  (use-package smartparens-config))
 
 (use-package ediff
   :defer t

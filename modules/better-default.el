@@ -372,8 +372,8 @@ If the universal prefix argument is used then kill the buffer too."
   (push '("*ert*"                  :dedicated t :position bottom :stick t :noselect nil            ) popwin:special-display-config)
   (push '("*grep*"                 :dedicated t :position bottom :stick t :noselect nil            ) popwin:special-display-config)
   (push '("*nosetests*"            :dedicated t :position bottom :stick t :noselect nil            ) popwin:special-display-config)
-  (push '("^\*WoMan.+\*$" :regexp t             :position bottom                                   ) popwin:special-display-config)
-  (define-key evil-normal-state-map (kbd "C-z") popwin:keymap))
+  (push '("^\*WoMan.+\*$" :regexp t             :position bottom                                   ) popwin:special-display-config))
+;; (define-key evil-normal-state-map (kbd "C-z") popwin:keymap)
 
 (setq standard-indent 2)
 
@@ -447,3 +447,7 @@ If the universal prefix argument is used then will the windows too."
 (yq/add-toggle hl-line :mode hl-line-mode)
 (spacemacs/set-leader-keys "tL" 'yq/toggle-hl-line)
 (spacemacs/set-leader-keys "Ts" 'load-theme)
+
+(use-package edit-server
+  :straight t
+  :config (edit-server-start))
