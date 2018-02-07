@@ -80,20 +80,20 @@ For evil states that also need an entry to `spacemacs-evil-cursors' use
 (defvar spacemacs-post-theme-change-hook nil
   "Hook run after theme has changed.")
 
-;; (defadvice load-theme (after spacemacs/load-theme-adv activate)
-;;   "Perform post load processing."
-;;   (let ((theme (ad-get-arg 0)))
-;;     ;; Without this a popup is raised every time emacs25 starts up for
-;;     ;; assignment to a free variable
-;;     (with-no-warnings
-;;       (setq spacemacs--cur-theme theme))
-;;     (spacemacs/post-theme-init theme)))
+(defadvice load-theme (after spacemacs/load-theme-adv activate)
+  "Perform post load processing."
+  (let ((theme (ad-get-arg 0)))
+    ;; Without this a popup is raised every time emacs25 starts up for
+    ;; assignment to a free variable
+    (with-no-warnings
+      (setq spacemacs--cur-theme theme))
+    (spacemacs/post-theme-init theme)))
 
-;; (defun spacemacs/post-theme-init (theme)
-;;   "Some processing that needs to be done when the current theme
-;; has been changed to THEME."
-;;   (interactive)
-;;   (run-hooks 'spacemacs-post-theme-change-hook))
+(defun spacemacs/post-theme-init (theme)
+  "Some processing that needs to be done when the current theme
+has been changed to THEME."
+  (interactive)
+  (run-hooks 'spacemacs-post-theme-change-hook))
 
 (cl-loop for (state color shape) in spacemacs-evil-cursors
          do (spacemacs/add-evil-cursor state color shape))
