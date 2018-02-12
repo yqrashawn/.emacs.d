@@ -4,6 +4,7 @@
   :commands (orgtbl-mode)
   :init
   (customize-set-variable 'org-startup-indented t)
+  (customize-set-variable 'org-deadline-warning-days 1)
   (setq org-clock-persist-file (concat spacemacs-cache-directory
                                        "org-clock-save.el")
         org-id-locations-file (concat spacemacs-cache-directory
@@ -155,8 +156,11 @@ Will work on both org-mode and any mode that accepts plain html."
     ",il" 'org-insert-link
     ",ip" 'org-set-property
     ",is" 'org-insert-subheading
-    ",it" 'org-set-tags
-    ;; region manipulation
+    ",it" 'org-set-tags)
+  ;; region manipulation
+  (evil-define-key 'visual org-mode-map
+    ",il" 'org-insert-link
+    ",id" 'org-insert-drawer
     ",xb" (spacemacs|org-emphasize spacemacs/org-bold ?*)
     ",xc" (spacemacs|org-emphasize spacemacs/org-code ?~)
     ",xi" (spacemacs|org-emphasize spacemacs/org-italic ?/)
@@ -224,7 +228,66 @@ Will work on both org-mode and any mode that accepts plain html."
       (org-eval-in-calendar '(calendar-backward-year 1))))
   (define-key org-read-date-minibuffer-local-map (kbd "M-J")
     (lambda () (interactive)
-      (org-eval-in-calendar '(calendar-forward-year 1)))))
+      (org-eval-in-calendar '(calendar-forward-year 1))))
+  (setq org-todo-state-tags-triggers
+        (quote (("CANCELLED"
+                 ("ARCHIVE" . t))
+                ("WAITING"
+                 ("WAITING" . t))
+                (done
+                 ("WAITING"))
+                ("TODO"
+                 ("WAITING")
+                 ("CANCELLED"))
+                ("NEXT"
+                 ("WAITING"))
+                ("STARTED"
+                 ("WAITING"))
+                ("DONE"
+                 ("WAITING")
+                 ("CANCELLED")))))
+
+  (defun org-summary-todo (n-done n-not-done)
+    "Switch entry to DONE when all subentries are done, to TODO otherwise."
+    (let (org-log-done org-log-states)   ; turn off logging
+      (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
+  (add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
+
+  (setq org-log-note-headings '((done . "CLOSING NOTE %t")
+                                (state . "State %-12s from %-12S %T")
+                                (note . "Note taken on %t")
+                                (reschedule . "Rescheduled from %S on %t")
+                                (delschedule . "Not scheduled, was %S on %t")
+                                (redeadline . "New deadline from %S on %t")
+                                (deldeadline . "Removed deadline, was %S on %t")
+                                (refile . "Refiled on %t")
+                                (clock-out . "")))
+  (setq org-log-note-headings '((done . "CLOSING DONE NOTE %t")
+                                (state . "State %-12s from %-12S %t")
+                                (note . "Note taken on %t")
+                                (reschedule . "Rescheduled from %S on %t")
+                                (delschedule . "Not scheduled, was %S on %t")
+                                (redeadline . "New deadline from %S on %t")
+                                (deldeadline . "Removed deadline, was %S on %t")
+                                (refile . "Refiled on %t")
+                                (clock-out . "")))
+  (setq org-todo-keywords (quote
+                           (
+                            (sequence "TODO(t)" "NEXT(n)" "STARTED(s)" "WAITING(w@/!)" "SOMEDAY(S!)" "|" "DONE(d!/!)" "CANCELLED(c@/!)"))))
+  (setq org-todo-repeat-to-state "NEXT")
+  (setq org-log-done (quote time))
+  (setq org-log-into-drawer t)
+  (setq org-log-redeadline (quote note));; record when the deadline date of a tasks is modified
+  (setq org-log-reschedule (quote time))
+  (setq org-return-follows-link t)
+  (setq org-remove-highlights-with-change nil)
+  (setq org-read-date-prefer-future 'time)
+  (setq org-list-demote-modify-bullet (quote (("+" . "-")
+                                              ("*" . "-")
+                                              ("1." . "-")
+                                              ("1)" . "-"))))
+  (setq org-blank-before-new-entry (quote ((heading . t)
+                                           (plain-list-item . nil)))))
 
 (use-package org-capture
   :defer
