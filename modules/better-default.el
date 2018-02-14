@@ -448,6 +448,9 @@ If the universal prefix argument is used then will the windows too."
 (spacemacs/set-leader-keys "tL" 'yq/toggle-hl-line)
 (spacemacs/set-leader-keys "Ts" 'load-theme)
 
+(yq/add-toggle auto-fill :mode auto-fill-mode)
+(spacemacs/set-leader-keys "tf" 'yq/toggle-auto-fill)
+
 ;; (use-package edit-server
 ;;   :straight t
 ;;   :config (edit-server-start))
