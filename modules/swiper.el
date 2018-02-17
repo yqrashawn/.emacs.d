@@ -36,6 +36,7 @@ around point as the initial input."
   :diminish counsel-mode
   :config
   (counsel-mode 1)
+  (setq counsel-find-file-at-point t)
   (setq counsel-find-file-occur-cmd "ls | grep -i -E '%s' | gxargs -d '\n' ls")
   (define-key ivy-minibuffer-map (kbd "C-n") 'ivy-next-history-element)
   (define-key ivy-minibuffer-map (kbd "C-p") 'ivy-previous-history-element)
