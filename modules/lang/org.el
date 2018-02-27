@@ -1,5 +1,6 @@
 (customize-set-variable 'org-startup-indented t)
 (customize-set-variable 'org-deadline-warning-days 1)
+(add-hook 'org-mode-hook 'hs-minor-mode)
 
 (with-eval-after-load 'org-mode
   ;; Evilify the calendar tool on C-c .
@@ -86,6 +87,7 @@
                   ("mtt" . "toggle")
                   ("mx" . "text"))))
 (evil-define-key 'normal org-mode-map
+  "t" 'org-todo
   ",'" 'org-edit-special
   ",c" 'org-capture
   ",Cc" 'org-clock-cancel
@@ -218,6 +220,7 @@
 (define-key global-map "\C-ca" 'org-agenda)
 (define-key global-map "\C-cc" 'org-capture)
 ;; (add-to-list 'org-babel-load-languages '(shell . t))
+;; (add-to-list 'org-babel-load-languages '(python . t))
 
 
 (setq org-todo-state-tags-triggers

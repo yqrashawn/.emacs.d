@@ -272,7 +272,6 @@ If the universal prefix argument is used then kill the buffer too."
 (use-package recentf
   :defer t
   :init
-  ;; lazy load recentf
   (add-hook 'find-file-hook (lambda () (unless recentf-mode
                                          (recentf-mode)
                                          (recentf-track-opened-file))))
@@ -457,3 +456,4 @@ If the universal prefix argument is used then will the windows too."
 (use-package atomic-chrome
   :straight t
   :config (atomic-chrome-start-server))
+(setq-default bidi-display-reordering nil)
