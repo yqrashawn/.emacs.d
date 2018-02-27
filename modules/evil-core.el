@@ -48,6 +48,8 @@
   (define-key evil-normal-state-map "gn" 'evil-search-word-forward)
   (define-key evil-normal-state-map "gd" 'spacemacs/jump-to-definition)
   (define-key evil-normal-state-map "gD" 'spacemacs/jump-to-definition-other-window)
+  (define-key evil-normal-state-map "gj" 'evil-next-visual-line)
+  (define-key evil-normal-state-map "gk" 'evil-previous-visual-line)
   (define-key evil-normal-state-map "zl" 'hs-hide-level)
   (define-key evil-normal-state-map (kbd "C-k") 'evil-toggle-fold)
   (define-key evil-normal-state-map "s" nil)
@@ -175,6 +177,8 @@
                     "S" nil
                     "t" #'evil-snipe-s
                     "T" #'evil-snipe-S)
+  (yq/add-toggle evil-snipe :mode evil-snipe-mode)
+  (add-hook 'org-mode-hook 'yq/toggle-evil-snipe-off)
   (setq evil-snipe-auto-disable-substitute nil)
   (evil-snipe-mode 1)
   (setq evil-snipe-repeat-scope 'whole-buffer)

@@ -272,7 +272,6 @@ If the universal prefix argument is used then kill the buffer too."
 (use-package recentf
   :defer t
   :init
-  ;; lazy load recentf
   (add-hook 'find-file-hook (lambda () (unless recentf-mode
                                          (recentf-mode)
                                          (recentf-track-opened-file))))
@@ -372,8 +371,8 @@ If the universal prefix argument is used then kill the buffer too."
   (push '("*ert*"                  :dedicated t :position bottom :stick t :noselect nil            ) popwin:special-display-config)
   (push '("*grep*"                 :dedicated t :position bottom :stick t :noselect nil            ) popwin:special-display-config)
   (push '("*nosetests*"            :dedicated t :position bottom :stick t :noselect nil            ) popwin:special-display-config)
-  (push '("^\*WoMan.+\*$" :regexp t             :position bottom                                   ) popwin:special-display-config)
-  (define-key evil-normal-state-map (kbd "C-z") popwin:keymap))
+  (push '("^\*WoMan.+\*$" :regexp t             :position bottom                                   ) popwin:special-display-config))
+;; (define-key evil-normal-state-map (kbd "C-z") popwin:keymap)
 
 (setq standard-indent 2)
 
@@ -447,3 +446,14 @@ If the universal prefix argument is used then will the windows too."
 (yq/add-toggle hl-line :mode hl-line-mode)
 (spacemacs/set-leader-keys "tL" 'yq/toggle-hl-line)
 (spacemacs/set-leader-keys "Ts" 'load-theme)
+
+(yq/add-toggle auto-fill :mode auto-fill-mode)
+(spacemacs/set-leader-keys "tf" 'yq/toggle-auto-fill)
+
+;; (use-package edit-server
+;;   :straight t
+;;   :config (edit-server-start))
+(use-package atomic-chrome
+  :straight t
+  :config (atomic-chrome-start-server))
+(setq-default bidi-display-reordering nil)
