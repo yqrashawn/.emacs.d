@@ -15,3 +15,7 @@
   :straight t
   :if (and (spacemacs/system-is-mac) (not (display-graphic-p)))
   :init (turn-on-pbcopy))
+
+(use-package edit-server
+  :straight t
+  :config (edit-server-start))
