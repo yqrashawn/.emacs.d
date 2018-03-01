@@ -33,9 +33,7 @@
   (add-to-list 'org-agenda-custom-commands '("wt" "Agenda and work todo" ((agenda "") (tags-todo "work"))))
   (add-to-list 'org-agenda-custom-commands
                '("B" "Working Weekly Todo"
-                 ((tags-todo "work")
-                  (tags-todo "MAYBE+work") ;; review someday/maybe items
-                  (tags-todo "WAITING+work"))
+                 ((tags-todo "work"))
                  nil
                  ("~/agendas/work/todo.pdf"
                   "~/agendas/work/todo.csv"
