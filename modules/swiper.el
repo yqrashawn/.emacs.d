@@ -64,11 +64,14 @@ around point as the initial input."
 
 (straight-use-package 'counsel-tramp)
 
+
 (use-package ivy
   :straight t
   :diminish ivy-mode
   :config
   (ivy-mode 1)
+
+
   (setq ivy-height 16)
   (defun yq/ivy-evil-registers ()
     "Show evil registers"
@@ -92,7 +95,7 @@ around point as the initial input."
                  'spacemacs//counsel-occur)
   (evil-make-overriding-map ivy-occur-mode-map 'normal)
   (define-key evil-normal-state-map "sb" 'ivy-switch-buffer))
-
+
 (use-package smex
   :straight t
   :init
