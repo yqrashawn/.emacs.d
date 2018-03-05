@@ -7,3 +7,4 @@
 (yq/get-modules "lang/vue.el")
 ;; (yq/get-modules "lang/python.el")
 ;; (yq/get-modules "lang/md.el")
+(yq/get-modules "lang/ruby.el")
