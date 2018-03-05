@@ -78,7 +78,7 @@ The return value is nil if no font was found, truthy otherwise."
                                      ;; "Anonymous Pro for Powerline"
                                      ;; "InconsolataG for Powerline"
                                      ;; "Source Code Pro for Powerline"
-                                     :size 13
+                                     :size 14
                                      :weight normal
                                      :width normal
                                      :powerline-scale 1.1))
@@ -88,12 +88,13 @@ The return value is nil if no font was found, truthy otherwise."
                                      ;; "Anonymous Pro for Powerline"
                                      ;; "InconsolataG for Powerline"
                                      ;; "Source Code Pro for Powerline"
-                                     :size 15
+                                     :size 16
                                      :weight normal
                                      :width normal
                                      :powerline-scale 1.1))
 
 (spacemacs/set-default-font yq/large-screen-default-font)
+
 (defun yq/toggle-default-font ()
   "font for large screen"
   (interactive)
