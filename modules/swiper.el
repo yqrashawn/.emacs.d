@@ -132,6 +132,7 @@ around point as the initial input."
   (evil-define-key 'normal dired-mode-map
     "s" 'nil
     "sk" 'yq/kill-this-buffer
+    "sj" 'counsel-recentf
     "sf" 'counsel-rg
     "ss" 'dired-sort-toggle-or-edit
     "sc" 'yq/delete-window
