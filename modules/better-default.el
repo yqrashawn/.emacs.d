@@ -205,10 +205,10 @@ If the universal prefix argument is used then kill the buffer too."
 (add-hook 'prog-mode-hook 'show-paren-mode)
 
 (use-package windmove
-  :bind( ("C-x 7 w h" . 'windmove-left)
-         ("C-x 7 w l" . 'windmove-right)
-         ("C-x 7 w j" . 'windmove-down)
-         ("C-x 7 w k" . 'windmove-up)))
+  :bind(("C-x 7 w h" . 'windmove-left)
+        ("C-x 7 w l" . 'windmove-right)
+        ("C-x 7 w j" . 'windmove-down)
+        ("C-x 7 w k" . 'windmove-up)))
 
 (use-package winner
   :init
@@ -270,8 +270,10 @@ If the universal prefix argument is used then kill the buffer too."
   (savehist-mode t))
 
 (use-package recentf
+  :straight t
   :defer t
   :init
+  ;; lazy load recentf
   (add-hook 'find-file-hook (lambda () (unless recentf-mode
                                          (recentf-mode)
                                          (recentf-track-opened-file))))
@@ -457,3 +459,172 @@ If the universal prefix argument is used then will the windows too."
   :straight t
   :config (atomic-chrome-start-server))
 (setq-default bidi-display-reordering nil)
+
+;; https://emacs.stackexchange.com/questions/28736/emacs-pointcursor-movement-lag/28746
+(setq auto-window-vscroll nil)
+
+(defun spacemacs/rename-file (filename &optional new-filename)
+  "Rename FILENAME to NEW-FILENAME.
+
+When NEW-FILENAME is not specified, asks user for a new name.
+
+Also renames associated buffer (if any exists), invalidates
+projectile cache when it's possible and update recentf list."
+  (interactive "f")
+  (when (and filename (file-exists-p filename))
+    (let* ((buffer (find-buffer-visiting filename))
+           (short-name (file-name-nondirectory filename))
+           (new-name (if new-filename new-filename
+                       (read-file-name
+                        (format "Rename %s to: " short-name)))))
+      (cond ((get-buffer new-name)
+             (error "A buffer named '%s' already exists!" new-name))
+            (t
+             (let ((dir (file-name-directory new-name)))
+               (when (and (not (file-exists-p dir)) (yes-or-no-p (format "Create directory '%s'?" dir)))
+                 (make-directory dir t)))
+             (rename-file filename new-name 1)
+             (when buffer
+               (kill-buffer buffer)
+               (find-file new-name))
+             (when (fboundp 'recentf-add-file)
+               (recentf-add-file new-name)
+               (recentf-remove-if-non-kept filename))
+             (when (and (configuration-layer/package-used-p 'projectile)
+                        (projectile-project-p))
+               (call-interactively #'projectile-invalidate-cache))
+             (message "File '%s' successfully renamed to '%s'" short-name (file-name-nondirectory new-name)))))))
+
+;; from magnars
+(defun spacemacs/rename-current-buffer-file (&optional arg)
+  "Rename the current buffer and the file it is visiting.
+If the buffer isn't visiting a file, ask if it should
+be saved to a file, or just renamed.
+
+If called without a prefix argument, the prompt is
+initialized with the current filename."
+  (interactive "P")
+  (let* ((name (buffer-name))
+         (filename (buffer-file-name)))
+    (if (and filename (file-exists-p filename))
+        ;; the buffer is visiting a file
+        (let* ((dir (file-name-directory filename))
+               (new-name (read-file-name "New name: " (if arg dir filename))))
+          (cond ((get-buffer new-name)
+                 (error "A buffer named '%s' already exists!" new-name))
+                (t
+                 (let ((dir (file-name-directory new-name)))
+                   (when (and (not (file-exists-p dir))
+                              (yes-or-no-p
+                               (format "Create directory '%s'?" dir)))
+                     (make-directory dir t)))
+                 (rename-file filename new-name 1)
+                 (rename-buffer new-name)
+                 (set-visited-file-name new-name)
+                 (set-buffer-modified-p nil)
+                 (when (fboundp 'recentf-add-file)
+                   (recentf-add-file new-name)
+                   (recentf-remove-if-non-kept filename))
+                 (when (and (configuration-layer/package-used-p 'projectile)
+                            (projectile-project-p))
+                   (call-interactively #'projectile-invalidate-cache))
+                 (message "File '%s' successfully renamed to '%s'"
+                          name (file-name-nondirectory new-name)))))
+      ;; the buffer is not visiting a file
+      (let ((key))
+        (while (not (memq key '(?s ?r)))
+          (setq key (read-key (propertize
+                               (format
+                                (concat "Buffer '%s' is not visiting a file: "
+                                        "[s]ave to file or [r]ename buffer?")
+                                name) 'face 'minibuffer-prompt)))
+          (cond ((eq key ?s)            ; save to file
+                 ;; this allows for saving a new empty (unmodified) buffer
+                 (unless (buffer-modified-p) (set-buffer-modified-p t))
+                 (save-buffer))
+                ((eq key ?r)            ; rename buffer
+                 (let ((new-name (read-string "New buffer name: ")))
+                   (while (get-buffer new-name)
+                     ;; ask to rename again, if the new buffer name exists
+                     (if (yes-or-no-p
+                          (format (concat "A buffer named '%s' already exists: "
+                                          "Rename again?") new-name))
+                         (setq new-name (read-string "New buffer name: "))
+                       (keyboard-quit)))
+                   (rename-buffer new-name)
+                   (message "Buffer '%s' successfully renamed to '%s'"
+                            name new-name)))
+                ;; ?\a = C-g, ?\e = Esc and C-[
+                ((memq key '(?\a ?\e)) (keyboard-quit))))))))
+
+(defun spacemacs/delete-file (filename &optional ask-user)
+  "Remove specified file or directory.
+
+Also kills associated buffer (if any exists) and invalidates
+projectile cache when it's possible.
+
+When ASK-USER is non-nil, user will be asked to confirm file
+removal."
+  (interactive "f")
+  (when (and filename (file-exists-p filename))
+    (let ((buffer (find-buffer-visiting filename)))
+      (when buffer
+        (kill-buffer buffer)))
+    (when (or (not ask-user)
+              (yes-or-no-p "Are you sure you want to delete this file? "))
+      (delete-file filename)
+      (when (and (configuration-layer/package-used-p 'projectile)
+                 (projectile-project-p))
+        (call-interactively #'projectile-invalidate-cache)))))
+
+(defun spacemacs/delete-file-confirm (filename)
+  "Remove specified file or directory after users approval.
+
+FILENAME is deleted using `spacemacs/delete-file' function.."
+  (interactive "f")
+  (funcall-interactively #'spacemacs/delete-file filename t))
+
+;; from magnars
+(defun spacemacs/delete-current-buffer-file ()
+  "Removes file connected to current buffer and kills buffer."
+  (interactive)
+  (let ((filename (buffer-file-name))
+        (buffer (current-buffer))
+        (name (buffer-name)))
+    (if (not (and filename (file-exists-p filename)))
+        (ido-kill-buffer)
+      (when (yes-or-no-p "Are you sure you want to delete this file? ")
+        (delete-file filename t)
+        (kill-buffer buffer)
+        (when (and (configuration-layer/package-used-p 'projectile)
+                   (projectile-project-p))
+          (call-interactively #'projectile-invalidate-cache))
+        (message "File '%s' successfully removed" filename)))))
+
+;; from magnars
+(defun spacemacs/sudo-edit (&optional arg)
+  (interactive "P")
+  (require 'tramp)
+  (let ((fname (if (or arg (not buffer-file-name))
+                   (read-file-name "File: ")
+                 buffer-file-name)))
+    (find-file
+     (if (not (tramp-tramp-file-p fname))
+         (concat "/sudo:root@localhost:" fname)
+       (with-parsed-tramp-file-name fname parsed
+                                    (when (equal parsed-user "root")
+                                      (error "Already root!"))
+                                    (let* ((new-hop (tramp-make-tramp-file-name parsed-method
+                                                                                parsed-user
+                                                                                parsed-host
+                                                                                nil
+                                                                                parsed-hop
+                                                                                ))
+                                           (new-hop (substring new-hop 1 -1))
+                                           (new-hop (concat new-hop "|"))
+                                           (new-fname (tramp-make-tramp-file-name "sudo"
+                                                                                  "root"
+                                                                                  parsed-host
+                                                                                  parsed-localname
+                                                                                  new-hop)))
+                                      new-fname))))))
