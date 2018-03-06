@@ -64,8 +64,8 @@
 (unless (server-running-p) (server-start))
 (setq gc-cons-threshold 8388608)
 
-;; TODO react vue lispy noderepl hl-todo
-;; TODO web-mode rust
+;; TODO react  noderepl
+;; TODO web-mode
 ;; TODO general.el?
 
 (use-package playground
