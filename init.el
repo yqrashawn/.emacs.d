@@ -64,7 +64,7 @@
 (unless (server-running-p) (server-start))
 (setq gc-cons-threshold 8388608)
 
-;; TODO react  noderepl
+;; TODO noderepl
 ;; TODO web-mode
 ;; TODO general.el?
 
