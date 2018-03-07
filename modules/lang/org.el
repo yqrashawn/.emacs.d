@@ -360,10 +360,13 @@
     (kbd "gr") 'org-agenda-redo
     (kbd "M-RET") 'org-agenda-show-and-scroll-up))
 
-;; (use-package org-projectile
-;;   :straight t
-;;   :config
-;;   (setq org-projectile-capture-template "* TODO %? %^G\n%U"))
+(use-package org-projectile
+  :straight t
+  :init
+  (setq org-projectile-projects-file "~/Dropbox/ORG/project.org")
+  (setq org-projectile-capture-template "* TODO %? %^G\n%U")
+  :config
+  (spacemacs/set-leader-keys "pc"  'org-projectile-capture-for-current-project))
 
 (use-package ob
   :defer t

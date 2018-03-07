@@ -356,5 +356,42 @@ Disable smartparens and remember its initial state."
   ;; enable eldoc in IELM
   (add-hook 'ielm-mode-hook #'eldoc-mode))
 
-
-;; TODO: auto-yas
+(use-package git-link
+  :straight t
+  :commands (git-link git-link-commit git-link-homepage)
+  :config
+  (defun git-link-gogs (hostname dirname filename branch commit start end)
+    (format "http://%s/%s/src/%s/%s"
+            hostname
+            dirname
+            (or branch commit)
+            (concat filename
+                    (when start
+                      (concat "#"
+                              (if end
+                                  (format "L%s-L%s" start end)
+                                (format "L%s" start)))))))
+  (defun git-link-commit-gogs (hostname dirname commit)
+    (format "http://%s/%s/commit/%s"
+            hostname
+            dirname
+            commit))
+  (add-to-list 'git-link-remote-alist
+               '("917\\.bimsop\\.com" git-link-gogs))
+  (add-to-list 'git-link-commit-remote-alist
+               '("917\\.bimsop\\.com" git-link-commit-gogs))
+  (setq git-link-open-in-browser t))
+
+(use-package git-timemachine
+  :straight t
+  :commands git-timemachine
+  :init
+  (spacemacs/set-leader-keys
+    "gt" 'git-timemachine)
+  (evil-define-key 'normal git-timemachine-mode-map
+    "n" 'git-timemachine-show-next-revision
+    "p" 'git-timemachine-show-previous-revision
+    "q" 'git-timemachine-quit
+    "W" 'git-timemachine-kill-revision
+    "c" 'git-timemachine-show-current-revision)
+  (add-hook 'git-timemachine-mode-hook 'yq/fix-evil-state-bug))
