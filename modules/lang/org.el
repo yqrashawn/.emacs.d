@@ -383,4 +383,10 @@
       (org-redisplay-inline-images)))
   (add-hook 'org-babel-after-execute-hook 'spacemacs/ob-fix-inline-images))
 
+(use-package org-fancy-priorities
+  :straight t
+  :hook (org-mode . org-fancy-priorities-mode)
+  :config
+  (setq org-fancy-priorities-list '("HIGH" "MID" "OPTIONAL" "LOW")))
+
 (yq/get-modules "org-agenda.el")

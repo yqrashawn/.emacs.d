@@ -356,6 +356,13 @@ Disable smartparens and remember its initial state."
   ;; enable eldoc in IELM
   (add-hook 'ielm-mode-hook #'eldoc-mode))
 
+(use-package flycheck-posframe
+  :straight (:host github :repo "alexmurray/flycheck-posframe")
+  :after flycheck
+  :config
+  (add-hook 'flycheck-mode-hook #'flycheck-posframe-mode)
+  (set-face-attribute 'flycheck-posframe-error-face nil :inherit 'error))
+
 (use-package git-link
   :straight t
   :commands (git-link git-link-commit git-link-homepage)
