@@ -284,8 +284,6 @@
 ;; )
 
 (use-package org-capture
-  :defer
-  :commands (org-capture)
   :config
   (setq org-capture--clipboards t)
   (evil-define-key 'normal 'org-capture-mode
@@ -360,10 +358,15 @@
     (kbd "gr") 'org-agenda-redo
     (kbd "M-RET") 'org-agenda-show-and-scroll-up))
 
-;; (use-package org-projectile
-;;   :straight t
-;;   :config
-;;   (setq org-projectile-capture-template "* TODO %? %^G\n%U"))
+(use-package org-projectile
+  :straight t
+  :commands (org-projectile-capture-for-current-project)
+  :init
+  (setq org-projectile-projects-file "~/Dropbox/ORG/project.org")
+  (setq org-projectile-capture-template "* TODO %? %^G\n%U")
+  (spacemacs/set-leader-keys "pc" 'org-projectile-capture-for-current-project)
+  (with-eval-after-load 'org-capture
+    (require 'org-projectile)))
 
 (use-package ob
   :defer t

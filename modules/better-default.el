@@ -628,3 +628,21 @@ FILENAME is deleted using `spacemacs/delete-file' function.."
                                                                                   parsed-localname
                                                                                   new-hop)))
                                       new-fname))))))
+(use-package ssh-config-mode
+  :straight t
+  :mode ("~/.ssh/config". ssh-config-mode))
+
+(defun yq/fix-evil-state-bug ()
+  ;; https://github.com/emacs-evil/evil/issues/301
+  (evil-insert-state)
+  (evil-normal-state))
+
+(use-package gitconfig-mode
+  :straight t
+  :defer t)
+(use-package gitignore-mode
+  :straight t
+  :defer t)
+(use-package gitattributes-mode
+  :straight t
+  :defer t)

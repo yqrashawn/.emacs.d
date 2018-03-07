@@ -86,11 +86,11 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
   (add-to-list 'term-bind-key-alist '("<tab>" . term-send-tab))
   ;; multi-term commands to create terminals and move through them.
   (evil-leader/set-key "p'" 'spacemacs/projectile-shell-pop)
-  (evil-define-key 'insert 'term-mode
+  (evil-define-key 'insert term-mode-mp
     (kbd "s-<return>") 'multi-term
     (kbd "s-[") 'multi-term-prev
     (kbd "s-]" ) 'multi-term-next)
-  (evil-define-key 'normal 'term-mode
+  (evil-define-key 'normal term-mode-map
     ",c" 'multi-term
     ",p" 'multi-term-prev
     ",n" 'multi-term-next))
