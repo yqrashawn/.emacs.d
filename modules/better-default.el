@@ -35,7 +35,7 @@ file stored in the cache directory and `nil' to disable auto-saving.")
 (setq longlines-show-hard-newlines t)
 (setq delete-by-moving-to-trash t)
 (setq-default fill-column 80)
-(setq abbrev-file-name (concat yq-emacs-cache-dir "abbrev_defs"))
+(setq abbrev-file-name (concat user-emacs-directory "abbrev_defs"))
 (setq save-interprogram-paste-before-kill t)
 (setq-default sentence-end-double-space nil)
 (with-eval-after-load 'comint

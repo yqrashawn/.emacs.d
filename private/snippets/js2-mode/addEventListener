@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: addEventListener
+# key: ;ade
+# type: command
+# contributor: yqrashawn
+# --
+(insert "addEventListener")
