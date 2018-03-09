@@ -1,7 +1,7 @@
 # -*- mode: snippet -*-
+# contributor: yqrashawn <namy.19@gmail.com>
 # name: addEventListener
 # key: ;ade
 # type: command
-# contributor: yqrashawn
 # --
 (insert "addEventListener")

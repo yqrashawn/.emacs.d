@@ -646,3 +646,10 @@ FILENAME is deleted using `spacemacs/delete-file' function.."
 (use-package gitattributes-mode
   :straight t
   :defer t)
+
+(use-package auto-insert
+  :config
+  (auto-insert-mode)
+  (setq auto-insert-directory (concat user-emacs-directory ".templates/"))
+  (setq auto-insert-query nil)
+  (define-auto-insert "\\.html$" "template.html"))
