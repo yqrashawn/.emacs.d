@@ -647,8 +647,7 @@ FILENAME is deleted using `spacemacs/delete-file' function.."
   :straight t
   :defer t)
 
-(use-package auto-insert
-  :config
+(with-eval-after-load 'auto-insert-mode
   (auto-insert-mode)
   (setq auto-insert-directory (concat user-emacs-directory ".templates/"))
   (setq auto-insert-query nil)
