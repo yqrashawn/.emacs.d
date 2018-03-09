@@ -305,6 +305,7 @@ Disable smartparens and remember its initial state."
   (setq yas--default-user-snippets-dir (concat user-home-directory ".emacs.d/private/snippets/"))
   (push 'yas--default-user-snippets-dir yas-snippet-dirs)
   (push 'yas-hippie-try-expand hippie-expand-try-functions-list)
+  (add-hook 'snippet-mode 'yq/toggle-aggressive-indent-off)
   (yas-reload-all))
 (use-package yasnippet-snippets
   :straight t

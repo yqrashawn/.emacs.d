@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
-# name: lint
-# key: lint
+# name: lintoff
+# key: lintoff
 # --
 /* eslint ${1:rule}:'off' */
