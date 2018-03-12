@@ -269,37 +269,37 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   :diminish yas-minor-mode
   :commands (yas-global-mode yas-minor-mode)
   :init
-  (defvar spacemacs--smartparens-enabled-initially t
-    "Stored whether smartparens is originally enabled or not.")
-  (defvar spacemacs--yasnippet-expanding nil
-    "Whether the snippet expansion is in progress.")
+  ;; https://github.com/joaotavora/yasnippet/issues/785
+  (defvar smartparens-mode-original-value)
 
-  (defun spacemacs//smartparens-disable-before-expand-snippet ()
-    "Handler for `yas-before-expand-snippet-hook'.
-Disable smartparens and remember its initial state."
-    ;; Remember the initial smartparens state only once, when expanding a top-level snippet.
-    (unless spacemacs--yasnippet-expanding
-      (setq spacemacs--yasnippet-expanding t
-            spacemacs--smartparens-enabled-initially smartparens-mode))
-    (smartparens-mode -1))
+  (defun disable-sp-hippie-advice (&rest _)
+    (setq smartparens-mode-original-value smartparens-mode)
+    (setq smartparens-mode nil)
+    t) ; We should still return t.
+  ;; This advice could be added to other functions that usually insert
+  ;; balanced parens, like `try-expand-list'.
+  (advice-add 'yas-hippie-try-expand :after-while #'disable-sp-hippie-advice)
 
-  (defun spacemacs//smartparens-restore-after-exit-snippet ()
-    "Handler for `yas-after-exit-snippet-hook'.
- Restore the initial state of smartparens."
-    (setq spacemacs--yasnippet-expanding nil)
-    (when spacemacs--smartparens-enabled-initially
-      (smartparens-mode 1)))
+  (defun reenable-sp-hippie-advice (&rest _)
+    (when (boundp 'smartparens-mode-original-value)
+      (setq smartparens-mode smartparens-mode-original-value)
+      (makunbound 'smartparens-mode-original-value)))
+  (advice-add 'hippie-expand :after #'reenable-sp-hippie-advice
+              ;; Set negative depth to make sure we go after
+              ;; `sp-auto-complete-advice'.
+              '((depth . -100)))
+
   (add-hook 'prog-mode-hook 'yas-minor-mode)
   (setq yas-triggers-in-field t
         yas-wrap-around-region t)
   (setq yas-prompt-functions '(yas-completing-prompt))
   (setq yas-minor-mode-map (make-sparse-keymap))
   (define-key yas-minor-mode-map (kbd "M-s-/") 'yas-next-field)
-  (with-eval-after-load 'smartparens
-    (add-hook 'yas-before-expand-snippet-hook
-              #'spacemacs//smartparens-disable-before-expand-snippet)
-    (add-hook 'yas-after-exit-snippet-hook
-              #'spacemacs//smartparens-restore-after-exit-snippet))
+  ;; (with-eval-after-load 'smartparens
+  ;;   (add-hook 'yas-before-expand-snippet-hook
+  ;;             #'spacemacs//smartparens-disable-before-expand-snippet)
+  ;;   (add-hook 'yas-after-exit-snippet-hook
+  ;;             #'spacemacs//smartparens-restore-after-exit-snippet))
   :config
   (setq yas-snippet-dirs '())
   (setq yas--default-user-snippets-dir (concat user-home-directory ".emacs.d/private/snippets/"))
@@ -403,3 +403,4 @@ Disable smartparens and remember its initial state."
     "W" 'git-timemachine-kill-revision
     "c" 'git-timemachine-show-current-revision)
   (add-hook 'git-timemachine-mode-hook 'yq/fix-evil-state-bug))
+
