@@ -367,6 +367,7 @@ If the universal prefix argument is used then kill the buffer too."
   (push '("*Warnings*"            :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config)
   (push '("*compilation*"          :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config)
   (push '("*Shell Command Output*" :dedicated t :position bottom :stick t :noselect t            ) popwin:special-display-config)
+  (push '("*prettier errors*" :dedicated nil :position bottom :stick nil :noselect t            ) popwin:special-display-config)
   (push '("*Async Shell Command*"  :dedicated t :position bottom :stick t :noselect nil            ) popwin:special-display-config)
   (push '(" *undo-tree*"           :dedicated t :position right  :stick t :noselect nil :width   60) popwin:special-display-config)
   (push '("*undo-tree Diff*"       :dedicated t :position bottom :stick t :noselect nil :height 0.3) popwin:special-display-config)

@@ -132,7 +132,22 @@ around point as the initial input."
 
 (use-package dired
   :config
+  (put 'dired-find-alternate-file 'disabled nil)
+  (add-hook 'dired-mode-hook
+            (lambda ()
+              (evil-define-key 'normal dired-mode-map (kbd "h")
+                (lambda () (interactive) (find-alternate-file "..")))))
+  (defadvice dired-advertised-find-file (around dired-subst-directory activate)
+    "Replace current buffer if file is a directory."
+    (interactive)
+    (let ((orig (current-buffer))
+          (filename (dired-get-filename)))
+      ad-do-it
+      (when (and (file-directory-p filename)
+                 (not (eq (current-buffer) orig)))
+        (kill-buffer orig))))
   (evil-define-key 'normal dired-mode-map
+    "l" 'dired-find-file
     "s" 'nil
     "sk" 'yq/kill-this-buffer
     "sj" 'counsel-recentf
@@ -141,16 +156,16 @@ around point as the initial input."
     "sc" 'yq/delete-window
     "f" 'dired-narrow-fuzzy))
 
-(use-package dired+
-  :straight t
-  :init
-  (setq diredp-hide-details-initially-flag nil)
-  (evil-leader/set-key "fj" 'diredp-dired-recent-dirs)
-  (evil-leader/set-key "fJ" 'diredp-dired-recent-dirs-other-window)
-  (evil-define-key 'normal dired-mode-map "h" 'diredp-up-directory-reuse-dir-buffer)
-  (evil-define-key 'normal dired-mode-map "j" 'diredp-next-line)
-  (evil-define-key 'normal dired-mode-map "k" 'diredp-previous-line)
-  (evil-define-key 'normal dired-mode-map "l" 'diredp-find-file-reuse-dir-buffer))
+;; (use-package dired+
+;;   :straight t
+;;   :init
+;;   (setq diredp-hide-details-initially-flag nil)
+;;   (evil-leader/set-key "fj" 'diredp-dired-recent-dirs)
+;;   (evil-leader/set-key "fJ" 'diredp-dired-recent-dirs-other-window)
+;;   (evil-define-key 'normal dired-mode-map "h" 'diredp-up-directory-reuse-dir-buffer)
+;;   (evil-define-key 'normal dired-mode-map "j" 'diredp-next-line)
+;;   (evil-define-key 'normal dired-mode-map "k" 'diredp-previous-line)
+;;   (evil-define-key 'normal dired-mode-map "l" 'diredp-find-file-reuse-dir-buffer))
 
 (use-package dired-x
   :hook (dired-mode . dired-omit-mode)
