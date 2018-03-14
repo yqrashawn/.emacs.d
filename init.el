@@ -58,13 +58,14 @@
 (yq/get-modules "osx.el")
 (yq/get-modules "shell.el")
 (yq/get-modules "lang.el")
+(yq/get-modules "comm-funcs.el")
 (yq/get-modules "org-agenda.el")
 
 (use-package server)
 (unless (server-running-p) (server-start))
 (setq gc-cons-threshold 8388608)
 
-;; TODO react  noderepl
+;; TODO noderepl
 ;; TODO web-mode
 ;; TODO general.el?
 

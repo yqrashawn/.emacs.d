@@ -35,7 +35,7 @@ file stored in the cache directory and `nil' to disable auto-saving.")
 (setq longlines-show-hard-newlines t)
 (setq delete-by-moving-to-trash t)
 (setq-default fill-column 80)
-(setq abbrev-file-name (concat yq-emacs-cache-dir "abbrev_defs"))
+(setq abbrev-file-name (concat user-emacs-directory "abbrev_defs"))
 (setq save-interprogram-paste-before-kill t)
 (setq-default sentence-end-double-space nil)
 (with-eval-after-load 'comint
@@ -367,6 +367,7 @@ If the universal prefix argument is used then kill the buffer too."
   (push '("*Warnings*"            :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config)
   (push '("*compilation*"          :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config)
   (push '("*Shell Command Output*" :dedicated t :position bottom :stick t :noselect t            ) popwin:special-display-config)
+  (push '("*prettier errors*" :dedicated nil :position bottom :stick nil :noselect t            ) popwin:special-display-config)
   (push '("*Async Shell Command*"  :dedicated t :position bottom :stick t :noselect nil            ) popwin:special-display-config)
   (push '(" *undo-tree*"           :dedicated t :position right  :stick t :noselect nil :width   60) popwin:special-display-config)
   (push '("*undo-tree Diff*"       :dedicated t :position bottom :stick t :noselect nil :height 0.3) popwin:special-display-config)
@@ -628,3 +629,27 @@ FILENAME is deleted using `spacemacs/delete-file' function.."
                                                                                   parsed-localname
                                                                                   new-hop)))
                                       new-fname))))))
+(use-package ssh-config-mode
+  :straight t
+  :mode ("~/.ssh/config". ssh-config-mode))
+
+(defun yq/fix-evil-state-bug ()
+  ;; https://github.com/emacs-evil/evil/issues/301
+  (evil-insert-state)
+  (evil-normal-state))
+
+(use-package gitconfig-mode
+  :straight t
+  :defer t)
+(use-package gitignore-mode
+  :straight t
+  :defer t)
+(use-package gitattributes-mode
+  :straight t
+  :defer t)
+
+(with-eval-after-load 'auto-insert-mode
+  (auto-insert-mode)
+  (setq auto-insert-directory (concat user-emacs-directory ".templates/"))
+  (setq auto-insert-query nil)
+  (define-auto-insert "\\.html$" "template.html"))

@@ -32,15 +32,15 @@
     (let ((jumpl (intern (format "spacemacs-jump-handlers-%S" mode))))
       (add-to-list jumpl 'elisp-slime-nav-find-elisp-thing-at-point))))
 
-(use-package parinfer
-  :straight t
-  ;; :hook (emacs-lisp-mode . parinfer-mode)
-  :commands (parinfer-mode parinfer-mode-enable parinfer-toggle-mode)
-  :init
-  (setq parinfer-lighters '(" Par:I" . " Par:P"))
-  (setq parinfer-extensions '(defaults pretty-parens evil smart-yank))
-  :config
-  (define-key parinfer-mode-map (kbd "C-,") 'parinfer-toggle-mode))
+;; (use-package parinfer
+;;   :straight t
+;;   ;; :hook (emacs-lisp-mode . parinfer-mode)
+;;   :commands (parinfer-mode parinfer-mode-enable parinfer-toggle-mode)
+;;   :init
+;;   (setq parinfer-lighters '(" Par:I" . " Par:P"))
+;;   (setq parinfer-extensions '(defaults pretty-parens evil smart-yank))
+;;   :config
+;;   (define-key parinfer-mode-map (kbd "C-,") 'parinfer-toggle-mode))
 
 (use-package lispy
   :straight t
@@ -54,4 +54,8 @@
   :config
   (evil-define-key 'insert lispy-mode-map (kbd "C-k") 'lispy-kill)
   (evil-define-key 'insert lispy-mode-map (kbd "C-r") 'undo-tree-redo)
-  (evil-define-key 'insert lispy-mode-map (kbd "C-e") 'lispy-move-end-of-line))
+  (evil-define-key 'insert lispy-mode-map (kbd "C-e") 'lispy-move-end-of-line)
+  (evil-define-key 'normal lispy-mode-map "sl" 'lispy-goto)
+  (evil-define-key 'normal lispy-mode-map "b" 'sp-previous-sexp)
+  (evil-define-key 'normal lispy-mode-map "e" 'sp-next-sexp)
+  (push '("*lispy-message*" :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config))

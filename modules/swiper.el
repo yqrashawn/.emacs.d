@@ -132,7 +132,22 @@ around point as the initial input."
 
 (use-package dired
   :config
+  (put 'dired-find-alternate-file 'disabled nil)
+  (add-hook 'dired-mode-hook
+            (lambda ()
+              (evil-define-key 'normal dired-mode-map (kbd "h")
+                (lambda () (interactive) (find-alternate-file "..")))))
+  (defadvice dired-advertised-find-file (around dired-subst-directory activate)
+    "Replace current buffer if file is a directory."
+    (interactive)
+    (let ((orig (current-buffer))
+          (filename (dired-get-filename)))
+      ad-do-it
+      (when (and (file-directory-p filename)
+                 (not (eq (current-buffer) orig)))
+        (kill-buffer orig))))
   (evil-define-key 'normal dired-mode-map
+    "l" 'dired-find-file
     "s" 'nil
     "sk" 'yq/kill-this-buffer
     "sj" 'counsel-recentf

@@ -6,5 +6,7 @@
 ;; (yq/get-modules "lang/c.el")
 (yq/get-modules "lang/vue.el")
 ;; (yq/get-modules "lang/python.el")
-;; (yq/get-modules "lang/md.el")
+(yq/get-modules "lang/md.el")
 (yq/get-modules "lang/ruby.el")
+(yq/get-modules "lang/html.el")
+(yq/get-modules "lang/css.el")

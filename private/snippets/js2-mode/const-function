@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: cfunc
+# key: cfunc
+# --
+const $1 = ($2) => {
+  $3
+};
