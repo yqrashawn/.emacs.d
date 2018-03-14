@@ -291,13 +291,11 @@
     ",c" 'org-capture-finalize
     ",k" 'org-capture-kill
     ",r" 'org-capture-refile)
+
   (setq org-capture-templates
         '(("s" "Some day" entry
            (file+olp "~/Dropbox/ORG/notes.org" "notes" "some day")
            "*** TODO %? %^C %^G\n%U")
-          ("l" "Capture from the Internet with link" entry
-           (file+olp "~/Dropbox/ORG/notes.org" "notes" "read")
-           "*** TODO %? %^G\n%U")
           ("b" "Brain" plain (function org-brain-goto-end)
            "* %i%?\n")
           ("n" "notes" entry
@@ -312,6 +310,27 @@
           ("t" "TODOs" entry
            (file+olp "~/Dropbox/ORG/gtd.org" "misc")
            "* TODO %? \n%U"))))
+
+(use-package org-web-tools
+  :straight t
+  :config
+  (defun mkm-org-capture/link ()
+    "Make a TODO entry with a link in clipboard. Page title is used as task heading."
+    (let* ((url-string (s-trim (x-get-clipboard)))
+           (pdf (string-suffix-p "pdf" url-string)))
+      (unless pdf
+        (let ((page-title (org-web-tools--html-title (org-web-tools--get-url url-string))))
+          (concat "* TODO "
+                  page-title
+                  "\n\t:PROPERTIES:\n\t:URL: "
+                  url-string
+                  "\n\t:END:\n\n\s\s- %?"
+                  )))))
+  (add-to-list
+   'org-capture-templates
+   '("l" "Capture a link from clipboard" entry
+     (file+olp "~/Dropbox/ORG/notes.org" "notes" "read")
+     #'mkm-org-capture/link)))
 
 (use-package evil-org
   :straight t
