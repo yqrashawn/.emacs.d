@@ -18,13 +18,14 @@
   :config
   (add-hook 'prog-mode-hook 'highlight-parentheses-mode))
 
+(use-package zenburn-theme
+  :straight t
+  :defer t)
+
 (use-package color-theme-sanityinc-solarized
   :straight t
   :defer t)
 
-(use-package zenburn-theme
-  :straight t
-  :defer t)
 
 ;; (load-theme 'yq-default-emacs-theme)
 ;; (load-theme 'default-white)
