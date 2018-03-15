@@ -2,7 +2,6 @@
   "Make function for setting the emphasis in org mode"
   `(defun ,fname () (interactive)
           (org-emphasize ,char)))
-
 ;; Insert key for org-mode and markdown a la C-h k
 ;; from SE endless http://emacs.stackexchange.com/questions/2206/i-want-to-have-the-kbd-tags-for-my-blog-written-in-org-mode/2208#2208
 (defun spacemacs/insert-keybinding-org (key)
@@ -73,6 +72,7 @@
         ;; `helm-org-headings-max-depth'.
         org-imenu-depth 8)
   :config
+  (add-to-list 'org-modules 'org-habit)
   (setq org-todo-state-tags-triggers
         (quote (("CANCELLED"
                  ("ARCHIVE" . t))
@@ -115,7 +115,7 @@
                                 (refile . "Refiled on %t")
                                 (clock-out . "")))
   (setq org-todo-keywords (quote
-                           ((sequence "TODO(t)" "NEXT(n)" "STARTED(s)" "WAITING(w@/!)" "SOMEDAY(S!)" "|" "DONE(d!/!)" "CANCELLED(c@/!)"))))
+                           ((sequence "TODO(t)" "NEXT(n!)" "STARTED(s!)" "WAITING(w@)" "SOMEDAY(S@/!)" "|" "DONE(d!/!)" "CANCELLED(c@)"))))
   (setq org-todo-repeat-to-state "NEXT")
   (setq org-log-done (quote time))
   (setq org-log-into-drawer t)

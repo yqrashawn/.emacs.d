@@ -653,3 +653,32 @@ FILENAME is deleted using `spacemacs/delete-file' function.."
   (setq auto-insert-directory (concat user-emacs-directory ".templates/"))
   (setq auto-insert-query nil)
   (define-auto-insert "\\.html$" "template.html"))
+
+(defun spacemacs/scale-up-or-down-font-size (direction)
+  "Scale the font. If DIRECTION is positive or zero the font is scaled up,
+otherwise it is scaled down."
+  (interactive)
+  (let ((scale 0.5))
+    (if (eq direction 0)
+        (text-scale-set 0)
+      (if (< direction 0)
+          (text-scale-decrease scale)
+        (text-scale-increase scale)))))
+
+(defun spacemacs/scale-up-font ()
+  "Scale up the font."
+  (interactive)
+  (spacemacs/scale-up-or-down-font-size 1))
+
+(defun spacemacs/scale-down-font ()
+  "Scale up the font."
+  (interactive)
+  (spacemacs/scale-up-or-down-font-size -1))
+
+(defun spacemacs/reset-font-size ()
+  "Reset the font size."
+  (interactive)
+  (spacemacs/scale-up-or-down-font-size 0))
+
+(global-set-key (kbd "s-=") 'spacemacs/scale-up-font)
+(global-set-key (kbd "s--") 'spacemacs/scale-down-font)
