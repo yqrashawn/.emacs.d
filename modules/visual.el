@@ -98,6 +98,14 @@ has been changed to THEME."
 
 (cl-loop for (state color shape) in spacemacs-evil-cursors
          do (spacemacs/add-evil-cursor state color shape))
+
+(defun spacemacs/set-state-faces ()
+  (cl-loop for (state color cursor) in spacemacs-evil-cursors
+           do
+           (set-face-attribute (intern (format "spacemacs-%s-face" state))
+                               nil
+                               :foreground (face-background 'mode-line))))
+
 (add-hook 'spacemacs-post-theme-change-hook 'spacemacs/set-state-faces)
 
 (use-package page-break-lines
