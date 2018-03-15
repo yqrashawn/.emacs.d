@@ -2,7 +2,6 @@
   "Make function for setting the emphasis in org mode"
   `(defun ,fname () (interactive)
           (org-emphasize ,char)))
-
 ;; Insert key for org-mode and markdown a la C-h k
 ;; from SE endless http://emacs.stackexchange.com/questions/2206/i-want-to-have-the-kbd-tags-for-my-blog-written-in-org-mode/2208#2208
 (defun spacemacs/insert-keybinding-org (key)
@@ -24,8 +23,6 @@
 
 (use-package org
   :straight t
-  :commands (org-clock-out org-occur-in-agenda-files org-agenda-files)
-  :defer t
   :init
   ;; Add global evil-leader mappings. Used to access org-agenda
   ;; functionalities – and a few others commands – from any other mode.
@@ -73,6 +70,7 @@
         ;; `helm-org-headings-max-depth'.
         org-imenu-depth 8)
   :config
+  (add-to-list 'org-modules 'org-habit)
   (setq org-todo-state-tags-triggers
         (quote (("CANCELLED"
                  ("ARCHIVE" . t))
@@ -115,7 +113,7 @@
                                 (refile . "Refiled on %t")
                                 (clock-out . "")))
   (setq org-todo-keywords (quote
-                           ((sequence "TODO(t)" "NEXT(n)" "STARTED(s)" "WAITING(w@/!)" "SOMEDAY(S!)" "|" "DONE(d!/!)" "CANCELLED(c@/!)"))))
+                           ((sequence "TODO(t)" "NEXT(n!)" "STARTED(s!)" "WAITING(w@)" "SOMEDAY(S@/!)" "|" "DONE(d!/!)" "CANCELLED(c@)"))))
   (setq org-todo-repeat-to-state "NEXT")
   (setq org-log-done (quote time))
   (setq org-log-into-drawer t)
@@ -289,8 +287,8 @@
         '(("s" "Some day" entry
            (file+olp "~/Dropbox/ORG/notes.org" "notes" "some day")
            "*** TODO %? %^C %^G\n%U")
-          ("b" "Brain" plain (function org-brain-goto-end)
-           "* %i%?\n")
+          ;; ("b" "Brain" plain (function org-brain-goto-end)
+          ;;  "* %i%?\n")
           ("n" "notes" entry
            (file+olp "~/Dropbox/ORG/notes.org" "notes" "note")
            "*** %?\n   %U")
@@ -330,7 +328,6 @@
   :defer t
   :diminish evil-org-mode
   :init
-  ;; (add-hook 'org-mode-hook 'spacemacs//evil-org-mode)
   (setq evil-org-key-theme `(textobjects
                              navigation
                              additional)))
@@ -408,7 +405,7 @@
 
 (yq/get-modules "org-agenda.el")
 
-(use-package org-jira
-  :straight t
-  :commands (org-jira-get-projects org-jira-get-issues)
-  :init (setq jiralib-url "http://72.bimsop.com/"))
+;; (use-package org-jira
+;;   :straight t
+;;   :commands (org-jira-get-projects org-jira-get-issues)
+;;   :init (setq jiralib-url "http://72.bimsop.com/"))

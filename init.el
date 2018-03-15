@@ -60,6 +60,7 @@
 (yq/get-modules "lang.el")
 (yq/get-modules "comm-funcs.el")
 (yq/get-modules "org-agenda.el")
+(yq/get-modules "auto-detect-which-machine.el")
 
 (use-package server)
 (unless (server-running-p) (server-start))

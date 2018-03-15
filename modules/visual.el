@@ -18,17 +18,18 @@
   :config
   (add-hook 'prog-mode-hook 'highlight-parentheses-mode))
 
-(use-package color-theme-sanityinc-solarized
-  :straight t
-  :defer t)
-
 (use-package zenburn-theme
   :straight t
   :defer t)
 
+(use-package color-theme-sanityinc-solarized
+  :straight t
+  :defer t)
+
+
 ;; (load-theme 'yq-default-emacs-theme)
 ;; (load-theme 'default-white)
-(load-theme 'zenburn)
+;; (load-theme 'zenburn)
 
 (defvar dotspacemacs-colorize-cursor-according-to-state t
   "If non nil the cursor color matches the state color in GUI Emacs.")
@@ -98,6 +99,14 @@ has been changed to THEME."
 
 (cl-loop for (state color shape) in spacemacs-evil-cursors
          do (spacemacs/add-evil-cursor state color shape))
+
+(defun spacemacs/set-state-faces ()
+  (cl-loop for (state color cursor) in spacemacs-evil-cursors
+           do
+           (set-face-attribute (intern (format "spacemacs-%s-face" state))
+                               nil
+                               :foreground (face-background 'mode-line))))
+
 (add-hook 'spacemacs-post-theme-change-hook 'spacemacs/set-state-faces)
 
 (use-package page-break-lines

@@ -274,11 +274,13 @@ If the universal prefix argument is used then kill the buffer too."
   :defer t
   :init
   ;; lazy load recentf
-  (add-hook 'find-file-hook (lambda () (unless recentf-mode
-                                         (recentf-mode)
-                                         (recentf-track-opened-file))))
+  (add-hook 'find-file-hook
+            (lambda ()
+              (unless recentf-mode
+                (recentf-mode)
+                (recentf-track-opened-file))))
   (setq recentf-save-file (concat spacemacs-cache-directory "recentf")
-        recentf-max-saved-items 1000
+        recentf-max-saved-items 10000
         recentf-auto-cleanup 'never
         recentf-auto-save-timer (run-with-idle-timer 600 t
                                                      'recentf-save-list))
@@ -653,3 +655,45 @@ FILENAME is deleted using `spacemacs/delete-file' function.."
   (setq auto-insert-directory (concat user-emacs-directory ".templates/"))
   (setq auto-insert-query nil)
   (define-auto-insert "\\.html$" "template.html"))
+
+(defun spacemacs/scale-up-or-down-font-size (direction)
+  "Scale the font. If DIRECTION is positive or zero the font is scaled up,
+otherwise it is scaled down."
+  (interactive)
+  (let ((scale 0.5))
+    (if (eq direction 0)
+        (text-scale-set 0)
+      (if (< direction 0)
+          (text-scale-decrease scale)
+        (text-scale-increase scale)))))
+
+(defun spacemacs/scale-up-font ()
+  "Scale up the font."
+  (interactive)
+  (spacemacs/scale-up-or-down-font-size 1))
+
+(defun spacemacs/scale-down-font ()
+  "Scale up the font."
+  (interactive)
+  (spacemacs/scale-up-or-down-font-size -1))
+
+(defun spacemacs/reset-font-size ()
+  "Reset the font size."
+  (interactive)
+  (spacemacs/scale-up-or-down-font-size 0))
+
+(global-set-key (kbd "s-=") 'spacemacs/scale-up-font)
+(global-set-key (kbd "s--") 'spacemacs/scale-down-font)
+
+(use-package info
+  :straight t
+  :commands (info)
+  :config
+  (define-key Info-mode-map "s" nil)
+  (define-key Info-mode-map "ss" 'Info-search)
+  (define-key Info-mode-map "sj" 'counsel-recentf)
+  (define-key Info-mode-map "sc" 'yq/delete-window)
+  (define-key Info-mode-map "sk" 'yq/kill-this-buffer)
+  (evil-define-key 'normal
+    "s" nil
+    "sj" 'counsel-recentf))
