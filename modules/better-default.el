@@ -653,3 +653,16 @@ FILENAME is deleted using `spacemacs/delete-file' function.."
   (setq auto-insert-directory (concat user-emacs-directory ".templates/"))
   (setq auto-insert-query nil)
   (define-auto-insert "\\.html$" "template.html"))
+
+(use-package info
+  :straight t
+  :commands (info)
+  :config
+  (define-key Info-mode-map "s" nil)
+  (define-key Info-mode-map "ss" 'Info-search)
+  (define-key Info-mode-map "sj" 'counsel-recentf)
+  (define-key Info-mode-map "sc" 'yq/delete-window)
+  (define-key Info-mode-map "sk" 'yq/kill-this-buffer)
+  (evil-define-key 'normal
+    "s" nil
+    "sj" 'counsel-recentf))
