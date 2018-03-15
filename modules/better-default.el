@@ -274,11 +274,13 @@ If the universal prefix argument is used then kill the buffer too."
   :defer t
   :init
   ;; lazy load recentf
-  (add-hook 'find-file-hook (lambda () (unless recentf-mode
-                                         (recentf-mode)
-                                         (recentf-track-opened-file))))
+  (add-hook 'find-file-hook
+            (lambda ()
+              (unless recentf-mode
+                (recentf-mode)
+                (recentf-track-opened-file))))
   (setq recentf-save-file (concat spacemacs-cache-directory "recentf")
-        recentf-max-saved-items 1000
+        recentf-max-saved-items 10000
         recentf-auto-cleanup 'never
         recentf-auto-save-timer (run-with-idle-timer 600 t
                                                      'recentf-save-list))
