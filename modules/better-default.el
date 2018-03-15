@@ -274,11 +274,13 @@ If the universal prefix argument is used then kill the buffer too."
   :defer t
   :init
   ;; lazy load recentf
-  (add-hook 'find-file-hook (lambda () (unless recentf-mode
-                                         (recentf-mode)
-                                         (recentf-track-opened-file))))
+  (add-hook 'find-file-hook
+            (lambda ()
+              (unless recentf-mode
+                (recentf-mode)
+                (recentf-track-opened-file))))
   (setq recentf-save-file (concat spacemacs-cache-directory "recentf")
-        recentf-max-saved-items 1000
+        recentf-max-saved-items 10000
         recentf-auto-cleanup 'never
         recentf-auto-save-timer (run-with-idle-timer 600 t
                                                      'recentf-save-list))
@@ -682,3 +684,16 @@ otherwise it is scaled down."
 
 (global-set-key (kbd "s-=") 'spacemacs/scale-up-font)
 (global-set-key (kbd "s--") 'spacemacs/scale-down-font)
+
+(use-package info
+  :straight t
+  :commands (info)
+  :config
+  (define-key Info-mode-map "s" nil)
+  (define-key Info-mode-map "ss" 'Info-search)
+  (define-key Info-mode-map "sj" 'counsel-recentf)
+  (define-key Info-mode-map "sc" 'yq/delete-window)
+  (define-key Info-mode-map "sk" 'yq/kill-this-buffer)
+  (evil-define-key 'normal
+    "s" nil
+    "sj" 'counsel-recentf))

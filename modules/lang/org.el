@@ -23,8 +23,6 @@
 
 (use-package org
   :straight t
-  :commands (org-clock-out org-occur-in-agenda-files org-agenda-files)
-  :defer t
   :init
   ;; Add global evil-leader mappings. Used to access org-agenda
   ;; functionalities – and a few others commands – from any other mode.
@@ -289,8 +287,8 @@
         '(("s" "Some day" entry
            (file+olp "~/Dropbox/ORG/notes.org" "notes" "some day")
            "*** TODO %? %^C %^G\n%U")
-          ("b" "Brain" plain (function org-brain-goto-end)
-           "* %i%?\n")
+          ;; ("b" "Brain" plain (function org-brain-goto-end)
+          ;;  "* %i%?\n")
           ("n" "notes" entry
            (file+olp "~/Dropbox/ORG/notes.org" "notes" "note")
            "*** %?\n   %U")
@@ -330,7 +328,6 @@
   :defer t
   :diminish evil-org-mode
   :init
-  ;; (add-hook 'org-mode-hook 'spacemacs//evil-org-mode)
   (setq evil-org-key-theme `(textobjects
                              navigation
                              additional)))
@@ -408,7 +405,7 @@
 
 (yq/get-modules "org-agenda.el")
 
-(use-package org-jira
-  :straight t
-  :commands (org-jira-get-projects org-jira-get-issues)
-  :init (setq jiralib-url "http://72.bimsop.com/"))
+;; (use-package org-jira
+;;   :straight t
+;;   :commands (org-jira-get-projects org-jira-get-issues)
+;;   :init (setq jiralib-url "http://72.bimsop.com/"))
