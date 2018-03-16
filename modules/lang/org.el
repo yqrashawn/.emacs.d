@@ -44,7 +44,7 @@
     "aot" 'org-todo-list
     ;; SPC C- capture/colors
     "Cc" 'org-capture)
-
+  (add-hook 'org-mode-hook 'hs-minor-mode)
   (define-key global-map "\C-cl" 'org-store-link)
   (define-key global-map "\C-ca" 'org-agenda)
   (define-key global-map "\C-cc" 'org-capture)
