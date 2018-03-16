@@ -24,6 +24,15 @@
 (use-package org
   :straight t
   :init
+  ;; automatically change status of a heading to DONE when all children are done
+  (straight-use-package 'org-plus-contrib)
+  (defun org-summary-todo (n-done n-not-done)
+    "Switch entry to DONE when all subentries are done, to TODO otherwise."
+    (let (org-log-done org-log-states)   ; turn off logging
+      (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
+  (add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
+  ;; src block have same indentation with #+BEGIN_SRC
+  (setq org-edit-src-content-indentation 0)
   ;; Add global evil-leader mappings. Used to access org-agenda
   ;; functionalities – and a few others commands – from any other mode.
   (spacemacs/set-leader-keys
@@ -88,11 +97,11 @@
                 ("DONE"
                  ("WAITING")
                  ("CANCELLED")))))
-  (defun org-summary-todo (n-done n-not-done)
-    "Switch entry to DONE when all subentries are done, to TODO otherwise."
-    (let (org-log-done org-log-states)   ; turn off logging
-      (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
-  (add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
+  ;; (defun org-summary-todo (n-done n-not-done)
+  ;;   "Switch entry to DONE when all subentries are done, to TODO otherwise."
+  ;;   (let (org-log-done org-log-states)   ; turn off logging
+  ;;     (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
+  ;; (add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
 
   (setq org-log-note-headings '((done . "CLOSING NOTE %t")
                                 (state . "State %-12s from %-12S %T")
@@ -270,6 +279,17 @@
   (define-key org-read-date-minibuffer-local-map (kbd "M-J")
     (lambda () (interactive)
       (org-eval-in-calendar '(calendar-forward-year 1)))))
+
+(use-package org-expiry
+  :commands (org-expiry-insinuate
+             org-expiry-deinsinuate
+             org-expiry-insert-created
+             org-expiry-insert-expiry
+             org-expiry-add-keyword
+             org-expiry-archive-subtree
+             org-expiry-process-entry
+             org-expiry-process-entries)
+  :init (org-expiry-insinuate))
 
 (with-eval-after-load 'org-indent
   (diminish 'org-indent-mode))
