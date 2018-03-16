@@ -33,21 +33,19 @@
   (add-to-list 'org-agenda-custom-commands '("wt" "Agenda and work todo" ((agenda "") (tags-todo "work"))))
   (add-to-list 'org-agenda-custom-commands
                '("B" "Working Weekly Todo"
-                 ((tags-todo "work"))
+                 ((tags "OFFICE/TODO"))
                  nil
-                 ("~/agendas/work/todo.pdf"
-                  "~/agendas/work/todo.csv"
-                  "~/agendas/work/todo.txt"
-                  "~/agendas/work/todo.html")))
+                 ("~/agendas/work/todos.pdf"
+                  "~/agendas/work/todos.csv"
+                  "~/agendas/work/todos.txt"
+                  "~/agendas/work/todos.html")))
 
   (add-to-list 'org-agenda-custom-commands
                '("ww" "Working Weekly Review"
                  ((agenda "" ((org-agenda-ndays 7))) ;; review upcoming deadlines and appointments
                   ;; type "l" in the agenda to review logged items
-                  (stuck "work" ((org-agenda-files (org-projectile-todo-files)))) ;; review stuck projects
-                  (tags-todo "work")
-                  (tags-todo "MAYBE+work") ;; review someday/maybe items
-                  (tags-todo "WAITING+work")) nil ("~/agendas/week/work.pdf" "~/agendas/week/work.csv" "~/agendas/week/work.txt" "~/agendas/week/work.html"))) ;; review waiting items
+                  (stuck "OFFICE" ((org-agenda-files (org-projectile-todo-files)))) ;; review stuck projects
+                  (tags-todo "OFFICE")) nil ("~/agendas/week/work.pdf" "~/agendas/week/work.csv" "~/agendas/week/work.txt" "~/agendas/week/work.html"))) ;; review waiting items
   (add-to-list 'org-agenda-custom-commands
                '("wp" . "Working Priority")) ;; review waiting items
   (add-to-list 'org-agenda-custom-commands
@@ -63,9 +61,7 @@
                  ((agenda "" ((org-agenda-ndays 7))) ;; review upcoming deadlines and appointments
                   ;; type "l" in the agenda to review logged items
                   (stuck "" ((org-agenda-files (list "~/Dropbox/ORG")))) ;; review stuck projects
-                  (tags-todo "home")
-                  (tags-todo "MAYBE+home") ;; review someday/maybe items
-                  (tags-todo "WAITING+home")))) ;; review waiting items
+                  (tags-todo "home"))))
   ;; (add-to-list org-agenda-custom-commands
   ;;              '("pc" "C items" tags-todo "+PRIORITY=\"C\""))
   (add-to-list 'org-agenda-custom-commands '("r" "Read later" ((tags-todo "read")) nil ("~/agendas/work/readlater.html" "~/agendas/work/readlater.txt"))))
