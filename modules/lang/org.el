@@ -385,8 +385,6 @@
         '(("s" "Some day" entry
            (file+olp "~/Dropbox/ORG/notes.org" "notes" "some day")
            "*** TODO %? %^C %^G\n%U")
-          ;; ("b" "Brain" plain (function org-brain-goto-end)
-          ;;  "* %i%?\n")
           ("n" "notes" entry
            (file+olp "~/Dropbox/ORG/notes.org" "notes" "note")
            "*** %?\n   %U")
@@ -410,10 +408,10 @@
       (unless pdf
         (let ((page-title (org-web-tools--html-title (org-web-tools--get-url url-string))))
           (concat "* TODO "
-                  page-title
+                  page-title " %^g"
                   "\n\t:PROPERTIES:\n\t:URL: "
                   url-string
-                  "\n\t:END:\n\n\s\s- %?"
+                  "\n\t:END:\n\s\s- %?"
                   )))))
   (add-to-list
    'org-capture-templates

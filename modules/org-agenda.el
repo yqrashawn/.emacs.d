@@ -64,4 +64,7 @@
                   (tags-todo "home"))))
   ;; (add-to-list org-agenda-custom-commands
   ;;              '("pc" "C items" tags-todo "+PRIORITY=\"C\""))
+  (add-to-list 'org-agenda-custom-commands
+               '("c" "casual"
+                 ((tags-todo "casual"))))
   (add-to-list 'org-agenda-custom-commands '("r" "Read later" ((tags-todo "read")) nil ("~/agendas/work/readlater.html" "~/agendas/work/readlater.txt"))))
