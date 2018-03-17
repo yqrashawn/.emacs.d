@@ -24,6 +24,26 @@
 (use-package org
   :straight t
   :init
+  ;; automatically change status of a heading to DONE when all children are done
+  (straight-use-package 'org-plus-contrib)
+  ;; src block have same indentation with #+BEGIN_SRC
+  (setq org-edit-src-content-indentation 0)
+
+  (defun my-sparse-tree-with-tag-filter()
+    "asks for a tag and generates sparse tree for all open tasks in current Org buffer
+  that are associated with this tag"
+    (interactive "*")
+    (setq tag-for-filter
+          (org-trim
+           (org-icompleting-read "Tags: "
+                                 'org-tags-completion-function
+                                 nil nil nil 'org-tags-history)))
+    (org-occur
+     (concat "^\\*+ \\(NEXT\\|TODO\\|WAITING\\|STARTED\\) .+:"
+             tag-for-filter
+             ":")))
+  (evil-define-key 'normal org-mode-map "ss" #'my-sparse-tree-with-tag-filter)
+
   ;; Add global evil-leader mappings. Used to access org-agenda
   ;; functionalities – and a few others commands – from any other mode.
   (spacemacs/set-leader-keys
@@ -44,7 +64,7 @@
     "aot" 'org-todo-list
     ;; SPC C- capture/colors
     "Cc" 'org-capture)
-
+  (add-hook 'org-mode-hook 'hs-minor-mode)
   (define-key global-map "\C-cl" 'org-store-link)
   (define-key global-map "\C-ca" 'org-agenda)
   (define-key global-map "\C-cc" 'org-capture)
@@ -59,7 +79,7 @@
                                       ".org-id-locations")
         org-publish-timestamp-directory (concat spacemacs-cache-directory
                                                 ".org-timestamps/")
-        org-directory "~/org" ;; needs to be defined for `org-default-notes-file'
+        org-directory "~/Dropbox/ORG" ;; needs to be defined for `org-default-notes-file'
         org-default-notes-file (expand-file-name "notes.org" org-directory)
         org-log-done t
         org-startup-with-inline-images t
@@ -70,6 +90,50 @@
         ;; `helm-org-headings-max-depth'.
         org-imenu-depth 8)
   :config
+  (defun my-handle-tsfile-link (querystring)
+    (let ((querystring
+           (if (s-contains-p "/" querystring)
+               (f-filename querystring)
+             (s-replace " " ".*" querystring)
+             )))
+      (message (concat "DEBUG1: querystring: " querystring))
+      (message (concat "DEBUG2: "
+                       "fd \""
+                       querystring
+                       "\" "
+                       (concat blog-root blog-file-pattern)))
+      ;; get a list of hits
+      (let ((queryresults (split-string
+                           (s-trim
+                            (shell-command-to-string
+                             (concat
+                              "fd \""
+                              querystring
+                              "\" "
+                              (concat blog-root blog-file-pattern))))
+                           "\n" t)))
+        (message (concat "DEBUG3: queryresults: " (car queryresults)))
+        ;; check length of list (number of lines)
+        (cond ((= 0 (length queryresults))
+               ;; edge case: empty query result
+               (message "Sorry, no results found for query: %s" querystring))
+              (t (with-temp-buffer
+                   (spacemacs//open-in-external-app (if (= 1 (length queryresults))
+                                                        (car queryresults)
+                                                      (completing-read "Choose: " queryresults)))
+                   ;; (insert (if (= 1 (length queryresults))
+                   ;;             (car queryresults)
+                   ;;           (completing-read "Choose: " queryresults)))
+                   ;; (org-mode)
+                   ;; (goto-char (point-min))
+                   ;; (org-next-link)
+                   ;; (org-open-at-point)
+                   ))))))
+  (setf org-blank-before-new-entry '((heading . nil) (plain-list-item . nil)))
+  (org-link-set-parameters
+   "tsfile"
+   :follow (lambda (path) (my-handle-tsfile-link path))
+   :help-echo "Opens the linked file with your default application")
   (add-to-list 'org-modules 'org-habit)
   (setq org-todo-state-tags-triggers
         (quote (("CANCELLED"
@@ -115,13 +179,27 @@
   (setq org-todo-keywords (quote
                            ((sequence "TODO(t)" "NEXT(n!)" "STARTED(s!)" "WAITING(w@)" "SOMEDAY(S@/!)" "|" "DONE(d!/!)" "CANCELLED(c@)"))))
   (setq org-todo-repeat-to-state "NEXT")
+
+  ;; https://github.com/novoid/dot-emacs/blob/28c146f785c1d87dc821514e8448e3dfe82e56ce/config.org
   (setq org-log-done (quote time))
+  (setq org-id-method 'org)
   (setq org-log-into-drawer t)
   (setq org-log-redeadline (quote note));; record when the deadline date of a tasks is modified
   (setq org-log-reschedule (quote time))
   (setq org-return-follows-link t)
   (setq org-remove-highlights-with-change nil)
   (setq org-read-date-prefer-future 'time)
+  (setq org-deadline-warning-days 1)
+  (setq org-enforce-todo-dependencies t)
+  (setq org-startup-indented t)
+  (setq org-adapt-indentation nil);; do not indent drawers/body according to heading level
+  (setq org-insert-heading-respect-content nil)
+  (setq org-reverse-note-order nil)
+  (setq org-special-ctrl-a/e t)
+  (setq org-special-ctrl-k t)
+  (setq org-hierarchical-todo-statistics t)
+  (setq org-log-note-clock-out t)
+  (setq org-yank-adjusted-subtrees t)
   (setq org-list-demote-modify-bullet (quote (("+" . "-")
                                               ("*" . "-")
                                               ("1." . "-")
@@ -271,6 +349,26 @@
     (lambda () (interactive)
       (org-eval-in-calendar '(calendar-forward-year 1)))))
 
+(use-package org-clock
+  :after org
+  :commands (org-clock-persistence-insinuate)
+  :init (org-clock-persistence-insinuate)
+  :config
+  (setq org-clock-persist 'history)
+  (setq org-clock-idle-time 10))
+
+(use-package org-expiry
+  :after org
+  :commands (org-expiry-insinuate
+             org-expiry-deinsinuate
+             org-expiry-insert-created
+             org-expiry-insert-expiry
+             org-expiry-add-keyword
+             org-expiry-archive-subtree
+             org-expiry-process-entry
+             org-expiry-process-entries)
+  :init (org-expiry-insinuate))
+
 (with-eval-after-load 'org-indent
   (diminish 'org-indent-mode))
 
@@ -287,8 +385,6 @@
         '(("s" "Some day" entry
            (file+olp "~/Dropbox/ORG/notes.org" "notes" "some day")
            "*** TODO %? %^C %^G\n%U")
-          ;; ("b" "Brain" plain (function org-brain-goto-end)
-          ;;  "* %i%?\n")
           ("n" "notes" entry
            (file+olp "~/Dropbox/ORG/notes.org" "notes" "note")
            "*** %?\n   %U")
@@ -312,10 +408,10 @@
       (unless pdf
         (let ((page-title (org-web-tools--html-title (org-web-tools--get-url url-string))))
           (concat "* TODO "
-                  page-title
+                  page-title " %^g"
                   "\n\t:PROPERTIES:\n\t:URL: "
                   url-string
-                  "\n\t:END:\n\n\s\s- %?"
+                  "\n\t:END:\n\s\s- %?"
                   )))))
   (add-to-list
    'org-capture-templates
