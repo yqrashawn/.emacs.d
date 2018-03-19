@@ -110,13 +110,18 @@ around point as the initial input."
 (use-package counsel-projectile
   :straight t
   :config
+  (setq projectile-switch-project-action 'counsel-projectile-find-file)
   (counsel-projectile-mode)
   (spacemacs/set-leader-keys "p" nil)
   (spacemacs/set-leader-keys "pb" 'counsel-projectile)
   (spacemacs/set-leader-keys "pf" 'counsel-projectile-find-file)
   (spacemacs/set-leader-keys "pd" 'counsel-projectile-find-dir)
   (spacemacs/set-leader-keys "pl" 'counsel-projectile-switch-project)
-  (spacemacs/set-leader-keys "ps" 'counsel-projectile-rg))
+  (spacemacs/set-leader-keys "ps" 'counsel-projectile-rg)
+  (defun yq/find-emacsd-modules ()
+    "find file in .emacs.d"
+    (interactive) (counsel-projectile-switch-project-by-name "~/.emacs.d"))
+  (spacemacs/set-leader-keys "fef" 'yq/find-emacsd-modules))
 
 (yq/get-modules "counsel-funcs.el")
 (spacemacs/set-leader-keys "s" nil)

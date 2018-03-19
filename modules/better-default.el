@@ -697,3 +697,5 @@ otherwise it is scaled down."
   (evil-define-key 'normal
     "s" nil
     "sj" 'counsel-recentf))
+
+(setq confirm-kill-emacs nil)
