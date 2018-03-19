@@ -72,3 +72,5 @@
 
 (use-package playground
   :straight (:host github :repo "akirak/emacs-playground"))
+
+(toggle-frame-maximized)
