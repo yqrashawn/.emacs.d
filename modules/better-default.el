@@ -432,10 +432,8 @@ already narrowed."
   "Kill all other buffers.
 If the universal prefix argument is used then will the windows too."
   (interactive "P")
-  (when (yes-or-no-p (format "Killing all buffers except \"%s\"? "
-                             (buffer-name)))
-    (mapc 'kill-buffer (delq (current-buffer) (buffer-list)))
-    (when (equal '(4) arg) (delete-other-windows))))
+  (mapc 'kill-buffer (delq (current-buffer) (buffer-list)))
+  (when (equal '(4) arg) (delete-other-windows)))
 (evil-leader/set-key (kbd "b C-d") 'spacemacs/kill-other-buffers)
 
 (setq require-final-newline nil)
@@ -699,3 +697,5 @@ otherwise it is scaled down."
     "sj" 'counsel-recentf))
 
 (setq confirm-kill-emacs nil)
+(setq dired-recursive-deletes 'always)
+(setq dired-recursive-copies 'always)
