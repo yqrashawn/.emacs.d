@@ -699,3 +699,4 @@ otherwise it is scaled down."
     "sj" 'counsel-recentf))
 
 (setq confirm-kill-emacs nil)
+(spacemacs/set-leader-keys "xdw" 'delete-trailing-whitespace)
