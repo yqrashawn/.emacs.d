@@ -91,7 +91,7 @@
   :defer t
   :init
   (add-to-list 'auto-mode-alist '("components\/.*\.js\'" . rjsx-mode))
-  :mode (("\\.jsx\\'" . rjsx-mode))
+  :mode (("\\.jsx\\'" . rjsx-mode) ("\\.tsx\\'" . rjsx-mode))
   :config (progn (evil-define-key 'insert rjsx-mode-map (kbd "C-d") 'rjsx-delete-creates-full-tag
                    (spacemacs/set-leader-keys-for-major-mode 'rjsx-mode "=" 'prettier-js)
                    (spacemacs/set-leader-keys-for-major-mode 'rjsx-mode "m" 'js2-mode)))

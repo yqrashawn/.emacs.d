@@ -22,10 +22,9 @@
     ",k" 'org-edit-src-abort))
 
 (use-package org
-  :straight t
+  :straight org-plus-contrib
   :init
   ;; automatically change status of a heading to DONE when all children are done
-  (straight-use-package 'org-plus-contrib)
   ;; src block have same indentation with #+BEGIN_SRC
   (setq org-edit-src-content-indentation 0)
 
