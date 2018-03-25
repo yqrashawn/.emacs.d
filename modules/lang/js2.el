@@ -71,23 +71,19 @@
   :init
   :mode "\\.json\\'")
 
-(defun yq/toggle-prettier-js-mode ()
-  (interactive)
-  (if (bound-and-true-p prettier-js-mode)
-      (prettier-js-mode -1)
-    (prettier-js-mode 1)))
+;; (bound-and-true-p prettier-js-mode)
 (use-package prettier-js
   :straight t
   :diminish prettier-js-mode
   :commands (prettier-js-mode prettier-js)
   :init
+  (yq/add-toggle prettier-js :mode prettier-js-mode)
   (add-hook 'js2-mode-hook 'prettier-js-mode)
+  (add-hook 'rjsx-mode-hook 'prettier-js-mode)
+  (add-hook 'typescript-mode-hook 'prettier-js-mode)
   (evil-define-key 'normal js2-mode-map ",=" 'prettier-js)
-  (evil-define-key 'normal js2-mode-map ",tp" 'yq/toggle-prettier-js-mode))
+  (evil-define-key 'normal js2-mode-map ",tp" 'yq/toggle-prettier-js))
 
-
-
-
 (use-package rjsx-mode
   :straight t
   :defer t
