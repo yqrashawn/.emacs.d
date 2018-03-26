@@ -44,6 +44,7 @@
     (kill-whole-line)
     (yank)
     (yank))
+  (define-key evil-insert-state-map (kbd "C-y") 'yank)
   (define-key evil-normal-state-map (kbd "gy") 'yq/duplicate-line)
   (define-key evil-normal-state-map "gn" 'evil-search-word-forward)
   (define-key evil-normal-state-map "gd" 'spacemacs/jump-to-definition)
@@ -93,8 +94,6 @@
   (evil-define-minor-mode-key 'motion 'visual-line-mode "j" 'evil-next-visual-line)
   (evil-define-minor-mode-key 'motion 'visual-line-mode "k" 'evil-previous-visual-line)
   (evil-mode 1))
-
-
 
 (use-package evil-nerd-commenter
   :straight t
