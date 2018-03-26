@@ -348,6 +348,10 @@
     (lambda () (interactive)
       (org-eval-in-calendar '(calendar-forward-year 1)))))
 
+(use-package htmlize
+  :straight t
+  :commands (org-html-export-as-html org-html-export-as-html))
+
 (use-package org-clock
   :after org
   :commands (org-clock-persistence-insinuate)
