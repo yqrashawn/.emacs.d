@@ -6,11 +6,18 @@ Currently avaliable 'tide (default)
 and 'typescript-formatter .")
 (defvar typescript-fmt-on-save nil "Run formatter on buffer save.")
 
+(defun enable-rjsx-feature-in-ts ()
+  (evil-define-key 'insert typescript-mode-map "<" 'rjsx-electric-lt)
+  (evil-define-key 'insert typescript-mode-map ">" 'rjsx-electric-gt)
+  (evil-define-key 'insert typescript-mode-map (kbd "C-d") 'rjsx-delete-creates-full-tag))
+
 (use-package typescript-mode
   :straight t
-  :mode ("\\.ts\\'" . typescript-mode)
+  :mode (("\\.ts\\'" . typescript-mode)("\\.tsx\\'" . typescript-mode))
+  :init
+  (setq typescript-indent-level 2)
+  (add-hook 'typescript-mode-hook 'enable-rjsx-feature-in-ts)
   :config
-
   (defun spacemacs/typescript-format ()
     "Call formatting tool specified in `typescript-fmt-tool'."
     (interactive)
@@ -32,6 +39,7 @@ and 'typescript-formatter .")
   :diminish tide-mode
   :commands (typescript/jump-to-type-def)
   :init
+  (setq tide-format-options '(:indentSize 2 :tabSize 2 :insertSpaceAfterSemicolonInForStatements t))
   (add-hook 'typescript-mode-hook 'eldoc-mode)
   (spacemacs|define-jump-handlers typescript-mode)
   (spacemacs|define-jump-handlers js2-mode)

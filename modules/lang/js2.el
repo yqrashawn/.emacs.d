@@ -71,27 +71,26 @@
   :init
   :mode "\\.json\\'")
 
-(defun yq/toggle-prettier-js-mode ()
-  (interactive)
-  (if (bound-and-true-p prettier-js-mode)
-      (prettier-js-mode -1)
-    (prettier-js-mode 1)))
-
+;; (bound-and-true-p prettier-js-mode)
 (use-package prettier-js
   :straight t
   :diminish prettier-js-mode
   :commands (prettier-js-mode prettier-js)
   :init
+  (yq/add-toggle prettier-js :mode prettier-js-mode)
   (add-hook 'js2-mode-hook 'prettier-js-mode)
+  (add-hook 'rjsx-mode-hook 'prettier-js-mode)
+  (add-hook 'typescript-mode-hook 'prettier-js-mode)
   (evil-define-key 'normal js2-mode-map ",=" 'prettier-js)
-  (evil-define-key 'normal js2-mode-map ",tp" 'yq/toggle-prettier-js-mode))
-
+  (evil-define-key 'normal js2-mode-map ",tp" 'yq/toggle-prettier-js))
+
 (use-package rjsx-mode
   :straight t
   :defer t
+  :mode (("\\.jsx\\'" . rjsx-mode))
+  :commands (rjsx-delete-creates-full-tag rjsx-electric-gt rjsx-electric-lt rjsx-rename-tag-at-point)
   :init
   (add-to-list 'auto-mode-alist '("components\/.*\.js\'" . rjsx-mode))
-  :mode (("\\.jsx\\'" . rjsx-mode) ("\\.tsx\\'" . rjsx-mode))
   :config (progn (evil-define-key 'insert rjsx-mode-map (kbd "C-d") 'rjsx-delete-creates-full-tag
                    (spacemacs/set-leader-keys-for-major-mode 'rjsx-mode "=" 'prettier-js)
                    (spacemacs/set-leader-keys-for-major-mode 'rjsx-mode "m" 'js2-mode)))
