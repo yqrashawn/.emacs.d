@@ -53,9 +53,9 @@ and 'typescript-formatter .")
                '(tide-jump-to-definition :async t))
   (add-to-list 'spacemacs-jump-handlers-typescript-mode
                '(tide-jump-to-definition :async t))
-  :config
   (flycheck-add-mode 'typescript-tslint 'typescript-mode)
   (spacemacs/enable-flycheck 'typescript-mode)
+  :config
   (spacemacs|add-company-backends
     :backends company-tide
     :modes typescript-mode web-mode js2-mode)
