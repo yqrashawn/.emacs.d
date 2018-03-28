@@ -299,6 +299,7 @@
     ;; attachments
     ",A" 'org-attach
     ;; insertion
+    ",ii" 'org-insert-item
     ",id" 'org-insert-drawer
     ",ie" 'org-set-effort
     ",if" 'org-footnote-new
@@ -308,7 +309,15 @@
     ",il" 'org-insert-link
     ",ip" 'org-set-property
     ",is" 'org-insert-subheading
-    ",it" 'org-set-tags)
+    ",it" 'org-set-tags
+    ",xb" (spacemacs|org-emphasize spacemacs/org-bold ?*)
+    ",xc" (spacemacs|org-emphasize spacemacs/org-code ?~)
+    ",xi" (spacemacs|org-emphasize spacemacs/org-italic ?/)
+    ",xo" 'org-open-at-point
+    ",xr" (spacemacs|org-emphasize spacemacs/org-clear ? )
+    ",xs" (spacemacs|org-emphasize spacemacs/org-strike-through ?+)
+    ",xu" (spacemacs|org-emphasize spacemacs/org-underline ?_)
+    ",xv" (spacemacs|org-emphasize spacemacs/org-verbatim ?=))
   ;; region manipulation
   (evil-define-key 'visual org-mode-map
     ",il" 'org-insert-link
@@ -414,7 +423,7 @@
                   page-title " %^g"
                   "\n\t:PROPERTIES:\n\t:URL: "
                   url-string
-                  "\n\t:END:\n\s\s- %?"
+                  "\n\t:END:\n\s\s%?"
                   )))))
   (add-to-list
    'org-capture-templates
@@ -502,37 +511,5 @@
   :config
   (setq org-fancy-priorities-list '("HIGH" "MID" "OPTIONAL" "LOW")))
 
-;; (use-package appt
-;;   :config
-;;   (defun notify-osx (title message)
-;;     (call-process "terminal-notifier"
-;;                   nil 0 nil
-;;                   "-group" "Emacs"
-;;                   "-title" title
-;;                   "-sender" "org.gnu.Emacs"
-;;                   "-message" message
-;;                   "-activate" "oeg.gnu.Emacs"))
-;;   (setq appt-time-msg-list nil)    ;; clear existing appt list
-;;   (setq appt-display-interval '5)  ;; warn every 5 minutes from t - appt-message-warning-time
-;;   (setq
-;;    appt-message-warning-time '15  ;; send first warning 15 minutes before appointment
-;;    appt-display-mode-line nil     ;; don't show in the modeline
-;;    appt-display-format 'window)   ;; pass warnings to the designated window function
-;;   (appt-activate 1)                ;; activate appointment notification
-;;   ;; (display-time)                   ;; activate time display
-;;   (org-agenda-to-appt)             ;; generate the appt list from org agenda files on emacs launch
-;;   (run-at-time "24:01" 3600 'org-agenda-to-appt)           ;; update appt list hourly
-;;   (add-hook 'org-finalize-agenda-hook 'org-agenda-to-appt) ;; update appt list on agenda view
-
-;;   (defun my-appt-display (min-to-app new-time msg)
-;;     (notify-osx
-;;      (format "Appointment in %s minutes" min-to-app)    ;; passed to -title in terminal-notifier call
-;;      (format "%s" msg)))                                ;; passed to -message in terminal-notifier call
-;;   (setq appt-disp-window-function (function my-appt-display)))
-
 (yq/get-modules "org-agenda.el")
 
-;; (use-package org-jira
-;;   :straight t
-;;   :commands (org-jira-get-projects org-jira-get-issues)
-;;   :init (setq jiralib-url "http://72.bimsop.com/"))
