@@ -828,4 +828,4 @@ otherwise it is scaled down."
       "Q" 'edebug-x-clear-data
       "q" 'quit-window)))
 
-(add-hook 'edebug-mode-hook 'evil-collection-edebug-setup)
+;; (add-hook 'edebug-mode-hook 'evil-collection-edebug-setup)
