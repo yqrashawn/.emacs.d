@@ -273,6 +273,7 @@ If the universal prefix argument is used then kill the buffer too."
   :straight t
   :defer t
   :init
+  (setq recentf-keep '(file-remote-p file-readable-p))
   ;; lazy load recentf
   (add-hook 'find-file-hook
             (lambda ()
