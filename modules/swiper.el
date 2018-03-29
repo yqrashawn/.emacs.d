@@ -267,3 +267,16 @@ When ARG is non-nil search in junk files."
             (t
              (counsel-find-file rel-fname)))))
   (spacemacs/set-leader-keys "fJ" 'spacemacs/open-junk-file))
+
+(use-package fasd
+  :straight t
+  :init
+  (defun evil-ex-fasd-eval (orig-fun str)
+    "docstring"
+    (interactive "P")
+    (if (not (cond ((string-prefix-p "j " str) (funcall 'fasd-find-file t (string-remove-prefix "j " str)))
+                   ((string-prefix-p ":" str) (funcall 'fasd-find-file t (string-remove-prefix ":" str)))) )
+        (funcall orig-fun str)))
+
+  (advice-add 'evil-ex-execute :around 'evil-ex-fasd-eval)
+  (global-fasd-mode 1))
