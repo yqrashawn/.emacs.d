@@ -67,8 +67,6 @@
 (setq gc-cons-threshold 8388608)
 
 ;; TODO noderepl
-;; TODO web-mode
-;; TODO general.el?
 
 (use-package playground
   :straight (:host github :repo "akirak/emacs-playground"))
