@@ -19,6 +19,7 @@
    ("\\.djhtml\\'"     . web-mode))
   :config
   (evil-define-key 'normal web-mode-map
+    (kbd "C-m") 'evilmi-jump-items
     ",El" 'web-mode-dom-errors-show
     ",gb" 'web-mode-element-beginning
     ",gc" 'web-mode-element-child

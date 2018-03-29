@@ -735,3 +735,97 @@ otherwise it is scaled down."
 ;;fast switching between three buffers
 (define-key evil-normal-state-map (kbd "<C-tab>") 'switch-to-second-most-recent-buffer)
 (define-key evil-normal-state-map (kbd "<C-s-tab>") 'switch-to-third-most-recent-buffer)
+
+(add-hook 'edebug-mode-hook 'yq/toggle-show-paren-off)
+
+(defconst evil-collection-edebug-maps
+  '(edebug-mode-map
+    edebug-x-instrumented-function-list-mode-map
+    edebug-x-breakpoint-list-mode-map))
+
+(defun evil-collection-edebug-setup ()
+  "Set up `evil' bindings for `edebug'."
+  (interactive)
+  (evil-set-initial-state 'edebug-mode 'normal)
+
+  (add-hook 'edebug-mode-hook #'evil-normalize-keymaps)
+
+  (define-key edebug-mode-map "g" nil)
+  (define-key edebug-mode-map "G" nil)
+
+  ;; FIXME: Seems like other minor modes will readily clash with `edebug'.
+  ;; `lispyville' and `edebug' 's' key?
+  (evil-define-key 'normal edebug-mode-map
+    ;; control
+    "s" 'edebug-step-mode
+    "n" 'edebug-next-mode
+    "go" 'edebug-go-mode
+    "gO" 'edebug-Go-nonstop-mode
+    "t" 'edebug-trace-mode
+    "T" 'edebug-Trace-fast-mode
+    "c" 'edebug-continue-mode
+    "C" 'edebug-Continue-fast-mode
+
+    "f" 'edebug-forward-sexp
+    "H" 'edebug-goto-here
+    "I" 'edebug-instrument-callee
+    "i" 'edebug-step-in
+    "o" 'edebug-step-out
+
+    ;; quit
+    "q" 'top-level
+    "Q" 'edebug-top-level-nonstop
+    "a" 'abort-recursive-edit
+    "S" 'edebug-stop
+
+    ;; breakpoints
+    "b" 'edebug-set-breakpoint
+    "u" 'edebug-unset-breakpoint
+    "B" 'edebug-next-breakpoint
+    "x" 'edebug-set-conditional-breakpoint
+    "X" 'edebug-set-global-break-condition
+
+    ;; evaluation
+    "r" 'edebug-previous-result
+    "e" 'edebug-eval-expression
+    (kbd "C-x C-e") 'edebug-eval-last-sexp
+    "EL" 'edebug-visit-eval-list
+
+    ;; views
+    "WW" 'edebug-where
+    "p" 'edebug-bounce-point
+    "P" 'edebug-view-outside ;; same as v
+    "WS" 'edebug-toggle-save-windows
+
+    ;; misc
+    "g?" 'edebug-help
+    "d" 'edebug-backtrace
+
+    "-" 'negative-argument
+
+    ;; statistics
+    "=" 'edebug-temp-display-freq-count
+
+    ;; GUD bindings
+    (kbd "C-c C-s") 'edebug-step-mode
+    (kbd "C-c C-n") 'edebug-next-mode
+    (kbd "C-c C-c") 'edebug-go-mode
+
+    (kbd "C-x SPC") 'edebug-set-breakpoint
+    (kbd "C-c C-d") 'edebug-unset-breakpoint
+    (kbd "C-c C-t") (lambda () (interactive) (edebug-set-breakpoint t))
+    (kbd "C-c C-l") 'edebug-where)
+
+  (with-eval-after-load 'edebug-x
+    (evil-define-key 'normal edebug-x-instrumented-function-list-mode-map
+      "E" 'edebug-x-evaluate-function
+      "Q" 'edebug-x-clear-data
+      (kbd "<return>") 'edebug-x-find-function
+      "q" 'quit-window)
+    (evil-define-key 'normal edebug-x-breakpoint-list-mode-map
+      (kbd "<return>") 'edebug-x-visit-breakpoint
+      "x" 'edebug-x-kill-breakpoint
+      "Q" 'edebug-x-clear-data
+      "q" 'quit-window)))
+
+(add-hook 'edebug-mode-hook 'evil-collection-edebug-setup)

@@ -10,10 +10,10 @@
   :config
   (global-undo-tree-mode)
   (global-set-key (kbd "s-y") 'undo-tree-redo))
-
+
 (use-package goto-chg
   :straight (:host github :repo "emacs-evil/goto-chg"))
-
+
 (use-package evil-leader
   :straight t
   :init
@@ -274,7 +274,11 @@ Example: (evil-map visual \"<\" \"<gv\")"
 
 (use-package evil-matchit
   :straight t
-  :init (add-hook 'after-init-hook #'global-evil-matchit-mode))
+  :init
+  (add-hook 'after-init-hook #'global-evil-matchit-mode)
+  :config
+  (define-key evil-normal-state-map (kbd "C-;") 'evilmi-select-items)
+  (define-key evil-normal-state-map (kbd "C-m") 'evilmi-jump-items))
 
 (use-package anzu
   :straight t
