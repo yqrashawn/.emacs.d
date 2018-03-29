@@ -279,4 +279,7 @@ When ARG is non-nil search in junk files."
         (funcall orig-fun str)))
 
   (advice-add 'evil-ex-execute :around 'evil-ex-fasd-eval)
+  (define-key evil-normal-state-map (kbd "C-f") (lambda ()
+                                                  (interactive)
+                                                  (evil-ex ":")))
   (global-fasd-mode 1))
