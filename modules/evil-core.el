@@ -261,13 +261,14 @@ Example: (evil-map visual \"<\" \"<gv\")"
   (global-evil-mc-mode t)
   :init (add-hook 'after-init-hook #'global-evil-mc-mode)
   :config
-  (defun yq/evil-mc-keyboard-quit (orig-fun str)
-    "docstring"
-    (interactive "P")
-    (if (and evil-mc-mode evil-mc-cursor-list)
-        (funcall 'evil-mc-undo-all-cursors)
-      (funcall orig-fun)))
-  (advice-add 'keyboard-quit :around 'yq/evil-mc-keyboard-quit)
+  ;; (defun yq/evil-mc-keyboard-quit (fn &rest props)
+  ;;   "docstring"
+  ;;   (interactive "P")
+  ;;   (if (and evil-mc-mode evil-mc-cursor-list)
+  ;;       (funcall 'evil-mc-undo-all-cursors)
+  ;;     (apply fn props)))
+  ;; (advice-add 'keyboard-quit :around #'yq/evil-mc-keyboard-quit)
+  (advice-add 'keyboard-quit :before #'evil-mc-undo-all-cursors)
   (setq evil-mc-mode-line-text-cursor-color t)
   (define-key evil-normal-state-map (kbd "C-n") 'evil-mc-make-and-goto-next-match)
   (define-key evil-normal-state-map (kbd "C-p") 'evil-mc-make-and-goto-prev-match)

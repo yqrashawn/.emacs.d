@@ -829,3 +829,7 @@ otherwise it is scaled down."
       "q" 'quit-window)))
 
 ;; (add-hook 'edebug-mode-hook 'evil-collection-edebug-setup)
+
+(use-package carbon-now-sh
+  :commands (carbon-now-sh)
+  :straight (:host github :repo "veelenga/carbon-now-sh.el"))

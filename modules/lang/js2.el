@@ -95,3 +95,17 @@
                    (spacemacs/set-leader-keys-for-major-mode 'rjsx-mode "=" 'prettier-js)
                    (spacemacs/set-leader-keys-for-major-mode 'rjsx-mode "m" 'js2-mode)))
   :commands (rjsx-mode))
+
+(use-package js2-refactor
+  :straight t
+  :defer t
+  :init
+  (evil-define-key 'normal js2-mode-map ",iv" 'js2r-inline-var)
+  (evil-define-key 'normal js2-mode-map ",rv" 'js2r-rename-var)
+  (evil-define-key 'normal js2-mode-map ",vt" 'js2r-var-to-this)
+  (evil-define-key 'normal js2-mode-map ",3i" 'js2r-ternary-to-if)
+  (evil-define-key 'normal js2-mode-map ",c" 'js2r-log-this)
+  (evil-define-key 'normal js2-mode-map ",k" 'js2r-kill)
+  (evil-define-key 'normal js2-mode-map ",ta" 'js2r-toggle-function-async)
+  (evil-define-key 'normal js2-mode-map ",ee" 'js2r-expand-node-at-point)
+  (evil-define-key 'normal js2-mode-map ",ec" 'js2r--expand-contract-node-at-point))
