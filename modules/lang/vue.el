@@ -1,11 +1,12 @@
 (use-package vue-mode
   :straight t
-  :mode ("\\.vue\\'" . vue-mode))
+  :mode ("\\.vue\\'" . vue-mode)
+  :config
+  (spacemacs/enable-flycheck 'vue-mode))
 
 (use-package lsp-mode
   :straight t
-  :after vue-mode
-  :config (require 'lsp-flycheck))
+  :after vue-mode)
 
 (use-package lsp-vue
   :straight t
@@ -19,3 +20,7 @@
   (spacemacs|add-company-backends
     :backends company-lsp
     :modes vue-mode))
+
+(use-package lsp-ui
+  :straight t
+  :hook (lsp-mode . lsp-ui-mode))

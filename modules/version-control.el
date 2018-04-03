@@ -6,6 +6,18 @@
 (use-package magit
   :straight t
   :config
+  ;; Command to list ignored files:
+  ;; $ git ls-files --others --ignored --exclude-standard --directory
+  ;; (defun magit-ignored-files ()
+  ;;   (magit-git-items "ls-files" "--others" "--ignored" "--exclude-standard" "-z" "--directory"))
+
+  ;; (defun magit-insert-ignored-files ()
+  ;;   (-when-let (files (magit-ignored-files))
+  ;;     (magit-insert-section (ignored)
+  ;;       (magit-insert-heading "Ignored files:")
+  ;;       (magit-insert-un/tracked-files-1 files nil)
+  ;;       (insert ?\n))))
+  ;; (add-hook 'magit-status-sections-hook 'magit-insert-ignored-files)
   (add-hook 'magit-mode-hook 'turn-off-evil-snipe-mode)
   (add-hook 'git-rebase-mode-hook 'turn-off-evil-snipe-mode)
   (add-hook 'magit-mode-hook 'turn-off-evil-snipe-override-mode)
