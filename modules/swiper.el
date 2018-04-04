@@ -242,7 +242,14 @@ FD-PROMPT, if non-nil, is passed as `ivy-read' prompt argument."
                       (swiper--cleanup))
             :caller 'counsel-fd))
 
-(spacemacs/set-leader-keys "sm" 'counsel-fd)
+;; (spacemacs/set-leader-keys "sm" 'counsel-fd)
+(use-package find-file-in-project
+  :straight t
+  :commands (find-file-in-project)
+  :init
+  (setq ffip-use-rust-fd t)
+  (spacemacs/set-leader-keys "sm" 'find-file-in-project)
+  (spacemacs/set-leader-keys "sM" 'find-relative-path))
 
 (use-package open-junk-file
   :straight t

@@ -1,7 +1,7 @@
 (add-hook 'comint-mode-hook 'yq/toggle-hl-line-off)
 (defvar spacemacs-repl-list '()
   "List of all registered REPLs.")
-
+(setq shell-default-shell 'multi-term)
 (defvar shell-default-shell (if (eq window-system 'w32)
                                 'eshell
                               'ansi-term)
@@ -25,7 +25,7 @@
   "Open the default shell in a popup."
   (interactive)
   (let ((shell (if (eq 'multi-term shell-default-shell)
-                   'multiterm
+                   'multi-term
                  shell-default-shell)))
     (call-interactively (intern (format "spacemacs/shell-pop-%S" shell)))))
 
@@ -63,7 +63,7 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
           'shell-pop-shell-type
           (backquote (,name
                       ,(concat "*" name "*")
-                      (lambda nil (,func ,shell)))))
+                      (lambda nil (,func)))))
          (shell-pop index)))))
 
 (defun ansi-term-handle-close ()
@@ -77,25 +77,8 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
                               (when (> (count-windows) 1)
                                 (delete-window)))))))
 
-(use-package multi-term
-  :straight t
-  :defer t
-  :init
-  (spacemacs/register-repl 'multi-term 'multi-term)
-  :config
-  (add-to-list 'term-bind-key-alist '("<tab>" . term-send-tab))
-  ;; multi-term commands to create terminals and move through them.
-  (evil-leader/set-key "p'" 'spacemacs/projectile-shell-pop)
-  (evil-define-key 'insert term-mode-mp
-    (kbd "s-<return>") 'multi-term
-    (kbd "s-[") 'multi-term-prev
-    (kbd "s-]" ) 'multi-term-next)
-  (evil-define-key 'normal term-mode-map
-    ",c" 'multi-term
-    ",p" 'multi-term-prev
-    ",n" 'multi-term-next))
-
 (spacemacs/register-repl 'shell 'shell)
+
 (defun shell-comint-input-sender-hook ()
   "Check certain shell commands.
  Executes the appropriate behavior for certain commands."
@@ -123,23 +106,49 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
   :straight t
   :defer t
   :init
-  (setq shell-pop-window-position shell-default-position
-        shell-pop-window-size     shell-default-height
-        shell-pop-term-shell      shell-default-term-shell
-        shell-pop-full-span       shell-default-full-span)
-  (make-shell-pop-command eshell)
-  (make-shell-pop-command shell)
-  (make-shell-pop-command term shell-pop-term-shell)
-  (make-shell-pop-command multiterm)
-  (make-shell-pop-command ansi-term shell-pop-term-shell)
+  (progn
+    (setq shell-pop-window-position shell-default-position
+          shell-pop-window-size     shell-default-height
+          shell-pop-term-shell      shell-default-term-shell
+          shell-pop-full-span       shell-default-full-span)
+    (make-shell-pop-command eshell)
+    ;; (make-shell-pop-command shell)
+    ;; (make-shell-pop-command term shell-pop-term-shell)
+    (make-shell-pop-command multi-term)
+    ;; (make-shell-pop-command ansi-term shell-pop-term-shell)
 
-  (add-hook 'term-mode-hook 'ansi-term-handle-close)
-  (add-hook 'term-mode-hook (lambda () (linum-mode -1)))
+    (add-hook 'term-mode-hook 'ansi-term-handle-close)
+    (add-hook 'term-mode-hook (lambda () (linum-mode -1)))
 
-  (spacemacs/set-leader-keys "'" 'spacemacs/default-pop-shell))
+    (spacemacs/set-leader-keys
+      "'"   'spacemacs/default-pop-shell
+      "ase" 'spacemacs/shell-pop-eshell)))
 
-(spacemacs/register-repl 'term 'term)
-(spacemacs/register-repl 'term 'ansi-term)
+;; (spacemacs/register-repl 'term 'term)
+;; (spacemacs/register-repl 'term 'ansi-term)
+
+(use-package multi-term
+  :straight t
+  :commands (multi-term)
+  :init
+  (spacemacs/register-repl 'multi-term 'multi-term)
+  (setq shell-pop-shell-type '("multi-term" "*multi-term" 'multi-term))
+  :config
+  (add-to-list 'term-bind-key-alist '("<tab>" . term-send-tab))
+  ;; multi-term commands to create terminals and move through them.
+  (evil-leader/set-key "p'" 'spacemacs/projectile-shell-pop)
+  (define-key term-mode-map (kbd "s-[") 'multi-term-prev)
+  (define-key term-mode-map (kbd "s-<return>") 'multi-term)
+  (define-key term-mode-map (kbd "s-]" ) 'multi-term-next)
+  (evil-define-key 'insert term-mode-mp
+    (kbd "s-<return>") 'multi-term
+    (kbd "s-[") 'multi-term-prev
+    (kbd "s-]" ) 'multi-term-next)
+  (evil-define-key 'normal term-mode-map
+    ",c" 'multi-term
+    ",p" 'multi-term-prev
+    ",n" 'multi-term-next))
+
 
 (defun term-send-tab ()
   "Send tab in term mode."
