@@ -649,11 +649,22 @@ FILENAME is deleted using `spacemacs/delete-file' function.."
   :straight t
   :defer t)
 
-(with-eval-after-load 'auto-insert-mode
-  (auto-insert-mode)
-  (setq auto-insert-directory (concat user-emacs-directory ".templates/"))
+(use-package autoinsert
+  :straight t
+  :init
+  ;; Don't want to be prompted before insertion:
   (setq auto-insert-query nil)
-  (define-auto-insert "\\.html$" "template.html"))
+  (setq auto-insert-directory (concat user-emacs-directory ".templates/"))
+  (add-hook 'find-file-hook 'auto-insert)
+  (auto-insert-mode 1)
+  :config
+  (defun autoinsert-yas-expand()
+    "Replace text in yasnippet template."
+    (yas-expand-snippet (buffer-string) (point-min) (point-max)))
+  (define-auto-insert "\\.html?$" "template.html")
+  (define-auto-insert "\\.\\(js\\|jsx\\)$" ["template.js" autoinsert-yas-expand])
+  (define-auto-insert "\\.\\(ts\\|tsx\\)$" ["template.ts" autoinsert-yas-expand])
+  (define-auto-insert "\\.el$" ["template.el" autoinsert-yas-expand]))
 
 (defun spacemacs/scale-up-or-down-font-size (direction)
   "Scale the font. If DIRECTION is positive or zero the font is scaled up,

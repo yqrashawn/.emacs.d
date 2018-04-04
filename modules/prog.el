@@ -306,6 +306,8 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   (push 'yas--default-user-snippets-dir yas-snippet-dirs)
   (push 'yas-hippie-try-expand hippie-expand-try-functions-list)
   (add-hook 'snippet-mode 'yq/toggle-aggressive-indent-off)
+  (require 'warnings)
+  (add-to-list 'warning-suppress-types '(yasnippet backquote-change))
   (yas-reload-all))
 (use-package yasnippet-snippets
   :straight t
