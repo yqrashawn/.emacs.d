@@ -34,6 +34,9 @@
   (evil-define-key 'normal css-mode-map
     ",zc" 'css-contract-statement
     ",zo" 'css-expand-statement))
+(use-package counsel-css
+  :straight t
+  :commands counsel-css)
 
 (use-package less-css-mode
   :straight t

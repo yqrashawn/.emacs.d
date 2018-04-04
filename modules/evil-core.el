@@ -36,6 +36,11 @@
   (customize-set-variable 'evil-shift-width 2)
   (customize-set-variable 'evil-show-paren-range 1)
   :config
+  (mapc #'evil-declare-change-repeat
+        '(company-complete-common
+          company-complete-selection
+          company-complete-number
+          hippie-expand))
   (defmacro evil-map (state key seq)
     "Map for a given STATE a KEY to a sequence SEQ of keys.
 

@@ -105,9 +105,10 @@ Available PROPS:
   :diminish company-mode
   :init
   (setq company-idle-delay 0
+        company-selection-wrap-around t
         company-minimum-prefix-length 2
         company-require-match nil
-        company-dabbrev-ignore-case nil
+        company-dabbrev-ignore-case t
         company-dabbrev-downcase nil)
   :config
   (setq company-backends '(company-capf
@@ -125,6 +126,10 @@ Available PROPS:
   (define-key company-active-map (kbd "C-m") 'newline-and-indent)
   (define-key company-active-map (kbd "C-r") 'company-show-doc-buffer)
   (add-hook 'after-init-hook 'global-company-mode))
+
+(use-package company-statistics
+  :straight t
+  :hook (company-mode . company-statistics-mode))
 
 (use-package company-flx
   :straight t
@@ -391,18 +396,3 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   (add-to-list 'git-link-commit-remote-alist
                '("917\\.bimsop\\.com" git-link-commit-gogs))
   (setq git-link-open-in-browser t))
-
-(use-package git-timemachine
-  :straight t
-  :commands git-timemachine
-  :init
-  (spacemacs/set-leader-keys
-    "gt" 'git-timemachine)
-  (evil-define-key 'normal git-timemachine-mode-map
-    "n" 'git-timemachine-show-next-revision
-    "p" 'git-timemachine-show-previous-revision
-    "q" 'git-timemachine-quit
-    "W" 'git-timemachine-kill-revision
-    "c" 'git-timemachine-show-current-revision)
-  (add-hook 'git-timemachine-mode-hook 'yq/fix-evil-state-bug))
-

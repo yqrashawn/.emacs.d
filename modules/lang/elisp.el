@@ -25,10 +25,10 @@
   :straight t
   :diminish elisp-slime-nav-mode
   :defer t
+  :hook (emacs-lisp-mode . elisp-slime-nav-mode)
   :init
-  (add-hook 'emacs-lisp-mode-hook 'elisp-slime-nav-mode)
   (dolist (mode '(emacs-lisp-mode lisp-interaction-mode))
-    (spacemacs/set-leader-keys-for-major-mode 'emacs-lisp-mode "mhh" 'elisp-slime-nav-describe-elisp-thing-at-point)
+    (evil-define-key 'normal emacs-lisp-mode-map ",hh" 'elisp-slime-nav-describe-elisp-thing-at-point)
     (let ((jumpl (intern (format "spacemacs-jump-handlers-%S" mode))))
       (add-to-list jumpl 'elisp-slime-nav-find-elisp-thing-at-point))))
 
@@ -46,11 +46,11 @@
   :straight t
   :diminish lispy " ʪ"
   :commands (lispy-mode)
+  :hook (emacs-lisp-mode . lispy-mode)
   :init
   (customize-set-variable 'lispy-visit-method 'projectile)
   (yq/add-toggle lispy :mode lispy-mode)
   (define-key evil-normal-state-map ",," 'yq/toggle-lispy)
-  (add-hook 'emacs-lisp-mode-hook 'lispy-mode)
   :config
   (evil-define-key 'insert lispy-mode-map (kbd "C-k") 'lispy-kill)
   (evil-define-key 'insert lispy-mode-map (kbd "C-r") 'undo-tree-redo)
@@ -59,3 +59,14 @@
   (evil-define-key 'normal lispy-mode-map "b" 'sp-previous-sexp)
   (evil-define-key 'normal lispy-mode-map "e" 'sp-next-sexp)
   (push '("*lispy-message*" :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config))
+
+(use-package hl-sexp
+  :straight (:host github :repo "emacsattic/hl-sexp")
+  :commands (hl-sexp-mode)
+  :hook (emacs-lisp-mode . hl-sexp-mode))
+;; :config
+;; (eval-after-load 'hl-sexp
+;; (defadvice hl-sexp-mode (after unflicker (turn-on) activate)
+;;   (when turn-on
+;;     (remove-hook 'pre-command-hook #'hl-sexp-unhighlight)))
+;; ))
