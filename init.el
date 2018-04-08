@@ -71,18 +71,3 @@
   :straight (:host github :repo "akirak/emacs-playground"))
 
 (toggle-frame-maximized)
-
-(defun my-swap-sexps (&optional num)
-  "Swap two lisp sexps."
-  (interactive "P")
-  (let* ((c (following-char)))
-    (cond
-     (num
-      (unless (eq c 40)
-        (goto-char (line-beginning-position))))
-     (t
-      (unless (eq c 40)
-        (goto-char (line-end-position))
-        (goto-char (+ (point) 1)))))
-    (transpose-sexps 1)
-    (backward-sexp)))
