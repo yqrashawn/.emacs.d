@@ -60,7 +60,19 @@ around point as the initial input."
   (define-key evil-normal-state-map "sf" 'counsel-rg)
   (define-key evil-normal-state-map "sl" 'counsel-imenu)
   (define-key evil-normal-state-map "sL" 'spacemacs/swiper-all-region-or-symbol)
-  (define-key evil-normal-state-map "sj" 'counsel-recentf))
+  (define-key evil-normal-state-map "sj" 'counsel-recentf)
+  (defun counsel-recent-dir ()
+    "Goto recent directories."
+    (interactive)
+    (unless recentf-mode (recentf-mode 1))
+    (let* ((cands (delete-dups
+                   (append my-dired-directory-history
+                           (mapcar 'file-name-directory recentf-list)
+                           ;; fasd history
+                           (if (executable-find "fasd")
+                               (split-string (shell-command-to-string "fasd -ld") "\n" t))))))
+      (ivy-read "directories:" cands :action 'dired)))
+  (define-key evil-normal-state-map "so" 'counsel-recent-dir))
 
 (straight-use-package 'counsel-tramp)
 
@@ -136,6 +148,22 @@ around point as the initial input."
   :commands (dired-narrow-fuzzy))
 
 (use-package dired
+  :init
+  ;; https://www.emacswiki.org/emacs/EmacsSession which is easier to setup than "desktop.el"
+  ;; See `session-globals-regexp' in "session.el".
+  ;; If the variable is named like "*-history", it will be automaticlaly saved.
+  (defvar my-dired-directory-history nil "Recent directories accessed by dired.")
+  ;; avoid accidently edit huge media file in dired
+  (defadvice dired-find-file (around dired-find-file-hack activate)
+    (let* ((file (dired-get-file-for-visit)))
+      (cond
+       ((string-match-p binary-file-name-regexp file)
+        ;; confirm before open big file
+        (if (yes-or-no-p "Edit binary file?") ad-do-it))
+       (t
+        (when (file-directory-p file)
+          (add-to-list 'my-dired-directory-history file))
+        ad-do-it))))
   :config
   (put 'dired-find-alternate-file 'disabled nil)
   (add-hook 'dired-mode-hook

@@ -57,10 +57,11 @@
 
 (use-package magit
   :straight t
-  :init
-  (evil-define-key 'normal magit-status-mode-map "j" 'magit-next-line)
-  (evil-define-key 'normal magit-status-mode-map "k" 'magit-previous-line)
   :config
+  (let ((maps (list magit-status-mode-map magit-log-mode-map magit-reflog-mode-map magit-diff-mode-map)))
+    (dolist (map maps)
+      (evil-define-key 'normal map "j" 'magit-next-line)
+      (evil-define-key 'normal map "k" 'magit-previous-line)))
   (add-hook 'magit-mode-hook 'turn-off-evil-snipe-mode)
   (add-hook 'git-rebase-mode-hook 'turn-off-evil-snipe-mode)
   (add-hook 'magit-mode-hook 'turn-off-evil-snipe-override-mode)
