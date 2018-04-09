@@ -844,3 +844,6 @@ otherwise it is scaled down."
 (use-package carbon-now-sh
   :commands (carbon-now-sh)
   :straight (:host github :repo "veelenga/carbon-now-sh.el"))
+
+;; If you tramp is hanging, you can uncomment below line.
+;; (setq tramp-ssh-controlmaster-options "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no")

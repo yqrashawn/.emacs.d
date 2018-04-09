@@ -30,7 +30,7 @@ around point as the initial input."
   (global-set-key (kbd "C-SPC") 'counsel-grep-or-swiper)
   (global-set-key (kbd "^@") 'counsel-grep-or-swiper)
   (global-set-key (kbd "C-S-SPC") 'yq/swiper-region-or-symbol))
-
+
 (use-package counsel
   :straight t
   :diminish counsel-mode
@@ -75,8 +75,7 @@ around point as the initial input."
   (define-key evil-normal-state-map "so" 'counsel-recent-dir))
 
 (straight-use-package 'counsel-tramp)
-
-
+
 (use-package ivy
   :straight t
   :diminish ivy-mode
@@ -149,10 +148,15 @@ around point as the initial input."
 
 (use-package dired
   :init
+  (setq insert-directory-program "/usr/local/bin/gls")
+  (setq dired-listing-switches "-laGh1v")
+  (setq dired-recursive-deletes 'always)
   ;; https://www.emacswiki.org/emacs/EmacsSession which is easier to setup than "desktop.el"
   ;; See `session-globals-regexp' in "session.el".
   ;; If the variable is named like "*-history", it will be automaticlaly saved.
   (defvar my-dired-directory-history nil "Recent directories accessed by dired.")
+  (defvar binary-file-name-regexp "\\.\\(avi\\|pdf\\|mp[34g]\\|mkv\\|exe\\|3gp\\|rmvb\\|rm\\)$"
+    "Is binary file name?")
   ;; avoid accidently edit huge media file in dired
   (defadvice dired-find-file (around dired-find-file-hack activate)
     (let* ((file (dired-get-file-for-visit)))
@@ -165,6 +169,33 @@ around point as the initial input."
           (add-to-list 'my-dired-directory-history file))
         ad-do-it))))
   :config
+  ;; search file name only when focus is over file
+  (setq dired-isearch-filenames 'dwim)
+  ;; when there is two dired buffer, Emacs will select another buffer
+  ;; as target buffer (target for copying files, for example).
+  ;; It's similar to windows commander.
+  (setq dired-dwim-target t)
+  (defun ora-ediff-files ()
+    (interactive)
+    (let ((files (dired-get-marked-files))
+          (wnd (current-window-configuration)))
+      (if (<= (length files) 2)
+          (let ((file1 (car files))
+                (file2 (if (cdr files)
+                           (cadr files)
+                         (read-file-name
+                          "file: "
+                          (dired-dwim-target-directory)))))
+            (if (file-newer-than-file-p file1 file2)
+                (ediff-files file2 file1)
+              (ediff-files file1 file2))
+            (add-hook 'ediff-after-quit-hook-internal
+                      (lambda ()
+                        (setq ediff-after-quit-hook-internal nil)
+                        (set-window-configuration wnd))))
+        (error "no more than 2 files should be marked"))))
+  (evil-define-key 'normal dired-mode-map "e" 'ora-ediff-files)
+  (evil-define-key 'normal dired-mode-map "\\" 'dired-do-async-shell-command)
   (put 'dired-find-alternate-file 'disabled nil)
   (add-hook 'dired-mode-hook
             (lambda ()

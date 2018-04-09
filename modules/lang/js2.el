@@ -1,3 +1,4 @@
+(yq/get-modules "lang/js2-imenu.el")
 (spacemacs|define-jump-handlers js2-mode)
 (setq js-indent-level 2)
 (use-package js2-mode
@@ -6,6 +7,8 @@
   :init
   (add-hook 'js2-mode-hook 'js2-imenu-extras-mode)
   :config
+  ;; @see https://github.com/mooz/js2-mode/issues/350
+  (setq forward-sexp-function nil)
   (setq js2-mode-show-parse-errors t)
   (setq js2-mode-show-strict-warnings nil)
   (evil-define-key 'normal js2-mode-map "," nil)
