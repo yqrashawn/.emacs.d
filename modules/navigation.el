@@ -169,6 +169,7 @@ around point as the initial input."
           (add-to-list 'my-dired-directory-history file))
         ad-do-it))))
   :config
+  (evil-define-key 'normal dired-mode-map (kbd ";") 'avy-goto-subword-2)
   ;; search file name only when focus is over file
   (setq dired-isearch-filenames 'dwim)
   ;; when there is two dired buffer, Emacs will select another buffer

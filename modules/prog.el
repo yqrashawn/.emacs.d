@@ -396,3 +396,14 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   (add-to-list 'git-link-commit-remote-alist
                '("917\\.bimsop\\.com" git-link-commit-gogs))
   (setq git-link-open-in-browser t))
+
+;; {{ shell and conf
+(add-to-list 'auto-mode-alist '("\\.[^b][^a][a-zA-Z]*rc$" . conf-mode))
+(add-to-list 'auto-mode-alist '("\\.aspell\\.en\\.pws\\'" . conf-mode))
+(add-to-list 'auto-mode-alist '("\\mimeapps\\.list$" . conf-mode))
+(add-to-list 'auto-mode-alist '("\\.editorconfig$" . conf-mode))
+(add-to-list 'auto-mode-alist '("\\.meta\\'" . conf-mode))
+(add-to-list 'auto-mode-alist '("\\.?muttrc\\'" . conf-mode))
+(add-to-list 'auto-mode-alist '("\\.mailcap\\'" . conf-mode))
+;; }}
+(define-key isearch-mode-map (kbd "C-o") 'isearch-occur)

@@ -1,3 +1,20 @@
+(setq *is-a-mac* (eq system-type 'darwin))
+(setq *win64* (eq system-type 'windows-nt))
+(setq *cygwin* (eq system-type 'cygwin) )
+(setq *linux* (or (eq system-type 'gnu/linux) (eq system-type 'linux)) )
+(setq *unix* (or *linux* (eq system-type 'usg-unix-v) (eq system-type 'berkeley-unix)) )
+(setq *emacs24* (and (not (featurep 'xemacs)) (or (>= emacs-major-version 24))) )
+(setq *emacs25* (and (not (featurep 'xemacs)) (or (>= emacs-major-version 25))) )
+(setq *no-memory* (cond
+                   (*is-a-mac*
+                    (< (string-to-number (nth 1 (split-string (shell-command-to-string "sysctl hw.physmem")))) 4000000000))
+                   (*linux* nil)
+                   (t nil)))
+
+;; emacs 24.3-
+(setq *emacs24old*  (or (and (= emacs-major-version 24) (= emacs-minor-version 3))
+                        (not *emacs24*)))
+
 (customize-set-variable 'inhibit-startup-screen t)
 (customize-set-variable 'inhibit-startup-message t)
 (defvar dotspacemacs-auto-save-file-location 'cache
@@ -288,7 +305,32 @@ If the universal prefix argument is used then kill the buffer too."
   :config
   (add-to-list 'recentf-exclude
                (file-truename spacemacs-cache-directory))
-  (add-to-list 'recentf-exclude "COMMIT_EDITMSG\\'"))
+  (add-to-list 'recentf-exclude "COMMIT_EDITMSG\\'")
+  (append recentf-list '("/tmp/"
+                         "/ssh:"
+                         "/sudo:"
+                         "recentf$"
+                         "company-statistics-cache\\.el$"
+                         ;; ctags
+                         "/TAGS$"
+                         ;; global
+                         "/GTAGS$"
+                         "/GRAGS$"
+                         "/GPATH$"
+                         ;; binary
+                         "\\.mkv$"
+                         "\\.mp[34]$"
+                         "\\.avi$"
+                         "\\.pdf$"
+                         "\\.docx?$"
+                         "\\.xlsx?$"
+                         ;; sub-titles
+                         "\\.sub$"
+                         "\\.srt$"
+                         "\\.ass$"
+                         ;; ~/.emacs.d/**/*.el included
+                         ;; "/home/[a-z]\+/\\.[a-df-z]" ; configuration file should not be excluded
+                         )))
 
 (use-package saveplace
   :init
@@ -847,3 +889,67 @@ otherwise it is scaled down."
 
 ;; If you tramp is hanging, you can uncomment below line.
 ;; (setq tramp-ssh-controlmaster-options "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no")
+
+(use-package keyfreq
+  :straight t
+  :init
+  (defun turnon-keyfreq-mode ()
+    (interactive)
+    (keyfreq-mode 1)
+    (keyfreq-autosave-mode 1))
+
+  (defun turnoff-keyfreq-mode ()
+    (interactive)
+    (keyfreq-mode -1)
+    (keyfreq-autosave-mode -1))
+  (setq keyfreq-excluded-commands
+        '(evil-next-visual-line
+          evil-previous-visual-line
+          evil-next-visual-line
+          evil-previous-line))
+  (turnon-keyfreq-mode)
+  :config
+  (unless (file-exists-p (file-truename keyfreq-file))
+    (with-temp-buffer
+      (insert "()")
+      (write-file (file-truename keyfreq-file)))))
+
+;; updated line number every second
+(setq linum-delay t)
+
+;; don't let the cursor go into minibuffer prompt
+(setq minibuffer-prompt-properties (quote (read-only t point-entered minibuffer-avoid-prompt face minibuffer-prompt)))
+
+(add-hook 'text-mode-hook 'turn-on-auto-fill)
+
+(setq history-delete-duplicates t)
+
+;; {{ @see http://emacsredux.com/blog/2013/04/21/edit-files-as-root/
+(defun sudo-edit (&optional arg)
+  "Edit currently visited file as root.\nWith a prefix ARG prompt for a file to visit.\nWill also prompt for a file to visit if current\nbuffer is not visiting a file.\nYou may insert below line into ~/.authinfo.gpg to type less:\nmachine 127.0.0.1 login root password ****** port sudo\nSee \"Reusing passwords for several connections\" from INFO.\n"
+  (interactive "P")
+  (if (or arg (not buffer-file-name))
+      (find-file (concat "/sudo:root@127.0.0.1:"
+                         (read-file-name "Find file(as root): ")))
+    (find-alternate-file (concat "/sudo:@127.0.0.1:"
+                                 buffer-file-name))))
+
+(defadvice ido-find-file (after find-file-sudo activate)
+  "Find file as root if necessary."
+  (if (and (not (and buffer-file-name
+                     (file-writable-p buffer-file-name)))
+           ;; sudo edit only physical file
+           buffer-file-name
+           ;; sudo edit only /etc/**/*
+           (string-match-p "^/etc/" buffer-file-name))
+      (find-alternate-file (concat "/sudo:root@127.0.0.1:"
+                                   buffer-file-name))))
+;; }}
+
+(setq imenu-max-item-length 256)
+
+(use-package string-edit
+  :straight t
+  :commands (string-edit-at-point)
+  :init
+  (evil-leader/set-key "es" 'string-edit-at-point))
