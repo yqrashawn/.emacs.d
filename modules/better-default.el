@@ -477,6 +477,13 @@ If the universal prefix argument is used then will the windows too."
   (interactive "P")
   (mapc 'kill-buffer (delq (current-buffer) (buffer-list)))
   (when (equal '(4) arg) (delete-other-windows)))
+
+(defun kill-all-buffers ()
+  "kill all buffers"
+  (interactive)
+  (mapc 'kill-buffer (buffer-list (current-buffer))))
+
+(global-set-key (kbd "s-K") 'kill-all-buffers)
 (evil-leader/set-key (kbd "b C-d") 'spacemacs/kill-other-buffers)
 
 (setq require-final-newline nil)
@@ -953,3 +960,44 @@ otherwise it is scaled down."
   :commands (string-edit-at-point)
   :init
   (evil-leader/set-key "es" 'string-edit-at-point))
+
+
+;; {{ eacl and other general grep (rgrep, grep ...) setup
+(eval-after-load 'grep
+  '(progn
+     (dolist (v '("auto"
+                  "target"
+                  "node_modules"
+                  "bower_components"
+                  "*dist"
+                  ".sass_cache"
+                  ".cache"
+                  ".npm"
+                  "elpa"))
+       (add-to-list 'grep-find-ignored-directories v))
+
+     (dolist (v '("*.min.js"
+                  "*.map"
+                  "*.bundle.js"
+                  "*.min.css"
+                  "tags"
+                  "TAGS"
+                  "GTAGS"
+                  "GRTAGS"
+                  "GPATH"
+                  "cscope.files"
+                  "*.json"
+                  "*.log"))
+       (add-to-list 'grep-find-ignored-files v))))
+;; }}
+
+(defun optimize-emacs-startup ()
+  "Speedup emacs startup by compiling."
+  (interactive)
+  (let* ((dir (file-truename "~/.emacs.d/modules/"))
+         (files (directory-files dir)))
+    ;; (load (file-truename "~/.emacs.d/init.el"))
+    (dolist (f files)
+      (when (string-match-p ".*\.el$" f)
+        (let* ((default-directory dir))
+          (byte-compile-file (file-truename f) t))))))

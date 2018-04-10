@@ -350,3 +350,9 @@ When ARG is non-nil search in junk files."
                                                   (interactive)
                                                   (evil-ex ":")))
   (global-fasd-mode 1))
+
+;; (use-package session
+;;   :straight t
+;;   :init
+;;   (setq session-save-file (expand-file-name "~/.emacs.d/.session"))
+;;   (add-hook 'after-init-hook 'session-initialize))

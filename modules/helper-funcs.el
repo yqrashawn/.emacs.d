@@ -85,29 +85,6 @@ http://pragmaticemacs.com/emacs/quickly-move-a-file-to-the-current-directory/
     (kill-new start-file)
     (gui-set-selection 'PRIMARY start-file)
     (message "moved %s to %s" start-file-full end-file)))
-o
-(defun yq/start-scratch-html-file (file-name)
-  "Create a test HTML file in ~/Downloads/scratch/FILE-NAME to play around with."
-  (interactive "sName of scratch HTML file: ")
-  (yq/start-scratch-file (format "%s.html" file-name))
-  (erase-buffer)
-  (insert "<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">
-        <title>
-        </title>
-        <style type=\"text/css\">
-        </style>
-    </head>
-    <body>
-
-    </body>
-</html>")
-  (forward-line -2)
-  (move-end-of-line nil))
-
-
 
 (defun yq/copy-file-path-to-clipboard ()
   "Put the current file name into the clipboard."
