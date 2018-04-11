@@ -145,7 +145,7 @@ around point as the initial input."
   :straight t
   :after dired
   :commands (dired-narrow-fuzzy))
-
+
 (use-package dired
   :init
   (setq insert-directory-program "/usr/local/bin/gls")
@@ -169,7 +169,7 @@ around point as the initial input."
           (add-to-list 'my-dired-directory-history file))
         ad-do-it))))
   :config
-  (evil-define-key 'normal dired-mode-map (kbd ";") 'avy-goto-subword-2)
+  (evil-define-key 'normal dired-mode-map (kbd ";") 'avy-goto-subword-1)
   ;; search file name only when focus is over file
   (setq dired-isearch-filenames 'dwim)
   ;; when there is two dired buffer, Emacs will select another buffer
