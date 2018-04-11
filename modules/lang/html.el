@@ -18,6 +18,7 @@
    ("\\.ejs\\'"        . web-mode)
    ("\\.djhtml\\'"     . web-mode))
   :config
+  (setq web-mode-enable-auto-expanding t)
   (evil-define-key 'normal web-mode-map
     (kbd "C-m") 'evilmi-jump-items
     ",El" 'web-mode-dom-errors-show

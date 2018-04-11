@@ -93,8 +93,12 @@ Example: (evil-map visual \"<\" \"<gv\")"
   (define-key evil-normal-state-map "gn" 'evil-search-word-forward)
   (define-key evil-normal-state-map "gd" 'spacemacs/jump-to-definition)
   (define-key evil-normal-state-map "gD" 'spacemacs/jump-to-definition-other-window)
-  (define-key evil-normal-state-map "gj" 'evil-next-visual-line)
-  (define-key evil-normal-state-map "gk" 'evil-previous-visual-line)
+  (define-key evil-normal-state-map "j" 'evil-next-visual-line)
+  (define-key evil-normal-state-map "k" 'evil-previous-visual-line)
+  ;; (define-key evil-motion-state-map "j" 'evil-next-visual-line)
+  ;; (define-key evil-motion-state-map "k" 'evil-previous-visual-line)
+  (define-key evil-normal-state-map "gj" 'evil-next--line)
+  (define-key evil-normal-state-map "gk" 'evil-previous-line)
   (define-key evil-normal-state-map "zl" 'hs-hide-level)
   (define-key evil-normal-state-map (kbd "C-k") 'evil-toggle-fold)
   (define-key evil-normal-state-map "s" nil)
@@ -288,6 +292,7 @@ Example: (evil-map visual \"<\" \"<gv\")"
   (add-hook 'after-init-hook #'global-evil-matchit-mode)
   :config
   (define-key evil-normal-state-map (kbd "C-;") 'evilmi-select-items)
+  (define-key evil-visual-state-map (kbd "C-m") 'evilmi-jump-items)
   (define-key evil-normal-state-map (kbd "C-m") 'evilmi-jump-items))
 
 (use-package anzu

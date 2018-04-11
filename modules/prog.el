@@ -407,3 +407,8 @@ is not visible. Otherwise delegates to regular Emacs next-error."
 (add-to-list 'auto-mode-alist '("\\.mailcap\\'" . conf-mode))
 ;; }}
 (define-key isearch-mode-map (kbd "C-o") 'isearch-occur)
+
+(use-package mixed-pitch
+  :straight t
+  :hook
+  (text-mode . mixed-pitch-mode))
