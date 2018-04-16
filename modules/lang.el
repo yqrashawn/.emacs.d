@@ -10,3 +10,4 @@
 (yq/get-modules "lang/ruby.el")
 (yq/get-modules "lang/html.el")
 (yq/get-modules "lang/css.el")
+(yq/get-modules "lang/lua.el")
