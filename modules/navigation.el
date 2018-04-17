@@ -168,6 +168,16 @@ around point as the initial input."
         (when (file-directory-p file)
           (add-to-list 'my-dired-directory-history file))
         ad-do-it))))
+  (defun my-dired-frame (directory)
+    "Open up a dired frame which closes on exit."
+    (interactive)
+    (switch-to-buffer (dired directory))
+    (local-set-key
+     (kbd "C-x C-c")
+     (lambda ()
+       (interactive)
+       (kill-this-buffer)
+       (save-buffers-kill-terminal 't))))
   :config
   (evil-define-key 'normal dired-mode-map (kbd ";") 'avy-goto-subword-1)
   ;; search file name only when focus is over file
@@ -308,8 +318,12 @@ FD-PROMPT, if non-nil, is passed as `ivy-read' prompt argument."
   :commands (find-file-in-project)
   :init
   (setq ffip-use-rust-fd t)
+  (spacemacs/set-leader-keys "pf" 'find-file-in-project)
+  (spacemacs/set-leader-keys "pF" 'find-relative-path)
   (spacemacs/set-leader-keys "sm" 'find-file-in-project)
-  (spacemacs/set-leader-keys "sM" 'find-relative-path))
+  (spacemacs/set-leader-keys "sM" 'find-relative-path)
+  (define-key evil-normal-state-map "sm" 'find-file-in-project)
+  (define-key evil-normal-state-map "sM" 'find-relative-path))
 
 (use-package open-junk-file
   :straight t

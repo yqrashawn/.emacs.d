@@ -44,7 +44,7 @@
     (imenu--generic-function javascript-common-imenu-regex-list)))
 
 (defun mo-js-mode-hook ()
-  (when (and (not (is-buffer-file-temp)) (not (derived-mode-p 'js2-mode)))
+  (when (not (derived-mode-p 'js2-mode))
     (setq imenu-create-index-function 'mo-js-imenu-make-index)))
 
 (add-hook 'js-mode-hook 'mo-js-mode-hook)
