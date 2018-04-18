@@ -34,6 +34,8 @@ file stored in the cache directory and `nil' to disable auto-saving.")
   (expand-file-name "~/")
   "User home directory (~/).")
 
+(setq user-mail-address "namy.19@gmail.com")
+
 (setq source-directory (concat user-home-directory "emacs"))
 
 
