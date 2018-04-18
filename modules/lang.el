@@ -11,3 +11,4 @@
 (yq/get-modules "lang/html.el")
 (yq/get-modules "lang/css.el")
 (yq/get-modules "lang/lua.el")
+(yq/get-modules "lang/clojure.el")
