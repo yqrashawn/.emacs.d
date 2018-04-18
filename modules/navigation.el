@@ -61,6 +61,7 @@ around point as the initial input."
   (define-key evil-normal-state-map "sl" 'counsel-imenu)
   (define-key evil-normal-state-map "sL" 'spacemacs/swiper-all-region-or-symbol)
   (define-key evil-normal-state-map "sj" 'counsel-recentf)
+  (define-key evil-normal-state-map (kbd "M-y" ) 'counsel-yank-pop)
   (defun counsel-recent-dir ()
     "Goto recent directories."
     (interactive)

@@ -513,3 +513,5 @@
 
 (yq/get-modules "org-agenda.el")
 
+;; (use-package counsel-org-clock
+;;   :straight (:host github :repo "akirak/counsel-org-clock"))

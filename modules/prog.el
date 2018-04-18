@@ -411,4 +411,4 @@ is not visible. Otherwise delegates to regular Emacs next-error."
 (use-package mixed-pitch
   :straight t
   :hook
-  (text-mode . mixed-pitch-mode))
+  (org-mode . mixed-pitch-mode))
