@@ -24,7 +24,7 @@
 ;;  clojure packages
 
 ;;; Code:
-(load-file "./clojure-funcs.el")
+(yq/get-modules "lang/clojure-funcs.el")
 
 (use-package clojure-mode
   :straight t
@@ -281,6 +281,27 @@
   :init
   (setq sayid--key-binding-prefixes
         '(("mdt" . "trace")))
+  
+
+  (evilified-state-evilify sayid-mode sayid-mode-map
+    (kbd "H") 'sayid-buf-show-help
+    (kbd "n") 'sayid-buffer-nav-to-next
+    (kbd "N") 'sayid-buffer-nav-to-prev
+    (kbd "C-s v") 'sayid-toggle-view
+    (kbd "C-s V") 'sayid-set-view
+    (kbd "L") 'sayid-buf-back
+    (kbd "e") 'sayid-gen-instance-expr) ;Originally this was bound to 'g', but I feel this is still mnemonic and doesn't overlap with evil
+
+  (evilified-state-evilify sayid-pprint-mode sayid-pprint-mode-map
+    (kbd "h") 'sayid-pprint-buf-show-help
+    (kbd "n") 'sayid-pprint-buf-next
+    (kbd "N") 'sayid-pprint-buf-prev
+    (kbd "l") 'sayid-pprint-buf-exit)
+
+  (evilified-state-evilify sayid-traced-mode sayid-traced-mode-map
+    (kbd "l") 'sayid-show-traced
+    (kbd "h") 'sayid-traced-buf-show-help)
+  :config
   (dolist (map (list clojure-mode-map
                      clojurec-mode-map
                      clojurescript-mode-map
@@ -308,25 +329,6 @@
                       "dV" 'sayid-set-view
                       "dw" 'sayid-get-workspace
                       "dx" 'sayid-reset-workspace
-                      ))
-
-  (evilified-state-evilify sayid-mode sayid-mode-map
-    (kbd "H") 'sayid-buf-show-help
-    (kbd "n") 'sayid-buffer-nav-to-next
-    (kbd "N") 'sayid-buffer-nav-to-prev
-    (kbd "C-s v") 'sayid-toggle-view
-    (kbd "C-s V") 'sayid-set-view
-    (kbd "L") 'sayid-buf-back
-    (kbd "e") 'sayid-gen-instance-expr) ;Originally this was bound to 'g', but I feel this is still mnemonic and doesn't overlap with evil
-
-  (evilified-state-evilify sayid-pprint-mode sayid-pprint-mode-map
-    (kbd "h") 'sayid-pprint-buf-show-help
-    (kbd "n") 'sayid-pprint-buf-next
-    (kbd "N") 'sayid-pprint-buf-prev
-    (kbd "l") 'sayid-pprint-buf-exit)
-
-  (evilified-state-evilify sayid-traced-mode sayid-traced-mode-map
-    (kbd "l") 'sayid-show-traced
-    (kbd "h") 'sayid-traced-buf-show-help))
+                      )))
 (provide 'clojure)
 ;;; clojure.el ends here

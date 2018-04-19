@@ -77,6 +77,7 @@ using `cargo-process-run'."
   :defer t
   :diminish racer-mode
   :init
+  (setq racer-cmd (concat user-home-directory ".cargo/bin/racer"))
   (push '("*Racer Help*"          :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config)
   (defun spacemacs/racer-describe ()
     "Show a *Racer Help* buffer for the function or type at point.
