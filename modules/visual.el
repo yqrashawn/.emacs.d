@@ -22,6 +22,10 @@
   :straight t
   :defer t)
 
+(use-package snazzy-theme
+  :straight t
+  :defer t)
+
 (use-package color-theme-sanityinc-solarized
   :straight t
   :defer t)
@@ -30,6 +34,7 @@
 ;; (load-theme 'yq-default-emacs-theme)
 ;; (load-theme 'default-white)
 ;; (load-theme 'zenburn)
+;; (load-theme 'snazzy-theme)
 
 (defvar dotspacemacs-colorize-cursor-according-to-state t
   "If non nil the cursor color matches the state color in GUI Emacs.")
