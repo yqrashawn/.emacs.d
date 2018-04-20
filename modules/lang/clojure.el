@@ -260,17 +260,17 @@
             (evil-define-key 'normal map
               (concat ",r" binding) func)))))))
 
-(use-package clojure-cheatsheet
-  :straight t
-  :defer t
-  :commands (clojure-cheatsheet)
-  :config
-  (dolist (map (list clojure-mode-map
-                     clojurec-mode-map
-                     clojurescript-mode-map
-                     cider-repl-mode-map))
-    (evil-define-key 'normal map
-      ",hc" 'clojure-cheatsheet)))
+;; (use-package clojure-cheatsheet
+;;   :straight t
+;;   :defer t
+;;   :commands (clojure-cheatsheet)
+;;   :config
+;;   (dolist (map (list clojure-mode-map
+;;                      clojurec-mode-map
+;;                      clojurescript-mode-map
+;;                      cider-repl-mode-map))
+;;     (evil-define-key 'normal map
+;;       ",hc" 'clojure-cheatsheet)))
 
 (use-package clojure-snippets
   :defer t)
