@@ -63,7 +63,6 @@
 (use-package hl-sexp
   :straight (:host github :repo "emacsattic/hl-sexp")
   :commands (hl-sexp-mode)
-  :hook (emacs-lisp-mode . hl-sexp-mode)
   :init
   (yq/add-toggle hl-sexp :mode hl-sexp-mode)
   (evil-define-key 'normal emacs-lisp-mode-map ",th" 'yq/toggle-hl-sexp))
