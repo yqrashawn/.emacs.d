@@ -508,9 +508,9 @@ If the universal prefix argument is used then will the windows too."
 ;; (use-package edit-server
 ;;   :straight t
 ;;   :config (edit-server-start))
-(use-package atomic-chrome
-  :straight t
-  :config (atomic-chrome-start-server))
+;; (use-package atomic-chrome
+;;   :straight t
+;;   :config (atomic-chrome-start-server))
 (setq-default bidi-display-reordering nil)
 
 ;; https://emacs.stackexchange.com/questions/28736/emacs-pointcursor-movement-lag/28746
