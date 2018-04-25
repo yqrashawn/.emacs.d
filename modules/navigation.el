@@ -366,6 +366,12 @@ When ARG is non-nil search in junk files."
                                                   (evil-ex ":")))
   (global-fasd-mode 1))
 
+(use-package dired-rsync
+  :straight t
+  :commands (dired-rsync)
+  :init
+  (bind-key "C-c C-r" 'dired-rsync dired-mode-map))
+
 ;; (use-package session
 ;;   :straight t
 ;;   :init

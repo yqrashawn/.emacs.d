@@ -409,12 +409,13 @@ If the universal prefix argument is used then kill the buffer too."
 
   ;; https://github.com/m2ym/popwin-el/tree/95dea14c60019d6cccf9a3b33e0dec4e1f22c304#special-display-config
   ;; buffers that we manage
+  (push '("*cider-error*"          :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config)
   (push '("*Help*"                 :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config)
   (push '("*Backtrace*"            :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config)
-  (push '("*Warnings*"            :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config)
+  (push '("*Warnings*"             :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config)
   (push '("*compilation*"          :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config)
   (push '("*Shell Command Output*" :dedicated t :position bottom :stick t :noselect t            ) popwin:special-display-config)
-  (push '("*prettier errors*" :dedicated nil :position bottom :stick nil :noselect t            ) popwin:special-display-config)
+  (push '("*prettier errors*"      :dedicated nil :position bottom :stick nil :noselect t            ) popwin:special-display-config)
   (push '("*Async Shell Command*"  :dedicated t :position bottom :stick t :noselect nil            ) popwin:special-display-config)
   (push '(" *undo-tree*"           :dedicated t :position right  :stick t :noselect nil :width   60) popwin:special-display-config)
   (push '("*undo-tree Diff*"       :dedicated t :position bottom :stick t :noselect nil :height 0.3) popwin:special-display-config)
@@ -1003,3 +1004,7 @@ otherwise it is scaled down."
       (when (string-match-p ".*\.el$" f)
         (let* ((default-directory dir))
           (byte-compile-file (file-truename f) t))))))
+
+(use-package carbon-now-sh
+  :straight t
+  :commands (carbon-now-sh))
