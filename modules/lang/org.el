@@ -488,7 +488,8 @@
   (setq org-projectile-capture-template "* TODO %? %^G\n%U")
   (spacemacs/set-leader-keys "pc" 'org-projectile-capture-for-current-project)
   (with-eval-after-load 'org-capture
-    (require 'org-projectile)))
+    (unless (featurep 'org-projectile)
+      (require 'org-projectile))))
 
 (use-package ob
   :defer t

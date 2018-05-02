@@ -658,7 +658,7 @@ FILENAME is deleted using `spacemacs/delete-file' function.."
 ;; from magnars
 (defun spacemacs/sudo-edit (&optional arg)
   (interactive "P")
-  (require 'tramp)
+  ;; (require 'tramp)
   (let ((fname (if (or arg (not buffer-file-name))
                    (read-file-name "File: ")
                  buffer-file-name)))
@@ -666,22 +666,22 @@ FILENAME is deleted using `spacemacs/delete-file' function.."
      (if (not (tramp-tramp-file-p fname))
          (concat "/sudo:root@localhost:" fname)
        (with-parsed-tramp-file-name fname parsed
-                                    (when (equal parsed-user "root")
-                                      (error "Already root!"))
-                                    (let* ((new-hop (tramp-make-tramp-file-name parsed-method
-                                                                                parsed-user
-                                                                                parsed-host
-                                                                                nil
-                                                                                parsed-hop
-                                                                                ))
-                                           (new-hop (substring new-hop 1 -1))
-                                           (new-hop (concat new-hop "|"))
-                                           (new-fname (tramp-make-tramp-file-name "sudo"
-                                                                                  "root"
-                                                                                  parsed-host
-                                                                                  parsed-localname
-                                                                                  new-hop)))
-                                      new-fname))))))
+         (when (equal parsed-user "root")
+           (error "Already root!"))
+         (let* ((new-hop (tramp-make-tramp-file-name parsed-method
+                                                     parsed-user
+                                                     parsed-host
+                                                     nil
+                                                     parsed-hop
+                                                     ))
+                (new-hop (substring new-hop 1 -1))
+                (new-hop (concat new-hop "|"))
+                (new-fname (tramp-make-tramp-file-name "sudo"
+                                                       "root"
+                                                       parsed-host
+                                                       parsed-localname
+                                                       new-hop)))
+           new-fname))))))
 (use-package ssh-config-mode
   :straight t
   :mode ("~/.ssh/config". ssh-config-mode))

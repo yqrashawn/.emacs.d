@@ -42,8 +42,10 @@
 
 ;;; Code:
 
-(require 'evil)
-(require 'bind-map)
+(unless (featurep 'evil)
+  (require 'evil))
+(unless (featurep 'bind-map)
+  (require 'bind-map))
 
 (defvar dotspacemacs-leader-key "SPC")
 (defvar evilified-state--evil-surround nil

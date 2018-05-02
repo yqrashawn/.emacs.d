@@ -7,12 +7,14 @@
 (use-package undo-tree
   :straight (:host github :repo "emacsmirror/undo-tree")
   :diminish undo-tree-mode
+  :defer t
   :config
   (global-undo-tree-mode)
   (global-set-key (kbd "s-y") 'undo-tree-redo))
 
 (use-package goto-chg
-  :straight (:host github :repo "emacs-evil/goto-chg"))
+  :straight (:host github :repo "emacs-evil/goto-chg")
+  :defer t)
 
 (use-package evil-leader
   :straight t

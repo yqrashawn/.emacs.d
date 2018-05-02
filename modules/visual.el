@@ -15,8 +15,8 @@
 (use-package highlight-parentheses
   :straight t
   :diminish highlight-parentheses-mode
-  :config
-  (add-hook 'prog-mode-hook 'highlight-parentheses-mode))
+  :defer t
+  :hook (prog-mode . highlight-parentheses-mode))
 
 (use-package zenburn-theme
   :straight t
@@ -119,7 +119,6 @@ has been changed to THEME."
   :diminish page-break-lines-mode
   :init
   (global-page-break-lines-mode t))
-
 (use-package ivy-rich
   :straight t
   :defer t

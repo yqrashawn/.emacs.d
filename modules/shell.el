@@ -55,7 +55,8 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
                         "open the shell in the current buffer instead of a "
                         "popup buffer.") func)
        (interactive "P")
-       (require 'shell-pop)
+       (unless (featurep 'shell-pop)
+         (require 'shell-pop))
        (if (equal '(4) index)
            ;; no popup
            (,func ,shell)
