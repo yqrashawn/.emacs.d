@@ -242,6 +242,9 @@ around point as the initial input."
   (evil-define-key 'normal dired-mode-map "j" 'diredp-next-line)
   (evil-define-key 'normal dired-mode-map "k" 'diredp-previous-line)
   (evil-define-key 'normal dired-mode-map "l" 'diredp-find-file-reuse-dir-buffer))
+(use-package dired-filter
+  :straight t
+  :hook (dired-mode . dired-filter-mode))
 
 (use-package dired-x
   :hook (dired-mode . dired-omit-mode)
