@@ -27,7 +27,7 @@
   ;; automatically change status of a heading to DONE when all children are done
   ;; src block have same indentation with #+BEGIN_SRC
   (setq org-edit-src-content-indentation 0)
-
+  (setq org-clock-into-drawer "CLOCKING")
   (defun my-sparse-tree-with-tag-filter()
     "asks for a tag and generates sparse tree for all open tasks in current Org buffer
   that are associated with this tag"
@@ -514,5 +514,14 @@
 
 (yq/get-modules "org-agenda.el")
 
-;; (use-package counsel-org-clock
-;;   :straight (:host github :repo "akirak/counsel-org-clock"))
+(use-package org-mru-clock
+  :straight t
+  :init
+  (setq org-mru-clock-completing-read #'ivy-completing-read)
+  (setq org-mru-clock-keep-formatting t)
+  (spacemacs/set-leader-keys "ci" 'org-mru-clock-in)
+  (spacemacs/set-leader-keys "co" 'org-clock-out)
+  (spacemacs/set-leader-keys "cd" 'org-clock-display)
+  (spacemacs/set-leader-keys "cj" 'org-mru-clock-select-recent-task)
+  (setq org-mru-clock-how-many 100
+        org-mru-clock-completing-read #'ivy-completing-read))
