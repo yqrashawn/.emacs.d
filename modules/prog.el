@@ -310,7 +310,7 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   (setq yas--default-user-snippets-dir (concat user-home-directory ".emacs.d/private/snippets/"))
   (push 'yas--default-user-snippets-dir yas-snippet-dirs)
   (push 'yas-hippie-try-expand hippie-expand-try-functions-list)
-  (add-hook 'snippet-mode 'yq/toggle-aggressive-indent-off)
+  ;; (add-hook 'snippet-mode 'yq/toggle-aggressive-indent-off)
   (unless (featurep 'warnings)
     (require 'warnings))
   (add-to-list 'warning-suppress-types '(yasnippet backquote-change))

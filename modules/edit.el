@@ -35,13 +35,13 @@
         try-complete-lisp-symbol))
 (define-key evil-insert-state-map (kbd "C-l") 'hippie-expand)
 
-(use-package aggressive-indent
-  :straight t
-  :init
-  (yq/add-toggle aggressive-indent :mode aggressive-indent-mode)
-  (spacemacs/set-leader-keys "tI" 'yq/toggle-aggressive-indent)
-  (add-hook 'prog-mode-hook 'aggressive-indent-mode)
-  (add-hook 'rjsx-mode-hook 'yq/toggle-aggressive-indent-off)
-  (add-hook 'typescript-mode-hook 'yq/toggle-aggressive-indent-off)
-  :commands (aggressive-indent-mode global-aggressive-indent-mode)
-  :diminish aggressive-indent-mode)
+;; (use-package aggressive-indent
+;;   :straight t
+;;   :init
+;;   (yq/add-toggle aggressive-indent :mode aggressive-indent-mode)
+;;   (spacemacs/set-leader-keys "tI" 'yq/toggle-aggressive-indent)
+;;   (add-hook 'prog-mode-hook 'aggressive-indent-mode)
+;;   (add-hook 'rjsx-mode-hook 'yq/toggle-aggressive-indent-off)
+;;   (add-hook 'typescript-mode-hook 'yq/toggle-aggressive-indent-off)
+;;   :commands (aggressive-indent-mode global-aggressive-indent-mode)
+;;   :diminish aggressive-indent-mode)
