@@ -138,11 +138,11 @@ Available PROPS:
   :config
   (company-flx-mode +1))
 
-(use-package company-childframe
-  :straight t
-  :diminish company-childframe-mode
-  :config
-  (company-childframe-mode 1))
+;; (use-package company-childframe
+;;   :straight t
+;;   :diminish company-childframe-mode
+;;   :config
+;;   (company-childframe-mode 1))
 
 (setq syntax-checking-enable-by-default t)
 
@@ -365,12 +365,12 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   ;; enable eldoc in IELM
   (add-hook 'ielm-mode-hook #'eldoc-mode))
 
-(use-package flycheck-posframe
-  :straight (:host github :repo "alexmurray/flycheck-posframe")
-  :after flycheck
-  :config
-  (add-hook 'flycheck-mode-hook #'flycheck-posframe-mode)
-  (set-face-attribute 'flycheck-posframe-error-face nil :inherit 'error))
+;; (use-package flycheck-posframe
+;;   :straight (:host github :repo "alexmurray/flycheck-posframe")
+;;   :after flycheck
+;;   :config
+;;   (add-hook 'flycheck-mode-hook #'flycheck-posframe-mode)
+;;   (set-face-attribute 'flycheck-posframe-error-face nil :inherit 'error))
 
 (use-package git-link
   :straight t
