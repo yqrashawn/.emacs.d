@@ -37,6 +37,7 @@ around point as the initial input."
   :config
   (counsel-mode 1)
   (setq counsel-find-file-occur-cmd "ls | grep -i -E '%s' | gxargs -d '\n' ls")
+  (define-key ivy-minibuffer-map (kbd "C-c C-e") 'spacemacs//counsel-edit)
   (define-key ivy-minibuffer-map (kbd "C-n") 'ivy-next-history-element)
   (define-key ivy-minibuffer-map (kbd "C-p") 'ivy-previous-history-element)
   (define-key ivy-minibuffer-map (kbd "C-l") 'ivy-alt-done)
@@ -82,8 +83,6 @@ around point as the initial input."
   :diminish ivy-mode
   :config
   (ivy-mode 1)
-
-
   (setq ivy-height 16)
   (defun yq/ivy-evil-registers ()
     "Show evil registers"
@@ -103,10 +102,15 @@ around point as the initial input."
                                       (substring-no-properties candidate 4))))
 
   (setq ivy-use-selectable-prompt t)
+  (evil-define-key 'normal ivy-occur-mode-map "w" 'ivy-wgrep-change-to-wgrep-mode)
   (ivy-set-occur 'spacemacs/counsel-search
                  'spacemacs//counsel-occur)
   (evil-make-overriding-map ivy-occur-mode-map 'normal)
   (define-key evil-normal-state-map "sb" 'ivy-switch-buffer))
+
+(use-package wgrep
+  :straight t
+  :defer t)
 
 (use-package smex
   :straight t
