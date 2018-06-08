@@ -525,3 +525,8 @@
   (spacemacs/set-leader-keys "cj" 'org-mru-clock-select-recent-task)
   (setq org-mru-clock-how-many 100
         org-mru-clock-completing-read #'ivy-completing-read))
+
+(use-package org-sticky-header
+  :straight ( :host github :repo "alphapapa/org-sticky-header")
+  :after org-mode
+  :hook (org-mode .org-sticky-header-mode))

@@ -244,8 +244,11 @@ is not visible. Otherwise delegates to regular Emacs next-error."
        ((eq 'flycheck sys) (call-interactively 'flycheck-previous-error))
        ((eq 'emacs sys) (call-interactively 'previous-error)))))
 
-  (define-key flycheck-error-list-mode-map (kbd "j") #'next-line)
-  (define-key flycheck-error-list-mode-map (kbd "k") #'previous-line)
+  (define-key evil-normal-state-map "]e" 'flycheck-next-error)
+  (define-key evil-normal-state-map "[e" 'flycheck-previous-error)
+  (define-key flycheck-error-list-mode-map "j" 'next-line)
+  (define-key flycheck-error-list-mode-map "k" 'previous-line)
+  (define-key flycheck-error-list-mode-map "q" 'quit-window)
 
   (push '("^\\*Flycheck.+\\*$"
           :regexp t

@@ -75,6 +75,7 @@
   :init
   :mode(("\\.json\\'" . json-mode)
    ("\\manifest.webapp\\'" . json-mode )
+   ("\\.eslintrc\\'" . json-mode)
    ("\\.tern-project\\'" . json-mode)))
 
 ;; (bound-and-true-p prettier-js-mode)
