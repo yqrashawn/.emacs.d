@@ -40,6 +40,7 @@
 
 (use-package company-lua
   :straight t
+  :after lua-mode
   :init
   (add-hook 'lua-mode-hook
             (lambda () (spacemacs|add-company-backends
