@@ -109,7 +109,13 @@ Available PROPS:
         company-minimum-prefix-length 2
         company-require-match nil
         company-dabbrev-ignore-case t
-        company-dabbrev-downcase nil)
+        company-dabbrev-downcase nil
+        company-dabbrev-minimum-length 2
+        company-dabbrev-time-limit .5
+        company-dabbrev-code-everywhere t
+        company-dabbrev-code-other-buffers 'all
+        company-dabbrev-code-time-limit .5)
+  (setq company-search-regexp-function 'company-search-flex-regexp)
   :config
   (setq company-backends '(company-capf
                            (company-dabbrev-code
@@ -118,6 +124,7 @@ Available PROPS:
                             company-keywords)
                            company-files
                            company-dabbrev))
+  (add-to-list 'company-frontends 'company-tng-frontend)
   (define-key company-active-map (kbd "C-j") 'company-select-next)
   (define-key company-active-map (kbd "C-k") 'company-select-previous)
   (define-key company-active-map (kbd "C-l") 'company-complete-selection)
