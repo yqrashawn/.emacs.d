@@ -145,6 +145,16 @@ Available PROPS:
   :config
   (company-flx-mode +1))
 
+(use-package company-try-hard
+  :straight t
+  :after company
+  :init
+  (define-key evil-insert-state-map (kbd "C-;") 'company-try-hard))
+
+;; (use-package company-quickhelp
+;;   :straight t
+;;   :hook (company-mode . company-quickhelp-mode))
+
 ;; (use-package company-childframe
 ;;   :straight t
 ;;   :diminish company-childframe-mode

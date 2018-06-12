@@ -55,10 +55,10 @@ and 'typescript-formatter .")
                '(tide-jump-to-definition :async t))
   (flycheck-add-mode 'typescript-tslint 'typescript-mode)
   (spacemacs/enable-flycheck 'typescript-mode)
-  :config
   (spacemacs|add-company-backends
     :backends company-tide
     :modes typescript-mode web-mode js2-mode)
+  :config
   (evil-define-key 'normal typescript-mode-map ",gb" 'tide-jump-back)
   (evil-define-key 'normal typescript-mode-map ",gt" 'typescript/jump-to-type-def)
   (evil-define-key 'normal typescript-mode-map ",gu" 'tide-references)

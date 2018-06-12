@@ -64,8 +64,8 @@
 
 (use-package company-tern
   :straight t
-  :init
   :after js2-mode
+  :init
   (spacemacs|add-company-backends
     :backends company-tern
     :modes js2-mode))
