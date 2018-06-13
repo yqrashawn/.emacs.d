@@ -22,7 +22,8 @@
     ",k" 'org-edit-src-abort))
 
 (use-package org
-  :straight org-plus-contrib
+  ;; :straight org-plus-contrib
+  :ensure t
   :init
   ;; automatically change status of a heading to DONE when all children are done
   ;; src block have same indentation with #+BEGIN_SRC
@@ -369,17 +370,17 @@
   (setq org-clock-persist 'history)
   (setq org-clock-idle-time 10))
 
-(use-package org-expiry
-  :after org
-  :commands (org-expiry-insinuate
-             org-expiry-deinsinuate
-             org-expiry-insert-created
-             org-expiry-insert-expiry
-             org-expiry-add-keyword
-             org-expiry-archive-subtree
-             org-expiry-process-entry
-             org-expiry-process-entries)
-  :init (org-expiry-insinuate))
+;; (use-package org-expiry
+;;   :after org
+;;   :commands (org-expiry-insinuate
+;;              org-expiry-deinsinuate
+;;              org-expiry-insert-created
+;;              org-expiry-insert-expiry
+;;              org-expiry-add-keyword
+;;              org-expiry-archive-subtree
+;;              org-expiry-process-entry
+;;              org-expiry-process-entries)
+;;   :init (org-expiry-insinuate))
 
 (with-eval-after-load 'org-indent
   (diminish 'org-indent-mode))

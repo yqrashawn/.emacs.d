@@ -67,6 +67,9 @@
   (yq/add-toggle hl-sexp :mode hl-sexp-mode)
   (evil-define-key 'normal emacs-lisp-mode-map ",th" 'yq/toggle-hl-sexp))
 
+;; (use-package eval-sexp-fu
+;;   :straight t)
+
 ;; :config
 ;; (eval-after-load 'hl-sexp
 ;; (defadvice hl-sexp-mode (after unflicker (turn-on) activate)
