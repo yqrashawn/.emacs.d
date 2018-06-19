@@ -37,11 +37,11 @@
 (use-package company-web
   :straight t
   :defer t
+  :after web-mode
   :init
-  (progn
-    (spacemacs|add-company-backends
-      :backends (company-web-html company-css)
-      :modes web-mode
-      :variables
-      ;; see https://github.com/osv/company-web/issues/4
-      company-minimum-prefix-length 0)))
+  (spacemacs|add-company-backends
+    :backends (company-web-html company-css company-web-jade)
+    :modes web-mode
+    :variables
+    ;; see https://github.com/osv/company-web/issues/4
+    company-minimum-prefix-length 0))

@@ -64,6 +64,7 @@
 
 (use-package company-tern
   :straight t
+  :after js2-mode
   :init
   (spacemacs|add-company-backends
     :backends company-tern
@@ -72,7 +73,10 @@
 (use-package json-mode
   :straight t
   :init
-  :mode "\\.json\\'")
+  :mode(("\\.json\\'" . json-mode)
+   ("\\manifest.webapp\\'" . json-mode )
+   ("\\.eslintrc\\'" . json-mode)
+   ("\\.tern-project\\'" . json-mode)))
 
 ;; (bound-and-true-p prettier-js-mode)
 (use-package prettier-js
@@ -104,7 +108,16 @@
 
 (use-package js2-refactor
   :straight t
-  :defer t
+  :after js2-mode
+  :commands (js2r-inline-var
+             js2r-rename-var
+             js2r-var-to-this
+             js2r-ternary-to-if
+             js2r-log-this
+             js2r-kill
+             js2r-toggle-function-async
+             js2r-expand-node-at-point
+             js2r--expand-contract-node-at-point)
   :init
   (evil-define-key 'normal js2-mode-map ",iv" 'js2r-inline-var)
   (evil-define-key 'normal js2-mode-map ",rv" 'js2r-rename-var)
@@ -113,5 +126,79 @@
   (evil-define-key 'normal js2-mode-map ",c" 'js2r-log-this)
   (evil-define-key 'normal js2-mode-map ",k" 'js2r-kill)
   (evil-define-key 'normal js2-mode-map ",ta" 'js2r-toggle-function-async)
-  (evil-define-key 'normal js2-mode-map ",ee" 'js2r-expand-node-at-point)
+  (evil-define-key 'normal js2-mode-map ",ep" 'js2r-expand-node-at-point)
   (evil-define-key 'normal js2-mode-map ",ec" 'js2r--expand-contract-node-at-point))
+
+(use-package add-node-modules-path
+  :straight t
+  :after js2-mode
+  :hook (js2-mode . add-node-modules-path))
+
+(use-package indium
+  :straight t
+  :after js2-mode
+  :diminish (indium-interaction-mode . "In" )
+  :hook (js2-mode . indium-interaction-mode)
+  :commands (indium-interaction-mode indium-run-node indium-run-chrome indium-debugger-mode)
+  :init (setq indium-nodejs-inspect-brk nil)
+  :config
+  ;; launch indium
+  (evil-define-key 'normal js2-mode-map ",in" 'indium-run-node)
+  (evil-define-key 'normal js2-mode-map ",ic" 'indium-run-chrome)
+  (evil-define-key 'normal js2-mode-map ",ir" 'indium-restart-node)
+  (evil-define-key 'normal js2-mode-map (kbd "s-r") 'indium-restart-node)
+
+  ;; indium debugger mode
+  (define-key indium-debugger-mode-map "h" nil)
+  (define-key indium-debugger-mode-map "l" nil)
+  (define-key indium-debugger-mode-map "s" nil)
+  (define-key indium-debugger-mode-map "n" nil)
+  (define-key indium-debugger-mode-map "p" nil)
+  (define-key indium-debugger-mode-map "e" nil)
+  (define-key indium-debugger-mode-map " " nil)
+  (define-key indium-debugger-mode-map "x" 'indium-debugger-evaluate)
+  (define-key indium-debugger-mode-map "a" 'indium-debugger-here)
+  (define-key indium-debugger-mode-map ";" 'indium-debugger-step-over)
+  (define-key indium-debugger-mode-map (kbd "M-n") 'indium-debugger-next-frame)
+  (define-key indium-debugger-mode-map (kbd "M-p") 'indium-debugger-previous-frame)
+  (evil-define-key 'normal indium-debugger-mode-map ",l" 'indium-debugger-locals)
+  (evil-define-key 'normal indium-debugger-mode-map ",s" 'indium-debugger-stack-frames)
+
+  (evil-define-key 'normal indium-debugger-locals-mode-map "q" 'quit-window)
+  (evil-define-key 'normal indium-debugger-frames-mode-map "q" 'quit-window)
+
+  (evil-define-key 'normal indium-repl-mode-map (kbd "C-a") 'evil-first-non-blank)
+  (evil-define-key 'normal indium-repl-mode-map (kbd "C-e") 'evil-end-of-line)
+
+  ;; inspector
+  (evil-define-key 'normal indium-inspector-mode-map "l" nil)
+  (evil-define-key 'normal indium-inspector-mode-map "g" nil)
+  (evil-define-key 'normal indium-inspector-mode-map "q" 'quit-window)
+  (evil-define-key 'normal indium-inspector-mode-map "u" 'indium-inspector-refresh)
+  (evil-define-key 'normal indium-inspector-mode-map "o" 'indium-inspector-pop)
+  (evil-define-key 'normal indium-inspector-mode-map "n" 'indium-inspector-next-reference)
+  (evil-define-key 'normal indium-inspector-mode-map "p" 'indium-inspector-previous-reference)
+
+  ;; make intercept enable automatically
+  (advice-add 'indium-debugger-mode :after (lambda (c) (evil-emacs-state) (evil-exit-emacs-state)))
+  (evil-make-intercept-map indium-debugger-mode-map)
+
+  (evil-define-key 'normal indium-interaction-mode-map ",ee" 'indium-inspect-expression)
+  (evil-define-key 'normal indium-interaction-mode-map ",eb" 'indium-eval-buffer)
+  (evil-define-key 'normal indium-interaction-mode-map ",er" 'indium-eval-region)
+  (evil-define-key 'normal indium-interaction-mode-map ",ef" 'indium-eval-defun)
+  (evil-define-key 'normal indium-interaction-mode-map ",bb" 'indium-add-breakpoint)
+  (evil-define-key 'normal indium-interaction-mode-map ",bc" 'indium-add-conditional-breakpoint)
+  (evil-define-key 'normal indium-interaction-mode-map ",bk" 'indium-remove-breakpoint)
+  (evil-define-key 'normal indium-interaction-mode-map ",bK" 'indium-remove-all-breakpoints-from-buffer)
+  (evil-define-key 'normal indium-interaction-mode-map ",be" 'indium-edit-breakpoint-condition)
+  (evil-define-key 'normal indium-interaction-mode-map ",bl" 'indium-list-breakpoints)
+  (evil-define-key 'normal indium-interaction-mode-map ",bd" 'indium-deactivate-breakpoints)
+  (evil-define-key 'normal indium-interaction-mode-map ",bd" 'indium-activate-breakpoints)
+  (define-key indium-interaction-mode-map (kbd "C-c :") 'indium-inspect-expression)
+  ;; webpack config
+  ;; output : {
+  ;;   devtoolModuleFilenameTemplate: '[absolute-resource-path]',
+  ;;   devtoolFallbackModuleFilenameTemplate: '[absolute-resource-path]?[hash]'
+  ;; }
+  )

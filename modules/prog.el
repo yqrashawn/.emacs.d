@@ -109,7 +109,13 @@ Available PROPS:
         company-minimum-prefix-length 2
         company-require-match nil
         company-dabbrev-ignore-case t
-        company-dabbrev-downcase nil)
+        company-dabbrev-downcase nil
+        company-dabbrev-minimum-length 2
+        company-dabbrev-time-limit .5
+        company-dabbrev-code-everywhere t
+        company-dabbrev-code-other-buffers 'all
+        company-dabbrev-code-time-limit .5)
+  (setq company-search-regexp-function 'company-search-flex-regexp)
   :config
   (setq company-backends '(company-capf
                            (company-dabbrev-code
@@ -118,6 +124,7 @@ Available PROPS:
                             company-keywords)
                            company-files
                            company-dabbrev))
+  (add-to-list 'company-frontends 'company-tng-frontend)
   (define-key company-active-map (kbd "C-j") 'company-select-next)
   (define-key company-active-map (kbd "C-k") 'company-select-previous)
   (define-key company-active-map (kbd "C-l") 'company-complete-selection)
@@ -137,6 +144,16 @@ Available PROPS:
   (add-hook 'emacs-lisp-mode-hook 'company-flx-mode)
   :config
   (company-flx-mode +1))
+
+(use-package company-try-hard
+  :straight t
+  :after company
+  :init
+  (define-key evil-insert-state-map (kbd "C-;") 'company-try-hard))
+
+;; (use-package company-quickhelp
+;;   :straight t
+;;   :hook (company-mode . company-quickhelp-mode))
 
 ;; (use-package company-childframe
 ;;   :straight t
@@ -244,8 +261,11 @@ is not visible. Otherwise delegates to regular Emacs next-error."
        ((eq 'flycheck sys) (call-interactively 'flycheck-previous-error))
        ((eq 'emacs sys) (call-interactively 'previous-error)))))
 
-  (define-key flycheck-error-list-mode-map (kbd "j") #'next-line)
-  (define-key flycheck-error-list-mode-map (kbd "k") #'previous-line)
+  (define-key evil-normal-state-map "]e" 'flycheck-next-error)
+  (define-key evil-normal-state-map "[e" 'flycheck-previous-error)
+  (define-key flycheck-error-list-mode-map "j" 'next-line)
+  (define-key flycheck-error-list-mode-map "k" 'previous-line)
+  (define-key flycheck-error-list-mode-map "q" 'quit-window)
 
   (push '("^\\*Flycheck.+\\*$"
           :regexp t

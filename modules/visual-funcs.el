@@ -72,7 +72,7 @@ The return value is nil if no font was found, truthy otherwise."
         (throw 'break t)))
     nil))
 
-(defvar yq/default-font-kind "large")
+(defvar yq/default-font-kind "small")
 (setq yq/small-screen-default-font '("Hack"
                                      ;;"Menlo"
                                      ;; "Anonymous Pro for Powerline"
@@ -93,7 +93,7 @@ The return value is nil if no font was found, truthy otherwise."
                                      :width normal
                                      :powerline-scale 1.1))
 
-(spacemacs/set-default-font yq/large-screen-default-font)
+(spacemacs/set-default-font yq/small-screen-default-font)
 
 (defun yq/toggle-default-font ()
   "font for large screen"
