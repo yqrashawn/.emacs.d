@@ -39,7 +39,7 @@
                 (not (eq index 'mu4e-main-mode))))))
    evil-emacs-state-modes) )
   (global-set-key (kbd "C-x m") 'mu4e-compose-new)
-  (spacemacs/set-leader-keys "aM" 'mu4e)
+  (spacemacs/set-leader-keys "1" 'mu4e)
   :config
   (defun jcs-view-in-eww (msg)
     (eww-browse-url (concat "file://" (mu4e~write-body-to-html msg))))
@@ -66,6 +66,7 @@
   (evil-define-key 'normal mu4e-main-mode-map (kbd "C-j") 'next-line)
   (evil-define-key 'normal mu4e-main-mode-map (kbd "C-k") 'previous-line)
   (evil-define-key 'normal mu4e-main-mode-map "q" 'mu4e-quit)
+  (evil-define-key 'normal mu4e-main-mode-map "b" 'mu4e-headers-search-bookmark)
   (evil-define-key 'normal mu4e-headers-mode-map (kbd "C-j") 'next-line)
   (evil-define-key 'normal mu4e-headers-mode-map (kbd "C-k") 'previous-line)
   (evil-define-key 'normal mu4e-headers-mode-map (kbd "J") (lambda ()
