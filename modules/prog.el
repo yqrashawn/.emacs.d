@@ -433,3 +433,11 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   :straight t
   :hook
   (org-mode . mixed-pitch-mode))
+
+(use-package hl-todo
+  :straight t
+  :hook (prog-mode . hl-todo-mode))
+
+(use-package magit-todos
+  :straight (:host github :repo "alphapapa/magit-todos")
+  :hook (magit-status-mode . magit-todos-mode))

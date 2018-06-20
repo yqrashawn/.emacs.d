@@ -255,7 +255,7 @@ If the universal prefix argument is used then kill the buffer too."
   :init
   (progn
     (setq linum-format "%4d")
-    (yq/add-toggle line-numbers :mode linum-mode)
+    (yq/add-toggle line-numbers :mode display-line-numbers-mode)
     (spacemacs/set-leader-keys "tn" 'yq/toggle-line-numbers)
     (defun spacemacs//linum-update-window-scale-fix (win)
       "Fix linum for scaled text in the window WIN."
