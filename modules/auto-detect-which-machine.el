@@ -4,8 +4,9 @@
 (defun yq/macbook ()
   "Load macbook theme and font size."
   (interactive)
-  (if (yq/day-p) (load-theme 'sanityinc-solarized-light)
-    ;; (load-theme 'zenburn)
+  (if (yq/day-p)
+      ;; (load-theme 'sanityinc-solarized-light)
+    (load-theme 'zenburn)
     (load-theme 'snazzy))
   (spacemacs/set-default-font yq/small-screen-default-font))
 
