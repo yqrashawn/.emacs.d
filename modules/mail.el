@@ -23,7 +23,7 @@
      ("/gmail/[Gmail].Starred" . ?S)))
   (mu4e-trash-folder "/gmail/Trash")
   (mu4e-change-filenames-when-moving t)
-  (mu4e-update-interval 300)
+  (mu4e-update-interval 900)
   (mu4e-use-fancy-chars t)
   (mu4e-view-show-addresses t)
   (mu4e-view-show-images t)
