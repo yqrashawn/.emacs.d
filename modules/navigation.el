@@ -321,6 +321,13 @@ FD-PROMPT, if non-nil, is passed as `ivy-read' prompt argument."
             :caller 'counsel-fd))
 
 ;; (spacemacs/set-leader-keys "sm" 'counsel-fd)
+
+(defun yq/org ()
+  (interactive)
+  (counsel-fd nil "~/Dropbox/ORG"))
+
+(spacemacs/set-leader-keys "fo" 'yq/org)
+
 (use-package find-file-in-project
   :straight t
   :commands (find-file-in-project)
