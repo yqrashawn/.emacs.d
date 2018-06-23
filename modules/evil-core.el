@@ -37,6 +37,13 @@
   (customize-set-variable 'evil-esc-delay 0)
   (customize-set-variable 'evil-shift-width 2)
   (customize-set-variable 'evil-show-paren-range 1)
+  (defun yq/update-evil-emacs-state-modes (mode-to-remove)
+    "remove MODE-TO-REMOVE from evil-emacs-state-modes"
+    (setq evil-emacs-state-modes
+          (seq-remove
+           (lambda (index)
+             (eq index mode-to-remove))
+           evil-emacs-state-modes)))
   :config
   (mapc #'evil-declare-change-repeat
         '(company-complete-common

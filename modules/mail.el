@@ -8,7 +8,7 @@
   (mu4e-maildir "~/Maildir")
   (mu4e-refile-folder "/gmail/Archive")
   (mu4e-sent-folder "/gmail/Sent Mail")
-  (mu4e-get-mail-command "export https_proxy=http://127.0.0.1:6152;export http_proxy=http://127.0.0.1:6152;export HTTP_PROXY=http://127.0.0.1:6152:export HTTPs_PROXY=http://127.0.0.1:6152 & mbsync gmail")
+  (mu4e-get-mail-command "export https_proxy=http://127.0.0.1:6152;export http_proxy=http://127.0.0.1:6152;export HTTP_PROXY=http://127.0.0.1:6152:export HTTPs_PROXY=http://127.0.0.1:6152 & mbsync --pull --create --new --delete --flags --renew --expunge-slave gmail && mbsync --push  --create --new --delete --flags --renew --expunge-master gmail")
 
   (mu4e-completing-read-function 'completing-read)
   (mu4e-use-fancy-chars 't)
@@ -33,13 +33,9 @@
   (smtpmail-queue-dir "~/Maildir/queue/cur")
   :init
   (setq mu4e-html2text-command "iconv -c -t utf-8 | pandoc -f html -t plain")
-  (setq evil-emacs-state-modes (seq-remove
-   (lambda (index)
-     (not (and
-           (not (eq index 'mu4e-view-mode))
-           (and (not (eq index 'mu4e-headers-mode))
-                (not (eq index 'mu4e-main-mode))))))
-   evil-emacs-state-modes) )
+  (yq/update-evil-emacs-state-modes 'mu4e-headers-mode)
+  (yq/update-evil-emacs-state-modes 'mu4e-view-mode)
+  (yq/update-evil-emacs-state-modes 'mu4e-main-mode)
   (global-set-key (kbd "C-x m") 'mu4e-compose-new)
   (spacemacs/set-leader-keys "1" 'mu4e)
   :config
@@ -97,8 +93,8 @@
   (evil-define-key 'normal mu4e-view-mode-map (kbd "q") 'next-line)
   (evil-define-key 'normal mu4e-view-mode-map (kbd "q") 'mu4e~view-quit-buffer)
   (evil-define-key 'normal mu4e-view-mode-map (kbd "J") (lambda ()
-                                                             (interactive)
-                                                             (mu4e-headers-mark-thread nil '(read)))))
+                                                          (interactive)
+                                                          (mu4e-headers-mark-thread nil '(read)))))
 
 (use-package mu4e-alert
   :straight t
