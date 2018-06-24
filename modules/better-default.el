@@ -410,6 +410,7 @@ If the universal prefix argument is used then kill the buffer too."
   ;; https://github.com/m2ym/popwin-el/tree/95dea14c60019d6cccf9a3b33e0dec4e1f22c304#special-display-config
   ;; buffers that we manage
   (push '("*cider-error*"          :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config)
+  (push '("*Contents*"                 :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config)
   (push '("*Help*"                 :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config)
   (push '("*Backtrace*"            :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config)
   (push '("*Warnings*"             :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config)

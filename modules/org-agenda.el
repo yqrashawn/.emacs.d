@@ -12,7 +12,8 @@
   (add-to-list 'org-agenda-custom-commands
                '("B" "Todo"
                  ((tags "OFFICE/TODO")
-                  (tags "HOME/TODO"))
+                  (tags "HOME/TODO")
+                  (tags "MISC/TODO"))
                  nil
                  ("~/agendas/work/todos.pdf"
                   "~/agendas/work/todos.csv"

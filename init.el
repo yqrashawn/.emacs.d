@@ -69,6 +69,7 @@
 (yq/get-modules "org-agenda.el")
 (yq/get-modules "auto-detect-which-machine.el")
 (yq/get-modules "mail.el")
+(yq/get-modules "pdf.el")
 
 (use-package server)
 (unless (server-running-p) (server-start))
