@@ -23,10 +23,12 @@
 
 (use-package org
   ;; :straight org-plus-contrib
+  ;; :straight org
   :ensure t
   :init
   ;; automatically change status of a heading to DONE when all children are done
   ;; src block have same indentation with #+BEGIN_SRC
+  (require 'org-agenda)
   (setq org-edit-src-content-indentation 0)
   (setq org-clock-into-drawer "CLOCKING")
   (defun my-sparse-tree-with-tag-filter()
