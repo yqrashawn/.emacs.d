@@ -285,7 +285,7 @@ If non-nil, append EXTRA-fd-ARGS to BASE-CMD."
 (defun my-insert-tsfile-path (path)
   (insert (concat (concat "[[tsfile:" (f-filename path)) "][]]")))
 
-(defun counsel-fd (&optional initial-input initial-directory fd-prompt)
+(defun counsel-fd (&optional initial-input initial-directory fd-prompt fd-args)
   "Grep for a string in the current directory using fd.
 INITIAL-INPUT can be given as the initial minibuffer input.
 INITIAL-DIRECTORY, if non-nil, is used as the root directory for search.
@@ -297,12 +297,13 @@ FD-PROMPT, if non-nil, is passed as `ivy-read' prompt argument."
            (read-directory-name (concat
                                  (car (split-string counsel-fd-base-command))
                                  " in directory: ")))))
+  (message fd-args)
   (counsel-require-program (car (split-string counsel-fd-base-command)))
   (ivy-set-prompt 'counsel-fd counsel-prompt-function)
   (setq counsel-fd-current-dir (or initial-directory default-directory))
   (ivy-read (or fd-prompt (car (split-string counsel-fd-base-command)))
             (lambda (string)
-              (counsel-fd-function string counsel-fd-base-command))
+              (counsel-fd-function string (concat counsel-fd-base-command " " (or fd-args " "))))
             :initial-input initial-input
             :dynamic-collection t
             ;; :keymap counsel-ag-map
@@ -324,9 +325,19 @@ FD-PROMPT, if non-nil, is passed as `ivy-read' prompt argument."
 
 (defun yq/org ()
   (interactive)
-  (counsel-fd nil "~/Dropbox/ORG"))
+  (counsel-fd nil "~/Dropbox/" nil "-t f -e org"))
+
+(defun yq/books ()
+  (interactive)
+  (counsel-fd nil "~/Dropbox/Books/" nil "-t f"))
+
+(defun yq/dropbox ()
+  (interactive)
+  (counsel-fd nil "~/Dropbox/"))
 
 (spacemacs/set-leader-keys "fo" 'yq/org)
+(spacemacs/set-leader-keys "fb" 'yq/books)
+(spacemacs/set-leader-keys "f1" 'yq/dropbox)
 
 (use-package find-file-in-project
   :straight t
