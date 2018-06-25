@@ -240,7 +240,6 @@ If the universal prefix argument is used then kill the buffer too."
                                           "*Help*"
                                           "*cvs*"
                                           "*Buffer List*"
-                                          "*Ibuffer*"
                                           "*esh command on file*"
                                           ))
   (setq winner-boring-buffers
@@ -1017,3 +1016,10 @@ otherwise it is scaled down."
 (unless garbage-collection-timer
   (setq garbage-collection-timer
 	      (run-with-idle-timer 60 t 'garbage-collect)))
+
+(global-set-key "\C-x\C-b" 'ibuffer)
+
+(use-package ibuffer-vc
+  :straight t
+  :commands (ibuffer-vc-set-filter-groups-by-vc-root)
+  :hook (ibuffer-mode . ibuffer-vc-set-filter-groups-by-vc-root))
