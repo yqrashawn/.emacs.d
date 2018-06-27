@@ -1021,6 +1021,7 @@ otherwise it is scaled down."
 
 (use-package ibuffer-vc
   :straight t
+  :after ibuffer
   :commands (ibuffer-vc-set-filter-groups-by-vc-root)
   :hook (ibuffer-mode . ibuffer-vc-set-filter-groups-by-vc-root)
   :init (define-key ibuffer-mode-map "K" 'ibuffer-kill-filter-group))
