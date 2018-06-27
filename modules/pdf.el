@@ -1,6 +1,7 @@
 (use-package pdf-tools
   :straight t
   :mode ("\\.pdf\\'" . pdf-view-mode)
+  :dminish pdf-view-midnight-minor-mode
   :init
   (yq/update-evil-emacs-state-modes 'pdf-view-mode)
   (yq/update-evil-emacs-state-modes 'pdf-outline-buffer-mode)

@@ -90,6 +90,7 @@
 
 (use-package git-gutter
   :straight t
+  :diminish git-gutter-mode
   :init
   (global-git-gutter-mode)
   (custom-set-variables '(git-gutter:handled-backends '(git)))

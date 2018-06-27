@@ -7,6 +7,7 @@
 
 (use-package elisp-mode
   :mode ("\\.el\\'" . emacs-lisp-mode)
+  :diminish emacs-lisp-mode "elisp"
   :commands (emacs-lisp-mode)
   :config
   (spacemacs|define-jump-handlers emacs-lisp-mode)
