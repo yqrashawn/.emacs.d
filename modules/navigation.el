@@ -320,6 +320,8 @@ FD-PROMPT, if non-nil, is passed as `ivy-read' prompt argument."
                       (swiper--cleanup))
             :caller 'counsel-fd))
 
+(spacemacs/set-leader-keys "2" (lambda () (interactive) (find-file "~/Dropbox/ORG/gtd.org")))
+(spacemacs/set-leader-keys "3" (lambda () (interactive) (find-file "~/Dropbox/ORG/project.org")))
 ;; (spacemacs/set-leader-keys "sm" 'counsel-fd)
 
 (defun yq/org ()

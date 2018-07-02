@@ -129,10 +129,11 @@
   (evil-define-key 'normal js2-mode-map ",ep" 'js2r-expand-node-at-point)
   (evil-define-key 'normal js2-mode-map ",ec" 'js2r--expand-contract-node-at-point))
 
-(use-package add-node-modules-path
-  :straight t
-  :after js2-mode
-  :hook (js2-mode . add-node-modules-path))
+;; bug for empty directory
+;; (use-package add-node-modules-path
+;;   :straight t
+;;   :after js2-mode
+;;   :hook (js2-mode . add-node-modules-path))
 
 (use-package indium
   :straight t
