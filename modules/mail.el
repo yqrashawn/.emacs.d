@@ -38,6 +38,7 @@
   (yq/update-evil-emacs-state-modes 'mu4e-main-mode)
   (global-set-key (kbd "C-x m") 'mu4e-compose-new)
   (spacemacs/set-leader-keys "1" 'mu4e)
+  (spacemacs/set-leader-keys "2" (lambda () (interactive) ( mu4e~headers-jump-to-maildir "/gmail/INBOX")))
   :config
   (add-to-list 'mu4e-bookmarks
                (make-mu4e-bookmark
@@ -65,6 +66,7 @@
   (evil-define-key 'normal mu4e-headers-mode-map "R" 'mu4e-headers-mark-for-move)
   (evil-define-key 'normal mu4e-headers-mode-map "u" 'mu4e-headers-mark-for-unmark)
   (evil-define-key 'normal mu4e-headers-mode-map "q" 'mu4e~headers-quit-buffer)
+  ;; (evil-define-key 'normal mu4e-headers-mode-map "q" 'yq/kill-this-buffer)
   (evil-define-key 'normal mu4e-headers-mode-map "x" 'mu4e-mark-execute-all)
   (evil-define-key 'normal mu4e-headers-mode-map "m" 'mu4e-headers-mark-for-read)
   (evil-define-key 'normal mu4e-headers-mode-map "M" 'mu4e-headers-mark-for-unread)
@@ -101,4 +103,5 @@
   :after mu4e
   :init
   (mu4e-alert-enable-notifications)
-  (mu4e-alert-enable-mode-line-display))
+  (mu4e-alert-enable-mode-line-display)
+  (mu4e-alert-set-default-style 'notifier))

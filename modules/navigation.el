@@ -205,16 +205,109 @@ around point as the initial input."
        (kill-this-buffer)
        (save-buffers-kill-terminal 't))))
   :config
-  (defun yq/find-lisp-find-dired (regexp)
-    "Find files in DIR, matching REGEXP."
-    (interactive "sMatching regexp: ")
-    (let ((find-lisp-regexp regexp))
-      (find-lisp-find-dired-internal
-       dired-directory
-       'find-lisp-default-file-predicate
-       'find-lisp-default-directory-predicate
-       "*Find Lisp Dired*")))
-  (evil-define-key 'normal dired-mode-map "F" 'yq/find-lisp-find-dired)
+
+  ;; fd-dired depends on dired-find
+  (defvar fd-program "fd")
+  (defvar pre-fd-args "-0 -c never")
+  (defvar fd-ls-option '("| xargs -0 ls -ld" . "-ld"))
+  (defvar input-fd-args "")
+  (defvar fd-args-history nil)
+  (defun fd-dired (dir args)
+    "Run `fd' and go into Dired mode on a buffer of the output.
+The command run (after changing into DIR) is essentially
+
+    fd . ARGS -ls
+
+except that the car of the variable `fd-ls-option' specifies what to
+use in place of \"-ls\" as the final argument."
+    (interactive (list (and current-prefix-arg (read-directory-name "Run find in directory: " nil "" t))
+                       (read-string "Run fd (with args): " input-fd-args
+                                    '(fd-args-history . 1))))
+    (let ((dired-buffers dired-buffers))
+      ;; Expand DIR ("" means default-directory), and make sure it has a
+      ;; trailing slash.
+      (setq dir (file-name-as-directory (expand-file-name (or dir default-directory))))
+      ;; Check that it's really a directory.
+      (or (file-directory-p dir)
+          (error "find-dired needs a directory: %s" dir))
+      (switch-to-buffer (get-buffer-create "*Find*"))
+
+      ;; See if there's still a `find' running, and offer to kill
+      ;; it first, if it is.
+      (let ((find (get-buffer-process (current-buffer))))
+        (when find
+          (if (or (not (eq (process-status find) 'run))
+                  (yes-or-no-p
+                   (format-message "A `find' process is running; kill it? ")))
+              (condition-case nil
+                  (progn
+                    (interrupt-process find)
+                    (sit-for 1)
+                    (delete-process find))
+                (error nil))
+            (error "Cannot have two processes in `%s' at once" (buffer-name)))))
+
+      (widen)
+      (kill-all-local-variables)
+      (setq buffer-read-only nil)
+      (erase-buffer)
+      (setq default-directory dir
+            input-fd-args args        ; save for next interactive call
+            args (concat fd-program " " pre-fd-args
+                         ;; " . "
+                         (if (string= args "")
+                             ""
+                           (concat
+                            " " args " "
+                            " "))
+                         (if (string-match "\\`\\(.*\\) {} \\(\\\\;\\|+\\)\\'"
+                                           (car fd-ls-option))
+                             (format "%s %s %s"
+                                     (match-string 1 (car fd-ls-option))
+                                     (shell-quote-argument "{}")
+                                     find-exec-terminator)
+                           (car fd-ls-option))))
+      ;; Start the find process.
+      (shell-command (concat args "&") (current-buffer))
+      ;; The next statement will bomb in classic dired (no optional arg allowed)
+      (dired-mode dir (cdr fd-ls-option))
+      (let ((map (make-sparse-keymap)))
+        (set-keymap-parent map (current-local-map))
+        (define-key map "\C-c\C-k" 'kill-find)
+        (use-local-map map))
+      (make-local-variable 'dired-sort-inhibit)
+      (setq dired-sort-inhibit t)
+      (set (make-local-variable 'revert-buffer-function)
+           `(lambda (ignore-auto noconfirm)
+              (find-dired ,dir ,input-fd-args)))
+      ;; Set subdir-alist so that Tree Dired will work:
+      (if (fboundp 'dired-simple-subdir-alist)
+          ;; will work even with nested dired format (dired-nstd.el,v 1.15
+          ;; and later)
+          (dired-simple-subdir-alist)
+        ;; else we have an ancient tree dired (or classic dired, where
+        ;; this does no harm)
+        (set (make-local-variable 'dired-subdir-alist)
+             (list (cons default-directory (point-min-marker)))))
+      (set (make-local-variable 'dired-subdir-switches) find-ls-subdir-switches)
+      (setq buffer-read-only nil)
+      ;; Subdir headlerline must come first because the first marker in
+      ;; subdir-alist points there.
+      (insert "  " dir ":\n")
+      ;; Make second line a ``find'' line in analogy to the ``total'' or
+      ;; ``wildcard'' line.
+      (let ((point (point)))
+        (insert "  " args "\n")
+        (dired-insert-set-properties point (point)))
+      (setq buffer-read-only t)
+      (let ((proc (get-buffer-process (current-buffer))))
+        (set-process-filter proc (function find-dired-filter))
+        (set-process-sentinel proc (function find-dired-sentinel))
+        ;; Initialize the process marker; it is used by the filter.
+        (move-marker (process-mark proc) (point) (current-buffer)))
+      (setq mode-line-process '(":%s"))))
+  (evil-define-key 'normal dired-mode-map "F" 'fd-dired)
+  (define-key evil-normal-state-map "s8" 'fd-dired)
   (evil-define-key 'normal dired-mode-map (kbd ";") 'avy-goto-subword-1)
   ;; search file name only when focus is over file
   (setq dired-isearch-filenames 'dwim)
@@ -351,8 +444,8 @@ FD-PROMPT, if non-nil, is passed as `ivy-read' prompt argument."
                       (swiper--cleanup))
             :caller 'counsel-fd))
 
-(spacemacs/set-leader-keys "2" (lambda () (interactive) (find-file "~/Dropbox/ORG/gtd.org")))
-(spacemacs/set-leader-keys "3" (lambda () (interactive) (find-file "~/Dropbox/ORG/project.org")))
+(spacemacs/set-leader-keys "3" (lambda () (interactive) (find-file "~/Dropbox/ORG/gtd.org")))
+(spacemacs/set-leader-keys "4" (lambda () (interactive) (find-file "~/Dropbox/ORG/project.org")))
 ;; (spacemacs/set-leader-keys "sm" 'counsel-fd)
 
 (defun yq/org ()
