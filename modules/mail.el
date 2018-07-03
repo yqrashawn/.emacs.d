@@ -8,7 +8,7 @@
   (mu4e-maildir "~/Maildir")
   (mu4e-refile-folder "/gmail/Archive")
   (mu4e-sent-folder "/gmail/Sent Mail")
-  (mu4e-get-mail-command "export https_proxy=http://127.0.0.1:6152;export http_proxy=http://127.0.0.1:6152;export HTTP_PROXY=http://127.0.0.1:6152:export HTTPs_PROXY=http://127.0.0.1:6152 & mbsync --pull --create --new --delete --flags --renew --expunge-slave gmail && mbsync --push  --create --new --delete --flags --renew --expunge-master gmail")
+  (mu4e-get-mail-command "export https_proxy=http://127.0.0.1:6152;export http_proxy=http://127.0.0.1:6152;export HTTP_PROXY=http://127.0.0.1:6152:export HTTPs_PROXY=http://127.0.0.1:6152 & proxychains4 -f /etc/proxychains.conf mbsync --pull --create --new --delete --flags --renew --expunge-slave gmail && proxychains4 -f /etc/proxychinas.conf mbsync --push  --create --new --delete --flags --renew --expunge-master gmail")
 
   (mu4e-completing-read-function 'completing-read)
   (mu4e-use-fancy-chars 't)
@@ -24,7 +24,7 @@
      ("/gmail/Starred" . ?S)))
   (mu4e-trash-folder "/gmail/Trash")
   (mu4e-change-filenames-when-moving t)
-  (mu4e-update-interval 900)
+  (mu4e-update-interval 300)
   (mu4e-use-fancy-chars t)
   (mu4e-view-show-addresses t)
   (mu4e-view-show-images t)

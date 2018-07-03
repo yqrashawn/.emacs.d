@@ -47,7 +47,6 @@
   :straight t
   :diminish lispy " ʪ"
   :commands (lispy-mode)
-  :hook (emacs-lisp-mode . lispy-mode)
   :init
   (customize-set-variable 'lispy-visit-method 'projectile)
   (yq/add-toggle lispy :mode lispy-mode)
