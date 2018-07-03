@@ -80,3 +80,4 @@
   :straight (:host github :repo "akirak/emacs-playground"))
 
 (toggle-frame-maximized)
+;; (straight-use-package 'suggest)
