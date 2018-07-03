@@ -408,21 +408,22 @@ If the universal prefix argument is used then kill the buffer too."
 
   ;; https://github.com/m2ym/popwin-el/tree/95dea14c60019d6cccf9a3b33e0dec4e1f22c304#special-display-config
   ;; buffers that we manage
-  (push '("*cider-error*"          :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config)
-  (push '("*Contents*"                 :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config)
-  (push '("*Help*"                 :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config)
-  (push '("*Backtrace*"            :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config)
-  (push '("*Warnings*"             :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config)
-  (push '("*compilation*"          :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config)
-  (push '("*Shell Command Output*" :dedicated t :position bottom :stick t :noselect t            ) popwin:special-display-config)
-  (push '("*prettier errors*"      :dedicated nil :position bottom :stick nil :noselect t            ) popwin:special-display-config)
-  (push '("*Async Shell Command*"  :dedicated t :position bottom :stick t :noselect nil            ) popwin:special-display-config)
-  (push '(" *undo-tree*"           :dedicated t :position right  :stick t :noselect nil :width   60) popwin:special-display-config)
-  (push '("*undo-tree Diff*"       :dedicated t :position bottom :stick t :noselect nil :height 0.3) popwin:special-display-config)
-  (push '("*ert*"                  :dedicated t :position bottom :stick t :noselect nil            ) popwin:special-display-config)
-  (push '("*grep*"                 :dedicated t :position bottom :stick t :noselect nil            ) popwin:special-display-config)
-  (push '("*nosetests*"            :dedicated t :position bottom :stick t :noselect nil            ) popwin:special-display-config)
-  (push '("^\*WoMan.+\*$" :regexp t             :position bottom                                   ) popwin:special-display-config))
+  (push '("*cider-error*"          :dedicated nil :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config)
+  (push '("*Contents*"             :dedicated t :position bottom :stick t :noselect t   :height 0.4)   popwin:special-display-config)
+  (push '("\*helpful\ .*\*"        :dedicated t :position bottom :stick t :noselect t   :height 0.4)   popwin:special-display-config)
+  (push '("*Help*"                 :dedicated nil :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config)
+  (push '("*Backtrace*"            :dedicated t :position bottom :stick t :noselect t   :height 0.4)   popwin:special-display-config)
+  (push '("*Warnings*"             :dedicated t :position bottom :stick t :noselect t   :height 0.4)   popwin:special-display-config)
+  (push '("*compilation*"          :dedicated t :position bottom :stick t :noselect t   :height 0.4)   popwin:special-display-config)
+  (push '("*Shell Command Output*" :dedicated t :position bottom :stick t :noselect t              )   popwin:special-display-config)
+  (push '("*prettier errors*"      :dedicated nil :position bottom :stick nil :noselect t          )   popwin:special-display-config)
+  (push '("*Async Shell Command*"  :dedicated t :position bottom :stick t :noselect nil            )   popwin:special-display-config)
+  (push '(" *undo-tree*"           :dedicated t :position right  :stick t :noselect nil :width   60)   popwin:special-display-config)
+  (push '("*undo-tree Diff*"       :dedicated t :position bottom :stick t :noselect nil :height 0.3)   popwin:special-display-config)
+  (push '("*ert*"                  :dedicated nil :position bottom :stick t :noselect nil          )   popwin:special-display-config)
+  (push '("*grep*"                 :dedicated t :position bottom :stick t :noselect nil            )   popwin:special-display-config)
+  (push '("*nosetests*"            :dedicated t :position bottom :stick t :noselect nil            )   popwin:special-display-config)
+  (push '("^\*WoMan.+\*$" :regexp t             :position bottom                                   )   popwin:special-display-config))
 ;; (define-key evil-normal-state-map (kbd "C-z") popwin:keymap)
 
 (setq standard-indent 2)
@@ -666,22 +667,22 @@ FILENAME is deleted using `spacemacs/delete-file' function.."
      (if (not (tramp-tramp-file-p fname))
          (concat "/sudo:root@localhost:" fname)
        (with-parsed-tramp-file-name fname parsed
-         (when (equal parsed-user "root")
-           (error "Already root!"))
-         (let* ((new-hop (tramp-make-tramp-file-name parsed-method
-                                                     parsed-user
-                                                     parsed-host
-                                                     nil
-                                                     parsed-hop
-                                                     ))
-                (new-hop (substring new-hop 1 -1))
-                (new-hop (concat new-hop "|"))
-                (new-fname (tramp-make-tramp-file-name "sudo"
-                                                       "root"
-                                                       parsed-host
-                                                       parsed-localname
-                                                       new-hop)))
-           new-fname))))))
+                                    (when (equal parsed-user "root")
+                                      (error "Already root!"))
+                                    (let* ((new-hop (tramp-make-tramp-file-name parsed-method
+                                                                                parsed-user
+                                                                                parsed-host
+                                                                                nil
+                                                                                parsed-hop
+                                                                                ))
+                                           (new-hop (substring new-hop 1 -1))
+                                           (new-hop (concat new-hop "|"))
+                                           (new-fname (tramp-make-tramp-file-name "sudo"
+                                                                                  "root"
+                                                                                  parsed-host
+                                                                                  parsed-localname
+                                                                                  new-hop)))
+                                      new-fname))))))
 (use-package ssh-config-mode
   :straight t
   :mode ("~/.ssh/config". ssh-config-mode))
@@ -1015,7 +1016,7 @@ otherwise it is scaled down."
 
 (unless garbage-collection-timer
   (setq garbage-collection-timer
-	      (run-with-idle-timer 60 t 'garbage-collect)))
+        (run-with-idle-timer 60 t 'garbage-collect)))
 
 (global-set-key "\C-x\C-b" 'ibuffer)
 
@@ -1025,3 +1026,4 @@ otherwise it is scaled down."
   :commands (ibuffer-vc-set-filter-groups-by-vc-root)
   :hook (ibuffer-mode . ibuffer-vc-set-filter-groups-by-vc-root)
   :init (define-key ibuffer-mode-map "K" 'ibuffer-kill-filter-group))
+

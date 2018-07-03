@@ -57,6 +57,7 @@ around point as the initial input."
   (spacemacs/set-leader-keys "hdv" 'counsel-describe-variable)
   (spacemacs/set-leader-keys "hdk" 'describe-key)
   (spacemacs/set-leader-keys "hdh" 'counsel-describe-symbol-history)
+  (spacemacs/set-leader-keys "hdl" 'view-lossage)
   (spacemacs/set-leader-keys "fJ" 'spacemacs/open-junk-file)
   (define-key evil-normal-state-map "sf" 'counsel-rg)
   (define-key evil-normal-state-map "sl" 'counsel-imenu)
@@ -77,6 +78,26 @@ around point as the initial input."
   (define-key evil-normal-state-map "so" 'counsel-recent-dir))
 
 (straight-use-package 'counsel-tramp)
+
+
+(use-package helpful
+  :straight t
+  :after counsel
+  :commands (helpful-variable helpful-key helpful-function)
+  :init
+  (spacemacs/set-leader-keys "hdv" 'helpful-variable)
+  (spacemacs/set-leader-keys "hdk" 'helpful-key)
+  (spacemacs/set-leader-keys "hdf" 'helpful-function)
+  (evil-define-key 'normal helpful-mode-map "Q"
+    (lambda ()
+      (interactive)
+      (quit-window)
+      (yq/delete-window)))
+  (evil-define-key 'normal helpful-mode-map "q"
+    (lambda ()
+      (interactive)
+      (kill-current-buffer)
+      (yq/delete-window))))
 
 (use-package ivy
   :straight t
@@ -184,6 +205,16 @@ around point as the initial input."
        (kill-this-buffer)
        (save-buffers-kill-terminal 't))))
   :config
+  (defun yq/find-lisp-find-dired (regexp)
+    "Find files in DIR, matching REGEXP."
+    (interactive "sMatching regexp: ")
+    (let ((find-lisp-regexp regexp))
+      (find-lisp-find-dired-internal
+       dired-directory
+       'find-lisp-default-file-predicate
+       'find-lisp-default-directory-predicate
+       "*Find Lisp Dired*")))
+  (evil-define-key 'normal dired-mode-map "F" 'yq/find-lisp-find-dired)
   (evil-define-key 'normal dired-mode-map (kbd ";") 'avy-goto-subword-1)
   ;; search file name only when focus is over file
   (setq dired-isearch-filenames 'dwim)
