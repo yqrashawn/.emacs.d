@@ -93,11 +93,11 @@ around point as the initial input."
       (interactive)
       (quit-window)
       (yq/delete-window)))
-  (evil-define-key 'normal helpful-mode-map "q"
-    (lambda ()
+  (defun yq/kill-buffer-and-window ()
       (interactive)
-      (kill-current-buffer)
-      (yq/delete-window))))
+    (kill-current-buffer)
+    (yq/delete-window))
+  (evil-define-key 'normal helpful-mode-map "q" 'yq/kill-buffer-and-window))
 
 (use-package ivy
   :straight t
@@ -443,9 +443,10 @@ FD-PROMPT, if non-nil, is passed as `ivy-read' prompt argument."
                       (counsel-delete-process)
                       (swiper--cleanup))
             :caller 'counsel-fd))
-
-(spacemacs/set-leader-keys "3" (lambda () (interactive) (find-file "~/Dropbox/ORG/gtd.org")))
-(spacemacs/set-leader-keys "4" (lambda () (interactive) (find-file "~/Dropbox/ORG/project.org")))
+(defun yq/find-org|gtd () (interactive) (find-file "~/Dropbox/ORG/gtd.org"))
+(defun yq/find-org|project () (interactive) (find-file "~/Dropbox/ORG/project.org"))
+(spacemacs/set-leader-keys "3" 'yq/find-org|gtd)
+(spacemacs/set-leader-keys "4" 'yq/find-org|project)
 ;; (spacemacs/set-leader-keys "sm" 'counsel-fd)
 
 (defun yq/org ()
@@ -511,9 +512,8 @@ When ARG is non-nil search in junk files."
         (funcall orig-fun str)))
 
   (advice-add 'evil-ex-execute :around 'evil-ex-fasd-eval)
-  (define-key evil-normal-state-map (kbd "C-f") (lambda ()
-                                                  (interactive)
-                                                  (evil-ex ":")))
+  (defun evil-ex: () (interactive) (evil-ex ":"))
+  (define-key evil-normal-state-map (kbd "C-f") 'evil-ex:)
   (global-fasd-mode 1))
 
 (use-package dired-rsync
