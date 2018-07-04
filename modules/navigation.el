@@ -220,7 +220,7 @@ The command run (after changing into DIR) is essentially
 
 except that the car of the variable `fd-ls-option' specifies what to
 use in place of \"-ls\" as the final argument."
-    (interactive (list (and current-prefix-arg (read-directory-name "Run find in directory: " nil "" t))
+    (interactive (list (and current-prefix-arg (read-directory-name "Run fd in directory: " nil "" t))
                        (read-string "Run fd (with args): " input-fd-args
                                     '(fd-args-history . 1))))
     (let ((dired-buffers dired-buffers))
@@ -229,21 +229,21 @@ use in place of \"-ls\" as the final argument."
       (setq dir (file-name-as-directory (expand-file-name (or dir default-directory))))
       ;; Check that it's really a directory.
       (or (file-directory-p dir)
-          (error "find-dired needs a directory: %s" dir))
-      (switch-to-buffer (get-buffer-create "*Find*"))
+          (error "fd-dired needs a directory: %s" dir))
+      (switch-to-buffer (get-buffer-create "*Fd*"))
 
-      ;; See if there's still a `find' running, and offer to kill
+      ;; See if there's still a `fd' running, and offer to kill
       ;; it first, if it is.
-      (let ((find (get-buffer-process (current-buffer))))
-        (when find
-          (if (or (not (eq (process-status find) 'run))
+      (let ((fd (get-buffer-process (current-buffer))))
+        (when fd
+          (if (or (not (eq (process-status fd) 'run))
                   (yes-or-no-p
-                   (format-message "A `find' process is running; kill it? ")))
+                   (format-message "A `fd' process is running; kill it? ")))
               (condition-case nil
                   (progn
-                    (interrupt-process find)
+                    (interrupt-process fd)
                     (sit-for 1)
-                    (delete-process find))
+                    (delete-process fd))
                 (error nil))
             (error "Cannot have two processes in `%s' at once" (buffer-name)))))
 
@@ -279,7 +279,7 @@ use in place of \"-ls\" as the final argument."
       (setq dired-sort-inhibit t)
       (set (make-local-variable 'revert-buffer-function)
            `(lambda (ignore-auto noconfirm)
-              (find-dired ,dir ,input-fd-args)))
+              (fd-dired ,dir ,input-fd-args)))
       ;; Set subdir-alist so that Tree Dired will work:
       (if (fboundp 'dired-simple-subdir-alist)
           ;; will work even with nested dired format (dired-nstd.el,v 1.15
@@ -527,3 +527,19 @@ When ARG is non-nil search in junk files."
 ;;   :init
 ;;   (setq session-save-file (expand-file-name "~/.emacs.d/.session"))
 ;;   (add-hook 'after-init-hook 'session-initialize))
+
+(use-package prescient
+  :straight t
+  :commands (prescient-persist-mode)
+  :init (prescient-persist-mode))
+(use-package ivy-prescient
+  :straight t
+  :commands (ivy-prescient-mode)
+  :init
+  (ivy-prescient-mode)
+  ;; (add-to-list ivy-prescient-excluded-commands 'counsel-fd)
+  )
+(use-package company-prescient
+  :straight t
+  :commands (company-prescient-mode)
+  :init (company-prescient-mode))
