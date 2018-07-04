@@ -136,52 +136,51 @@ around point as the initial input."
   (defun yq/ivy-call-kill-buffer-action ()
     "Call the current action without exiting completion."
     (interactive)
-    (unless
-        (or
-         ;; this is needed for testing in ivy-with which seems to call ivy-call
-         ;; again, and this-command is nil in that case.
-         (null this-command)
-         (memq this-command '(ivy-done
-                              ivy-alt-done
-                              ivy-dispatching-done)))
-      (setq ivy-current-prefix-arg current-prefix-arg))
-    (unless ivy-inhibit-action
-      (let ((action 'ivy--kill-buffer-action))
-        (when action
-          (let* ((collection (ivy-state-collection ivy-last))
-                 (x (cond
-                     ;; Alist type.
-                     ((and (consp collection)
-                           (consp (car collection))
-                           ;; Previously, the cdr of the selected
-                           ;; candidate would be returned.  Now, the
-                           ;; whole candidate is returned.
-                           (let (idx)
-                             (if (setq idx (get-text-property
-                                            0 'idx (ivy-state-current ivy-last)))
-                                 (nth idx collection)
-                               (assoc (ivy-state-current ivy-last)
-                                      collection)))))
-                     (ivy--directory
-                      (expand-file-name
-                       (ivy-state-current ivy-last)
-                       ivy--directory))
-                     ((equal (ivy-state-current ivy-last) "")
-                      ivy-text)
-                     (t
-                      (ivy-state-current ivy-last)))))
-            (if (eq action 'identity)
-                (funcall action x)
-              (select-window (ivy--get-window ivy-last))
-              (set-buffer (ivy-state-buffer ivy-last))
-              (prog1 (with-current-buffer (ivy-state-buffer ivy-last)
-                       (unwind-protect (funcall action x)
-                         (ivy-recursive-restore)))
-                (unless (or (eq ivy-exit 'done)
-                            (equal (selected-window)
-                                   (active-minibuffer-window))
-                            (null (active-minibuffer-window)))
-                  (select-window (active-minibuffer-window))))))))))
+    ;; (unless
+    ;;     (or
+    ;;      ;; this is needed for testing in ivy-with which seems to call ivy-call
+    ;;      ;; again, and this-command is nil in that case.
+    ;;      (null this-command)
+    ;;      (memq this-command '(ivy-done
+    ;;                           ivy-alt-done
+    ;;                           ivy-dispatching-done)))
+    ;;   (setq ivy-current-prefix-arg current-prefix-arg))
+    (let ((action 'ivy--kill-buffer-action))
+      (when action
+      (let* ((collection (ivy-state-collection ivy-last))
+             (x (cond
+                 ;; Alist type.
+                 ((and (consp collection)
+                       (consp (car collection))
+                       ;; Previously, the cdr of the selected
+                       ;; candidate would be returned.  Now, the
+                       ;; whole candidate is returned.
+                       (let (idx)
+                         (if (setq idx (get-text-property
+                                        0 'idx (ivy-state-current ivy-last)))
+                             (nth idx collection)
+                           (assoc (ivy-state-current ivy-last)
+                                  collection)))))
+                 (ivy--directory
+                  (expand-file-name
+                   (ivy-state-current ivy-last)
+                   ivy--directory))
+                 ((equal (ivy-state-current ivy-last) "")
+                  ivy-text)
+                 (t
+                  (ivy-state-current ivy-last)))))
+        (if (eq action 'identity)
+            (funcall action x)
+          (select-window (ivy--get-window ivy-last))
+          (set-buffer (ivy-state-buffer ivy-last))
+          (prog1 (with-current-buffer (ivy-state-buffer ivy-last)
+                   (unwind-protect (funcall action x)
+                     (ivy-recursive-restore)))
+            (unless (or (eq ivy-exit 'done)
+                        (equal (selected-window)
+                               (active-minibuffer-window))
+                        (null (active-minibuffer-window)))
+              (select-window (active-minibuffer-window)))))))))
 
   (defhydra hydra-ivy (:hint nil
                              :color pink)
