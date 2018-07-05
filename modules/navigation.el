@@ -128,6 +128,100 @@ around point as the initial input."
                  'spacemacs//counsel-occur)
   (evil-make-overriding-map ivy-occur-mode-map 'normal)
   (define-key evil-normal-state-map "sb" 'ivy-switch-buffer))
+
+(use-package ivy-hydra
+  :straight t
+  :after ivy
+  :config
+  (defun yq/ivy-call-kill-buffer-action ()
+    "Call the current action without exiting completion."
+    (interactive)
+    ;; (unless
+    ;;     (or
+    ;;      ;; this is needed for testing in ivy-with which seems to call ivy-call
+    ;;      ;; again, and this-command is nil in that case.
+    ;;      (null this-command)
+    ;;      (memq this-command '(ivy-done
+    ;;                           ivy-alt-done
+    ;;                           ivy-dispatching-done)))
+    ;;   (setq ivy-current-prefix-arg current-prefix-arg))
+    (let ((action 'ivy--kill-buffer-action))
+      (when action
+      (let* ((collection (ivy-state-collection ivy-last))
+             (x (cond
+                 ;; Alist type.
+                 ((and (consp collection)
+                       (consp (car collection))
+                       ;; Previously, the cdr of the selected
+                       ;; candidate would be returned.  Now, the
+                       ;; whole candidate is returned.
+                       (let (idx)
+                         (if (setq idx (get-text-property
+                                        0 'idx (ivy-state-current ivy-last)))
+                             (nth idx collection)
+                           (assoc (ivy-state-current ivy-last)
+                                  collection)))))
+                 (ivy--directory
+                  (expand-file-name
+                   (ivy-state-current ivy-last)
+                   ivy--directory))
+                 ((equal (ivy-state-current ivy-last) "")
+                  ivy-text)
+                 (t
+                  (ivy-state-current ivy-last)))))
+        (if (eq action 'identity)
+            (funcall action x)
+          (select-window (ivy--get-window ivy-last))
+          (set-buffer (ivy-state-buffer ivy-last))
+          (prog1 (with-current-buffer (ivy-state-buffer ivy-last)
+                   (unwind-protect (funcall action x)
+                     (ivy-recursive-restore)))
+            (unless (or (eq ivy-exit 'done)
+                        (equal (selected-window)
+                               (active-minibuffer-window))
+                        (null (active-minibuffer-window)))
+              (select-window (active-minibuffer-window)))))))))
+
+  (defhydra hydra-ivy (:hint nil
+                             :color pink)
+    "
+^ ^ ^ ^ ^ ^ | ^Call^      ^ ^  | ^Cancel^ | ^Options^ | Action _w_/_s_/_a_: %-14s(ivy-action-name)
+^-^-^-^-^-^-+-^-^---------^-^--+-^-^------+-^-^-------+-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^---------------------------
+^ ^ _k_ ^ ^ | _f_ollow occ_u_r | _i_nsert | _c_: calling %-5s(if ivy-calling \"on\" \"off\") _C_ase-fold: %-10`ivy-case-fold-search
+_h_ ^+^ _l_ | _d_one      ^ ^  | _o_ops   | _m_: matcher %-5s(ivy--matcher-desc)^^^^^^^^^^^^ _t_runcate: %-11`truncate-lines
+^ ^ _j_ ^ ^ | _g_o        ^ ^  | ^ ^      | _<_/_>_: shrink/grow _q_uit _x_ kill buffer^^ _D_efinition of this menu
+"
+    ;; arrows
+    ("h" ivy-beginning-of-buffer)
+    ("j" ivy-next-line)
+    ("k" ivy-previous-line)
+    ("l" ivy-end-of-buffer)
+    ;; actions
+    ("o" keyboard-escape-quit :exit t)
+    ("C-g" keyboard-escape-quit :exit t)
+    ("i" nil)
+    ("C-o" nil)
+    ("f" ivy-alt-done :exit nil)
+    ("C-j" ivy-alt-done :exit nil)
+    ("d" ivy-done :exit t)
+    ("g" ivy-call)
+    ("C-m" ivy-done :exit t)
+    ("c" ivy-toggle-calling)
+    ("m" ivy-rotate-preferred-builders)
+    (">" ivy-minibuffer-grow)
+    ("<" ivy-minibuffer-shrink)
+    ("w" ivy-prev-action)
+    ("s" ivy-next-action)
+    ("a" ivy-read-action)
+    ("x" yq/ivy-call-kill-buffer-action)
+    ("t" (setq truncate-lines (not truncate-lines)))
+    ("C" ivy-toggle-case-fold)
+    ("u" ivy-occur :exit t)
+    ("q" (ivy-exit-with-action (lambda (_))) :exit t)
+    ("D" (ivy-exit-with-action
+          (lambda (_) (find-function 'hydra-ivy/body)))
+     :exit t))
+  )
 
 (use-package wgrep
   :straight t
