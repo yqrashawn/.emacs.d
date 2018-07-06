@@ -77,7 +77,11 @@ around point as the initial input."
       (ivy-read "directories:" cands :action 'dired)))
   (define-key evil-normal-state-map "so" 'counsel-recent-dir))
 
-(straight-use-package 'counsel-tramp)
+(use-package counsel-tramp
+  :straight t
+  :commands (counsel-tramp)
+  :init
+  (spacemacs/set-leader-keys "fT" 'counsel-tramp))
 
 
 (use-package helpful
@@ -472,6 +476,7 @@ FD-PROMPT, if non-nil, is passed as `ivy-read' prompt argument."
   (spacemacs/set-leader-keys "pF" 'find-relative-path)
   (spacemacs/set-leader-keys "sm" 'find-file-in-project)
   (spacemacs/set-leader-keys "sM" 'find-relative-path)
+  (evil-define-key 'normal dired-mode-map "sm" 'find-file-in-project)
   (define-key evil-normal-state-map "sm" 'find-file-in-project)
   (define-key evil-normal-state-map "sM" 'find-relative-path))
 
