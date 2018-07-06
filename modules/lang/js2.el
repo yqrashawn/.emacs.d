@@ -86,11 +86,8 @@
   :hook (js2-mode . prettier-js-mode)
   :hook (rjsx-mode . prettier-js-mode)
   :hook (typescript-mode . prettier-js-mode)
-  :init
+  :config
   (yq/add-toggle prettier-js :mode prettier-js-mode)
-  ;; (add-hook 'js2-mode-hook 'prettier-js-mode)
-  ;; (add-hook 'rjsx-mode-hook 'prettier-js-mode)
-  ;; (add-hook 'typescript-mode-hook 'prettier-js-mode)
   (evil-define-key 'normal js2-mode-map ",=" 'prettier-js)
   (evil-define-key 'normal js2-mode-map ",tp" 'yq/toggle-prettier-js))
 
