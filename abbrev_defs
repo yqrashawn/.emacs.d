@@ -536,7 +536,6 @@
     ("hvae" "have" nil :count 0)
     ("hvaing" "having" nil :count 0)
     ("hwich" "which" nil :count 0)
-    ("i" "I" nil :count 0)
     ("idae" "idea" nil :count 0)
     ("idaes" "ideas" nil :count 0)
     ("identifiy" "identify" nil :count 0)
