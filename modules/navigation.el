@@ -551,3 +551,10 @@ When ARG is non-nil search in junk files."
 ;;   :straight (:host github :repo "casouri/ivy-filthy-rich")
 ;;   :commands (ivy-filthy-rich-mode)
 ;;   :init (ivy-filthy-rich-mode))
+
+;; (use-package deadgrep
+;;   :straight t
+;;   :commands (deadgrep)
+;;   :config
+;;   (evil-define-key 'normal deadgrep-mode-map (kbd "RET") 'deadgrep-visit-result)
+;;   (evil-define-key 'normal deadgrep-mode-map (kbd "TAB") 'deadgrep-toggle-file-results))
