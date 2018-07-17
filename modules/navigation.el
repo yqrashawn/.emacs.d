@@ -151,40 +151,40 @@ around point as the initial input."
     ;;   (setq ivy-current-prefix-arg current-prefix-arg))
     (let ((action 'ivy--kill-buffer-action))
       (when action
-      (let* ((collection (ivy-state-collection ivy-last))
-             (x (cond
-                 ;; Alist type.
-                 ((and (consp collection)
-                       (consp (car collection))
-                       ;; Previously, the cdr of the selected
-                       ;; candidate would be returned.  Now, the
-                       ;; whole candidate is returned.
-                       (let (idx)
-                         (if (setq idx (get-text-property
-                                        0 'idx (ivy-state-current ivy-last)))
-                             (nth idx collection)
-                           (assoc (ivy-state-current ivy-last)
-                                  collection)))))
-                 (ivy--directory
-                  (expand-file-name
-                   (ivy-state-current ivy-last)
-                   ivy--directory))
-                 ((equal (ivy-state-current ivy-last) "")
-                  ivy-text)
-                 (t
-                  (ivy-state-current ivy-last)))))
-        (if (eq action 'identity)
-            (funcall action x)
-          (select-window (ivy--get-window ivy-last))
-          (set-buffer (ivy-state-buffer ivy-last))
-          (prog1 (with-current-buffer (ivy-state-buffer ivy-last)
-                   (unwind-protect (funcall action x)
-                     (ivy-recursive-restore)))
-            (unless (or (eq ivy-exit 'done)
-                        (equal (selected-window)
-                               (active-minibuffer-window))
-                        (null (active-minibuffer-window)))
-              (select-window (active-minibuffer-window)))))))))
+        (let* ((collection (ivy-state-collection ivy-last))
+               (x (cond
+                   ;; Alist type.
+                   ((and (consp collection)
+                         (consp (car collection))
+                         ;; Previously, the cdr of the selected
+                         ;; candidate would be returned.  Now, the
+                         ;; whole candidate is returned.
+                         (let (idx)
+                           (if (setq idx (get-text-property
+                                          0 'idx (ivy-state-current ivy-last)))
+                               (nth idx collection)
+                             (assoc (ivy-state-current ivy-last)
+                                    collection)))))
+                   (ivy--directory
+                    (expand-file-name
+                     (ivy-state-current ivy-last)
+                     ivy--directory))
+                   ((equal (ivy-state-current ivy-last) "")
+                    ivy-text)
+                   (t
+                    (ivy-state-current ivy-last)))))
+          (if (eq action 'identity)
+              (funcall action x)
+            (select-window (ivy--get-window ivy-last))
+            (set-buffer (ivy-state-buffer ivy-last))
+            (prog1 (with-current-buffer (ivy-state-buffer ivy-last)
+                     (unwind-protect (funcall action x)
+                       (ivy-recursive-restore)))
+              (unless (or (eq ivy-exit 'done)
+                          (equal (selected-window)
+                                 (active-minibuffer-window))
+                          (null (active-minibuffer-window)))
+                (select-window (active-minibuffer-window)))))))))
 
   (defhydra hydra-ivy (:hint nil
                              :color pink)
@@ -551,3 +551,21 @@ When ARG is non-nil search in junk files."
 ;;   :straight (:host github :repo "casouri/ivy-filthy-rich")
 ;;   :commands (ivy-filthy-rich-mode)
 ;;   :init (ivy-filthy-rich-mode))
+
+(use-package ibuffer-sidebar
+  :straight t
+  :commands (ibuffer-sidebar-toggle-sidebar)
+  :init
+  (add-to-list 'ibuffer-never-show-predicates "^\\*Ibuffer")
+  (add-to-list 'ibuffer-never-show-predicates "^\\*Straight")
+  (add-to-list 'ibuffer-never-show-predicates "^\\*scratch")
+  (add-to-list 'ibuffer-never-show-predicates "^\\*Messages")
+  (add-to-list 'ibuffer-never-show-predicates "^\\*Warnings")
+  (add-to-list 'ibuffer-never-show-predicates "^\\*:Buffers:")
+  (add-to-list 'ibuffer-never-show-predicates "^\\*mu4e")
+  (add-to-list 'ibuffer-never-show-predicates "^\\*Help")
+  (spacemacs/set-leader-keys "5" 'ibuffer-sidebar-toggle-sidebar)
+  (yq/update-evil-emacs-state-modes 'ibuffer-mode)
+  (push 'ibuffer-mode evil-insert-state-modes)
+  (define-key ibuffer-mode-map "j" 'ibuffer-forward-line)
+  (define-key ibuffer-mode-map "k" 'ibuffer-backward-line))
