@@ -88,7 +88,7 @@
   (evil-define-key 'normal mu4e-main-mode-map "j" 'mu4e~headers-jump-to-maildir)
   (evil-define-key 'normal mu4e-main-mode-map (kbd "C-j") 'next-line)
   (evil-define-key 'normal mu4e-main-mode-map (kbd "C-k") 'previous-line)
-  (evil-define-key 'normal mu4e-main-mode-map "q" 'mu4e-quit)
+  (evil-define-key 'normal mu4e-main-mode-map "q" 'quit-window)
   (evil-define-key 'normal mu4e-main-mode-map "b" 'mu4e-headers-search-bookmark)
   (evil-define-key 'normal mu4e-headers-mode-map (kbd "C-j") 'next-line)
   (evil-define-key 'normal mu4e-headers-mode-map (kbd "C-k") 'previous-line)

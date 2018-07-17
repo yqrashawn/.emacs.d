@@ -58,6 +58,24 @@
 (use-package magit
   :straight t
   :config
+  ;; https://emacs-pe.github.io/2015/06/30/magit-github-pr/
+  (defun marsam/add-pull-request-refs (&optional remote local-ns)
+    "Set pull requests refs from a REMOTE with LOCAL-NS namespace into Git config."
+    (interactive (let* ((remote (magit-read-remote "Fetch remote"))
+                        (local-ns (read-string "local namespace: " (format "%s/pr" remote))))
+                   (list remote local-ns)))
+    (and (not (magit-get-boolean "core" "disableprref"))
+         (let* ((remote (or remote "origin"))
+                (local-ns (if (or (null local-ns) (string= "" local-ns)) (format "%s/pr" remote) local-ns))
+                (pr-refs (format "+refs/pull/*/head:refs/remotes/%s/*" local-ns))
+                (remote-fetch-refs (magit-get-all "remote" remote "fetch")))
+           (and remote-fetch-refs
+                (not (magit-get-boolean "remote" remote "disableprref"))
+                (not (member pr-refs remote-fetch-refs))
+                (string-match "github.com" (magit-get "remote" remote "url"))
+                (magit-git-string "config" "--add" (format "remote.%s.fetch" remote) pr-refs)))))
+
+  (add-hook 'magit-mode-hook 'marsam/add-pull-request-refs)
   (let ((maps (list magit-status-mode-map magit-log-mode-map magit-reflog-mode-map magit-diff-mode-map)))
     (dolist (map maps)
       (evil-define-key 'normal map "j" 'magit-next-line)
