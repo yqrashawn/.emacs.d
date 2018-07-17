@@ -172,8 +172,9 @@
                       ))
 
   ;; cider-repl-mode only
-  (evil-define-key 'normal cider-repl-mode-map
-    ",," 'cider-repl-handle-shortcut)
+  (evil-define-key 'normal cider-repl-mode-map ",," 'cider-repl-handle-shortcut)
+  (evil-define-key 'insert cider-repl-mode-map (kbd "RET" ) 'cider-repl-closing-return)
+  (evil-define-key 'insert cider-repl-mode-map (kbd "<C-return>" ) 'newline-and-indent)
   :config
   ;; add support for golden-ratio
   (with-eval-after-load 'golden-ratio

@@ -6,9 +6,9 @@
   (yq/update-evil-emacs-state-modes 'pdf-view-mode)
   (yq/update-evil-emacs-state-modes 'pdf-outline-buffer-mode)
   (yq/update-evil-emacs-state-modes 'pdf-annot-list-mode)
-  :config
   ;; initialise
   (pdf-tools-install)
+  :config
   ;; open pdfs scaled to fit page
   (setq-default pdf-view-display-size 'fit-page)
   ;; automatically annotate highlights

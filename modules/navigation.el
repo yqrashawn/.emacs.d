@@ -569,3 +569,10 @@ When ARG is non-nil search in junk files."
   (push 'ibuffer-mode evil-insert-state-modes)
   (define-key ibuffer-mode-map "j" 'ibuffer-forward-line)
   (define-key ibuffer-mode-map "k" 'ibuffer-backward-line))
+
+;; (use-package deadgrep
+;;   :straight t
+;;   :commands (deadgrep)
+;;   :config
+;;   (evil-define-key 'normal deadgrep-mode-map (kbd "RET") 'deadgrep-visit-result)
+;;   (evil-define-key 'normal deadgrep-mode-map (kbd "TAB") 'deadgrep-toggle-file-results))
