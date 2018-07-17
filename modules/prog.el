@@ -109,6 +109,8 @@ Available PROPS:
         company-minimum-prefix-length 2
         company-require-match nil
         company-dabbrev-ignore-case t
+        company-tooltip-align-annotations t
+        company-tooltip-flip-when-above t
         company-dabbrev-downcase nil
         company-dabbrev-minimum-length 2
         company-dabbrev-time-limit .5
