@@ -37,7 +37,14 @@ file stored in the cache directory and `nil' to disable auto-saving.")
 (setq user-mail-address "namy.19@gmail.com")
 
 (setq source-directory (concat user-home-directory "emacs"))
+(size-indication-mode t)
 
+;; more useful frame title, that show either a file or a
+;; buffer name (if the buffer isn't visiting a file)
+(setq frame-title-format
+      '((:eval (if (buffer-file-name)
+                   (abbreviate-file-name (buffer-file-name))
+                 "%b"))))
 
 (add-hook 'prog-mode-hook 'goto-address-prog-mode)
 (add-hook 'prog-mode-hook 'bug-reference-prog-mode)
@@ -69,7 +76,7 @@ file stored in the cache directory and `nil' to disable auto-saving.")
   (define-key comint-mode-map (kbd "C-d") nil))
 (setq window-combination-resize t)
 (setq column-number-mode t)
-(blink-cursor-mode 0)
+(blink-cursor-mode -1)
 (setq x-underline-at-descent-line t)
 ;; don't let the cursor go into minibuffer prompt
 ;; Tip taken from Xah Lee: http://ergoemacs.org/emacs/emacs_stop_cursor_enter_prompt.html
@@ -306,7 +313,7 @@ If the universal prefix argument is used then kill the buffer too."
               (unless recentf-mode
                 (recentf-mode)
                 (recentf-track-opened-file))))
-  (setq recentf-save-file (concat spacemacs-cache-directory "recentf")
+  (setq recentf-save-file (concat user-emacs-directory "recentf")
         recentf-max-saved-items 10000
         recentf-auto-cleanup 'never
         recentf-auto-save-timer (run-with-idle-timer 600 t
@@ -341,6 +348,7 @@ If the universal prefix argument is used then kill the buffer too."
                          ;; "/home/[a-z]\+/\\.[a-df-z]" ; configuration file should not be excluded
                          )))
 
+;; saveplace remembers your location in a file when saving files
 (use-package saveplace
   :init
   (if (fboundp 'save-place-mode)
@@ -1040,3 +1048,24 @@ otherwise it is scaled down."
 
 (global-set-key (kbd "C-x \\") #'align-regexp)
 (setq tab-always-indent 'complete)
+
+;; nice scroll
+;; (setq scroll-margin 0
+;;       scroll-conservatively 100000
+;;       scroll-preserve-screen-position 1)
+
+(use-package uniquify
+  :straight t
+  :config
+  (setq uniquify-buffer-name-style 'forward)
+  (setq uniquify-separator "/")
+  ;; rename after killing uniquified
+  (setq uniquify-after-kill-buffer-p t)
+  ;; don't muck with special buffers
+  (setq uniquify-ignore-buffers-re "^\\*"))
+
+;; auto save buffers when they lost focus
+;; (use-package super-save
+;;   :ensure t
+;;   :config
+;; (super-save-mode +1))

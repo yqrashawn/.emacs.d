@@ -9,6 +9,9 @@
   :diminish undo-tree-mode
   :defer t
   :config
+  (setq undo-tree-history-directory-alist
+        `((".*" . ,temporary-file-directory)))
+  (setq undo-tree-auto-save-history t)
   (global-undo-tree-mode)
   (global-set-key (kbd "s-y") 'undo-tree-redo))
 

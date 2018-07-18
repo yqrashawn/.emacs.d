@@ -5,7 +5,11 @@
 ;;                              (float-time
 ;;                               (time-subtract after-init-time before-init-time)))
 ;;                      gcs-done)))
-(tool-bar-mode -1)
+;; Always load newest byte code
+(setq load-prefer-newer t)
+
+(when (fboundp 'tool-bar-mode)
+  (tool-bar-mode -1))
 (toggle-scroll-bar -1)
 (menu-bar-mode -1)
 ;; (package-initialize)
