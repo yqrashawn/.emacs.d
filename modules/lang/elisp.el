@@ -1,17 +1,43 @@
 (yq/add-toggle parinfer :mode parinfer-mode)
+
 (defun yq/toggle-parinfer-mode ()
   (interactive)
   (if (bound-and-true-p parinfer-mode)
       (parinfer-mode -1)
     (parinfer-mode 1)))
 
+(defun crux-start-or-switch-to (function buffer-name)
+  "Invoke FUNCTION if there is no buffer with BUFFER-NAME.
+Otherwise switch to the buffer named BUFFER-NAME.  Don't clobber
+the current buffer."
+  (if (not (get-buffer buffer-name))
+      (progn
+        (split-window-sensibly (selected-window))
+        (other-window 1)
+        (funcall function))
+    (switch-to-buffer-other-window buffer-name)))
+
+(use-package ielm
+  :straight t
+  :init
+  (define-key inferior-emacs-lisp-mode-map (kbd "C-c C-z") 'kill-buffer-and-window)
+  :config (add-hook 'ielm-mode-hook #'rainbow-delimiters-mode))
 (use-package elisp-mode
   :mode ("\\.el\\'" . emacs-lisp-mode)
   :diminish emacs-lisp-mode "elisp"
   :commands (emacs-lisp-mode)
   :config
+  (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
+  (defun bozhidar-visit-ielm ()
+    "Switch to default `ielm' buffer.
+Start `ielm' if it's not already running."
+    (interactive)
+    (crux-start-or-switch-to 'ielm "*ielm*"))
+  (define-key emacs-lisp-mode-map (kbd "C-c C-z") #'bozhidar-visit-ielm)
   (spacemacs|define-jump-handlers emacs-lisp-mode)
   (spacemacs|define-jump-handlers lisp-interaction-mode)
+  (define-key emacs-lisp-mode-map (kbd "C-c C-c") #'eval-defun)
+  (define-key emacs-lisp-mode-map (kbd "C-c C-b") #'eval-buffer)
   (evil-define-key 'normal emacs-lisp-mode-map "," nil)
   (evil-define-key 'normal emacs-lisp-mode-map ",m" 'yq/toggle-parinfer)
   (evil-define-key 'normal emacs-lisp-mode-map ",cc" 'emacs-lisp-byte-compile)
