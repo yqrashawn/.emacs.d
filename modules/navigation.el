@@ -61,7 +61,6 @@ around point as the initial input."
   (spacemacs/set-leader-keys "fJ" 'spacemacs/open-junk-file)
   (define-key evil-normal-state-map "sf" 'counsel-rg)
   (define-key evil-normal-state-map "sl" 'counsel-imenu)
-  (define-key evil-normal-state-map "sL" 'spacemacs/swiper-all-region-or-symbol)
   (define-key evil-normal-state-map "sj" 'counsel-recentf)
   (define-key evil-normal-state-map (kbd "M-y" ) 'counsel-yank-pop)
   (defun counsel-recent-dir ()
@@ -76,6 +75,11 @@ around point as the initial input."
                                (split-string (shell-command-to-string "fasd -ld") "\n" t))))))
       (ivy-read "directories:" cands :action 'dired)))
   (define-key evil-normal-state-map "so" 'counsel-recent-dir))
+
+(use-package imenu-anywhere
+  :straight t
+  :commands (imenu-anywhere)
+  :init (define-key evil-normal-state-map "sL" 'imenu-anywhere))
 
 (use-package counsel-tramp
   :straight t
@@ -109,6 +113,7 @@ around point as the initial input."
   :config
   (ivy-mode 1)
   (setq ivy-height 16)
+  ;; (setq ivy-use-virtual-buffers t)
   (defun yq/ivy-evil-registers ()
     "Show evil registers"
     (interactive)
@@ -230,16 +235,6 @@ _h_ ^+^ _l_ | _d_one      ^ ^  | _o_ops   | _m_: matcher %-5s(ivy--matcher-desc)
 (use-package wgrep
   :straight t
   :defer t)
-
-(use-package avy
-  :straight t
-  :bind (("s-." . avy-goto-word-or-subword-1)
-         ("s-," . avy-goto-char))
-  :init
-  (global-set-key (kbd "s-.") 'avy-goto-word-or-subword-1)
-  (global-set-key (kbd "s-,") 'avy-goto-char)
-  :config
-  (setq avy-background t))
 
 (use-package smex
   :straight t
