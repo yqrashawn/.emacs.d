@@ -440,6 +440,17 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   :straight t
   :hook (prog-mode . hl-todo-mode))
 
-(use-package magit-todos
-  :straight (:host github :repo "alphapapa/magit-todos")
-  :hook (magit-status-mode . magit-todos-mode))
+;; (use-package magit-todos
+;;   :straight (:host github :repo "alphapapa/magit-todos")
+;;   :hook (magit-status-mode . magit-todos-mode))
+
+(use-package rainbow-delimiters
+  :straight t
+  :ensure t
+  :defer t)
+
+(use-package zop-to-char
+  :straight t
+  :init
+  (evil-define-key '(normal insert) 'global (kbd "s-m") 'zop-up-to-char)
+  (evil-define-key '(normal insert) 'global (kbd "s-M") 'zop-to-char))

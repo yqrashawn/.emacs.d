@@ -52,6 +52,7 @@
     cider-repl-mode)
   (add-hook 'cider-mode-hook 'eldoc-mode)
   (add-hook 'cider-repl-mode-hook 'eldoc-mode)
+  (add-hook 'cider-repl-mode-hook #'rainbow-delimiters-mode)
   (add-hook 'cider-clojure-interaction-mode-hook 'eldoc-mode)
   (spacemacs/register-repl 'cider 'cider-jack-in "cider")
   (setq cider-stacktrace-default-filters '(tooling dup)
@@ -60,6 +61,7 @@
         cider-repl-use-clojure-font-lock t
         cider-repl-history-file (concat spacemacs-cache-directory "cider-repl-history"))
   (add-hook 'clojure-mode-hook 'cider-mode)
+  (add-hook 'clojure-mode-hook #'rainbow-delimiters-mode)
   (dolist (x '(spacemacs-jump-handlers-clojure-mode
                spacemacs-jump-handlers-clojurec-mode
                spacemacs-jump-handlers-clojurescript-mode
@@ -71,7 +73,6 @@
   (add-hook 'clojurescript-mode-hook #'spacemacs//init-jump-handlers-clojurescript-mode)
   (add-hook 'clojurec-mode-hook #'spacemacs//init-jump-handlers-clojurec-mode)
   (add-hook 'cider-repl-mode-hook #'spacemacs//init-jump-handlers-cider-repl-mode)
-
   :config
   ;; TODO: having this work for cider-macroexpansion-mode would be nice,
   ;;       but the problem is that it uses clojure-mode as its major-mode
