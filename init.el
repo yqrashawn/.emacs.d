@@ -8,6 +8,7 @@
 (tool-bar-mode -1)
 (toggle-scroll-bar -1)
 (menu-bar-mode -1)
+;; (package-initialize)
 (setq scroll-bar-background nil)
 (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
 (add-to-list 'default-frame-alist '(ns-appearance . 'dark)) ; or 'dark, to switch to white title text
@@ -17,7 +18,6 @@
 (setq url-configuration-directory (concat spacemacs-cache-directory "url/"))
 (setq custom-file (concat yq-emacs-cache-dir ".custom-settings"))
 (load-file custom-file)
-(package-initialize)
 
 (setq url-proxy-services
       '(("http" . "127.0.0.1:6152")

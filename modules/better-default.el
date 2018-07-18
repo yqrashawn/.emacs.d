@@ -1038,3 +1038,5 @@ otherwise it is scaled down."
   :hook (ibuffer-mode . ibuffer-vc-set-filter-groups-by-vc-root)
   :init (define-key ibuffer-mode-map "K" 'ibuffer-kill-filter-group))
 
+(global-set-key (kbd "C-x \\") #'align-regexp)
+(setq tab-always-indent 'complete)

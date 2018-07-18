@@ -231,6 +231,16 @@ _h_ ^+^ _l_ | _d_one      ^ ^  | _o_ops   | _m_: matcher %-5s(ivy--matcher-desc)
   :straight t
   :defer t)
 
+(use-package avy
+  :straight t
+  :bind (("s-." . avy-goto-word-or-subword-1)
+         ("s-," . avy-goto-char))
+  :init
+  (global-set-key (kbd "s-.") 'avy-goto-word-or-subword-1)
+  (global-set-key (kbd "s-,") 'avy-goto-char)
+  :config
+  (setq avy-background t))
+
 (use-package smex
   :straight t
   :init
