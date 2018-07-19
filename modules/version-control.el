@@ -22,6 +22,11 @@
 (use-package magit
   :straight t
   :config
+  ;; add submodule in magit-status buffer
+  ;; https://emacs.stackexchange.com/a/39009/14357
+  (magit-add-section-hook 'magit-status-sections-hook
+                          'magit-insert-modules-overview
+                          'magit-insert-unpulled-from-upstream)
   ;; https://emacs-pe.github.io/2015/06/30/magit-github-pr/
   (defun marsam/add-pull-request-refs (&optional remote local-ns)
     "Set pull requests refs from a REMOTE with LOCAL-NS namespace into Git config."
