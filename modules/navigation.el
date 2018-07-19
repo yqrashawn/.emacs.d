@@ -27,8 +27,10 @@ around point as the initial input."
 (use-package swiper
   :straight t
   :config
-  (global-set-key (kbd "C-SPC") 'counsel-grep-or-swiper)
-  (global-set-key (kbd "^@") 'counsel-grep-or-swiper)
+  ;; (global-set-key (kbd "C-SPC") 'counsel-grep-or-swiper)
+  ;; (global-set-key (kbd "^@") 'counsel-grep-or-swiper)
+  (global-set-key (kbd "C-SPC") 'swiper)
+  (global-set-key (kbd "^@") 'swiper)
   (global-set-key (kbd "C-S-SPC") 'yq/swiper-region-or-symbol))
 
 (use-package counsel

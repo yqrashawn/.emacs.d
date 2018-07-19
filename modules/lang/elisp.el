@@ -19,9 +19,8 @@ the current buffer."
 
 (use-package ielm
   :straight t
-  :init
-  (define-key inferior-emacs-lisp-mode-map (kbd "C-c C-z") 'kill-buffer-and-window)
-  :config (add-hook 'ielm-mode-hook #'rainbow-delimiters-mode))
+  :init(add-hook 'ielm-mode-hook #'rainbow-delimiters-mode)
+  :config (define-key inferior-emacs-lisp-mode-map (kbd "C-c C-z") 'kill-buffer-and-window))
 (use-package elisp-mode
   :mode ("\\.el\\'" . emacs-lisp-mode)
   :diminish emacs-lisp-mode "elisp"

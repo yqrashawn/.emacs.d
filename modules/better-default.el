@@ -1055,7 +1055,6 @@ otherwise it is scaled down."
 ;;       scroll-preserve-screen-position 1)
 
 (use-package uniquify
-  :straight t
   :config
   (setq uniquify-buffer-name-style 'forward)
   (setq uniquify-separator "/")
@@ -1066,6 +1065,5 @@ otherwise it is scaled down."
 
 ;; auto save buffers when they lost focus
 ;; (use-package super-save
-;;   :ensure t
 ;;   :config
 ;; (super-save-mode +1))
