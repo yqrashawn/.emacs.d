@@ -446,7 +446,6 @@ is not visible. Otherwise delegates to regular Emacs next-error."
 
 (use-package rainbow-delimiters
   :straight t
-  :ensure t
   :defer t)
 
 (use-package zop-to-char
