@@ -263,7 +263,8 @@ _h_ ^+^ _l_ | _d_one      ^ ^  | _o_ops   | _m_: matcher %-5s(ivy--matcher-desc)
   (defun yq/find-emacsd-modules ()
     "find file in .emacs.d"
     (interactive) (counsel-projectile-switch-project-by-name "~/.emacs.d"))
-  (spacemacs/set-leader-keys "fef" 'yq/find-emacsd-modules))
+  (spacemacs/set-leader-keys "fef" 'yq/find-emacsd-modules)
+  (spacemacs/set-leader-keys "fel" 'counsel-find-library))
 
 (yq/get-modules "counsel-funcs.el")
 (spacemacs/set-leader-keys "s" nil)
