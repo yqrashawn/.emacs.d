@@ -44,12 +44,13 @@ and 'typescript-formatter .")
   (add-hook 'typescript-mode-hook 'tide-hl-identifier-mode)
   (spacemacs|define-jump-handlers typescript-mode)
   (spacemacs|define-jump-handlers js2-mode)
+  (advice-add 'tide-setup :before-until 'yq/scratch-buffer-p)
   (evilified-state-evilify tide-references-mode tide-references-mode-map
     (kbd "C-k") 'tide-find-previous-reference
     (kbd "C-j") 'tide-find-next-reference
     (kbd "C-l") 'tide-goto-reference)
-  (add-hook 'typescript-mode-hook 'tide-setup)
-  (add-hook 'js2-mode-hook 'tide-setup)
+  (add-hook 'typescript-mode-hook 'yq/tide-setup)
+  (add-hook 'js2-mode-hook 'yq/tide-setup)
   (add-to-list 'spacemacs-jump-handlers-js2-mode
                '(tide-jump-to-definition :async t))
   (add-to-list 'spacemacs-jump-handlers-typescript-mode
