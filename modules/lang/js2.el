@@ -140,8 +140,31 @@
   :commands (indium-interaction-mode indium-run-node indium-run-chrome indium-debugger-mode)
   :init (setq indium-nodejs-inspect-brk nil)
   :config
+  (defun yq/indium-run-node (command)
+    "do not switch the process buffer compared to the original indium-run-node"
+    (interactive (list (read-shell-command "Node command: "
+                                           (or (car indium-nodejs-commands-history) "node ")
+                                           'indium-nodejs-commands-history)))
+    (indium-maybe-quit)
+    (unless indium-current-connection
+      (make-process :name "indium-nodejs-process"
+				            :buffer "*node process*"
+				            :filter #'indium-nodejs--process-filter
+				            :command (list shell-file-name
+						                       shell-command-switch
+						                       (indium-nodejs--add-flags command)))))
+  ;; if there's no connection, simply run current file with node
+  (defun indium-interaction--ensure-connection ()
+    "Signal an error if there is no indium connection."
+    (unless-indium-connected
+      (message "No Indium connection, defaultly run node on current file")
+      (if (string= (buffer-name) "*scratch*")
+          (write-file (concat (temporary-file-directory) (make-temp-name "indium-eval-"))))
+      (if (and (buffer-file-name) (file-exists-p (buffer-file-name)))
+          (yq/indium-run-node (concat "node " (buffer-file-name)))
+        (user-error "yq: invliad file name, something wrong"))))
   ;; launch indium
-  (evil-define-key 'normal js2-mode-map ",in" 'indium-run-node)
+  (evil-define-key 'normal js2-mode-map ",in" 'yq/indium-run-node-run-node)
   (evil-define-key 'normal js2-mode-map ",ic" 'indium-run-chrome)
   (evil-define-key 'normal js2-mode-map ",ir" 'indium-restart-node)
   (evil-define-key 'normal js2-mode-map (kbd "s-r") 'indium-restart-node)

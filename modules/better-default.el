@@ -322,8 +322,12 @@ If the universal prefix argument is used then kill the buffer too."
   (add-to-list 'recentf-exclude
                (file-truename spacemacs-cache-directory))
   (add-to-list 'recentf-exclude "COMMIT_EDITMSG\\'")
-  (append recentf-list '("/tmp/"
-                         "/ssh:"
+  (add-to-list 'recentf-exclude "/private/var/folders/")
+  (add-to-list 'recentf-exclude "/var/folders/")
+  (add-to-list 'recentf-exclude "/var/tmp/")
+  (add-to-list 'recentf-exclude "/tmp/")
+  (add-to-list 'recentf-exclude "\\indium-eval-.*")
+  (append recentf-list '("/ssh:"
                          "/sudo:"
                          "recentf$"
                          "company-statistics-cache\\.el$"
@@ -339,6 +343,7 @@ If the universal prefix argument is used then kill the buffer too."
                          "\\.avi$"
                          "\\.pdf$"
                          "\\.docx?$"
+                         "\\.bin$"
                          "\\.xlsx?$"
                          ;; sub-titles
                          "\\.sub$"
