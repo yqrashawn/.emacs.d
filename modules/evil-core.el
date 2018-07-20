@@ -32,6 +32,7 @@
 (use-package evil
   :straight t
   :init
+  (customize-set-variable 'evil-intercept-maps nil)
   (customize-set-variable 'evil-move-cursor-back nil)
   (customize-set-variable 'evil-want-C-u-scroll t)
   (customize-set-variable 'evil-want-Y-yank-to-eol t)
@@ -48,6 +49,7 @@
              (eq index mode-to-remove))
            evil-emacs-state-modes)))
   :config
+  (add-hook 'edebug-mode-hook 'evil-insert-state)
   (mapc #'evil-declare-change-repeat
         '(company-complete-common
           company-complete-selection

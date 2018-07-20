@@ -138,7 +138,8 @@
   :diminish (indium-interaction-mode . "In" )
   :hook (js2-mode . indium-interaction-mode)
   :commands (indium-interaction-mode indium-run-node indium-run-chrome indium-debugger-mode)
-  :init (setq indium-nodejs-inspect-brk nil)
+  :init (setq indium-nodejs-inspect-brk t)
+  (add-to-list 'evil-insert-state-modes 'indium-repl-mode)
   :config
   (defun yq/indium-run-node (command)
     "do not switch the process buffer compared to the original indium-run-node"
@@ -164,8 +165,8 @@
   ;;         (yq/indium-run-node (concat "node " (buffer-file-name)))
   ;;       (user-error "yq: invliad file name, something wrong"))))
   ;; launch indium
-  (evil-define-key 'normal js2-mode-map ",iq" 'indium-maybe-quit)
-  (evil-define-key 'normal js2-mode-map ",in" 'yq/indium-run-node-run-node)
+  (evil-define-key 'normal js2-mode-map ",iq" 'indium-quit)
+  (evil-define-key 'normal js2-mode-map ",in" 'yq/indium-run-node)
   (evil-define-key 'normal js2-mode-map ",ic" 'indium-run-chrome)
   (evil-define-key 'normal js2-mode-map ",ir" 'indium-restart-node)
   (evil-define-key 'normal js2-mode-map (kbd "s-r") 'indium-restart-node)
@@ -191,6 +192,8 @@
 
   (evil-define-key 'normal indium-repl-mode-map (kbd "C-a") 'evil-first-non-blank)
   (evil-define-key 'normal indium-repl-mode-map (kbd "C-e") 'evil-end-of-line)
+  (evil-define-key 'insert indium-repl-mode-map (kbd "C-p") 'indium-repl-previous-input)
+  (evil-define-key 'insert indium-repl-mode-map (kbd "C-n") 'indium-repl-next-input)
 
   ;; inspector
   (evil-define-key 'normal indium-inspector-mode-map "l" nil)
