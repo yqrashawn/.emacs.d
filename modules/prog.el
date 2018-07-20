@@ -298,7 +298,6 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   :init
   ;; https://github.com/joaotavora/yasnippet/issues/785
   (defvar smartparens-mode-original-value)
-
   (defun disable-sp-hippie-advice (&rest _)
     (setq smartparens-mode-original-value smartparens-mode)
     (setq smartparens-mode nil)
@@ -453,3 +452,18 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   :init
   (evil-define-key '(normal insert) 'global (kbd "s-m") 'zop-up-to-char)
   (evil-define-key '(normal insert) 'global (kbd "s-M") 'zop-to-char))
+
+(with-eval-after-load 'hydra
+  (defhydra hydra-change-mode (:hint nil :color pink)
+"
+_e_  elisp    _c_  clojure   _t_  typescript
+_j_  js2      _T_     text   _f_  fundamental
+"
+    ("e" emacs-lisp-mode :exit t)
+    ("j" js2-mode :exit t)
+    ("c" clojure-mode :exit t)
+    ("T" text-mode :exit t)
+    ("t" typescript-mode :exit t)
+    ("f" fundamental-mode :exit t)
+    ("q" hydra-keyboard-quit :exit t))
+(define-key evil-normal-state-map (kbd "s <RET>") 'hydra-change-mode/body))

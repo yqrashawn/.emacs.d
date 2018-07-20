@@ -95,3 +95,5 @@
 
 (toggle-frame-maximized)
 ;; (straight-use-package 'suggest)
+;; (use-package zpresent)
+
