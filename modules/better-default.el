@@ -779,11 +779,13 @@ otherwise it is scaled down."
   (define-key Info-mode-map "s" nil)
   (define-key Info-mode-map "ss" 'Info-search)
   (define-key Info-mode-map "sj" 'counsel-recentf)
+  (define-key Info-mode-map (kbd "s SPC") 'counsel-M-x)
   (define-key Info-mode-map "sc" 'yq/delete-window)
   (define-key Info-mode-map "sk" 'yq/kill-this-buffer)
   (evil-define-key 'normal
     "s" nil
-    "sj" 'counsel-recentf))
+    "sj" 'counsel-recentf
+    (kbd "s SPC") 'counsel-M-x))
 
 (setq confirm-kill-emacs nil)
 (spacemacs/set-leader-keys "xdw" 'delete-trailing-whitespace)

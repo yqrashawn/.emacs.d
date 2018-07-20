@@ -5,7 +5,7 @@
   :config
   ;; (global-set-key (kbd "C-SPC") 'counsel-grep-or-swiper)
   ;; (global-set-key (kbd "^@") 'counsel-grep-or-swiper)
-  (define-key evil-normal-state-map (kbd "s SPC") 'spacemacs/swiper-all-region-or-symbol)
+  (define-key evil-normal-state-map (kbd "sn") 'spacemacs/swiper-all-region-or-symbol)
   (global-set-key (kbd "C-SPC") 'swiper)
   (global-set-key (kbd "^@") 'swiper)
   (global-set-key (kbd "C-S-SPC") 'spacemacs/swiper-region-or-symbol))
@@ -27,6 +27,8 @@
   (define-key ivy-minibuffer-map (kbd "<escape>") 'minibuffer-keyboard-quit)
   (global-set-key (kbd "C-x C-f") 'counsel-find-file)
   (spacemacs/set-leader-keys "<SPC>" 'counsel-M-x)
+  (global-set-key (kbd "s-j") 'counsel-M-x)
+  (global-set-key (kbd "s-f") 'counsel-M-x)
   (spacemacs/set-leader-keys "f" nil)
   (spacemacs/set-leader-keys "fe" nil)
   (spacemacs/set-leader-keys "fed" 'yq/edit-dotfile)
@@ -43,6 +45,7 @@
   (define-key evil-normal-state-map "sf" 'counsel-rg)
   (define-key evil-normal-state-map "sl" 'spacemacs/counsel-jump-in-buffer)
   (define-key evil-normal-state-map "sj" 'counsel-recentf)
+  (define-key evil-normal-state-map (kbd "s SPC") 'counsel-M-x)
   (define-key evil-normal-state-map (kbd "M-y" ) 'counsel-yank-pop)
   (defun counsel-recent-dir ()
     "Goto recent directories."
@@ -338,6 +341,7 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
     "s" 'nil
     "sk" 'yq/kill-this-buffer
     "sj" 'counsel-recentf
+    (kbd "s SPC") 'counsel-M-x
     "sf" 'counsel-rg
     "ss" 'dired-sort-toggle-or-edit
     "sc" 'yq/delete-window
