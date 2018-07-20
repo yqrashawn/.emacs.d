@@ -455,7 +455,7 @@ is not visible. Otherwise delegates to regular Emacs next-error."
 
 (with-eval-after-load 'hydra
   (defhydra hydra-change-mode (:hint nil :color pink)
-"
+    "
 _e_  elisp    _c_  clojure   _t_  typescript
 _j_  js2      _T_     text   _f_  fundamental
 "
@@ -466,4 +466,15 @@ _j_  js2      _T_     text   _f_  fundamental
     ("t" typescript-mode :exit t)
     ("f" fundamental-mode :exit t)
     ("q" hydra-keyboard-quit :exit t))
-(define-key evil-normal-state-map (kbd "s <RET>") 'hydra-change-mode/body))
+  (define-key evil-normal-state-map (kbd "s <RET>") 'hydra-change-mode/body))
+
+(use-package ivy-xrefivy-xref
+  :defer t
+  :init
+  (setq xref-prompt-for-identifier '(not xref-find-definitions
+                                         xref-find-definitions-other-window
+                                         xref-find-definitions-other-frame
+                                         xref-find-references
+                                         spacemacs/jump-to-definition))
+  ;; Use ivy-xref to display `xref.el' results.
+  (setq xref-show-xrefs-function #'ivy-xref-show-xrefs))

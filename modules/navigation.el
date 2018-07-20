@@ -96,6 +96,9 @@
   ;; :init
   ;; (add-to-list 'ivy-re-builders-alist '(t . spacemacs/ivy--regex-plus))
   :config
+  (ivy-set-actions
+   'counsel-recentf
+   spacemacs--ivy-file-actions)
   (ivy-mode 1)
   (setq ivy-height 16)
   (setq ivy-use-virtual-buffers t)
@@ -180,24 +183,25 @@
     "
 ^ ^ ^ ^ ^ ^ | ^Call^      ^ ^  | ^Cancel^ | ^Options^ | Action _w_/_s_/_a_: %-14s(ivy-action-name)
 ^-^-^-^-^-^-+-^-^---------^-^--+-^-^------+-^-^-------+-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^---------------------------
-^ ^ _k_ ^ ^ | _f_ollow occ_u_r | _i_nsert | _c_: calling %-5s(if ivy-calling \"on\" \"off\") _C_ase-fold: %-10`ivy-case-fold-search
-_h_ ^+^ _l_ | _d_one      ^ ^  | _o_ops   | _m_: matcher %-5s(ivy--matcher-desc)^^^^^^^^^^^^ _t_runcate: %-11`truncate-lines
-^ ^ _j_ ^ ^ | _g_o        ^ ^  | ^ ^      | _<_/_>_: shrink/grow _q_uit _x_ kill buffer^^ _D_efinition of this menu
+^ ^ _k_ ^ ^ | _f_ollow _o_ccur | _i_nsert | _c_: calling %-5s(if ivy-calling \"on\" \"off\") _C_ase-fold: %-10`ivy-case-fold-search
+_h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)^^^^^^^^^^^^ _t_runcate: %-11`truncate-lines
+^ ^ _j_ ^ ^ | _u_p _d_own      |          | _<_/_>_: shrink/grow _q_uit _x_ kill buffer^^ _D_efinition of this menu
 "
     ;; arrows
-    ("h" ivy-beginning-of-buffer)
+    ("h" spacemacs/counsel-up-directory-no-error)
     ("j" ivy-next-line)
     ("k" ivy-previous-line)
     ("l" ivy-end-of-buffer)
+    ("u" ivy-scroll-down-command)
+    ("d" ivy-scroll-up-command)
     ;; actions
-    ("o" keyboard-escape-quit :exit t)
     ("C-g" keyboard-escape-quit :exit t)
     ("i" nil)
     ("C-o" nil)
     ("f" ivy-alt-done :exit nil)
     ("C-j" ivy-alt-done :exit nil)
-    ("d" ivy-done :exit t)
-    ("g" ivy-call)
+    ("g" ivy-beginning-of-buffer)
+    ("G" ivy-end-of-buffer)
     ("C-m" ivy-done :exit t)
     ("c" ivy-toggle-calling)
     ("m" ivy-rotate-preferred-builders)
@@ -209,7 +213,7 @@ _h_ ^+^ _l_ | _d_one      ^ ^  | _o_ops   | _m_: matcher %-5s(ivy--matcher-desc)
     ("x" yq/ivy-call-kill-buffer-action)
     ("t" (setq truncate-lines (not truncate-lines)))
     ("C" ivy-toggle-case-fold)
-    ("u" ivy-occur :exit t)
+    ("o" ivy-occur :exit t)
     ("q" (ivy-exit-with-action (lambda (_))) :exit t)
     ("D" (ivy-exit-with-action
           (lambda (_) (find-function 'hydra-ivy/body)))
@@ -229,8 +233,6 @@ _h_ ^+^ _l_ | _d_one      ^ ^  | _o_ops   | _m_: matcher %-5s(ivy--matcher-desc)
 (use-package projectile
   :straight t
   :diminish projectile-mode)
-
-;; TODO: config action
 (use-package counsel-projectile
   :straight t
   :config
