@@ -91,12 +91,12 @@
 
 (use-package server)
 (unless (server-running-p) (server-start))
-(setq gc-cons-threshold 8388608)
 
 ;; TODO noderepl
 (use-package playground
   :straight (:host github :repo "akirak/emacs-playground"))
 
+(setq gc-cons-threshold 8388608)
 (toggle-frame-maximized)
 ;; (straight-use-package 'suggest)
 ;; (use-package zpresent)
