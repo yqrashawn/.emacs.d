@@ -66,7 +66,11 @@
     (exec-path-from-shell-initialize)))
 
 (defun yq/get-modules (module-dir)
-  (load-file (concat user-emacs-directory "modules/" module-dir)))
+  (let* ((el-file-path (concat user-emacs-directory "modules/" module-dir))
+         (elc-file-path (concat el-file-path "c")))
+    (if (file-exists-p elc-file-path)
+        (load-file elc-file-path)
+      (load-file el-file-path))))
 
 (yq/get-modules "evil-core.el")
 (yq/get-modules "better-default.el")

@@ -73,6 +73,7 @@ The return value is nil if no font was found, truthy otherwise."
     nil))
 
 (defvar yq/default-font-kind "small")
+
 (setq yq/small-screen-default-font '("Hack"
                                      ;;"Menlo"
                                      ;; "Anonymous Pro for Powerline"

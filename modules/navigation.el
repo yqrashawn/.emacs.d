@@ -99,9 +99,6 @@
   ;; :init
   ;; (add-to-list 'ivy-re-builders-alist '(t . spacemacs/ivy--regex-plus))
   :config
-  (ivy-set-actions
-   'counsel-recentf
-   spacemacs--ivy-file-actions)
   (ivy-mode 1)
   (setq ivy-height 16)
   (setq ivy-use-virtual-buffers t)
@@ -253,6 +250,9 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   (spacemacs/set-leader-keys "fef" 'yq/find-emacsd-modules)
   (spacemacs/set-leader-keys "fel" 'counsel-find-library))
 (yq/get-modules "counsel-funcs.el")
+(ivy-set-actions
+ 'counsel-recentf
+ spacemacs--ivy-file-actions)
 (spacemacs/set-leader-keys "s" nil)
 (spacemacs/set-leader-keys "sd" 'spacemacs/search-dir-rg)
 (spacemacs/set-leader-keys "sD" 'spacemacs/search-dir-rg-region-or-symbol)
