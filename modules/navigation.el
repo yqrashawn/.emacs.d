@@ -527,7 +527,7 @@ When ARG is non-nil search in junk files."
   :straight t
   :commands (ivy-prescient-mode)
   :init
-  ;; (add-to-list ivy-prescient-excluded-commands 'counsel-fd)
+  ;; (add-to-list 'ivy-prescient-excluded-commands 'counsel-fd)
   (ivy-prescient-mode))
 
 (use-package company-prescient

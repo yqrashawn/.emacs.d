@@ -35,7 +35,6 @@
     (unless found
       (message "tern binary not found!"))
     found))
-
 (defun yq//set-tern-key-bindings (mode)
   "Set the key bindings for tern and the given MODE."
   (add-to-list 'tern-command "--no-port-file" 'append)
@@ -48,7 +47,6 @@
   (evil-define-key 'normal js2-mode-map ",tn" 'tern-find-definition-by-name)
   (evil-define-key 'normal js2-mode-map ",tp" 'tern-pop-find-definition)
   (evil-define-key 'normal js2-mode-map ",tt" 'tern-get-type))
-
 (use-package tern
   :defer t
   :commands (tern-mode)
@@ -126,12 +124,6 @@
   (evil-define-key 'normal js2-mode-map ",ep" 'js2r-expand-node-at-point)
   (evil-define-key 'normal js2-mode-map ",ec" 'js2r--expand-contract-node-at-point))
 
-;; bug for empty directory
-;; (use-package add-node-modules-path
-;;   :straight t
-;;   :after js2-mode
-;;   :hook (js2-mode . add-node-modules-path))
-
 (use-package indium
   :straight t
   :after js2-mode
@@ -155,15 +147,15 @@
 						                       shell-command-switch
 						                       (indium-nodejs--add-flags command)))))
   ;; if there's no connection, simply run current file with node
-  ;; (defun indium-interaction--ensure-connection ()
-  ;;   "Signal an error if there is no indium connection."
-  ;;   (unless-indium-connected
-  ;;     (message "No Indium connection, defaultly run node on current file")
-  ;;     (if (string= (buffer-name) "*scratch*")
-  ;;         (write-file (concat (temporary-file-directory) (make-temp-name "indium-eval-"))))
-  ;;     (if (and (buffer-file-name) (file-exists-p (buffer-file-name)))
-  ;;         (yq/indium-run-node (concat "node " (buffer-file-name)))
-  ;;       (user-error "yq: invliad file name, something wrong"))))
+  (defun indium-interaction--ensure-connection ()
+    "Signal an error if there is no indium connection."
+    (unless-indium-connected
+      (message "No Indium connection, defaultly run node on current file")
+      (if (string= (buffer-name) "*scratch*")
+          (write-file (concat (temporary-file-directory) (make-temp-name "indium-eval-"))))
+      (if (and (buffer-file-name) (file-exists-p (buffer-file-name)))
+          (yq/indium-run-node (concat "node " (buffer-file-name)))
+        (user-error "yq: invliad file name, something wrong"))))
   ;; launch indium
   (evil-define-key 'normal js2-mode-map ",iq" 'indium-quit)
   (evil-define-key 'normal js2-mode-map ",in" 'yq/indium-run-node)

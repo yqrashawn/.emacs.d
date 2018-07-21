@@ -1,6 +1,6 @@
 (setq *is-a-mac* (eq system-type 'darwin))
 (setq *win64* (eq system-type 'windows-nt))
-(setq *cygwin* (eq system-type 'cygwin) )
+(setq *cygwin* (eq system-type 'cygwin))
 (setq *linux* (or (eq system-type 'gnu/linux) (eq system-type 'linux)) )
 (setq *unix* (or *linux* (eq system-type 'usg-unix-v) (eq system-type 'berkeley-unix)) )
 (setq *emacs24* (and (not (featurep 'xemacs)) (or (>= emacs-major-version 24))) )
@@ -71,6 +71,7 @@ file stored in the cache directory and `nil' to disable auto-saving.")
   (if (file-exists-p abbrev-file-name)
       (quietly-read-abbrev-file)))
 (setq save-interprogram-paste-before-kill t)
+(setq confirm-kill-processes nil)
 (setq-default sentence-end-double-space nil)
 (with-eval-after-load 'comint
   (define-key comint-mode-map (kbd "C-d") nil))
@@ -304,7 +305,6 @@ If the universal prefix argument is used then kill the buffer too."
 
 (use-package recentf
   :straight t
-  :defer t
   :init
   (setq recentf-keep '(file-remote-p file-readable-p))
   ;; lazy load recentf
@@ -319,6 +319,7 @@ If the universal prefix argument is used then kill the buffer too."
         recentf-auto-save-timer (run-with-idle-timer 600 t
                                                      'recentf-save-list))
   :config
+  (run-at-time nil (* 5 60) 'recentf-save-list)
   (add-to-list 'recentf-exclude
                (file-truename spacemacs-cache-directory))
   (add-to-list 'recentf-exclude "COMMIT_EDITMSG\\'")
@@ -326,32 +327,10 @@ If the universal prefix argument is used then kill the buffer too."
   (add-to-list 'recentf-exclude "/var/folders/")
   (add-to-list 'recentf-exclude "/var/tmp/")
   (add-to-list 'recentf-exclude "/tmp/")
-  (add-to-list 'recentf-exclude "\\indium-eval-.*")
-  (append recentf-list '("/ssh:"
-                         "/sudo:"
-                         "recentf$"
-                         "company-statistics-cache\\.el$"
-                         ;; ctags
-                         "/TAGS$"
-                         ;; global
-                         "/GTAGS$"
-                         "/GRAGS$"
-                         "/GPATH$"
-                         ;; binary
-                         "\\.mkv$"
-                         "\\.mp[34]$"
-                         "\\.avi$"
-                         "\\.pdf$"
-                         "\\.docx?$"
-                         "\\.bin$"
-                         "\\.xlsx?$"
-                         ;; sub-titles
-                         "\\.sub$"
-                         "\\.srt$"
-                         "\\.ass$"
-                         ;; ~/.emacs.d/**/*.el included
-                         ;; "/home/[a-z]\+/\\.[a-df-z]" ; configuration file should not be excluded
-                         )))
+  (add-to-list 'recentf-exclude "\\indium-eval-.*"))
+(use-package recentf-ext
+  :straight t
+  :after recentf)
 
 ;; saveplace remembers your location in a file when saving files
 (use-package saveplace
