@@ -129,11 +129,14 @@ Available PROPS:
   (add-to-list 'company-frontends 'company-tng-frontend)
   (define-key company-active-map (kbd "C-j") 'company-select-next)
   (define-key company-active-map (kbd "C-k") 'company-select-previous)
+  (evil-define-key 'insert company-active-map (kbd "C-j") 'company-select-next)
+  (evil-define-key 'insert company-active-map (kbd "C-k") 'company-select-previous)
   (define-key company-active-map (kbd "C-l") 'company-complete-selection)
   (define-key company-active-map (kbd "C-w") 'evil-delete-backward-word)
   (define-key company-active-map (kbd "C-d") 'company-show-location)
   (define-key company-active-map (kbd "C-m") 'newline-and-indent)
   (define-key company-active-map (kbd "C-r") 'company-show-doc-buffer)
+  (evil-define-key 'insert company-active-map (kbd "C-r") 'company-show-doc-buffer)
   (add-hook 'after-init-hook 'global-company-mode))
 
 (use-package company-statistics
@@ -478,3 +481,10 @@ _j_  js2      _T_     text   _f_  fundamental
                                          spacemacs/jump-to-definition))
   ;; Use ivy-xref to display `xref.el' results.
   (setq xref-show-xrefs-function #'ivy-xref-show-xrefs))
+
+;; (use-package company-quickhelp
+;;   :straight t
+;;   :commands (company-quickhelp-manual-begin)
+;;   :init
+;;   (evil-define-key 'insert company-quickhelp-mode-map (kbd "C-k") 'company-select-previous)
+;;   (define-key company-active-map (kbd "M-h") #'company-quickhelp-manual-begin))
