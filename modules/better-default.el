@@ -71,6 +71,7 @@ file stored in the cache directory and `nil' to disable auto-saving.")
   (if (file-exists-p abbrev-file-name)
       (quietly-read-abbrev-file)))
 (setq save-interprogram-paste-before-kill t)
+(setq confirm-kill-processes nil)
 (setq-default sentence-end-double-space nil)
 (with-eval-after-load 'comint
   (define-key comint-mode-map (kbd "C-d") nil))
