@@ -388,8 +388,7 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   "Grep in the current directory for STRING using BASE-CMD.
 If non-nil, append EXTRA-fd-ARGS to BASE-CMD."
 
-  (if (< (length string) 3)
-      (counsel-more-chars 3)
+  (or (counsel-more-chars)
     (let ((default-directory counsel-fd-current-dir)
           (regex (counsel-unquote-regex-parens
                   (setq ivy--old-re
@@ -446,15 +445,15 @@ FD-PROMPT, if non-nil, is passed as `ivy-read' prompt argument."
 ;; (spacemacs/set-leader-keys "sm" 'counsel-fd)
 (defun yq/org ()
   (interactive)
-  (counsel-fd nil "~/Dropbox/" nil "-t f -e org"))
+  (counsel-fd "" "~/Dropbox/" nil "-t f -e org"))
 
 (defun yq/books ()
   (interactive)
-  (counsel-fd nil "~/Dropbox/Books/" nil "-t f"))
+  (counsel-fd "" "~/Dropbox/Books/" nil "-t f"))
 
 (defun yq/dropbox ()
   (interactive)
-  (counsel-fd nil "~/Dropbox/"))
+  (counsel-fd "" "~/Dropbox/"))
 
 (spacemacs/set-leader-keys "fo" 'yq/org)
 (spacemacs/set-leader-keys "fb" 'yq/books)
