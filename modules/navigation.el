@@ -526,6 +526,24 @@ FD-PROMPT, if non-nil, is passed as `ivy-read' prompt argument."
 (spacemacs/set-leader-keys "fb" 'yq/books)
 (spacemacs/set-leader-keys "f1" 'yq/dropbox)
 
+(defun yq/open-with-call-osascript (file)
+  (shell-command (concat "osascript -e '" (format "-- Search for the file
+		tell application \"Alfred 3\"
+			search \"%1$s\"
+		end tell
+
+		-- Show file actions
+		tell application \"System Events\"
+			-- Press \"fn\" to show file actions
+			key code 63
+		end tell'" file))))
+(defun yq/open-with ()
+  (interactive)
+  (if (derived-mode-p 'dired-mode)
+      (yq/open-with-call-osascript (dired-get-filename nil t))
+    (and (file-exists-p buffer-file-name) (yq/open-with-call-osascript buffer-file-name))))
+(spacemacs/set-leader-keys "bb" 'yq/open-with)
+
 (use-package find-file-in-project
   :straight t
   :commands (find-file-in-project)
