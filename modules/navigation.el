@@ -233,6 +233,8 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
 (use-package projectile
   :straight t
   :diminish projectile-mode
+  :init
+  (setq projectile-completion-system 'ivy)
   :config
   ;; http://endlessparentheses.com/improving-projectile-with-extra-commands.html
   (def-projectile-commander-method ?? "Commander help buffer."

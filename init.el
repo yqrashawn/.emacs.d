@@ -47,14 +47,14 @@
   (load bootstrap-file nil 'nomessage))
 
 ;; use the under vc straight/repos dir instead of straight/build one
-(defun yq/straight-library-build-to-repo (library)
-  (interactive (list (read-library-name)))
-  (let* ((lib-path (find-library-name library))
-         (right-lib-path (or (and (string-match "straight/build" lib-path) (replace-match "straight/repos" nil nil lib-path)) lib-path)))
-    (prog1
-        (switch-to-buffer (find-file-noselect right-lib-path))
-      (run-hooks 'find-function-after-hook))))
-(advice-add 'find-library :override 'yq/straight-library-build-to-repo)
+;; (defun yq/straight-library-build-to-repo (library)
+;;   (interactive (list (read-library-name)))
+;;   (let* ((lib-path (find-library-name library))
+;;          (right-lib-path (or (and (string-match "straight/build" lib-path) (replace-match "straight/repos" nil nil lib-path)) lib-path)))
+;;     (prog1
+;;         (switch-to-buffer (find-file-noselect right-lib-path))
+;;       (run-hooks 'find-function-after-hook))))
+;; (advice-add 'find-library :override 'yq/straight-library-build-to-repo)
 
 (straight-use-package 'diminish)
 (straight-use-package 'use-package)
