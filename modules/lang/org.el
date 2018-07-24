@@ -22,9 +22,8 @@
     ",k" 'org-edit-src-abort))
 
 (use-package org
-  ;; :straight org-plus-contrib
-  ;; :straight org
-  :ensure t
+  :straight org-plus-contrib
+  ;; :ensure t
   :init
   ;; automatically change status of a heading to DONE when all children are done
   ;; src block have same indentation with #+BEGIN_SRC
@@ -387,6 +386,8 @@
     (lambda () (interactive)
       (org-eval-in-calendar '(calendar-forward-year 1)))))
 
+(use-package org-tempo)
+
 (use-package htmlize
   :straight t
   :commands (org-html-export-as-html org-html-export-as-html))
@@ -430,11 +431,6 @@
 
 (with-eval-after-load 'org-indent
   (diminish 'org-indent-mode))
-
-(use-package org-bullets
-  :straight t
-  :init
-  :hook (org-mode . org-bullets-mode))
 
 (use-package org-capture
   :commands (org-capture)
@@ -491,7 +487,8 @@
 
 (use-package org-web-tools
   :straight t
-  :config
+  :after org
+  :init
   (defun mkm-org-capture/link ()
     "Make a TODO entry with a link in clipboard. Page title is used as task heading."
     (let* ((url-string (s-trim (x-get-clipboard)))
@@ -504,11 +501,12 @@
                   url-string
                   "\n\t:END:\n\s\s%?"
                   )))))
-  (add-to-list
-   'org-capture-templates
-   '("l" "Capture a link from clipboard" entry
-     (file+olp "~/Dropbox/ORG/notes.org" "notes" "read")
-     #'mkm-org-capture/link)))
+  (with-eval-after-load 'org-capture
+    (add-to-list
+     'org-capture-templates
+     '("l" "Capture a link from clipboard" entry
+       (file+olp "~/Dropbox/ORG/notes.org" "notes" "read")
+       #'mkm-org-capture/link))))
 
 (use-package evil-org
   :straight t
@@ -556,6 +554,7 @@
 
 (use-package org-bullets
   :straight t
+  :after org
   :defer t
   :init (add-hook 'org-mode-hook 'org-bullets-mode))
 
