@@ -655,6 +655,12 @@ When ARG is non-nil search in junk files."
 ;;   (evil-define-key 'normal deadgrep-mode-map (kbd "RET") 'deadgrep-visit-result)
 ;;   (evil-define-key 'normal deadgrep-mode-map (kbd "TAB") 'deadgrep-toggle-file-results))
 
+(use-package avy
+  :straight t
+  :init
+  (define-key evil-normal-state-map "si" 'avy-goto-subword-1)
+  (define-key evil-normal-state-map "sI" 'avy-goto-char-2))
+
 (use-package rg
   :straight t
   :commands (rg rg-dwim rg-literal rg-project))
