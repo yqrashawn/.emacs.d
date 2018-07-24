@@ -101,3 +101,4 @@
 ;; (straight-use-package 'suggest)
 ;; (use-package zpresent)
 
+(global-set-key (kbd "s-?") 'info-display-manual)

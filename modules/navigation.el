@@ -232,7 +232,73 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
 
 (use-package projectile
   :straight t
-  :diminish projectile-mode)
+  :diminish projectile-mode
+  :config
+  (def-projectile-commander-method ?? "Commander help buffer."
+    (ignore-errors (kill-buffer projectile-commander-help-buffer))
+    (with-current-buffer (get-buffer-create projectile-commander-help-buffer)
+      (insert "Projectile Commander Methods:\n\n")
+      (dolist (met projectile-commander-methods)
+        (insert (format "%c:\t%s\n" (car met) (cadr met))))
+      (goto-char (point-min))
+      (help-mode)
+      (display-buffer (current-buffer) t))
+    (projectile-commander))
+  (def-projectile-commander-method ?s
+    "Run rg on project."
+    (counsel-projectile-rg))
+  (def-projectile-commander-method ?b
+    "Open an IBuffer window showing all buffers in the current project."
+    (counsel-projectile-switch-to-buffer))
+  (def-projectile-commander-method ?B
+    "Display a project buffer in other window."
+    (projectile-display-buffer))
+  (def-projectile-commander-method ?c
+    "Run `compile' in the project."
+    (projectile-compile-project nil))
+  (def-projectile-commander-method ?d
+    "Open project root in dired."
+    (projectile-dired))
+  (def-projectile-commander-method ?D
+    "Find a project directory in other window."
+    (projectile-find-dir-other-window))
+  (def-projectile-commander-method ?e
+    "Open an eshell buffer for the project."
+    ;; This requires a snapshot version of Projectile.
+    (projectile-run-eshell))
+  (def-projectile-commander-method ?f
+    "Find a project directory in other window."
+    (projectile-find-file))
+  (def-projectile-commander-method ?F
+    "Find project file in other window."
+    (projectile-find-file-other-window))
+  (def-projectile-commander-method ?g
+    "Open project root in vc-dir or magit."
+    (projectile-vc))
+  (def-projectile-commander-method ?j
+    "Jack in to CLJ or CLJS depending on context."
+    (let* ((opts (projectile-current-project-files))
+           (file (ido-completing-read
+                  "Find file: "
+                  opts
+                  nil nil nil nil
+                  (car (cl-member-if
+                        (lambda (f)
+                          (string-match "core\\.clj\\'" f))
+                        opts)))))
+      (find-file (expand-file-name
+                  file (projectile-project-root)))
+      (run-hooks 'projectile-find-file-hook)
+      (if (derived-mode-p 'clojurescript-mode)
+          (cider-jack-in-clojurescript)
+        (cider-jack-in))))
+  (def-projectile-commander-method ?r
+    "Find recently visited file in project."
+    (projectile-recentf))
+  (def-projectile-commander-method ?\C-h
+    "Go back to project selection."
+    (projectile-switch-project)))
+
 (use-package counsel-projectile
   :straight t
   :config
@@ -242,7 +308,8 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   (spacemacs/set-leader-keys "pb" 'counsel-projectile)
   (spacemacs/set-leader-keys "pf" 'counsel-projectile-find-file)
   (spacemacs/set-leader-keys "pd" 'counsel-projectile-find-dir)
-  (spacemacs/set-leader-keys "pl" 'counsel-projectile-switch-project)
+  ;; (spacemacs/set-leader-keys "pl" 'counsel-projectile-switch-project)
+  (spacemacs/set-leader-keys "pl" 'projectile-switch-project)
   (spacemacs/set-leader-keys "ps" 'counsel-projectile-rg)
   (defun yq/find-emacsd-modules ()
     "find file in .emacs.d"
@@ -573,3 +640,10 @@ When ARG is non-nil search in junk files."
 (use-package rg
   :straight t
   :commands (rg rg-dwim rg-literal rg-project))
+
+(use-package ace-link
+  :straight t
+  :commands (ace-link)
+  :init
+  (evil-define-key 'normal helpful-mode-map "o" 'ace-link-help)
+  (ace-link-setup-default))

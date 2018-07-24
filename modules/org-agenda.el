@@ -40,7 +40,7 @@
                '("ww" "Working Weekly Review"
                  ((agenda "" ((org-agenda-ndays 7))) ;; review upcoming deadlines and appointments
                   ;; type "l" in the agenda to review logged items
-                  (stuck "OFFICE" ((org-agenda-files (org-projectile-todo-files)))) ;; review stuck projects
+                  ;; (stuck "OFFICE" ((org-agenda-files (org-projectile-todo-files)))) ;; review stuck projects
                   (tags-todo "OFFICE")) nil ("~/agendas/week/work.pdf" "~/agendas/week/work.csv" "~/agendas/week/work.txt" "~/agendas/week/work.html"))) ;; review waiting items
   (add-to-list 'org-agenda-custom-commands
                '("wp" . "Working Priority")) ;; review waiting items

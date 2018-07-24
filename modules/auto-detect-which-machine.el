@@ -5,7 +5,8 @@
   "Load macbook theme and font size."
   (interactive)
   (if (yq/day-p)
-      (load-theme 'spacemacs-light)
+      ;; (load-theme 'spacemacs-light)
+      (load-theme 'zenburn)
     (load-theme 'zenburn))
   (spacemacs/set-default-font yq/small-screen-default-font))
 
@@ -13,7 +14,8 @@
   "Load macbook theme and font size."
   (interactive)
   (if (yq/day-p)
-      (load-theme 'spacemacs-light)
+      ;; (load-theme 'spacemacs-light)
+      (load-theme 'zenburn)
     (load-theme 'zenburn))
   (spacemacs/set-default-font yq/large-screen-default-font))
 
@@ -28,4 +30,3 @@
 
 (provide 'auto-detect-which-machine)
 ;;; auto-detect-which-machine.el ends here
-

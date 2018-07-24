@@ -76,6 +76,7 @@
   (evil-define-key 'normal mu4e-headers-mode-map "M" 'mu4e-headers-mark-for-unread)
 
   (evil-define-key 'normal mu4e-view-mode-map "f" 'mu4e-headers-search)
+  (evil-define-key 'normal mu4e-view-mode-map "o" 'ace-link-mu4e)
   (evil-define-key 'normal mu4e-view-mode-map "a" 'mu4e-view-action)
   (evil-define-key 'normal mu4e-view-mode-map "D" 'mu4e-view-mark-for-trash)
   (evil-define-key 'normal mu4e-view-mode-map "d" 'mu4e-view-mark-for-delete)

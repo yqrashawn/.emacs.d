@@ -17,6 +17,10 @@
 
 (customize-set-variable 'inhibit-startup-screen t)
 (customize-set-variable 'inhibit-startup-message t)
+(customize-set-variable 'inhibit-startup-echo-area-message t)
+(setq confirm-nonexistent-file-or-buffer nil)
+(setq kmacro-ring-max 30)
+
 (defvar dotspacemacs-auto-save-file-location 'cache
   "Location where to auto-save files. Possible values are `original' to
 auto-save the file in-place, `cache' to auto-save the file to another
@@ -48,6 +52,7 @@ file stored in the cache directory and `nil' to disable auto-saving.")
 
 (add-hook 'prog-mode-hook 'goto-address-prog-mode)
 (add-hook 'prog-mode-hook 'bug-reference-prog-mode)
+;; (global-prettify-symbols-mode +1)
 (setq help-window-select 't)
 (setq compilation-scroll-output 'first-error)
 (setq ffap-machine-p-known 'reject)
@@ -1053,3 +1058,20 @@ otherwise it is scaled down."
 ;; (use-package super-save
 ;;   :config
 ;; (super-save-mode +1))
+
+(use-package async
+  :straight t
+  :init
+  (autoload 'dired-async-mode "dired-async.el" nil t)
+  (dired-async-mode 1)
+  (async-bytecomp-package-mode 1))
+
+(use-package smtpmail-async
+  :commands (async-smtpmail-send-it)
+  :init
+  (setq message-send-mail-function 'async-smtpmail-send-it)
+  (setq send-mail-function 'async-smtpmail-send-it))
+
+(use-package auth-source
+  :no-require t
+  :config (setq auth-sources '("~/.authinfo.gpg" "~/.netrc")))
