@@ -14,11 +14,11 @@
   (setq undo-tree-auto-save-history t)
   (global-undo-tree-mode)
   (global-set-key (kbd "s-y") 'undo-tree-redo))
-
+
 (use-package goto-chg
   :straight (:host github :repo "emacs-evil/goto-chg")
   :defer t)
-
+
 (use-package evil-leader
   :straight t
   :init
@@ -28,7 +28,7 @@
   (defalias 'spacemacs/set-leader-keys-for-major-mode 'evil-leader/set-key-for-mode)
   (evil-leader/set-leader "<SPC>" "M-")
   (global-evil-leader-mode))
-
+
 (use-package evil
   :straight t
   :init
@@ -156,7 +156,7 @@ Example: (evil-map visual \"<\" \"<gv\")"
   (evil-define-minor-mode-key 'motion 'visual-line-mode "j" 'evil-next-visual-line)
   (evil-define-minor-mode-key 'motion 'visual-line-mode "k" 'evil-previous-visual-line)
   (evil-mode 1))
-
+
 (use-package evil-nerd-commenter
   :straight t
   :commands evilnc-comment-operator
@@ -217,7 +217,7 @@ Example: (evil-map visual \"<\" \"<gv\")"
       "cT" 'spacemacs/quick-comment-or-uncomment-to-the-line-inverse
       "cy" 'spacemacs/copy-and-comment-lines
       "cY" 'spacemacs/copy-and-comment-lines-inverse)))
-
+
 (use-package evil-snipe
   :straight t
   :diminish evil-snipe-mode
@@ -244,20 +244,20 @@ Example: (evil-map visual \"<\" \"<gv\")"
   (evil-snipe-mode 1)
   (setq evil-snipe-repeat-scope 'whole-buffer)
   (evil-snipe-override-mode 1))
-
+
 (use-package evil-surround
   :straight t
   :config
   (global-evil-surround-mode 1)
   (evil-define-key 'visual evil-surround-mode-map "s" 'evil-surround-region)
   (evil-define-key 'visual evil-surround-mode-map "S" 'evil-substitute))
-
+
 (use-package evil-args
   :straight t
   :config ;; bind evil-args text objects
   (define-key evil-inner-text-objects-map "a" 'evil-inner-arg)
   (define-key evil-outer-text-objects-map "a" 'evil-outer-arg))
-
+
 (use-package evil-search-highlight-persist
   :straight t
   :diminish global-highlight-parentheses-mode
@@ -269,13 +269,13 @@ Example: (evil-map visual \"<\" \"<gv\")"
   (global-evil-search-highlight-persist t)
   (setq evil-search-highlight-string-min-len 1)
   evil-search-highlight-persist-all-windows t)
-
+
 (use-package evil-textobj-anyblock
   :straight t
   :config
   (define-key evil-inner-text-objects-map "f" 'evil-textobj-anyblock-inner-block)
   (define-key evil-outer-text-objects-map "f" 'evil-textobj-anyblock-a-block))
-
+
 (use-package evil-mc
   :straight t
   :diminish evil-mc-mode

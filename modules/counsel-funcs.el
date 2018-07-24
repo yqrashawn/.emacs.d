@@ -9,7 +9,6 @@
 ;;
 ;;; License: GPLv3
 
-
 ;; Counsel
 
 ;; async
@@ -394,7 +393,7 @@ To prevent this error we just wrap `describe-mode' to defeat the
    (cond
     ((eq major-mode 'org-mode) 'counsel-org-goto)
     (t 'counsel-imenu))))
-
+ 
 ;; Ivy
 
 (defun spacemacs//ivy-command-not-implemented-yet (key)
@@ -483,7 +482,7 @@ Closing doesn't kill buffers inside the layout while killing layouts does."
             (persp-names)
             :action 'persp-kill))
 
-
+ 
 ;; Swiper
 
 (defun spacemacs/swiper-region-or-symbol ()

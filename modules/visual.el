@@ -129,7 +129,7 @@ has been changed to THEME."
   :straight t
   :config
   (evil-visual-mark-mode 1))
-
+
 (defun spacemacs//adaptive-evil-highlight-persist-face ()
   (set-face-attribute 'evil-search-highlight-persist-highlight-face nil
                       :inherit 'lazy-highlight

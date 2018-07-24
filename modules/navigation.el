@@ -9,7 +9,7 @@
   (global-set-key (kbd "C-SPC") 'swiper)
   (global-set-key (kbd "^@") 'swiper)
   (global-set-key (kbd "C-S-SPC") 'spacemacs/swiper-region-or-symbol))
-
+
 (use-package counsel
   :straight (:host github :repo "abo-abo/swiper" :branch "master"
                    :files ("counsel.el")
@@ -64,12 +64,12 @@
   :commands (counsel-tramp)
   :init
   (spacemacs/set-leader-keys "fT" 'counsel-tramp))
-
+
 (use-package imenu-anywhere
   :straight t
   :commands (imenu-anywhere)
   :init (define-key evil-normal-state-map "sL" 'imenu-anywhere))
-
+
 (use-package helpful
   :straight t
   :after counsel
@@ -88,7 +88,7 @@
     (kill-current-buffer)
     (yq/delete-window))
   (evil-define-key 'normal helpful-mode-map "q" 'yq/kill-buffer-and-window))
-
+
 (use-package ivy
   :straight (:host github :repo "abo-abo/swiper" :branch "master"
                    :files (:defaults
@@ -219,17 +219,17 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
           (lambda (_) (find-function 'hydra-ivy/body)))
      :exit t))
   )
-
+
 (use-package wgrep
   :straight t
   :defer t)
-
+
 (use-package smex
   :straight t
   :init
   (setq-default smex-history-length 32)
   (setq-default smex-save-file (concat yq-emacs-cache-dir ".smex-items")))
-
+
 (use-package projectile
   :straight t
   :diminish projectile-mode
@@ -299,7 +299,6 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   (def-projectile-commander-method ?\C-h
     "Go back to project selection."
     (projectile-switch-project)))
-
 (use-package counsel-projectile
   :straight t
   :config
@@ -328,7 +327,7 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
 (spacemacs/set-leader-keys "sF" 'spacemacs/search-rg-region-or-symbol)
 ;; (define-key evil-normal-state-map "sf" 'spacemacs/search-rg-direct)
 (define-key evil-normal-state-map "sF" 'spacemacs/search-project-rg-region-or-symbol)
-
+
 (use-package dired
   :init
   (setq insert-directory-program "/usr/local/bin/gls")
@@ -445,7 +444,7 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   :config
   (setq dired-omit-files
         (concat dired-omit-files "\\|^\\.DS_Store$\\|^__MACOSX$\\|^\\.localized$")))
-
+
 (defcustom counsel-fd-base-command "fd -L -I --hidden -a --color never "
   "Alternative to `counsel-fd-base-command' using ripgrep."
   :type 'string
@@ -505,7 +504,7 @@ FD-PROMPT, if non-nil, is passed as `ivy-read' prompt argument."
                       (counsel-delete-process)
                       (swiper--cleanup))
             :caller 'counsel-fd))
-
+
 (defun yq/find-org|gtd () (interactive) (find-file "~/Dropbox/ORG/gtd.org"))
 (defun yq/find-org|project () (interactive) (find-file "~/Dropbox/ORG/project.org"))
 (spacemacs/set-leader-keys "3" 'yq/find-org|gtd)
@@ -526,7 +525,7 @@ FD-PROMPT, if non-nil, is passed as `ivy-read' prompt argument."
 (spacemacs/set-leader-keys "fo" 'yq/org)
 (spacemacs/set-leader-keys "fb" 'yq/books)
 (spacemacs/set-leader-keys "f1" 'yq/dropbox)
-
+
 (use-package find-file-in-project
   :straight t
   :commands (find-file-in-project)
@@ -539,7 +538,7 @@ FD-PROMPT, if non-nil, is passed as `ivy-read' prompt argument."
   (evil-define-key 'normal dired-mode-map "sm" 'find-file-in-project)
   (define-key evil-normal-state-map "sm" 'find-file-in-project)
   (define-key evil-normal-state-map "sM" 'find-relative-path))
-
+
 (use-package open-junk-file
   :straight t
   :defer t
@@ -563,7 +562,7 @@ When ARG is non-nil search in junk files."
             (t
              (counsel-find-file rel-fname)))))
   (spacemacs/set-leader-keys "fJ" 'spacemacs/open-junk-file))
-
+
 (use-package fasd
   :straight t
   :init
@@ -578,13 +577,13 @@ When ARG is non-nil search in junk files."
   (defun evil-ex: () (interactive) (evil-ex ":"))
   (define-key evil-normal-state-map (kbd "C-f") 'evil-ex:)
   (global-fasd-mode 1))
-
+
 (use-package dired-rsync
   :straight t
   :commands (dired-rsync)
   :init
   (bind-key "C-c C-r" 'dired-rsync dired-mode-map))
-
+
 (use-package prescient
   :straight t
   :commands (prescient-persist-mode)
@@ -601,7 +600,7 @@ When ARG is non-nil search in junk files."
   :straight t
   :commands (company-prescient-mode)
   :init (company-prescient-mode))
-
+
 (use-package ibuffer-sidebar
   :straight t
   :commands (ibuffer-sidebar-toggle-sidebar)
@@ -619,18 +618,18 @@ When ARG is non-nil search in junk files."
   (push 'ibuffer-mode evil-insert-state-modes)
   (define-key ibuffer-mode-map "j" 'ibuffer-forward-line)
   (define-key ibuffer-mode-map "k" 'ibuffer-backward-line))
-
+
 ;; (use-package session
 ;;   :straight t
 ;;   :init
 ;;   (setq session-save-file (expand-file-name "~/.emacs.d/.session"))
 ;;   (add-hook 'after-init-hook 'session-initialize))
-
+
 ;; (use-package ivy-filthy-rich
 ;;   :straight (:host github :repo "casouri/ivy-filthy-rich")
 ;;   :commands (ivy-filthy-rich-mode)
 ;;   :init (ivy-filthy-rich-mode))
-
+
 ;; (use-package deadgrep
 ;;   :straight t
 ;;   :commands (deadgrep)

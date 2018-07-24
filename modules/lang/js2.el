@@ -20,7 +20,7 @@
   (evil-define-key 'normal js2-mode-map ",zf" 'js2-mode-toggle-hide-functions)
   (evil-define-key 'normal js2-mode-map ",zC" 'js2-mode-toggle-hide-comments)
   (evil-define-key 'normal js2-mode-map ",w" 'js2-mode-toggle-warnings-and-errors))
-
+
 (use-package js-doc
   :straight t
   :commands (js-doc-insert-file-doc js-doc-insert-function-doc js-doc-insert-tag js-doc-describe-tag):init
@@ -28,7 +28,7 @@
   (evil-define-key 'normal js2-mode-map ",df" 'js-doc-insert-function-doc)
   (evil-define-key 'normal js2-mode-map ",df" 'js-doc-insert-tag)
   (evil-define-key 'normal js2-mode-map ",df" 'js-doc-describe-tag))
-
+
 (defun spacemacs//tern-detect ()
   "Detect tern binary and warn if not found."
   (let ((found (executable-find "tern")))
@@ -59,7 +59,7 @@
   (yq//set-tern-key-bindings 'js2-mode)
   (dolist (mode '(js2-mode json-mode))
     (spacemacs/enable-flycheck mode)))
-
+
 (use-package company-tern
   :straight t
   :after js2-mode
@@ -67,7 +67,7 @@
   (spacemacs|add-company-backends
     :backends company-tern
     :modes js2-mode))
-
+
 (use-package json-mode
   :straight t
   :init
@@ -75,7 +75,7 @@
    ("\\manifest.webapp\\'" . json-mode )
    ("\\.eslintrc\\'" . json-mode)
    ("\\.tern-project\\'" . json-mode)))
-
+
 ;; (bound-and-true-p prettier-js-mode)
 (use-package prettier-js
   :straight t
@@ -88,7 +88,7 @@
   (yq/add-toggle prettier-js :mode prettier-js-mode)
   (evil-define-key 'normal js2-mode-map ",=" 'prettier-js)
   (evil-define-key 'normal js2-mode-map ",tp" 'yq/toggle-prettier-js))
-
+
 (use-package rjsx-mode
   :straight t
   :defer t
@@ -100,7 +100,7 @@
                    (spacemacs/set-leader-keys-for-major-mode 'rjsx-mode "=" 'prettier-js)
                    (spacemacs/set-leader-keys-for-major-mode 'rjsx-mode "m" 'js2-mode)))
   :commands (rjsx-mode))
-
+
 (use-package js2-refactor
   :straight t
   :after js2-mode
@@ -123,7 +123,7 @@
   (evil-define-key 'normal js2-mode-map ",ta" 'js2r-toggle-function-async)
   (evil-define-key 'normal js2-mode-map ",ep" 'js2r-expand-node-at-point)
   (evil-define-key 'normal js2-mode-map ",ec" 'js2r--expand-contract-node-at-point))
-
+
 (use-package indium
   :straight t
   :after js2-mode

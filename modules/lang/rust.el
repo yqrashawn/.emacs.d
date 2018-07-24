@@ -2,7 +2,7 @@
 (let ((var "RUST_SRC_PATH"))
   (unless (or (member var exec-path-from-shell-variables) (getenv var))
     (push var exec-path-from-shell-variables)))
-
+
 (use-package rust-mode
   :straight t
   :defer t
@@ -30,7 +30,7 @@ using `cargo-process-run'."
   (evil-define-key 'normal rust-mode-map
     ",=" 'rust-format-buffer
     ",q" 'spacemacs/rust-quick-run))
-
+
 (use-package cargo
   :straight t
   :defer t
@@ -57,21 +57,21 @@ using `cargo-process-run'."
     ",cx" 'cargo-process-run
     ",x" 'cargo-process-run
     ",t" 'cargo-process-test))
-
+
 (use-package flycheck-rust
   :straight t
   :defer t
   :init
   (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
   (spacemacs/enable-flycheck 'rust-mode))
-
+
 (use-package toml-mode
   :straight t
   :mode "/\\(Cargo.lock\\|\\.cargo/config\\)\\'")
 (with-eval-after-load 'smartparens
   ;; Don't pair lifetime specifiers
   (sp-local-pair 'rust-mode "'" nil :actions nil))
-
+
 (use-package racer
   :straight t
   :defer t
@@ -93,4 +93,3 @@ If `help-window-select' is non-nil, also select the help window."
   :config
   (evilified-state-evilify-map racer-help-mode-map
     :mode racer-help-mode))
-

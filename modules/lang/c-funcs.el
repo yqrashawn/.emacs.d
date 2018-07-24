@@ -9,7 +9,7 @@
 ;;
 ;;; License: GPLv3
 
-
+
 ;; clang
 
 (defun spacemacs/clang-format-function (&optional style)
@@ -131,7 +131,7 @@ and the arguments for flyckeck-clang based on a project-specific text file."
                             (spacemacs//c-c++-get-standard-include-paths "c"))
                           idirafter-paths)))))
 
-
+
 ;; realgud
 
 (defun spacemacs//short-key-state (modeon)
@@ -140,7 +140,7 @@ and the arguments for flyckeck-clang based on a project-specific text file."
       (evil-evilified-state)
     (evil-normal-state)))
 
-
+
 ;; rtags
 
 (defun spacemacs/c-c++-use-rtags (&optional useFileManager)

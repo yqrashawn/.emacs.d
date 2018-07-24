@@ -5,7 +5,7 @@
   (if (bound-and-true-p parinfer-mode)
       (parinfer-mode -1)
     (parinfer-mode 1)))
-
+
 (defun crux-start-or-switch-to (function buffer-name)
   "Invoke FUNCTION if there is no buffer with BUFFER-NAME.
 Otherwise switch to the buffer named BUFFER-NAME.  Don't clobber
@@ -16,7 +16,7 @@ the current buffer."
         (other-window 1)
         (funcall function))
     (switch-to-buffer-other-window buffer-name)))
-
+
 (use-package ielm
   :straight t
   :init(add-hook 'ielm-mode-hook #'rainbow-delimiters-mode)
@@ -46,7 +46,7 @@ Start `ielm' if it's not already running."
   (evil-define-key 'normal emacs-lisp-mode-map ",ef" 'eval-defun)
   (evil-define-key 'normal emacs-lisp-mode-map ",el" 'lisp-state-eval-sexp-end-of-line)
   (evil-define-key 'visual emacs-lisp-mode-map ",er" 'eval-region))
-
+
 (use-package elisp-slime-nav
   :straight t
   :diminish elisp-slime-nav-mode
@@ -57,7 +57,7 @@ Start `ielm' if it's not already running."
     (evil-define-key 'normal emacs-lisp-mode-map ",hh" 'elisp-slime-nav-describe-elisp-thing-at-point)
     (let ((jumpl (intern (format "spacemacs-jump-handlers-%S" mode))))
       (add-to-list jumpl 'elisp-slime-nav-find-elisp-thing-at-point))))
-
+
 ;; (use-package parinfer
 ;;   :straight t
 ;;   ;; :hook (emacs-lisp-mode . parinfer-mode)
@@ -67,7 +67,7 @@ Start `ielm' if it's not already running."
 ;;   (setq parinfer-extensions '(defaults pretty-parens evil smart-yank))
 ;;   :config
 ;;   (define-key parinfer-mode-map (kbd "C-,") 'parinfer-toggle-mode))
-
+
 (use-package lispy
   :straight t
   :diminish lispy " ʪ"
@@ -84,7 +84,7 @@ Start `ielm' if it's not already running."
   (evil-define-key 'normal lispy-mode-map "b" 'sp-previous-sexp)
   (evil-define-key 'normal lispy-mode-map "e" 'sp-next-sexp)
   (push '("*lispy-message*" :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config))
-
+
 (use-package hl-sexp
   :straight (:host github :repo "emacsattic/hl-sexp")
   :commands (hl-sexp-mode)

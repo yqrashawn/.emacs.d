@@ -42,7 +42,7 @@
     ",rr" 'web-mode-element-rename
     ",rw" 'web-mode-element-wrap
     ",z" 'web-mode-fold-or-unfold))
-
+
 (use-package company-web
   :straight t
   :defer t

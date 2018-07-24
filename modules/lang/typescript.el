@@ -5,7 +5,7 @@ for TypeScript source code formatting.
 Currently avaliable 'tide (default)
 and 'typescript-formatter .")
 (defvar typescript-fmt-on-save nil "Run formatter on buffer save.")
-
+
 (defun enable-rjsx-feature-in-ts ()
   (evil-define-key 'insert typescript-mode-map "<" 'rjsx-electric-lt)
   (evil-define-key 'insert typescript-mode-map ">" 'rjsx-electric-gt)
@@ -32,7 +32,7 @@ and 'typescript-formatter .")
   (when typescript-fmt-on-save
     (add-hook 'typescript-mode-hook 'spacemacs/typescript-fmt-before-save-hook))
   (evil-define-key 'normal typescript-mode "=" 'spacemacs/typescript-format))
-
+
 (use-package tide
   :straight t
   :defer t

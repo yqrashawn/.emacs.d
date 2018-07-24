@@ -142,30 +142,30 @@ Available PROPS:
 (use-package company-statistics
   :straight t
   :hook (company-mode . company-statistics-mode))
-
+
 (use-package company-flx
   :straight t
   :init
   (add-hook 'emacs-lisp-mode-hook 'company-flx-mode)
   :config
   (company-flx-mode +1))
-
+
 (use-package company-try-hard
   :straight t
   :after company
   :init
   (define-key evil-insert-state-map (kbd "C-;") 'company-try-hard))
-
+
 ;; (use-package company-quickhelp
 ;;   :straight t
 ;;   :hook (company-mode . company-quickhelp-mode))
-
+
 ;; (use-package company-childframe
 ;;   :straight t
 ;;   :diminish company-childframe-mode
 ;;   :config
 ;;   (company-childframe-mode 1))
-
+
 (setq syntax-checking-enable-by-default t)
 
 (defun spacemacs/enable-flycheck (mode)
@@ -292,7 +292,7 @@ is not visible. Otherwise delegates to regular Emacs next-error."
     "en" 'spacemacs/next-error
     "ep" 'spacemacs/previous-error
     ))
-
+
 (use-package yasnippet
   :straight t
   :diminish yas-global-mode
@@ -342,7 +342,7 @@ is not visible. Otherwise delegates to regular Emacs next-error."
 (use-package yasnippet-snippets
   :straight t
   :after yasnippet)
-
+
 (use-package smartparens
   :straight t
   :diminish smartparens-mode
@@ -351,7 +351,7 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   (define-key evil-normal-state-map "sd" 'sp-kill-sexp)
   (define-key evil-normal-state-map "s," 'sp-copy-sexp)
   (use-package smartparens-config))
-
+
 (use-package ediff
   :defer t
   :init
@@ -364,7 +364,7 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   ;; (add-hook 'ediff-prepare-buffer-hook #'show-all)
   ;; restore window layout when done
   (add-hook 'ediff-quit-hook #'winner-undo))
-
+
 (use-package dumb-jump
   :straight t
   :config
@@ -378,7 +378,7 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   ;; the time of writing it is the only default jump handler. (gtags remains
   ;; mode-local)
   (add-to-list 'spacemacs-default-jump-handlers 'dumb-jump-go 'append))
-
+
 (use-package eldoc
   :diminish eldoc-mode
   :commands (eldoc-mode)
@@ -388,14 +388,14 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   (add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode)
   ;; enable eldoc in IELM
   (add-hook 'ielm-mode-hook #'eldoc-mode))
-
+
 ;; (use-package flycheck-posframe
 ;;   :straight (:host github :repo "alexmurray/flycheck-posframe")
 ;;   :after flycheck
 ;;   :config
 ;;   (add-hook 'flycheck-mode-hook #'flycheck-posframe-mode)
 ;;   (set-face-attribute 'flycheck-posframe-error-face nil :inherit 'error))
-
+
 (use-package git-link
   :straight t
   :commands (git-link git-link-commit git-link-homepage)

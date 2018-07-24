@@ -14,13 +14,13 @@
          (format tag (help-key-description key nil)))
       (insert (format tag ""))
       (forward-char -8))))
-
+
 (with-eval-after-load 'org-src
   (evil-define-key 'org-src-mode
     ",c" 'org-edit-src-exit
     ",a" 'org-edit-src-abort
     ",k" 'org-edit-src-abort))
-
+
 (use-package org
   ;; :straight org-plus-contrib
   ;; :straight org
@@ -386,11 +386,11 @@
   (define-key org-read-date-minibuffer-local-map (kbd "M-J")
     (lambda () (interactive)
       (org-eval-in-calendar '(calendar-forward-year 1)))))
-
+
 (use-package htmlize
   :straight t
   :commands (org-html-export-as-html org-html-export-as-html))
-
+
 (use-package org-clock
   :after org
   :commands (org-clock-persistence-insinuate)
@@ -427,10 +427,9 @@
 ;;              org-expiry-process-entry
 ;;              org-expiry-process-entries)
 ;;   :init (org-expiry-insinuate))
-
+
 (with-eval-after-load 'org-indent
   (diminish 'org-indent-mode))
-
 
 (use-package org-bullets
   :straight t
@@ -510,7 +509,7 @@
    '("l" "Capture a link from clipboard" entry
      (file+olp "~/Dropbox/ORG/notes.org" "notes" "read")
      #'mkm-org-capture/link)))
-
+
 (use-package evil-org
   :straight t
   :defer t
@@ -519,7 +518,7 @@
   (setq evil-org-key-theme `(textobjects
                              navigation
                              additional)))
-
+
 (use-package org-agenda
   :defer t
   :init
@@ -554,12 +553,12 @@
     (kbd "gd") 'org-agenda-toggle-time-grid
     (kbd "gr") 'org-agenda-redo
     (kbd "M-RET") 'org-agenda-show-and-scroll-up))
-
+
 (use-package org-bullets
   :straight t
   :defer t
   :init (add-hook 'org-mode-hook 'org-bullets-mode))
-
+
 (use-package org-projectile
   :straight t
   :commands (org-projectile-capture-for-current-project)
@@ -570,7 +569,7 @@
   (with-eval-after-load 'org-capture
     (unless (featurep 'org-projectile)
       (require 'org-projectile))))
-
+
 (use-package ob
   :defer t
   :init
@@ -585,15 +584,15 @@
     (when org-inline-image-overlays
       (org-redisplay-inline-images)))
   (add-hook 'org-babel-after-execute-hook 'spacemacs/ob-fix-inline-images))
-
+
 (use-package org-fancy-priorities
   :straight t
   :hook (org-mode . org-fancy-priorities-mode)
   :config
   (setq org-fancy-priorities-list '("HIGH" "MID" "OPTIONAL" "LOW")))
-
+
 (yq/get-modules "org-agenda.el")
-
+
 (use-package org-mru-clock
   :straight t
   :init
@@ -625,13 +624,11 @@ Clock   In/out^     ^Edit^   ^Summary     (_?_)
   (spacemacs/set-leader-keys "cj" 'org-mru-clock-select-recent-task)
   (setq org-mru-clock-how-many 100
         org-mru-clock-completing-read #'ivy-completing-read))
-
 ;; (straight-use-package 'org-download)
 (use-package org-sticky-header
   :straight ( :host github :repo "alphapapa/org-sticky-header")
   :after org-mode
   :hook (org-mode .org-sticky-header-mode))
-
 
 (use-package ox-clip
   :straight t

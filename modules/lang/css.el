@@ -37,21 +37,21 @@
 (use-package counsel-css
   :straight t
   :commands counsel-css)
-
+
 (use-package less-css-mode
   :straight t
   :mode ("\\.less\\'" . less-css-mode))
-
+
 (use-package scss-mode
   :straight t
   :mode ("\\.scss\\'" . scss-mode))
-
+
 (use-package counsel-css
   :straight t
   :commands (counsel-css)
   :init
   (evil-define-key 'normal css-mode-map ",l" 'counsel-css))
-
+
 (use-package show-css
   :straight t
   :commands (showcss-mode showcss/main)

@@ -15,11 +15,11 @@
 
 (defvar ruby-test-runner 'minitest
   "Test runner to use. Possible values are `ruby-test', `minitest' or `rspec'.")
-
+
 (use-package bundler
   :straight t
   :defer t)
-
+
 (use-package robe
   :straight t
   :defer t
@@ -31,7 +31,7 @@
   (spacemacs/add-to-hooks 'robe-jump
                           '(spacemacs-jump-handlers-ruby-mode
                             spacemacs-jump-handlers-enh-ruby-mode)))
-
+
 (use-package rspec-mode
   :straight t
   :defer t
@@ -47,7 +47,7 @@
     (remove-hook hook 'rspec-enable-appropriate-mode))
   :config
   (add-hook 'rspec-compilation-mode-hook 'spacemacs//inf-ruby-auto-enter))
-
+
 (use-package minitest
   :straight t
   :defer t
@@ -59,12 +59,12 @@
   ;; remove hooks added by minitest mode
   (dolist (hook '(ruby-mode-hook enh-ruby-mode-hook))
     (remove-hook hook 'minitest-enable-appropriate-mode)))
-
+
 (use-package rake
   :straight t
   :defer t
   :init (setq rake-cache-file (concat spacemacs-cache-directory "rake.cache")))
-
+
 (use-package ruby-mode
   :defer t
   :mode (("Appraisals\\'" . ruby-mode)
@@ -96,7 +96,7 @@
   (push '("*rake-compilation*" :dedicated t :position bottom :stick t :noselect t :height 0.4)
         popwin:special-display-config))
 ;; (add-to-list 'org-babel-load-languages '(ruby . t))
-
+
 (use-package enh-ruby-mode
   :straight t
   :mode (("Appraisals\\'" . enh-ruby-mode)

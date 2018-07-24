@@ -49,7 +49,6 @@ file stored in the cache directory and `nil' to disable auto-saving.")
       '((:eval (if (buffer-file-name)
                    (abbreviate-file-name (buffer-file-name))
                  "%b"))))
-
 (put 'narrow-to-region 'disabled nil)
 (put 'narrow-to-page 'disabled nil)
 (add-hook 'prog-mode-hook 'goto-address-prog-mode)
@@ -272,7 +271,7 @@ If the universal prefix argument is used then kill the buffer too."
 
 (with-eval-after-load 'hi-lock
   (diminish 'hi-lock-mode))
-
+
 (use-package linum
   :init
   (progn
@@ -295,7 +294,7 @@ If the universal prefix argument is used then kill the buffer too."
                                             1))))))
     (advice-add #'linum-update-window
                 :after #'spacemacs//linum-update-window-scale-fix)))
-
+
 (use-package savehist
   :init
   ;; Minibuffer history
@@ -309,7 +308,7 @@ If the universal prefix argument is used then kill the buffer too."
                                         extended-command-history)
         savehist-autosave-interval 60)
   (savehist-mode t))
-
+
 (use-package recentf
   :straight t
   :init
@@ -338,7 +337,7 @@ If the universal prefix argument is used then kill the buffer too."
 (use-package recentf-ext
   :straight t
   :after recentf)
-
+
 ;; saveplace remembers your location in a file when saving files
 (use-package saveplace
   :init
@@ -348,13 +347,13 @@ If the universal prefix argument is used then kill the buffer too."
     (setq save-place t))
   ;; Save point position between sessions
   (setq save-place-file (concat spacemacs-cache-directory "places")))
-
+
 (use-package uniquify
   :config
   (setq uniquify-buffer-name-style 'post-forward-angle-brackets
         ;; don't screw special buffers
         uniquify-ignore-buffers-re "^\\*"))
-
+
 (use-package whitespace
   :defer t
   :diminish whitespace-mode
@@ -396,7 +395,7 @@ If the universal prefix argument is used then kill the buffer too."
                       :background nil)
   (set-face-attribute 'whitespace-indentation nil
                       :background nil))
-
+
 (use-package bookmark
   :defer t
   :init
@@ -1038,7 +1037,7 @@ otherwise it is scaled down."
   :commands (ibuffer-vc-set-filter-groups-by-vc-root)
   :hook (ibuffer-mode . ibuffer-vc-set-filter-groups-by-vc-root)
   :init (define-key ibuffer-mode-map "K" 'ibuffer-kill-filter-group))
-
+
 (global-set-key (kbd "C-x \\") #'align-regexp)
 (setq tab-always-indent 'complete)
 
@@ -1046,7 +1045,7 @@ otherwise it is scaled down."
 ;; (setq scroll-margin 0
 ;;       scroll-conservatively 100000
 ;;       scroll-preserve-screen-position 1)
-
+
 (use-package uniquify
   :config
   (setq uniquify-buffer-name-style 'forward)
@@ -1055,25 +1054,25 @@ otherwise it is scaled down."
   (setq uniquify-after-kill-buffer-p t)
   ;; don't muck with special buffers
   (setq uniquify-ignore-buffers-re "^\\*"))
-
+
 ;; auto save buffers when they lost focus
 ;; (use-package super-save
 ;;   :config
 ;; (super-save-mode +1))
-
+
 (use-package async
   :straight t
   :init
   (autoload 'dired-async-mode "dired-async.el" nil t)
   (dired-async-mode 1)
   (async-bytecomp-package-mode 1))
-
+
 (use-package smtpmail-async
   :commands (async-smtpmail-send-it)
   :init
   (setq message-send-mail-function 'async-smtpmail-send-it)
   (setq send-mail-function 'async-smtpmail-send-it))
-
+
 (use-package auth-source
   :no-require t
   :config (setq auth-sources '("~/.authinfo.gpg" "~/.netrc")))

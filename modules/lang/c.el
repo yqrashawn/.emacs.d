@@ -34,7 +34,7 @@
 
 (defvar c-c++-default-mode-for-headers 'c-mode
   "Default mode to open header files. Can be `c-mode' or `c++-mode'.")
-
+
 (use-package cc-mode
   :straight t
   :defer t
