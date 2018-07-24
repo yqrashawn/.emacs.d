@@ -50,6 +50,8 @@ file stored in the cache directory and `nil' to disable auto-saving.")
                    (abbreviate-file-name (buffer-file-name))
                  "%b"))))
 
+(put 'narrow-to-region 'disabled nil)
+(put 'narrow-to-page 'disabled nil)
 (add-hook 'prog-mode-hook 'goto-address-prog-mode)
 (add-hook 'prog-mode-hook 'bug-reference-prog-mode)
 ;; (global-prettify-symbols-mode +1)
@@ -1075,3 +1077,37 @@ otherwise it is scaled down."
 (use-package auth-source
   :no-require t
   :config (setq auth-sources '("~/.authinfo.gpg" "~/.netrc")))
+
+(use-package comment-dwim-2
+  :straight t
+  :commands (comment-dwim-2)
+  :init
+  (global-set-key (kbd "M-;") 'comment-dwim-2)
+  (global-set-key (kbd "C-x C-;") 'comment-dwim-2))
+
+;; http://endlessparentheses.com/emacs-narrow-or-widen-dwim.html
+(defun narrow-or-widen-dwim (p)
+  "Widen if buffer is narrowed, narrow-dwim otherwise.
+   Dwim means: region, org-src-block, org-subtree, or defun,
+   whichever applies first. Narrowing to org-src-block actually
+   calls `org-edit-src-code'.
+
+With prefix P, don't widen, just narrow even if buffer is
+already narrowed."
+  (interactive "P")
+  (declare (interactive-only))
+  (cond ((and (buffer-narrowed-p) (not p)) (widen))
+        ((region-active-p)
+         (narrow-to-region (region-beginning) (region-end)))
+        ((derived-mode-p 'org-mode)
+         ;; `org-edit-src-code' is not a real narrowing
+         ;; command. Remove this first conditional if you
+         ;; don't want it.
+         (cond ((ignore-errors (org-edit-src-code))
+                (delete-other-windows))
+               ((ignore-errors (org-narrow-to-block) t))
+               (t (org-narrow-to-subtree))))
+        ((derived-mode-p 'latex-mode)
+         (LaTeX-narrow-to-environment))
+        (t (narrow-to-defun))))
+(global-set-key "\C-x\C-l" 'narrow-or-widen-dwim)

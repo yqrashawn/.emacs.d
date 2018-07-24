@@ -234,6 +234,7 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   :straight t
   :diminish projectile-mode
   :config
+  ;; http://endlessparentheses.com/improving-projectile-with-extra-commands.html
   (def-projectile-commander-method ?? "Commander help buffer."
     (ignore-errors (kill-buffer projectile-commander-help-buffer))
     (with-current-buffer (get-buffer-create projectile-commander-help-buffer)

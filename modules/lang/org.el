@@ -30,7 +30,6 @@
   ;; src block have same indentation with #+BEGIN_SRC
   (require 'org-agenda)
   (setq org-edit-src-content-indentation 0)
-  (setq org-clock-into-drawer "CLOCKING")
   (defun my-sparse-tree-with-tag-filter()
     "asks for a tag and generates sparse tree for all open tasks in current Org buffer
   that are associated with this tag"
@@ -45,6 +44,10 @@
              tag-for-filter
              ":")))
   (evil-define-key 'normal org-mode-map "ss" #'my-sparse-tree-with-tag-filter)
+
+  (setq org-tag-alist '(("OFFICE" . ?w)
+                        ("HOME" . ?h)
+                        ))
 
   ;; Add global evil-leader mappings. Used to access org-agenda
   ;; functionalities – and a few others commands – from any other mode.
@@ -92,6 +95,30 @@
         ;; `helm-org-headings-max-depth'.
         org-imenu-depth 8)
   :config
+  ;; https://www.reddit.com/r/orgmode/comments/7gqsif/is_it_possible_to_auto_sort_a_file_or_subtree_by/
+  (defun yant/org-entry-has-subentries ()
+    "Any entry with subheadings."
+    (let ((subtree-end (save-excursion (org-end-of-subtree t))))
+      (save-excursion
+        (org-back-to-heading)
+        (forward-line 1)
+        (when (< (point) subtree-end)
+          (re-search-forward "^\*+ " subtree-end t)))))
+
+  (defun yant/org-entry-sort-by-property nil
+    "Apply property sort on current entry. The sorting is done using property with the name from value of :SORT: property.
+      For example, :SORT: DEADLINE will apply org-sort-entries by DEADLINE property on current entry."
+    (let ((property (org-entry-get (point) "SORT" 'INHERIT)))
+      (when (and (not (seq-empty-p property))
+                 (yant/org-entry-has-subentries))
+        (funcall #'org-sort-entries nil ?r nil nil property))))
+
+  (defun yant/org-buffer-sort-by-property (&optional MATCH)
+    "Sort all subtrees in buffer by the property, which is the value of their :SORT: property.
+        Only subtrees, matching MATCH are selected"
+    (org-map-entries #'yant/org-entry-sort-by-property MATCH 'file))
+
+  (add-hook 'org-mode-hook #'yant/org-buffer-sort-by-property)
   (defun my-handle-tsfile-link (querystring)
     (let ((querystring
            (if (s-contains-p "/" querystring)
@@ -369,9 +396,26 @@
   :commands (org-clock-persistence-insinuate)
   :init (org-clock-persistence-insinuate)
   :config
-  (setq org-clock-persist 'history)
-  (setq org-clock-idle-time 10))
-
+
+
+  (defun bh/remove-empty-drawer-on-clock-out ()
+    (interactive)
+    (save-excursion
+      (beginning-of-line 0)
+      (org-remove-empty-drawer-at (point))))
+  (add-hook 'org-clock-out-hook 'bh/remove-empty-drawer-on-clock-out 'append)
+  (setq  org-log-done 'time
+         org-clock-idle-time 10
+         org-clock-into-drawer "CLOCKING"
+         org-clock-continuously nil
+         org-clock-persist t
+         org-clock-in-switch-to-state "STARTED"
+         org-clock-in-resume nil
+         org-clock-report-include-clocking-task t
+         org-clock-out-remove-zero-time-clocks t
+         ;; Too many clock entries clutter up a heading
+         org-log-into-drawer t))
+
 ;; (use-package org-expiry
 ;;   :after org
 ;;   :commands (org-expiry-insinuate
@@ -387,7 +431,38 @@
 (with-eval-after-load 'org-indent
   (diminish 'org-indent-mode))
 
+
+(use-package org-bullets
+  :straight t
+  :init
+  :hook (org-mode . org-bullets-mode))
+
 (use-package org-capture
+  :commands (org-capture)
+  :init
+  (setq yq/org-daily-review-file "~/Dropbox/ORG/review/daily-review.org")
+  (defun yq/create-daily-org-review-date (&optional suffix)
+    (concat "~/Dropbox/ORG/.review/daily/" (format-time-string "%Y-%m-%d") suffix))
+  (defun yq/daily-review (&optional startup)
+    (interactive)
+    (let ((review-file (yq/create-daily-org-review-date)))
+      (unless (and startup (file-exists-p (yq/create-daily-org-review-date "-finished")))
+        (if (file-exists-p review-file)
+            (progn
+              (find-file yq/org-daily-review-file)
+              (org-speed-move-safe 'outline-up-heading))
+          (progn
+            (shell-command (concat "> " review-file))
+            (org-capture nil "d")
+            (org-capture-finalize t)
+            (org-speed-move-safe 'outline-up-heading)
+            )))))
+  (defun yq/daily-review-finished ()
+    (interactive)
+    (shell-command (concat "> " (yq/create-daily-org-review-date "-finished")))
+    (org-clock-out))
+  (spacemacs/set-leader-keys (kbd "ESC") 'yq/daily-review)
+  (yq/daily-review 'startup)
   :config
   (setq org-capture--clipboards t)
   (evil-define-key 'normal 'org-capture-mode
@@ -395,7 +470,6 @@
     ",c" 'org-capture-finalize
     ",k" 'org-capture-kill
     ",r" 'org-capture-refile)
-
   (setq org-capture-templates
         '(("s" "Some day" entry
            (file+olp "~/Dropbox/ORG/notes.org" "notes" "some day")
@@ -411,8 +485,11 @@
            "* TODO %? \n %a\n%U")
           ("t" "TODOs" entry
            (file+olp "~/Dropbox/ORG/gtd.org" "misc")
-           "* TODO %? \n%U"))))
-
+           "* TODO %? \n%U")
+          ("D" "Review: Daily Review" entry (file+olp+datetree "~/Dropbox/ORG/review/daily-review.org")
+           (file "~/Dropbox/ORG/daily-review-template.org"))
+          )))
+
 (use-package org-web-tools
   :straight t
   :config
@@ -520,18 +597,51 @@
 (use-package org-mru-clock
   :straight t
   :init
+  (defhydra hydra-org-clock (:color blue :hint nil)
+    "
+Clock   In/out^     ^Edit^   ^Summary     (_?_)
+-----------------------------------------
+        _i_n         _e_dit   _g_oto entry
+        _c_ontinue   _C_ancel _d_isplay
+        _o_ut        ^ ^      _r_eport
+      "
+    ("i" org-mru-clock-in)
+    ("o" org-clock-out)
+    ("c" org-clock-in-last)
+    ("e" org-clock-modify-effort-estimate)
+    ("C" org-clock-cancel)
+    ("q" nil)
+    ("g" org-clock-goto)
+    ("d" org-clock-display)
+    ("r" org-clock-report)
+    ("?" (org-info "Clocking commands")))
   (setq org-mru-clock-completing-read #'ivy-completing-read)
   (setq org-mru-clock-keep-formatting t)
+  (spacemacs/set-leader-keys "cc" 'hydra-org-clock/body)
   (spacemacs/set-leader-keys "ci" 'org-mru-clock-in)
   (spacemacs/set-leader-keys "co" 'org-clock-out)
   (spacemacs/set-leader-keys "cd" 'org-clock-display)
+  (spacemacs/set-leader-keys "cD" 'org-clock-report)
   (spacemacs/set-leader-keys "cj" 'org-mru-clock-select-recent-task)
   (setq org-mru-clock-how-many 100
         org-mru-clock-completing-read #'ivy-completing-read))
 
+;; (straight-use-package 'org-download)
 (use-package org-sticky-header
   :straight ( :host github :repo "alphapapa/org-sticky-header")
   :after org-mode
   :hook (org-mode .org-sticky-header-mode))
 
 
+(use-package ox-clip
+  :straight t
+  :after org
+  :config
+  (defun ox-clip-dwim ()
+    "If the region is active, call ox-clip as normal. Otherwise, call ox-clip on whole buffer (or visible / narrowed section, if applicable)."
+    (interactive)
+    (if (region-active-p)
+        (ox-clip-formatted-copy (region-beginning) (region-end))
+      ;; if buffer is narrowed, this will work on visible; if not, it will capture whole buffer
+      (ox-clip-formatted-copy (point-min) (point-max))))
+  (define-key org-mode-map (kbd "C-c x") 'ox-clip-dwim))
