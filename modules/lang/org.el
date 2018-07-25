@@ -629,15 +629,15 @@ Clock   In/out^     ^Edit^   ^Summary     (_?_)
   :after org-mode
   :hook (org-mode .org-sticky-header-mode))
 
-(use-package ox-clip
-  :straight t
-  :after org
-  :config
-  (defun ox-clip-dwim ()
-    "If the region is active, call ox-clip as normal. Otherwise, call ox-clip on whole buffer (or visible / narrowed section, if applicable)."
-    (interactive)
-    (if (region-active-p)
-        (ox-clip-formatted-copy (region-beginning) (region-end))
-      ;; if buffer is narrowed, this will work on visible; if not, it will capture whole buffer
-      (ox-clip-formatted-copy (point-min) (point-max))))
-  (define-key org-mode-map (kbd "C-c x") 'ox-clip-dwim))
+;; (use-package ox-clip
+;;   :straight t
+;;   :after org
+;;   :config
+;;   (defun ox-clip-dwim ()
+;;     "If the region is active, call ox-clip as normal. Otherwise, call ox-clip on whole buffer (or visible / narrowed section, if applicable)."
+;;     (interactive)
+;;     (if (region-active-p)
+;;         (ox-clip-formatted-copy (region-beginning) (region-end))
+;;       ;; if buffer is narrowed, this will work on visible; if not, it will capture whole buffer
+;;       (ox-clip-formatted-copy (point-min) (point-max))))
+;;   (define-key org-mode-map (kbd "C-c x") 'ox-clip-dwim))

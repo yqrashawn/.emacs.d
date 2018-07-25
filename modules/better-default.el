@@ -1077,13 +1077,6 @@ otherwise it is scaled down."
   :no-require t
   :config (setq auth-sources '("~/.authinfo.gpg" "~/.netrc")))
 
-(use-package comment-dwim-2
-  :straight t
-  :commands (comment-dwim-2)
-  :init
-  (global-set-key (kbd "M-;") 'comment-dwim-2)
-  (global-set-key (kbd "C-x C-;") 'comment-dwim-2))
-
 ;; http://endlessparentheses.com/emacs-narrow-or-widen-dwim.html
 (defun narrow-or-widen-dwim (p)
   "Widen if buffer is narrowed, narrow-dwim otherwise.
