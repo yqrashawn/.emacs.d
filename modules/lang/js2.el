@@ -129,10 +129,19 @@
   :after js2-mode
   :diminish (indium-interaction-mode . "In" )
   :hook (js2-mode . indium-interaction-mode)
-  :commands (indium-interaction-mode indium-run-node indium-run-chrome indium-debugger-mode)
+  :commands (indium-launch indium-interaction-mode indium-run-node indium-run-chrome indium-debugger-mode)
   :init (setq indium-nodejs-inspect-brk t)
   (add-to-list 'evil-insert-state-modes 'indium-repl-mode)
-  :config
+  (setq indium-debugger-inspect-when-eval t)
+  (setq indium-chrome-executable "/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary")
+  (defun indium-v8--handle-ws-open (ws url nodejs)
+    "Setup indium for a new connection for the websocket WS.
+URL points to the browser tab.
+
+If NODEJS is non-nil, set an extra property in the connection."
+    (setq indium-current-connection (indium-v8--make-connection ws url nodejs))
+    (indium-v8--enable-tools)
+    (run-hooks 'indium-connection-open-hook))
   (defun yq/indium-run-node (command)
     "do not switch the process buffer compared to the original indium-run-node"
     (interactive (list (read-shell-command "Node command: "
@@ -141,11 +150,11 @@
     (indium-maybe-quit)
     (unless indium-current-connection
       (make-process :name "indium-nodejs-process"
-				            :buffer "*node process*"
-				            :filter #'indium-nodejs--process-filter
-				            :command (list shell-file-name
-						                       shell-command-switch
-						                       (indium-nodejs--add-flags command)))))
+                    :buffer "*node process*"
+                    :filter #'indium-nodejs--process-filter
+                    :command (list shell-file-name
+                                   shell-command-switch
+                                   (indium-nodejs--add-flags command)))))
   ;; if there's no connection, simply run current file with node
   (defun indium-interaction--ensure-connection ()
     "Signal an error if there is no indium connection."
@@ -157,12 +166,13 @@
           (yq/indium-run-node (concat "node " (buffer-file-name)))
         (user-error "yq: invliad file name, something wrong"))))
   ;; launch indium
+  (evil-define-key 'normal js2-mode-map ",il" 'indium-launch)
   (evil-define-key 'normal js2-mode-map ",iq" 'indium-quit)
   (evil-define-key 'normal js2-mode-map ",in" 'yq/indium-run-node)
   (evil-define-key 'normal js2-mode-map ",ic" 'indium-run-chrome)
   (evil-define-key 'normal js2-mode-map ",ir" 'indium-restart-node)
   (evil-define-key 'normal js2-mode-map (kbd "s-r") 'indium-restart-node)
-
+  :config
   ;; indium debugger mode
   (define-key indium-debugger-mode-map "h" nil)
   (define-key indium-debugger-mode-map "l" nil)
@@ -171,14 +181,11 @@
   (define-key indium-debugger-mode-map "p" nil)
   (define-key indium-debugger-mode-map "e" nil)
   (define-key indium-debugger-mode-map " " nil)
-  (define-key indium-debugger-mode-map "x" 'indium-debugger-evaluate)
-  (define-key indium-debugger-mode-map "a" 'indium-debugger-here)
-  (define-key indium-debugger-mode-map ";" 'indium-debugger-step-over)
-  (define-key indium-debugger-mode-map (kbd "M-n") 'indium-debugger-next-frame)
-  (define-key indium-debugger-mode-map (kbd "M-p") 'indium-debugger-previous-frame)
-  (evil-define-key 'normal indium-debugger-mode-map ",l" 'indium-debugger-locals)
-  (evil-define-key 'normal indium-debugger-mode-map ",s" 'indium-debugger-stack-frames)
+  (define-key indium-interaction-mode-map (kbd "C-c C-v") 'indium-switch-to-debugger)
+  (define-key indium-repl-mode-map (kbd "C-c C-v") 'indium-switch-to-debugger)
 
+  (evil-define-key 'normal indium-debugger-locals-mode-map "f" 'next-buffer)
+  (evil-define-key 'normal indium-debugger-locals-mode-map "b" 'previous-buffer)
   (evil-define-key 'normal indium-debugger-locals-mode-map "q" 'quit-window)
   (evil-define-key 'normal indium-debugger-frames-mode-map "q" 'quit-window)
 
@@ -190,6 +197,8 @@
   ;; inspector
   (evil-define-key 'normal indium-inspector-mode-map "l" nil)
   (evil-define-key 'normal indium-inspector-mode-map "g" nil)
+  (evil-define-key 'normal indium-inspector-mode-map "f" 'next-buffer)
+  (evil-define-key 'normal indium-inspector-mode-map "b" 'previous-buffer)
   (evil-define-key 'normal indium-inspector-mode-map "q" 'quit-window)
   (evil-define-key 'normal indium-inspector-mode-map "u" 'indium-inspector-refresh)
   (evil-define-key 'normal indium-inspector-mode-map "o" 'indium-inspector-pop)
@@ -200,22 +209,54 @@
   (advice-add 'indium-debugger-mode :after (lambda (c) (evil-emacs-state) (evil-exit-emacs-state)))
   (evil-make-intercept-map indium-debugger-mode-map)
 
-  (evil-define-key 'normal indium-interaction-mode-map ",ee" 'indium-inspect-expression)
-  (evil-define-key 'normal indium-interaction-mode-map ",eb" 'indium-eval-buffer)
-  (evil-define-key 'normal indium-interaction-mode-map ",er" 'indium-eval-region)
-  (evil-define-key 'normal indium-interaction-mode-map ",ef" 'indium-eval-defun)
-  (evil-define-key 'normal indium-interaction-mode-map ",bb" 'indium-add-breakpoint)
-  (evil-define-key 'normal indium-interaction-mode-map ",bc" 'indium-add-conditional-breakpoint)
-  (evil-define-key 'normal indium-interaction-mode-map ",bk" 'indium-remove-breakpoint)
-  (evil-define-key 'normal indium-interaction-mode-map ",bK" 'indium-remove-all-breakpoints-from-buffer)
-  (evil-define-key 'normal indium-interaction-mode-map ",be" 'indium-edit-breakpoint-condition)
-  (evil-define-key 'normal indium-interaction-mode-map ",bl" 'indium-list-breakpoints)
-  (evil-define-key 'normal indium-interaction-mode-map ",bd" 'indium-deactivate-breakpoints)
-  (evil-define-key 'normal indium-interaction-mode-map ",bd" 'indium-activate-breakpoints)
-  (define-key indium-interaction-mode-map (kbd "C-c :") 'indium-inspect-expression)
-  ;; webpack config
-  ;; output : {
-  ;;   devtoolModuleFilenameTemplate: '[absolute-resource-path]',
-  ;;   devtoolFallbackModuleFilenameTemplate: '[absolute-resource-path]?[hash]'
-  ;; }
-  )
+  (evil-define-key 'normal js2-mode-map ",," 'hydra-indium/body)
+  (evil-define-key 'normal js2-mode-map ",ee" 'indium-inspect-expression)
+  (evil-define-key 'normal js2-mode-map ",eb" 'indium-eval-buffer)
+  (evil-define-key 'normal js2-mode-map ",er" 'indium-eval-region)
+  (evil-define-key 'normal js2-mode-map ",ef" 'indium-eval-defun)
+  (evil-define-key 'normal js2-mode-map ",bb" 'indium-add-breakpoint)
+  (evil-define-key 'normal js2-mode-map ",bc" 'indium-add-conditional-breakpoint)
+  (evil-define-key 'normal js2-mode-map ",bu" 'indium-remove-breakpoint)
+  (evil-define-key 'normal js2-mode-map ",bU" 'indium-remove-all-breakpoints-from-buffer)
+  (evil-define-key 'normal js2-mode-map ",be" 'indium-edit-breakpoint-condition)
+  (evil-define-key 'normal js2-mode-map ",bl" 'indium-list-breakpoints)
+  (evil-define-key 'normal js2-mode-map ",bd" 'indium-deactivate-breakpoints)
+  (evil-define-key 'normal js2-mode-map ",bd" 'indium-activate-breakpoints)
+  (define-key js2-mode-map (kbd "C-c :") 'indium-inspect-expression)
+
+  (defhydra hydra-indium (:hint nil :color pink :foreign-keys run)
+    "
+Breakpoint  | _b_ add   _u_ remove  _t_oggle _a_/_d_eactivate
+            | _l_ist _C_ondition _E_dit
+Debug       | _h_ere  step _i_n/_o_ut _SPC_ step over _c_ontinue _e_/_E_valuate
+    "
+    ("b" indium-add-breakpoint)
+    ("u" indium-remove-breakpoint)
+    ("t" indium-toggle-breakpoint)
+    ("a" indium-activate-breakpoints)
+    ("d" indium-deactivate-breakpoints)
+    ("C" indium-add-conditional-breakpoint)
+    ("E" indium-edit-breakpoint-condition)
+    ("h" indium-debugger-here)
+    ("i" indium-debugger-step-into)
+    ("o" indium-debugger-step-out)
+    ("SPC" indium-debugger-step-over)
+    ("c" indium-debugger-resume)
+    ("s" indium-debugger-stack-frames :exit t)
+    ("n" indium-debugger-next-frame)
+    ("p" indium-debugger-previous-frame)
+    ("E" indium-inspect-expression)
+    ("e" indium-inspect-last-node)
+    ("r" indium-reload)
+    ("l" indium-debugger-locals :exit t)
+    (",," (lambda ()(interactive)) :exit t)
+    ("q" (lambda ()(interactive)) :exit t))
+  (add-hook 'indium-script-parsed-hook (lambda (_) (interactive) (hydra-indium/body)))
+  (add-hook 'indium-debugger-locals-mode-hook 'hydra-indium/lambda-q-and-exit)
+  (add-hook 'indium-inspector-mode-hook 'hydra-indium/lambda-q-and-exit)
+  (add-hook 'indium-debugger-frames-mode-hook 'hydra-indium/lambda-q-and-exit))
+;; webpack config
+;; output : {
+;;   devtoolModuleFilenameTemplate: '[absolute-resource-path]',
+;;   devtoolFallbackModuleFilenameTemplate: '[absolute-resource-path]?[hash]'
+;; }
