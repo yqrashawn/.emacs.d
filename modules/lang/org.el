@@ -436,35 +436,6 @@
   :commands (org-capture)
   :init
   (setq yq/org-daily-review-file "~/Dropbox/ORG/review/daily-review.org")
-  (defun yq/create-daily-org-review-date (&optional suffix)
-    (concat "~/Dropbox/ORG/.review/daily/" (format-time-string "%Y-%m-%d") suffix))
-  (defun yq/daily-review (&optional startup)
-    (interactive)
-    (let ((review-file (yq/create-daily-org-review-date)))
-      (unless (and startup (file-exists-p (yq/create-daily-org-review-date "-finished")))
-        (if (file-exists-p review-file)
-            (progn
-              (find-file yq/org-daily-review-file)
-              (org-speed-move-safe 'outline-up-heading))
-          (progn
-            (shell-command (concat "> " review-file))
-            (org-capture nil "d")
-            (org-capture-finalize t)
-            (org-speed-move-safe 'outline-up-heading)
-            )))))
-  (defun yq/daily-review-finished ()
-    (interactive)
-    (shell-command (concat "> " (yq/create-daily-org-review-date "-finished")))
-    (org-clock-out))
-  (spacemacs/set-leader-keys (kbd "ESC") 'yq/daily-review)
-  (yq/daily-review 'startup)
-  :config
-  (setq org-capture--clipboards t)
-  (evil-define-key 'normal 'org-capture-mode
-    ",a" 'org-capture-kill
-    ",c" 'org-capture-finalize
-    ",k" 'org-capture-kill
-    ",r" 'org-capture-refile)
   (setq org-capture-templates
         '(("s" "Some day" entry
            (file+olp "~/Dropbox/ORG/notes.org" "notes" "some day")
@@ -483,7 +454,37 @@
            "* TODO %? \n%U")
           ("D" "Review: Daily Review" entry (file+olp+datetree "~/Dropbox/ORG/review/daily-review.org")
            (file "~/Dropbox/ORG/daily-review-template.org"))
-          )))
+          ))
+  (defun yq/create-daily-org-review-date (&optional suffix)
+    (concat "~/Dropbox/ORG/.review/daily/" (format-time-string "%Y-%m-%d") suffix))
+  (defun yq/daily-review (&optional startup)
+    (interactive)
+    (let ((review-file (yq/create-daily-org-review-date)))
+      (unless (and startup (file-exists-p (yq/create-daily-org-review-date "-finished")))
+        (if (file-exists-p review-file)
+            (progn
+              (find-file yq/org-daily-review-file)
+              (org-speed-move-safe 'outline-up-heading))
+          (progn
+            (shell-command (concat "> " review-file))
+            (org-capture nil "D")
+            (org-capture-finalize t)
+            (save-buffer)
+            ;; (org-speed-move-safe 'outline-up-heading)
+            )))))
+  (defun yq/daily-review-finished ()
+    (interactive)
+    (shell-command (concat "> " (yq/create-daily-org-review-date "-finished")))
+    (org-clock-out))
+  (spacemacs/set-leader-keys (kbd "`") 'yq/daily-review)
+  (yq/daily-review 'startup)
+  :config
+  (setq org-capture--clipboards t)
+  (evil-define-key 'normal 'org-capture-mode
+    ",a" 'org-capture-kill
+    ",c" 'org-capture-finalize
+    ",k" 'org-capture-kill
+    ",r" 'org-capture-refile))
 
 (use-package org-web-tools
   :straight t
@@ -555,8 +556,7 @@
 (use-package org-bullets
   :straight t
   :after org
-  :defer t
-  :init (add-hook 'org-mode-hook 'org-bullets-mode))
+  :hook (org-mode . org-bullets-mode))
 
 (use-package org-projectile
   :straight t
