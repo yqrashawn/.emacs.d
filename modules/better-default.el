@@ -332,8 +332,10 @@ If the universal prefix argument is used then kill the buffer too."
   (add-to-list 'recentf-exclude "/private/var/folders/")
   (add-to-list 'recentf-exclude "/var/folders/")
   (add-to-list 'recentf-exclude "/var/tmp/")
+  (add-to-list 'recentf-exclude (expand-file-name (concat user-emacs-directory "recentf")))
   (add-to-list 'recentf-exclude "/tmp/")
   (add-to-list 'recentf-exclude "\\indium-eval-.*"))
+
 (use-package recentf-ext
   :straight t
   :after recentf)

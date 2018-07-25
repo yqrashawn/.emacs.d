@@ -234,90 +234,24 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   :straight t
   :diminish projectile-mode
   :init
-  (setq projectile-completion-system 'ivy)
-  :config
-  ;; http://endlessparentheses.com/improving-projectile-with-extra-commands.html
-  (def-projectile-commander-method ?? "Commander help buffer."
-    (ignore-errors (kill-buffer projectile-commander-help-buffer))
-    (with-current-buffer (get-buffer-create projectile-commander-help-buffer)
-      (insert "Projectile Commander Methods:\n\n")
-      (dolist (met projectile-commander-methods)
-        (insert (format "%c:\t%s\n" (car met) (cadr met))))
-      (goto-char (point-min))
-      (help-mode)
-      (display-buffer (current-buffer) t))
-    (projectile-commander))
-  (def-projectile-commander-method ?s
-    "Run rg on project."
-    (counsel-projectile-rg))
-  (def-projectile-commander-method ?b
-    "Open an IBuffer window showing all buffers in the current project."
-    (counsel-projectile-switch-to-buffer))
-  (def-projectile-commander-method ?B
-    "Display a project buffer in other window."
-    (projectile-display-buffer))
-  (def-projectile-commander-method ?c
-    "Run `compile' in the project."
-    (projectile-compile-project nil))
-  (def-projectile-commander-method ?d
-    "Open project root in dired."
-    (projectile-dired))
-  (def-projectile-commander-method ?D
-    "Find a project directory in other window."
-    (projectile-find-dir-other-window))
-  (def-projectile-commander-method ?e
-    "Open an eshell buffer for the project."
-    ;; This requires a snapshot version of Projectile.
-    (projectile-run-eshell))
-  (def-projectile-commander-method ?f
-    "Find a project directory in other window."
-    (projectile-find-file))
-  (def-projectile-commander-method ?F
-    "Find project file in other window."
-    (projectile-find-file-other-window))
-  (def-projectile-commander-method ?g
-    "Open project root in vc-dir or magit."
-    (projectile-vc))
-  (def-projectile-commander-method ?j
-    "Jack in to CLJ or CLJS depending on context."
-    (let* ((opts (projectile-current-project-files))
-           (file (ido-completing-read
-                  "Find file: "
-                  opts
-                  nil nil nil nil
-                  (car (cl-member-if
-                        (lambda (f)
-                          (string-match "core\\.clj\\'" f))
-                        opts)))))
-      (find-file (expand-file-name
-                  file (projectile-project-root)))
-      (run-hooks 'projectile-find-file-hook)
-      (if (derived-mode-p 'clojurescript-mode)
-          (cider-jack-in-clojurescript)
-        (cider-jack-in))))
-  (def-projectile-commander-method ?r
-    "Find recently visited file in project."
-    (projectile-recentf))
-  (def-projectile-commander-method ?\C-h
-    "Go back to project selection."
-    (projectile-switch-project)))
+  (setq projectile-completion-system 'ivy))
+
 (use-package counsel-projectile
   :straight t
-  :config
-  (setq projectile-switch-project-action 'counsel-projectile-find-file)
+  :commands (counsel-projectile-mode)
+  :init
   (counsel-projectile-mode)
   (spacemacs/set-leader-keys "p" nil)
   (spacemacs/set-leader-keys "pb" 'counsel-projectile)
   (spacemacs/set-leader-keys "pf" 'counsel-projectile-find-file)
   (spacemacs/set-leader-keys "pd" 'counsel-projectile-find-dir)
-  ;; (spacemacs/set-leader-keys "pl" 'counsel-projectile-switch-project)
-  (spacemacs/set-leader-keys "pl" 'projectile-switch-project)
-  (spacemacs/set-leader-keys "ps" 'counsel-projectile-rg)
+  (spacemacs/set-leader-keys "pl" 'counsel-projectile-switch-project)
   (defun yq/find-emacsd-modules ()
     "find file in .emacs.d"
     (interactive) (counsel-projectile-switch-project-by-name "~/.emacs.d"))
   (spacemacs/set-leader-keys "fef" 'yq/find-emacsd-modules)
   (spacemacs/set-leader-keys "fel" 'counsel-find-library))
+
 (yq/get-modules "counsel-funcs.el")
 (ivy-set-actions
  'counsel-recentf
@@ -528,7 +462,7 @@ FD-PROMPT, if non-nil, is passed as `ivy-read' prompt argument."
 (spacemacs/set-leader-keys "fb" 'yq/books)
 (spacemacs/set-leader-keys "f1" 'yq/dropbox)
 
-(defun yq/open-with-call-osascript (file)
+(defun yq/open-with-call-alfred-osascript (file)
   (shell-command (concat "osascript -e '" (format "-- Search for the file
 		tell application \"Alfred 3\"
 			search \"%1$s\"
@@ -539,12 +473,12 @@ FD-PROMPT, if non-nil, is passed as `ivy-read' prompt argument."
 			-- Press \"fn\" to show file actions
 			key code 63
 		end tell'" file))))
-(defun yq/open-with ()
+(defun yq/open-with-alfred ()
   (interactive)
   (if (derived-mode-p 'dired-mode)
-      (yq/open-with-call-osascript (dired-get-filename nil t))
-    (and (file-exists-p buffer-file-name) (yq/open-with-call-osascript buffer-file-name))))
-(spacemacs/set-leader-keys "bb" 'yq/open-with)
+      (yq/open-with-call-alfred-osascript (dired-get-filename nil t))
+    (and (file-exists-p buffer-file-name) (yq/open-with-call-alfred-osascript buffer-file-name))))
+(spacemacs/set-leader-keys "bb" 'yq/open-with-alfred)
 
 (use-package find-file-in-project
   :straight t
@@ -621,10 +555,11 @@ When ARG is non-nil search in junk files."
   :commands (company-prescient-mode)
   :init (company-prescient-mode))
 
-(use-package ibuffer-sidebar
-  :straight t
-  :commands (ibuffer-sidebar-toggle-sidebar)
-  :init
+(with-eval-after-load 'buffer
+  (yq/update-evil-emacs-state-modes 'ibuffer-mode)
+  (push 'ibuffer-mode evil-insert-state-modes)
+  (define-key ibuffer-mode-map "j" 'ibuffer-forward-line)
+  (define-key ibuffer-mode-map "k" 'ibuffer-backward-line)
   (add-to-list 'ibuffer-never-show-predicates "^\\*Ibuffer")
   (add-to-list 'ibuffer-never-show-predicates "^\\*Straight")
   (add-to-list 'ibuffer-never-show-predicates "^\\*scratch")
@@ -632,12 +567,7 @@ When ARG is non-nil search in junk files."
   (add-to-list 'ibuffer-never-show-predicates "^\\*Warnings")
   (add-to-list 'ibuffer-never-show-predicates "^\\*:Buffers:")
   (add-to-list 'ibuffer-never-show-predicates "^\\*mu4e")
-  (add-to-list 'ibuffer-never-show-predicates "^\\*Help")
-  (spacemacs/set-leader-keys "5" 'ibuffer-sidebar-toggle-sidebar)
-  (yq/update-evil-emacs-state-modes 'ibuffer-mode)
-  (push 'ibuffer-mode evil-insert-state-modes)
-  (define-key ibuffer-mode-map "j" 'ibuffer-forward-line)
-  (define-key ibuffer-mode-map "k" 'ibuffer-backward-line))
+  (add-to-list 'ibuffer-never-show-predicates "^\\*Help"))
 
 ;; (use-package session
 ;;   :straight t

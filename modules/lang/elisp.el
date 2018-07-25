@@ -102,4 +102,3 @@ Start `ielm' if it's not already running."
 ;;     (remove-hook 'pre-command-hook #'hl-sexp-unhighlight)))
 ;; ))
 
-;; (straight-use-package edit-list)
