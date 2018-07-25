@@ -1,7 +1,7 @@
 (use-package swiper
   :straight (:host github :repo "abo-abo/swiper" :branch "master"
-         :files ("swiper.el")
-         :upstream (:host github :repo "abo-abo/swiper"))
+                   :files ("swiper.el")
+                   :upstream (:host github :repo "abo-abo/swiper"))
   :config
   ;; (global-set-key (kbd "C-SPC") 'counsel-grep-or-swiper)
   ;; (global-set-key (kbd "^@") 'counsel-grep-or-swiper)
@@ -392,13 +392,13 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
 If non-nil, append EXTRA-fd-ARGS to BASE-CMD."
 
   (or (counsel-more-chars)
-    (let ((default-directory counsel-fd-current-dir)
-          (regex (counsel-unquote-regex-parens
-                  (setq ivy--old-re
-                        (ivy--regex-plus string)))))
-      (let* ((fd-cmd (concat (format base-cmd) (concat " " (s-wrap regex "'")))))
-        (counsel--async-command fd-cmd)
-        nil))))
+      (let ((default-directory counsel-fd-current-dir)
+            (regex (counsel-unquote-regex-parens
+                    (setq ivy--old-re
+                          (ivy--regex-plus string)))))
+        (let* ((fd-cmd (concat (format base-cmd) (concat " " (s-wrap regex "'")))))
+          (counsel--async-command fd-cmd)
+          nil))))
 
 (defun my-insert-fd-full-path (path)
   (insert (concat counsel-fd-current-dir path)))
@@ -464,15 +464,15 @@ FD-PROMPT, if non-nil, is passed as `ivy-read' prompt argument."
 
 (defun yq/open-with-call-alfred-osascript (file)
   (shell-command (concat "osascript -e '" (format "-- Search for the file
-		tell application \"Alfred 3\"
-			search \"%1$s\"
-		end tell
+    tell application \"Alfred 3\"
+      search \"%1$s\"
+    end tell
 
-		-- Show file actions
-		tell application \"System Events\"
-			-- Press \"fn\" to show file actions
-			key code 63
-		end tell'" file))))
+    -- Show file actions
+    tell application \"System Events\"
+      -- Press \"fn\" to show file actions
+      key code 63
+    end tell'" file))))
 (defun yq/open-with-alfred ()
   (interactive)
   (if (derived-mode-p 'dired-mode)
@@ -555,19 +555,18 @@ When ARG is non-nil search in junk files."
   :commands (company-prescient-mode)
   :init (company-prescient-mode))
 
-(with-eval-after-load 'buffer
-  (yq/update-evil-emacs-state-modes 'ibuffer-mode)
-  (push 'ibuffer-mode evil-insert-state-modes)
-  (define-key ibuffer-mode-map "j" 'ibuffer-forward-line)
-  (define-key ibuffer-mode-map "k" 'ibuffer-backward-line)
-  (add-to-list 'ibuffer-never-show-predicates "^\\*Ibuffer")
-  (add-to-list 'ibuffer-never-show-predicates "^\\*Straight")
-  (add-to-list 'ibuffer-never-show-predicates "^\\*scratch")
-  (add-to-list 'ibuffer-never-show-predicates "^\\*Messages")
-  (add-to-list 'ibuffer-never-show-predicates "^\\*Warnings")
-  (add-to-list 'ibuffer-never-show-predicates "^\\*:Buffers:")
-  (add-to-list 'ibuffer-never-show-predicates "^\\*mu4e")
-  (add-to-list 'ibuffer-never-show-predicates "^\\*Help"))
+(yq/update-evil-emacs-state-modes 'ibuffer-mode)
+(push 'ibuffer-mode evil-insert-state-modes)
+(define-key ibuffer-mode-map "j" 'ibuffer-forward-line)
+(define-key ibuffer-mode-map "k" 'ibuffer-backward-line)
+(add-to-list 'ibuffer-never-show-predicates "^\\*Ibuffer")
+(add-to-list 'ibuffer-never-show-predicates "^\\*Straight")
+(add-to-list 'ibuffer-never-show-predicates "^\\*scratch")
+(add-to-list 'ibuffer-never-show-predicates "^\\*Messages")
+(add-to-list 'ibuffer-never-show-predicates "^\\*Warnings")
+(add-to-list 'ibuffer-never-show-predicates "^\\*:Buffers:")
+(add-to-list 'ibuffer-never-show-predicates "^\\*mu4e")
+(add-to-list 'ibuffer-never-show-predicates "^\\*Help")
 
 ;; (use-package session
 ;;   :straight t
