@@ -397,8 +397,6 @@
   :commands (org-clock-persistence-insinuate)
   :init (org-clock-persistence-insinuate)
   :config
-
-
   (defun bh/remove-empty-drawer-on-clock-out ()
     (interactive)
     (save-excursion
@@ -463,8 +461,8 @@
       (unless (and startup (file-exists-p (yq/create-daily-org-review-date "-finished")))
         (if (file-exists-p review-file)
             (progn
-              (find-file yq/org-daily-review-file)
-              (org-speed-move-safe 'outline-up-heading))
+              (find-file yq/org-daily-review-file))
+              ;; (org-speed-move-safe 'outline-up-heading)
           (progn
             (shell-command (concat "> " review-file))
             (org-capture nil "D")

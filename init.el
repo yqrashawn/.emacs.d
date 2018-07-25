@@ -99,6 +99,7 @@
 (setq gc-cons-threshold 8388608)
 (toggle-frame-maximized)
 ;; (straight-use-package 'suggest)
+;; (straight-use-package 'edit-list)
 ;; (use-package zpresent)
 
 (global-set-key (kbd "s-?") 'info-display-manual)
