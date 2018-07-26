@@ -36,7 +36,7 @@
   :config
   (dolist (map (list clojure-mode-map clojurec-mode-map clojurescript-mode-map))
     (evil-define-key* 'normal map
-                      "fl" 'clojure-align))
+                      ",fl" 'clojure-align))
   (when clojure-enable-fancify-symbols
     (dolist (m '(clojure-mode clojurescript-mode clojurec-mode))
       (clojure/fancify-symbols m))))
@@ -173,6 +173,7 @@
                       ))
 
   ;; cider-repl-mode only
+  (define-key cider-repl-mode-map (kbd "C-c C-l") 'cider-repl-clear-buffer)
   (evil-define-key 'normal cider-repl-mode-map ",," 'cider-repl-handle-shortcut)
   (evil-define-key 'insert cider-repl-mode-map (kbd "RET" ) 'cider-repl-closing-return)
   (evil-define-key 'insert cider-repl-mode-map (kbd "<C-return>" ) 'newline-and-indent)
