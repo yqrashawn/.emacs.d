@@ -54,11 +54,24 @@
   (add-hook 'cider-repl-mode-hook 'eldoc-mode)
   (add-hook 'cider-repl-mode-hook #'rainbow-delimiters-mode)
   (add-hook 'cider-clojure-interaction-mode-hook 'eldoc-mode)
+  (add-hook 'cider-repl-mode-hook #'cider-company-enable-fuzzy-completion)
+  (add-hook 'cider-mode-hook #'cider-company-enable-fuzzy-completion)
   (spacemacs/register-repl 'cider 'cider-jack-in "cider")
+
   (setq cider-stacktrace-default-filters '(tooling dup)
         cider-repl-pop-to-buffer-on-connect nil
+        cider-repl-display-in-current-window t
         cider-prompt-save-file-on-load nil
+        cider-auto-select-error-buffer nil
+        cider-eval-result-prefix ";; => "
+        cider-repl-result-prefix ";; => "
         cider-repl-use-clojure-font-lock t
+        cider-repl-use-pretty-printing t
+        cider-repl-wrap-history t
+        cider-repl-history-quit-action 'delete-and-restore
+        cider-repl-history-show-preview t
+        cider-repl-history-display-duplicates nil
+        cider-repl-history-highlight-inserted-item t
         cider-repl-history-file (concat spacemacs-cache-directory "cider-repl-history"))
   (add-hook 'clojure-mode-hook 'cider-mode)
   (add-hook 'clojure-mode-hook #'rainbow-delimiters-mode)
@@ -68,7 +81,8 @@
                spacemacs-jump-handlers-clojurex-mode
                spacemacs-jump-handlers-cider-repl-mode))
     (add-to-list x 'spacemacs/clj-find-var))
-
+  (add-to-list 'evil-insert-state-modes 'cider-repl-mode)
+  (add-to-list 'evil-insert-state-modes 'cider--debug-mode)
   (add-hook 'clojure-mode-hook #'spacemacs//init-jump-handlers-clojure-mode)
   (add-hook 'clojurescript-mode-hook #'spacemacs//init-jump-handlers-clojurescript-mode)
   (add-hook 'clojurec-mode-hook #'spacemacs//init-jump-handlers-clojurec-mode)
@@ -176,6 +190,8 @@
   (define-key cider-repl-mode-map (kbd "C-c C-l") 'cider-repl-clear-buffer)
   (evil-define-key 'normal cider-repl-mode-map ",," 'cider-repl-handle-shortcut)
   (evil-define-key 'insert cider-repl-mode-map (kbd "RET" ) 'cider-repl-closing-return)
+  (evil-define-key 'insert cider-repl-mode-map (kbd "C-n" ) 'cider-repl-next-input)
+  (evil-define-key 'insert cider-repl-mode-map (kbd "C-p" ) 'cider-repl-previous-input)
   (evil-define-key 'insert cider-repl-mode-map (kbd "<C-return>" ) 'newline-and-indent)
   :config
   ;; add support for golden-ratio
@@ -262,6 +278,27 @@
           (when (not (string-prefix-p "hydra" (symbol-name func)))
             (evil-define-key 'normal map
               (concat ",r" binding) func)))))))
+
+(use-package helm-cider
+  :straight t
+  :commands (helm-cider-mode)
+  :hook ((clojure-mode cider-repl-mode cider-docview-mode cider-inspector-mode) . helm-cider-mode))
+
+(use-package cider-eval-sexp-fu
+  :straight t
+  :after cider)
+
+(use-package clojure-snippets
+  :straight t
+  :after clojure-mode)
+
+(use-package flycheck-clojure
+  :straight t
+  :after (flycheck cider))
+
+(use-package clojure-mode-extra-font-locking
+  :straight t
+  :after clojure-mode)
 
 ;; (use-package clojure-cheatsheet
 ;;   :straight t

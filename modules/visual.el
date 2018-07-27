@@ -111,11 +111,6 @@ has been changed to THEME."
 
 (add-hook 'spacemacs-post-theme-change-hook 'spacemacs/set-state-faces)
 
-(use-package page-break-lines
-  :straight t
-  :diminish page-break-lines-mode
-  :init
-  (global-page-break-lines-mode t))
 (use-package ivy-rich
   :straight t
   :defer t

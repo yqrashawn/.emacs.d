@@ -293,6 +293,11 @@ is not visible. Otherwise delegates to regular Emacs next-error."
     "ep" 'spacemacs/previous-error
     ))
 
+(use-package flycheck-pos-tip
+  :straight t
+  :after flycheck
+  :config
+  (setq flycheck-display-errors-function #'flycheck-pos-tip-error-messages))
 (use-package yasnippet
   :straight t
   :diminish yas-global-mode

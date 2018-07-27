@@ -92,6 +92,10 @@ Start `ielm' if it's not already running."
   (yq/add-toggle hl-sexp :mode hl-sexp-mode)
   (evil-define-key 'normal emacs-lisp-mode-map ",th" 'yq/toggle-hl-sexp))
 
+(use-package eval-sexp-fu
+  :straight t
+  :commands (eval-sexp-fu-flash-mode)
+  :hook (emacs-lisp-mode . eval-sexp-fu-flash-mode))
 ;; (use-package eval-sexp-fu
 ;;   :straight t)
 
