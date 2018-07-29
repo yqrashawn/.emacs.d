@@ -84,8 +84,8 @@ Start `ielm' if it's not already running."
   (evil-define-key 'insert lispy-mode-map (kbd "C-r") 'undo-tree-redo)
   (evil-define-key 'insert lispy-mode-map (kbd "C-e") 'lispy-move-end-of-line)
   (evil-define-key 'normal lispy-mode-map "sl" 'lispy-goto)
-  (evil-define-key 'normal lispy-mode-map "b" 'sp-previous-sexp)
-  (evil-define-key 'normal lispy-mode-map "e" 'sp-next-sexp)
+  ;; (evil-define-key 'normal lispy-mode-map "b" 'sp-previous-sexp)
+  ;; (evil-define-key 'normal lispy-mode-map "e" 'sp-next-sexp)
   (push '("*lispy-message*" :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config))
 
 ;; (use-package hl-sexp
