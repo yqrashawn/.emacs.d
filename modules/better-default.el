@@ -336,9 +336,9 @@ If the universal prefix argument is used then kill the buffer too."
   (add-to-list 'recentf-exclude "/tmp/")
   (add-to-list 'recentf-exclude "\\indium-eval-.*"))
 
-(use-package recentf-ext
-  :straight t
-  :after recentf)
+;; (use-package recentf-ext
+;;   :straight t
+;;   :after recentf)
 
 ;; saveplace remembers your location in a file when saving files
 (use-package saveplace
@@ -1019,9 +1019,9 @@ otherwise it is scaled down."
         (let* ((default-directory dir))
           (byte-compile-file (file-truename f) t))))))
 
-(use-package carbon-now-sh
-  :straight t
-  :commands (carbon-now-sh))
+;; (use-package carbon-now-sh
+;;   :straight t
+;;   :commands (carbon-now-sh))
 
 ;; idle garbage collection
 (defvar garbage-collection-timer nil
