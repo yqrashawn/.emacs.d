@@ -75,9 +75,12 @@ Start `ielm' if it's not already running."
   :init
   (customize-set-variable 'lispy-visit-method 'projectile)
   (yq/add-toggle lispy :mode lispy-mode)
-  (define-key evil-normal-state-map ",," 'yq/toggle-lispy)
+  ;; (define-key evil-normal-state-map ",," 'yq/toggle-lispy)
+  (spacemacs/set-leader-keys "," 'yq/toggle-lispy)
   :config
+  (evil-define-key 'insert lispy-mode-map "o" 'evil-execute-in-normal-state)
   (evil-define-key 'insert lispy-mode-map (kbd "C-k") 'lispy-kill)
+  (evil-define-key 'insert lispy-mode-map (kbd "C-d") 'lispy-delete)
   (evil-define-key 'insert lispy-mode-map (kbd "C-r") 'undo-tree-redo)
   (evil-define-key 'insert lispy-mode-map (kbd "C-e") 'lispy-move-end-of-line)
   (evil-define-key 'normal lispy-mode-map "sl" 'lispy-goto)
@@ -85,12 +88,12 @@ Start `ielm' if it's not already running."
   (evil-define-key 'normal lispy-mode-map "e" 'sp-next-sexp)
   (push '("*lispy-message*" :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config))
 
-(use-package hl-sexp
-  :straight (:host github :repo "emacsattic/hl-sexp")
-  :commands (hl-sexp-mode)
-  :init
-  (yq/add-toggle hl-sexp :mode hl-sexp-mode)
-  (evil-define-key 'normal emacs-lisp-mode-map ",th" 'yq/toggle-hl-sexp))
+;; (use-package hl-sexp
+;;   :straight (:host github :repo "emacsattic/hl-sexp")
+;;   :commands (hl-sexp-mode)
+;;   :init
+;;   (yq/add-toggle hl-sexp :mode hl-sexp-mode)
+;;   (evil-define-key 'normal emacs-lisp-mode-map ",th" 'yq/toggle-hl-sexp))
 
 (use-package eval-sexp-fu
   :straight t
