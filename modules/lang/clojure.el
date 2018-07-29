@@ -279,10 +279,10 @@
             (evil-define-key 'normal map
               (concat ",r" binding) func)))))))
 
-(use-package helm-cider
-  :straight t
-  :commands (helm-cider-mode)
-  :hook ((clojure-mode cider-repl-mode cider-docview-mode cider-inspector-mode) . helm-cider-mode))
+;; (use-package helm-cider
+;;   :straight t
+;;   :commands (helm-cider-mode)
+;;   :hook ((clojure-mode cider-repl-mode cider-docview-mode cider-inspector-mode) . helm-cider-mode))
 
 (use-package cider-eval-sexp-fu
   :straight t

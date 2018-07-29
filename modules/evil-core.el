@@ -41,6 +41,7 @@
   (customize-set-variable 'evil-esc-delay 0)
   (customize-set-variable 'evil-shift-width 2)
   (customize-set-variable 'evil-show-paren-range 1)
+  (setq evil-insert-state-cursor '(box "green"))
   (defun yq/update-evil-emacs-state-modes (mode-to-remove)
     "remove MODE-TO-REMOVE from evil-emacs-state-modes"
     (setq evil-emacs-state-modes
