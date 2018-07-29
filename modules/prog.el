@@ -493,3 +493,7 @@ _j_  js2      _T_     text   _f_  fundamental
 ;;   :init
 ;;   (evil-define-key 'insert company-quickhelp-mode-map (kbd "C-k") 'company-select-previous)
 ;;   (define-key company-active-map (kbd "M-h") #'company-quickhelp-manual-begin))
+(use-package yaml-mode
+  :straight t
+  :defer t
+  :mode ("\\.yaml\\'" . yaml-mode))
