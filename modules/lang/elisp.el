@@ -78,7 +78,7 @@ Start `ielm' if it's not already running."
   ;; (define-key evil-normal-state-map ",," 'yq/toggle-lispy)
   (spacemacs/set-leader-keys "," 'yq/toggle-lispy)
   :config
-  (evil-define-key 'insert lispy-mode-map "o" 'evil-execute-in-normal-state)
+  (evil-define-key 'insert lispy-mode-map-special "o" 'evil-execute-in-normal-state)
   (evil-define-key 'insert lispy-mode-map (kbd "C-k") 'lispy-kill)
   (evil-define-key 'insert lispy-mode-map (kbd "C-d") 'lispy-delete)
   (evil-define-key 'insert lispy-mode-map (kbd "C-r") 'undo-tree-redo)

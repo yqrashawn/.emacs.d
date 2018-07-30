@@ -60,7 +60,8 @@
 
   (setq cider-stacktrace-default-filters '(tooling dup)
         cider-repl-pop-to-buffer-on-connect nil
-        cider-repl-display-in-current-window t
+        ;; cider-repl-display-in-current-window t
+        cider-repl-display-in-current-window nil
         cider-prompt-save-file-on-load nil
         cider-auto-select-error-buffer nil
         cider-eval-result-prefix ";; => "

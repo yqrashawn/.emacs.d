@@ -425,6 +425,7 @@ If the universal prefix argument is used then kill the buffer too."
   (push '("*Help*"                              :dedicated nil :position bottom :stick t    :noselect t   :height 0.4) popwin:special-display-config)
   (push '("*Backtrace*"                         :dedicated nil :position bottom :stick t    :noselect t   :height 0.4)   popwin:special-display-config)
   (push '("*Warnings*"                          :dedicated t   :position bottom :stick t    :noselect t   :height 0.4)   popwin:special-display-config)
+  (push '("*HTTP Response*"                     :dedicated t   :position bottom :stick t    :noselect t   :height 0.4)   popwin:special-display-config)
   (push '("*compilation*"                       :dedicated t   :position bottom :stick t    :noselect t   :height 0.4)   popwin:special-display-config)
   (push '("*Shell Command Output*"              :dedicated t   :position bottom :stick t    :noselect t   :height 0.4)   popwin:special-display-config)
   (push '("*prettier errors*"                   :dedicated t   :position bottom :stick nil  :noselect t   :height 0.4)   popwin:special-display-config)
