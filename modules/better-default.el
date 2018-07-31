@@ -310,36 +310,31 @@ If the universal prefix argument is used then kill the buffer too."
         savehist-autosave-interval 60)
   (savehist-mode t))
 
+;; recentf
 (use-package recentf
-  :straight t
   :init
   (setq recentf-keep '(file-remote-p file-readable-p))
-  ;; lazy load recentf
-  (add-hook 'find-file-hook
-            (lambda ()
-              (unless recentf-mode
-                (recentf-mode)
-                (recentf-track-opened-file))))
   (setq recentf-save-file (concat user-emacs-directory "recentf")
-        recentf-max-saved-items 10000
+        recentf-max-saved-items 100
         recentf-auto-cleanup 'never
-        recentf-auto-save-timer (run-with-idle-timer 600 t
+        recentf-auto-save-timer (run-with-idle-timer 30 t
                                                      'recentf-save-list))
-  :config
-  (run-at-time nil (* 5 60) 'recentf-save-list)
-  (add-to-list 'recentf-exclude
-               (file-truename spacemacs-cache-directory))
-  (add-to-list 'recentf-exclude "COMMIT_EDITMSG\\'")
-  (add-to-list 'recentf-exclude "/private/var/folders/")
-  (add-to-list 'recentf-exclude "/var/folders/")
-  (add-to-list 'recentf-exclude "/var/tmp/")
-  (add-to-list 'recentf-exclude (expand-file-name (concat user-emacs-directory "recentf")))
-  (add-to-list 'recentf-exclude "/tmp/")
-  (add-to-list 'recentf-exclude "\\indium-eval-.*"))
 
-;; (use-package recentf-ext
-;;   :straight t
-;;   :after recentf)
+  (add-hook 'delete-terminal-functions 'recentf-save-list)
+  (recentf-mode 1)
+  :config
+  (with-eval-after-load 'recentf
+    (run-at-time nil (* 5 60) 'recentf-save-list)
+    (add-to-list 'recentf-exclude
+                 (file-truename spacemacs-cache-directory))
+    (add-to-list 'recentf-exclude "COMMIT_EDITMSG\\'")
+    (add-to-list 'recentf-exclude "/private/var/folders/")
+    (add-to-list 'recentf-exclude "/usr/local/Cellar/emacs")
+    (add-to-list 'recentf-exclude "/var/folders/")
+    (add-to-list 'recentf-exclude "/var/tmp/")
+    (add-to-list 'recentf-exclude (expand-file-name (concat user-emacs-directory "recentf")))
+    (add-to-list 'recentf-exclude "/tmp/")
+    (add-to-list 'recentf-exclude "\\indium-eval-.*")))
 
 ;; saveplace remembers your location in a file when saving files
 (use-package saveplace
