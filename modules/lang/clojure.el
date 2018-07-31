@@ -28,6 +28,7 @@
 
 (use-package clojure-mode
   :straight t
+  :diminish clojure-mode
   :defer t
   :init
   (add-to-list 'auto-mode-alist '("\\.boot\\'" . clojure-mode))
@@ -57,6 +58,7 @@
   (add-hook 'cider-repl-mode-hook #'cider-company-enable-fuzzy-completion)
   (add-hook 'cider-mode-hook #'cider-company-enable-fuzzy-completion)
   (spacemacs/register-repl 'cider 'cider-jack-in "cider")
+  (evil-define-key 'normal clojure-mode-map ",c" 'cider-cheatsheet)
 
   (setq cider-stacktrace-default-filters '(tooling dup)
         cider-repl-pop-to-buffer-on-connect nil
@@ -257,6 +259,7 @@
 
 (use-package clj-refactor
   :straight t
+  :diminish clj-refactor-mode
   :defer t
   :init
   (add-hook 'clojure-mode-hook 'clj-refactor-mode)

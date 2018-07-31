@@ -70,6 +70,7 @@ file stored in the cache directory and `nil' to disable auto-saving.")
 (use-package abbrev
   :defer t
   :ensure nil
+  :diminish abbrev-mode
   :custom
   (abbrev-file-name (concat user-emacs-directory "abbrev_defs"))
   (abbrev-mode 1)
