@@ -62,11 +62,9 @@ Start `ielm' if it's not already running."
 (use-package lispy
   :straight t
   :diminish lispy " ʪ"
-  :demand t
   :init
   (customize-set-variable 'lispy-visit-method 'projectile)
   (yq/add-toggle lispy :mode lispy-mode)
-  ;; (define-key evil-normal-state-map ",," 'yq/toggle-lispy)
   (spacemacs/set-leader-keys "," 'yq/toggle-lispy)
   :config
   ;; (evil-define-key 'insert lispy-mode-map-special "o" 'evil-execute-in-normal-state)
