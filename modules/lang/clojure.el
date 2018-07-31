@@ -226,6 +226,7 @@
   (evilified-state-evilify cider-docview-mode cider-docview-mode-map
     (kbd "q") 'cider-popup-buffer-quit)
 
+  (add-hook 'cider-inspector-mode-hook 'visual-line-mode)
   (evilified-state-evilify cider-inspector-mode cider-inspector-mode-map
     (kbd "L") 'cider-inspector-pop
     (kbd "n") 'cider-inspector-next-page
