@@ -1,10 +1,10 @@
 (setq *is-a-mac* (eq system-type 'darwin))
 (setq *win64* (eq system-type 'windows-nt))
 (setq *cygwin* (eq system-type 'cygwin))
-(setq *linux* (or (eq system-type 'gnu/linux) (eq system-type 'linux)) )
-(setq *unix* (or *linux* (eq system-type 'usg-unix-v) (eq system-type 'berkeley-unix)) )
-(setq *emacs24* (and (not (featurep 'xemacs)) (or (>= emacs-major-version 24))) )
-(setq *emacs25* (and (not (featurep 'xemacs)) (or (>= emacs-major-version 25))) )
+(setq *linux* (or (eq system-type 'gnu/linux) (eq system-type 'linux)))
+(setq *unix* (or *linux* (eq system-type 'usg-unix-v) (eq system-type 'berkeley-unix)))
+(setq *emacs24* (and (not (featurep 'xemacs)) (or (>= emacs-major-version 24))))
+(setq *emacs25* (and (not (featurep 'xemacs)) (or (>= emacs-major-version 25))))
 (setq *no-memory* (cond
                    (*is-a-mac*
                     (< (string-to-number (nth 1 (split-string (shell-command-to-string "sysctl hw.physmem")))) 4000000000))
@@ -70,6 +70,7 @@ file stored in the cache directory and `nil' to disable auto-saving.")
 (use-package abbrev
   :defer t
   :ensure nil
+  :diminish abbrev-mode
   :custom
   (abbrev-file-name (concat user-emacs-directory "abbrev_defs"))
   (abbrev-mode 1)
@@ -262,8 +263,8 @@ If the universal prefix argument is used then kill the buffer too."
                                           "*Help*"
                                           "*cvs*"
                                           "*Buffer List*"
-                                          "*esh command on file*"
-                                          ))
+                                          "*esh command on file*"))
+
   (setq winner-boring-buffers
         (append winner-boring-buffers spacemacs/winner-boring-buffers))
   (winner-mode t))
@@ -685,8 +686,8 @@ FILENAME is deleted using `spacemacs/delete-file' function.."
                                                                                 parsed-user
                                                                                 parsed-host
                                                                                 nil
-                                                                                parsed-hop
-                                                                                ))
+                                                                                parsed-hop))
+
                                            (new-hop (substring new-hop 1 -1))
                                            (new-hop (concat new-hop "|"))
                                            (new-fname (tramp-make-tramp-file-name "sudo"

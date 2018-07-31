@@ -64,6 +64,7 @@
   :commands (with-editor-mode)
   :hook (git-commit-mode-hook . with-editor-hook)
   :init
+  (add-hook 'with-editor-mode-hook 'evil-insert-state)
   (spacemacs/set-leader-keys "hdK" 'describe-keymap))
 
 (use-package magithub

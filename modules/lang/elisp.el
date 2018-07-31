@@ -21,9 +21,10 @@ the current buffer."
   :straight t
   :init(add-hook 'ielm-mode-hook #'rainbow-delimiters-mode)
   :config (define-key inferior-emacs-lisp-mode-map (kbd "C-c C-z") 'kill-buffer-and-window))
+
 (use-package elisp-mode
   :mode ("\\.el\\'" . emacs-lisp-mode)
-  :diminish emacs-lisp-mode "elisp"
+  :diminish emacs-lisp-mode "ELISP"
   :commands (emacs-lisp-mode)
   :config
   (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
@@ -58,27 +59,15 @@ Start `ielm' if it's not already running."
     (let ((jumpl (intern (format "spacemacs-jump-handlers-%S" mode))))
       (add-to-list jumpl 'elisp-slime-nav-find-elisp-thing-at-point))))
 
-;; (use-package parinfer
-;;   :straight t
-;;   ;; :hook (emacs-lisp-mode . parinfer-mode)
-;;   :commands (parinfer-mode parinfer-mode-enable parinfer-toggle-mode)
-;;   :init
-;;   (setq parinfer-lighters '(" Par:I" . " Par:P"))
-;;   (setq parinfer-extensions '(defaults pretty-parens evil smart-yank))
-;;   :config
-;;   (define-key parinfer-mode-map (kbd "C-,") 'parinfer-toggle-mode))
-
 (use-package lispy
   :straight t
   :diminish lispy " ʪ"
-  :commands (lispy-mode)
   :init
   (customize-set-variable 'lispy-visit-method 'projectile)
   (yq/add-toggle lispy :mode lispy-mode)
-  ;; (define-key evil-normal-state-map ",," 'yq/toggle-lispy)
   (spacemacs/set-leader-keys "," 'yq/toggle-lispy)
   :config
-  (evil-define-key 'insert lispy-mode-map-special "o" 'evil-execute-in-normal-state)
+  ;; (evil-define-key 'insert lispy-mode-map-special "o" 'evil-execute-in-normal-state)
   (evil-define-key 'insert lispy-mode-map (kbd "C-k") 'lispy-kill)
   (evil-define-key 'insert lispy-mode-map (kbd "C-d") 'lispy-delete)
   (evil-define-key 'insert lispy-mode-map (kbd "C-r") 'undo-tree-redo)
@@ -88,24 +77,28 @@ Start `ielm' if it's not already running."
   ;; (evil-define-key 'normal lispy-mode-map "e" 'sp-next-sexp)
   (push '("*lispy-message*" :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config))
 
-;; (use-package hl-sexp
-;;   :straight (:host github :repo "emacsattic/hl-sexp")
-;;   :commands (hl-sexp-mode)
-;;   :init
-;;   (yq/add-toggle hl-sexp :mode hl-sexp-mode)
-;;   (evil-define-key 'normal emacs-lisp-mode-map ",th" 'yq/toggle-hl-sexp))
+(use-package parinfer
+  :straight t
+  :after lispy
+  :bind
+  (("C-," . parinfer-toggle-mode))
+  :hook ((clojure-mode .  parinfer-mode)
+         (emacs-lisp-mode . parinfer-mode)
+         (lisp-mode . parinfer-mode))
+  :commands (parinfer-mode parinfer-mode-enable parinfer-toggle-mode)
+  :init
+  (setq parinfer-auto-switch-indent-mode t)
+  (setq parinfer-auto-switch-indent-mode-when-closing t)
+  (setq parinfer-lighters '(" Par:I" . " Par:P"))
+  (setq parinfer-extensions
+        '(defaults       ; should be included.
+           pretty-parens  ; different paren styles for different modes.
+           evil           ; If you use Evil.
+           lispy          ; If you use Lispy. With this extension, you should install Lispy and do not enable lispy-mode directly.
+           smart-tab      ; C-b & C-f jump positions and smart shift with tab & S-tab.
+           smart-yank)))
 
 (use-package eval-sexp-fu
   :straight t
   :commands (eval-sexp-fu-flash-mode)
   :hook (emacs-lisp-mode . eval-sexp-fu-flash-mode))
-;; (use-package eval-sexp-fu
-;;   :straight t)
-
-;; :config
-;; (eval-after-load 'hl-sexp
-;; (defadvice hl-sexp-mode (after unflicker (turn-on) activate)
-;;   (when turn-on
-;;     (remove-hook 'pre-command-hook #'hl-sexp-unhighlight)))
-;; ))
-
