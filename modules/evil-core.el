@@ -32,6 +32,7 @@
 (use-package evil
   :straight t
   :init
+  (setq local-function-key-map (delq '(kp-tab . [9]) local-function-key-map))
   (customize-set-variable 'evil-intercept-maps nil)
   (customize-set-variable 'evil-move-cursor-back nil)
   (customize-set-variable 'evil-want-C-u-scroll t)
@@ -56,6 +57,8 @@
           company-complete-selection
           company-complete-number
           hippie-expand))
+  (define-key evil-normal-state-map (kbd "C-i") 'evil-jump-forward)
+  ;; (define-key evil-normal-state-map (kbd "<tab>") 'spacemacs/alternate-buffer)
   (defmacro evil-map (state key seq)
     "Map for a given STATE a KEY to a sequence SEQ of keys.
 
@@ -72,6 +75,12 @@ Example: (evil-map visual \"<\" \"<gv\")"
               (execute-kbd-macro ,seq))))))
   (evil-map visual "<" "<gv")
   (evil-map visual ">" ">gv")
+  (define-key evil-normal-state-map "W" 'evil-forward-word-begin)
+  (define-key evil-normal-state-map "w" 'evil-forward-WORD-begin)
+  (define-key evil-normal-state-map "e" 'evil-forward-WORD-end)
+  (define-key evil-normal-state-map "E" 'evil-forward-word-end)
+  (define-key evil-normal-state-map "b" 'evil-backward-WORD-begin)
+  (define-key evil-normal-state-map "B" 'evil-backward-word-begin)
   (define-key evil-visual-state-map "J" (concat ":m '>+1" (kbd "RET") "gv=gv"))
   (define-key evil-visual-state-map "K" (concat ":m '<-2" (kbd "RET") "gv=gv"))
   (spacemacs|define-text-object "$" "dollar" "$" "$")
@@ -250,18 +259,18 @@ Example: (evil-map visual \"<\" \"<gv\")"
   :straight t
   :init
   (setq evil-surround-pairs-alist '((40 "(" . ")")
-   (91 "[" . "]")
-   (123 "{" . "}")
-   (41 "(" . ")")
-   (93 "[" . "]")
-   (125 "{" . "}")
-   (35 "#{" . "}")
-   (98 "(" . ")")
-   (66 "{" . "}")
-   (62 "<" . ">")
-   (116 . evil-surround-read-tag)
-   (60 . evil-surround-read-tag)
-   (102 . evil-surround-function)))
+                                    (91 "[" . "]")
+                                    (123 "{" . "}")
+                                    (41 "(" . ")")
+                                    (93 "[" . "]")
+                                    (125 "{" . "}")
+                                    (35 "#{" . "}")
+                                    (98 "(" . ")")
+                                    (66 "{" . "}")
+                                    (62 "<" . ">")
+                                    (116 . evil-surround-read-tag)
+                                    (60 . evil-surround-read-tag)
+                                    (102 . evil-surround-function)))
   :config
   (global-evil-surround-mode 1)
   (evil-define-key 'visual evil-surround-mode-map "s" 'evil-surround-region)

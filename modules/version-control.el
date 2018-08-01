@@ -22,6 +22,7 @@
 (use-package magit
   :straight t
   :config
+  (evil-define-key 'normal magit-mode-map (kbd "<tab>") 'magit-section-toggle)
   ;; add submodule in magit-status buffer
   ;; https://emacs.stackexchange.com/a/39009/14357
   (magit-add-section-hook 'magit-status-sections-hook
