@@ -454,34 +454,41 @@ if prefix argument ARG is given, switch to it in an other, possibly new window."
 
 (evil-leader/set-key "bs" 'spacemacs/switch-to-scratch-buffer)
 
-;; http://endlessparentheses.com/emacs-narrow-or-widen-dwim.html
-(defun narrow-or-widen-dwim (p)
-  "Widen if buffer is narrowed, narrow-dwim otherwise.
-   Dwim means: region, org-src-block, org-subtree, or defun,
-   whichever applies first. Narrowing to org-src-block actually
-   calls `org-edit-src-code'.
+(use-package fancy-narrow
+  :straight t
+  :commands (fancy-narrow-mode
+             fancy-narrow-to-region
+             fancy-narrow-to-page
+             fancy-narrow-to-defunfancy-widen)
+  :init
+  ;; http://endlessparentheses.com/emacs-narrow-or-widen-dwim.html
+  (defun fancy-narrow-or-widen-dwim (p)
+    "Widen if buffer is narrowed, narrow-dwim otherwise.
+          Dwim means: region, org-src-block, org-subtree, or defun,
+          whichever applies first. Narrowing to org-src-block actually
+          calls `org-edit-src-code'.
 
-With prefix P, don't widen, just narrow even if buffer is
-already narrowed."
-  (interactive "P")
-  (declare (interactive-only))
-  (cond ((and (buffer-narrowed-p) (not p)) (widen))
-        ((region-active-p)
-         (narrow-to-region (region-beginning) (region-end)))
-        ((derived-mode-p 'org-mode)
-         ;; `org-edit-src-code' is not a real narrowing
-         ;; command. Remove this first conditional if you
-         ;; don't want it.
-         (cond ((ignore-errors (org-edit-src-code))
-                (delete-other-windows))
-               ((ignore-errors (org-narrow-to-block) t))
-               (t (org-narrow-to-subtree))))
-        ((derived-mode-p 'latex-mode)
-         (LaTeX-narrow-to-environment))
-        (t (narrow-to-defun))))
+        With prefix P, don't widen, just narrow even if buffer is
+        already narrowed."
+    (interactive "P")
+    (declare (interactive-only))
+    (cond ((and (fancy-narrow-active-p) (not p)) (fancy-widen))
+          ((region-active-p)
+           (fancy-narrow-to-region (region-beginning) (region-end)))
+          ((derived-mode-p 'org-mode)
+           ;; `org-edit-src-code' is not a real narrowing
+           ;; command. Remove this first conditional if you
+           ;; don't want it.
+           (cond ((ignore-errors (org-edit-src-code)
+                                 (delete-other-windows)))
+                 ((ignore-errors (org-narrow-to-block) t))
+                 (t (org-narrow-to-subtree))))
+          ((derived-mode-p 'latex-mode)
+           (LaTeX-narrow-to-environment))
+          (t (fancy-narrow-to-defun))))
 
-;; replace downcase region
-(global-set-key "\C-x\C-l" 'narrow-or-widen-dwim)
+  ;; replace downcase region
+  (global-set-key "\C-x\C-l" 'fancy-narrow-or-widen-dwim))
 
 (defun spacemacs/kill-other-buffers (&optional arg)
   "Kill all other buffers.
@@ -675,22 +682,22 @@ FILENAME is deleted using `spacemacs/delete-file' function.."
      (if (not (tramp-tramp-file-p fname))
          (concat "/sudo:root@localhost:" fname)
        (with-parsed-tramp-file-name fname parsed
-                                    (when (equal parsed-user "root")
-                                      (error "Already root!"))
-                                    (let* ((new-hop (tramp-make-tramp-file-name parsed-method
-                                                                                parsed-user
-                                                                                parsed-host
-                                                                                nil
-                                                                                parsed-hop))
+         (when (equal parsed-user "root")
+           (error "Already root!"))
+         (let* ((new-hop (tramp-make-tramp-file-name parsed-method
+                                                     parsed-user
+                                                     parsed-host
+                                                     nil
+                                                     parsed-hop))
 
-                                           (new-hop (substring new-hop 1 -1))
-                                           (new-hop (concat new-hop "|"))
-                                           (new-fname (tramp-make-tramp-file-name "sudo"
-                                                                                  "root"
-                                                                                  parsed-host
-                                                                                  parsed-localname
-                                                                                  new-hop)))
-                                      new-fname))))))
+                (new-hop (substring new-hop 1 -1))
+                (new-hop (concat new-hop "|"))
+                (new-fname (tramp-make-tramp-file-name "sudo"
+                                                       "root"
+                                                       parsed-host
+                                                       parsed-localname
+                                                       new-hop)))
+           new-fname))))))
 (use-package ssh-config-mode
   :straight t
   :mode ("~/.ssh/config". ssh-config-mode))
@@ -1075,30 +1082,3 @@ otherwise it is scaled down."
 (use-package auth-source
   :no-require t
   :config (setq auth-sources '("~/.authinfo.gpg" "~/.netrc")))
-
-;; http://endlessparentheses.com/emacs-narrow-or-widen-dwim.html
-(defun narrow-or-widen-dwim (p)
-  "Widen if buffer is narrowed, narrow-dwim otherwise.
-   Dwim means: region, org-src-block, org-subtree, or defun,
-   whichever applies first. Narrowing to org-src-block actually
-   calls `org-edit-src-code'.
-
-With prefix P, don't widen, just narrow even if buffer is
-already narrowed."
-  (interactive "P")
-  (declare (interactive-only))
-  (cond ((and (buffer-narrowed-p) (not p)) (widen))
-        ((region-active-p)
-         (narrow-to-region (region-beginning) (region-end)))
-        ((derived-mode-p 'org-mode)
-         ;; `org-edit-src-code' is not a real narrowing
-         ;; command. Remove this first conditional if you
-         ;; don't want it.
-         (cond ((ignore-errors (org-edit-src-code))
-                (delete-other-windows))
-               ((ignore-errors (org-narrow-to-block) t))
-               (t (org-narrow-to-subtree))))
-        ((derived-mode-p 'latex-mode)
-         (LaTeX-narrow-to-environment))
-        (t (narrow-to-defun))))
-(global-set-key "\C-x\C-l" 'narrow-or-widen-dwim)
