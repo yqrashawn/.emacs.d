@@ -45,8 +45,8 @@
   (evil-define-key 'normal org-mode-map "ss" #'my-sparse-tree-with-tag-filter)
 
   (setq org-tag-alist '(("OFFICE" . ?w)
-                        ("HOME" . ?h)
-                        ))
+                        ("HOME" . ?h)))
+
 
   ;; Add global evil-leader mappings. Used to access org-agenda
   ;; functionalities – and a few others commands – from any other mode.
@@ -94,6 +94,8 @@
         ;; `helm-org-headings-max-depth'.
         org-imenu-depth 8)
   :config
+  (evil-define-key 'normal org-mode-map (kbd "<tab>") 'org-cycle)
+
   ;; https://www.reddit.com/r/orgmode/comments/7gqsif/is_it_possible_to_auto_sort_a_file_or_subtree_by/
   (defun yant/org-entry-has-subentries ()
     "Any entry with subheadings."
@@ -122,8 +124,8 @@
     (let ((querystring
            (if (s-contains-p "/" querystring)
                (f-filename querystring)
-             (s-replace " " ".*" querystring)
-             )))
+             (s-replace " " ".*" querystring))))
+
       (message (concat "DEBUG1: querystring: " querystring))
       (message (concat "DEBUG2: "
                        "fd \""
@@ -148,7 +150,7 @@
               (t (with-temp-buffer
                    (spacemacs//open-in-external-app (if (= 1 (length queryresults))
                                                         (car queryresults)
-                                                      (completing-read "Choose: " queryresults)))
+                                                      (completing-read "Choose: " queryresults)))))))))
                    ;; (insert (if (= 1 (length queryresults))
                    ;;             (car queryresults)
                    ;;           (completing-read "Choose: " queryresults)))
@@ -156,7 +158,7 @@
                    ;; (goto-char (point-min))
                    ;; (org-next-link)
                    ;; (org-open-at-point)
-                   ))))))
+
   (setf org-blank-before-new-entry '((heading . nil) (plain-list-item . nil)))
   (org-link-set-parameters
    "tsfile"
@@ -343,7 +345,7 @@
     ",xc" (spacemacs|org-emphasize spacemacs/org-code ?~)
     ",xi" (spacemacs|org-emphasize spacemacs/org-italic ?/)
     ",xo" 'org-open-at-point
-    ",xr" (spacemacs|org-emphasize spacemacs/org-clear ? )
+    ",xr" (spacemacs|org-emphasize spacemacs/org-clear ?)
     ",xs" (spacemacs|org-emphasize spacemacs/org-strike-through ?+)
     ",xu" (spacemacs|org-emphasize spacemacs/org-underline ?_)
     ",xv" (spacemacs|org-emphasize spacemacs/org-verbatim ?=))
@@ -355,7 +357,7 @@
     ",xc" (spacemacs|org-emphasize spacemacs/org-code ?~)
     ",xi" (spacemacs|org-emphasize spacemacs/org-italic ?/)
     ",xo" 'org-open-at-point
-    ",xr" (spacemacs|org-emphasize spacemacs/org-clear ? )
+    ",xr" (spacemacs|org-emphasize spacemacs/org-clear ?)
     ",xs" (spacemacs|org-emphasize spacemacs/org-strike-through ?+)
     ",xu" (spacemacs|org-emphasize spacemacs/org-underline ?_)
     ",xv" (spacemacs|org-emphasize spacemacs/org-verbatim ?=))
@@ -451,8 +453,8 @@
            (file+olp "~/Dropbox/ORG/gtd.org" "misc")
            "* TODO %? \n%U")
           ("D" "Review: Daily Review" entry (file+olp+datetree "~/Dropbox/ORG/review/daily-review.org")
-           (file "~/Dropbox/ORG/daily-review-template.org"))
-          ))
+           (file "~/Dropbox/ORG/daily-review-template.org"))))
+
   (defun yq/create-daily-org-review-date (&optional suffix)
     (concat "~/Dropbox/ORG/.review/daily/" (format-time-string "%Y-%m-%d") suffix))
   (defun yq/daily-review (&optional startup)
@@ -467,9 +469,9 @@
             (shell-command (concat "> " review-file))
             (org-capture nil "D")
             (org-capture-finalize t)
-            (save-buffer)
+            (save-buffer))))))
             ;; (org-speed-move-safe 'outline-up-heading)
-            )))))
+
   (defun yq/daily-review-finished ()
     (interactive)
     (shell-command (concat "> " (yq/create-daily-org-review-date "-finished")))
@@ -498,8 +500,8 @@
                   page-title " %^g"
                   "\n\t:PROPERTIES:\n\t:URL: "
                   url-string
-                  "\n\t:END:\n\s\s%?"
-                  )))))
+                  "\n\t:END:\n\s\s%?")))))
+
   (with-eval-after-load 'org-capture
     (add-to-list
      'org-capture-templates
