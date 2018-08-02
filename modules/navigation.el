@@ -520,17 +520,12 @@ When ARG is non-nil search in junk files."
 (use-package fasd
   :straight t
   :init
-  (defun evil-ex-fasd-eval (orig-fun str)
-    "docstring"
-    (interactive "P")
-    (if (not (cond ((string-prefix-p "j " str) (funcall 'fasd-find-file t (string-remove-prefix "j " str)))
-                   ((string-prefix-p ":" str) (funcall 'fasd-find-file t (string-remove-prefix ":" str)))) )
-        (funcall orig-fun str)))
-
-  (advice-add 'evil-ex-execute :around 'evil-ex-fasd-eval)
-  (defun evil-ex: () (interactive) (evil-ex ":"))
-  (define-key evil-normal-state-map (kbd "C-f") 'evil-ex:)
   (global-fasd-mode 1))
+
+(use-package evil-ex-fasd
+  :straight (:host github :repo "yqrashawn/evil-ex-fasd")
+  :init (define-key evil-normal-state-map (kbd "C-f") 'evil-ex-fasd))
+
 
 (use-package dired-rsync
   :straight t
