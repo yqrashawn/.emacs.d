@@ -1,0 +1,9 @@
+* .emasc.d
+My personal emacs configuration. Using [[https://github.com/raxod502/straight.el][straight.el]] as package manager.
+
+* Language
+- javascript, typescript (tide, js2-mode, typescript-mode, no lsp)
+- clojure (cider)
+
+* Anything intersting?
+I'll try to make them into separate packages.
