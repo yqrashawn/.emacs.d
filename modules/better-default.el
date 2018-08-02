@@ -811,7 +811,7 @@ otherwise it is scaled down."
   (switch-to-nth-buffer 3))
 
 ;;fast switching between two buffers
-;; (define-key evil-normal-state-map (kbd "<tab>") 'switch-to-most-recent-buffer)
+(define-key evil-normal-state-map (kbd "<tab>") 'switch-to-most-recent-buffer)
 
 ;;fast switching between three buffers
 (define-key evil-normal-state-map (kbd "<C-tab>") 'switch-to-second-most-recent-buffer)
@@ -1082,3 +1082,11 @@ otherwise it is scaled down."
 (use-package auth-source
   :no-require t
   :config (setq auth-sources '("~/.authinfo.gpg" "~/.netrc")))
+
+;; make emacs recognize shell command alias
+(setq shell-file-name "zsh")
+(setq shell-command-switch "-ic")
+
+(use-package evil-ex-shell-command
+  :straight (:host github :repo "yqrashawn/evil-ex-shell-command")
+  :init (global-set-key (kbd "M-l") 'evil-ex-shell-command))
