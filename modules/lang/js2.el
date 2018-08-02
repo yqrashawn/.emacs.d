@@ -229,6 +229,7 @@ If NODEJS is non-nil, set an extra property in the connection."
 Breakpoint  | _b_ add   _u_ remove  _t_oggle _a_/_d_eactivate
             | _l_ist _C_ondition _E_dit
 Debug       | _h_ere  step _i_n/_o_ut _SPC_ step over _c_ontinue _e_/_E_valuate
+Others      | _s_tack _n_ext/_p_rev stack _l_ocal _r_eload
     "
     ("b" indium-add-breakpoint)
     ("u" indium-remove-breakpoint)
@@ -251,7 +252,7 @@ Debug       | _h_ere  step _i_n/_o_ut _SPC_ step over _c_ontinue _e_/_E_valuate
     ("l" indium-debugger-locals :exit t)
     (",," (lambda ()(interactive)) :exit t)
     ("q" (lambda ()(interactive)) :exit t))
-  (add-hook 'indium-script-parsed-hook (lambda (_) (interactive) (hydra-indium/body)))
+  ;; (add-hook 'indium-script-parsed-hook (lambda (_) (interactive) (hydra-indium/body)))
   (add-hook 'indium-debugger-locals-mode-hook 'hydra-indium/lambda-q-and-exit)
   (add-hook 'indium-inspector-mode-hook 'hydra-indium/lambda-q-and-exit)
   (add-hook 'indium-debugger-frames-mode-hook 'hydra-indium/lambda-q-and-exit))
