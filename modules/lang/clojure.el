@@ -51,6 +51,10 @@
     :modes
     cider-mode
     cider-repl-mode)
+
+  (spacemacs|define-jump-handlers clojure-mode)
+  (add-to-list (intern (format "spacemacs-jump-handlers-%S" 'clojure-mode))
+               '(cider-find-dwim :async t))
   (add-hook 'cider-mode-hook 'eldoc-mode)
   (add-hook 'cider-repl-mode-hook 'eldoc-mode)
   (add-hook 'cider-repl-mode-hook #'rainbow-delimiters-mode)
@@ -62,8 +66,8 @@
 
   (setq cider-stacktrace-default-filters '(tooling dup)
         cider-repl-pop-to-buffer-on-connect nil
-        ;; cider-repl-display-in-current-window t
-        cider-repl-display-in-current-window nil
+        cider-repl-display-in-current-window t
+        ;; cider-repl-display-in-current-window nil
         cider-prompt-save-file-on-load nil
         cider-auto-select-error-buffer nil
         cider-eval-result-prefix ";; => "
