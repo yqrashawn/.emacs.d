@@ -1089,4 +1089,4 @@ otherwise it is scaled down."
 
 (use-package evil-ex-shell-command
   :straight (:host github :repo "yqrashawn/evil-ex-shell-command")
-  :init (global-set-key (kbd "M-l") 'evil-ex-shell-command))
+  :init (global-set-key (kbd "s-l") 'evil-ex-shell-command))

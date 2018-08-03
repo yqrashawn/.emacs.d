@@ -51,7 +51,7 @@
     :modes
     cider-mode
     cider-repl-mode)
-
+  (setq cider-default-cljs-repl 'figwheel)
   (spacemacs|define-jump-handlers clojure-mode)
   (add-to-list (intern (format "spacemacs-jump-handlers-%S" 'clojure-mode))
                '(cider-find-dwim :async t))
@@ -192,7 +192,10 @@
                       ",rc[" 'clojure-convert-collection-to-vector
                       ",rc{" 'clojure-convert-collection-to-map
                       ))
-
+  ;; (add-hook 'cider-connected-hook (lambda ()
+  ;;                                   (interactive)
+  ;;                                   (cider-load-file
+  ;;                                    (expand-file-name "lispy-clojure.clj" lispy-site-directory))))
   ;; cider-repl-mode only
   (define-key cider-repl-mode-map (kbd "C-c C-l") 'cider-repl-clear-buffer)
   (evil-define-key 'normal cider-repl-mode-map ",," 'cider-repl-handle-shortcut)
