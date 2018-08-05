@@ -63,6 +63,7 @@
   (evil-define-key 'insert pdf-outline-buffer-mode-map "f" 'pdf-outline-follow-mode)
   (evil-define-key 'insert pdf-outline-buffer-mode-map "q" 'pdf-outline-quit)
   (evil-define-key 'insert pdf-outline-buffer-mode-map (kbd "TAB") 'pdf-outline-toggle-subtree)
+  (evil-define-key 'normal pdf-outline-buffer-mode-map (kbd "TAB") 'pdf-outline-toggle-subtree)
   (evil-define-key 'normal pdf-view-mode-map "h" 'image-backward-hscroll)
   (evil-define-key 'normal pdf-view-mode-map "l" 'image-forward-hscroll)
   (evil-define-key 'normal pdf-view-mode-map "<" 'image-bob)
