@@ -29,6 +29,7 @@
 (use-package clojure-mode
   :straight t
   :diminish clojure-mode
+  :diminish clojurescript-mode
   :defer t
   :init
   (add-to-list 'auto-mode-alist '("\\.boot\\'" . clojure-mode))
