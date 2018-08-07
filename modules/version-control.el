@@ -21,6 +21,15 @@
 
 (use-package magit
   :straight t
+  :init
+  (magit-auto-revert-mode 1)
+  (setq magit-bury-buffer-function #'magit-mode-quit-window)
+  (setq magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1)
+  (setq magit-save-repository-buffers 'dontask)
+  (setq magit-commit-ask-to-stage t)
+  (setq magit-fetch-modules-jobs 10)
+  (setq magit-push-arguments '("--set-upstream"))
+  (setq magit-commit-arguments '("--verbose"))
   :config
   (evil-define-key 'normal magit-mode-map (kbd "<tab>") 'magit-section-toggle)
   ;; add submodule in magit-status buffer
