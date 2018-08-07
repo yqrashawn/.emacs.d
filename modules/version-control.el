@@ -37,6 +37,7 @@
                                        ("~/.zprezto" . 0)))
   (setq magit-blame-echo-style 'margin)
   (setq magit-diff-refine-hunk 'all)
+  :config
   (add-to-list 'magit-diff-arguments "--minimal")
   (add-to-list 'magit-diff-arguments "--ignore-blank-lines")
   (add-to-list 'magit-diff-arguments "--ignore-space-at-eol")
@@ -47,7 +48,6 @@
   (add-to-list 'magit-diff-section-arguments "--ignore-space-at-eol")
   (add-to-list 'magit-diff-section-arguments "--ignore-space-change")
   (add-to-list 'magit-diff-section-arguments "--ignore-all-space")
-  :config
   (evil-define-key 'normal magit-mode-map (kbd "<tab>") 'magit-section-toggle)
   ;; add submodule in magit-status buffer
   ;; https://emacs.stackexchange.com/a/39009/14357

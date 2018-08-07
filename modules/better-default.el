@@ -1097,7 +1097,7 @@ otherwise it is scaled down."
                      nil)))
       (and err1 err2)))
 
-  (setq mp/ibuffer-collapsed-groups (list "Git:~/" "Default"))
+  (setq mp/ibuffer-collapsed-groups (list "Default"))
 
   (defadvice ibuffer (after collapse-helm)
     (dolist (group mp/ibuffer-collapsed-groups)
