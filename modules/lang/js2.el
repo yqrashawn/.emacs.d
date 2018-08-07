@@ -4,6 +4,7 @@
 (use-package js2-mode
   :straight t
   :mode "\\.js\\'"
+  :diminish (js2-mode . "JS")
   :init
   (add-hook 'js2-mode-hook 'js2-imenu-extras-mode)
   :config

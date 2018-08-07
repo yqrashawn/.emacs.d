@@ -24,7 +24,7 @@ the current buffer."
 
 (use-package elisp-mode
   :mode ("\\.el\\'" . emacs-lisp-mode)
-  :diminish emacs-lisp-mode "ELISP"
+  :diminish (emacs-lisp-mode . "ELISP")
   :commands (emacs-lisp-mode)
   :config
   (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)

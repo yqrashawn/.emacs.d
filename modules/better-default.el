@@ -332,6 +332,7 @@ If the universal prefix argument is used then kill the buffer too."
     (add-to-list 'recentf-exclude "/usr/local/Cellar/emacs")
     (add-to-list 'recentf-exclude (concat user-home-directory "Dropbox/ORG"))
     (add-to-list 'recentf-exclude (concat user-home-directory "Dropbox/Books"))
+    (add-to-list 'recentf-exclude (concat user-emacs-directory "straight/build"))
     (add-to-list 'recentf-exclude "/var/folders/")
     (add-to-list 'recentf-exclude "/var/tmp/")
     (add-to-list 'recentf-exclude (expand-file-name (concat user-emacs-directory "recentf")))

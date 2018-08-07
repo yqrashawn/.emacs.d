@@ -246,9 +246,10 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   (spacemacs/set-leader-keys "pf" 'counsel-projectile-find-file)
   (spacemacs/set-leader-keys "pd" 'counsel-projectile-find-dir)
   (spacemacs/set-leader-keys "pl" 'counsel-projectile-switch-project)
+
   (defun yq/find-emacsd-modules ()
     "find file in .emacs.d"
-    (interactive) (counsel-projectile-switch-project-by-name "~/.emacs.d"))
+    (interactive) (counsel-fd "" "~/.emacs.d/" nil "-t f"))
   (spacemacs/set-leader-keys "fef" 'yq/find-emacsd-modules)
   (spacemacs/set-leader-keys "fel" 'counsel-find-library))
 
@@ -646,6 +647,7 @@ When ARG is non-nil search in junk files."
   :after persp-mode
   :commands (persp-mode-projectile-bridge-mode)
   :init
+  (setq persp-mode-projectile-bridge-persp-name-prefix "@")
   (persp-mode-projectile-bridge-mode 1)
   (persp-mode-projectile-bridge-find-perspectives-for-all-buffers)
   :config
@@ -655,8 +657,8 @@ When ARG is non-nil search in junk files."
                     (persp-mode-projectile-bridge-find-perspectives-for-all-buffers)
                   (persp-mode-projectile-bridge-kill-perspectives)))))
 
-(use-package persp-fr
-  :straight t
-  :after persp-mode
-  :commands (persp-fr-start)
-  :init (persp-fr-start))
+;; (use-package persp-fr
+;;   :straight t
+;;   :after persp-mode
+;;   :commands (persp-fr-start)
+;;   :init (persp-fr-start))
