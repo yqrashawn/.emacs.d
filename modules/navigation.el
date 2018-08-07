@@ -569,11 +569,6 @@ When ARG is non-nil search in junk files."
 ;;   (setq session-save-file (expand-file-name "~/.emacs.d/.session"))
 ;;   (add-hook 'after-init-hook 'session-initialize))
 
-;; (use-package ivy-filthy-rich
-;;   :straight (:host github :repo "casouri/ivy-filthy-rich")
-;;   :commands (ivy-filthy-rich-mode)
-;;   :init (ivy-filthy-rich-mode))
-
 ;; (use-package deadgrep
 ;;   :straight t
 ;;   :commands (deadgrep)
@@ -597,3 +592,31 @@ When ARG is non-nil search in junk files."
   :init
   (evil-define-key 'normal helpful-mode-map "o" 'ace-link-help)
   (ace-link-setup-default))
+(use-package persp-mode
+  :straight t
+  :init (persp-mode 1)
+  (setq persp-add-buffer-on-after-change-major-mode t)
+  :config
+  (with-eval-after-load 'projectile)
+  (defun spacemacs/ivy-persp-switch-project (arg)
+    (interactive "P")
+    (ivy-read "Switch to Project Perspective: "
+              (if (projectile-project-p)
+                  (cons (abbreviate-file-name (projectile-project-root))
+                        (projectile-relevant-known-projects))
+                projectile-known-projects)
+              :action (lambda (project)
+                        (let ((persp-reset-windows-on-nil-window-conf t))
+                          (persp-switch project)
+                          (let ((projectile-completion-system 'ivy))
+                            (projectile-switch-project-by-name project))))))
+  ;; (add-hook 'persp-common-buffer-filter-functions
+  ;;           ;; there is also `persp-add-buffer-on-after-change-major-mode-filter-functions'
+  ;;           #'(lambda (b) (string-prefix-p "*" (buffer-name b))))
+  (setq persp-autokill-buffer-on-remove 'kill-weak))
+
+(use-package persp-fr
+  :straight t
+  :after persp-mode
+  :commands (persp-fr-start)
+  :init (persp-fr-start))
