@@ -63,7 +63,10 @@ Start `ielm' if it's not already running."
   :straight t
   :diminish lispy " ʪ"
   :init
+  (customize-set-variable 'lispy-eval-display-style 'overlay)
   (customize-set-variable 'lispy-visit-method 'projectile)
+  (customize-set-variable 'lispy-safe-copy t)
+  (customize-set-variable 'lispy-safe-delete t)
   (yq/add-toggle lispy :mode lispy-mode)
   (spacemacs/set-leader-keys "," 'yq/toggle-lispy)
   :config

@@ -362,7 +362,6 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   :init
   ;; first we set some sane defaults
   (setq-default
-   ediff-window-setup-function 'ediff-setup-windows-plain
    ;; emacs is evil and decrees that vertical shall henceforth be horizontal
    ediff-split-window-function 'split-window-horizontally
    ediff-merge-split-window-function 'split-window-horizontally)
