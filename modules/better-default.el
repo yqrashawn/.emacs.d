@@ -330,6 +330,8 @@ If the universal prefix argument is used then kill the buffer too."
     (add-to-list 'recentf-exclude "COMMIT_EDITMSG\\'")
     (add-to-list 'recentf-exclude "/private/var/folders/")
     (add-to-list 'recentf-exclude "/usr/local/Cellar/emacs")
+    (add-to-list 'recentf-exclude (concat user-home-directory "Dropbox/ORG"))
+    (add-to-list 'recentf-exclude (concat user-home-directory "Dropbox/Books"))
     (add-to-list 'recentf-exclude "/var/folders/")
     (add-to-list 'recentf-exclude "/var/tmp/")
     (add-to-list 'recentf-exclude (expand-file-name (concat user-emacs-directory "recentf")))
@@ -1035,14 +1037,118 @@ otherwise it is scaled down."
   (setq garbage-collection-timer
         (run-with-idle-timer 60 t 'garbage-collect)))
 
-(global-set-key "\C-x\C-b" 'ibuffer)
-
 (use-package ibuffer-vc
   :straight t
   :after ibuffer
   :commands (ibuffer-vc-set-filter-groups-by-vc-root)
   :hook (ibuffer-mode . ibuffer-vc-set-filter-groups-by-vc-root)
   :init (define-key ibuffer-mode-map "K" 'ibuffer-kill-filter-group))
+
+(global-set-key (kbd "C-x C-b") 'ibuffer)
+(define-key evil-normal-state-map "sb" 'ibuffer)
+
+(with-eval-after-load 'ibuffer
+  (defun ibuffer-advance-motion (direction)
+    (forward-line direction)
+    (beginning-of-line)
+    (if (not (get-text-property (point) 'ibuffer-filter-group-name))
+        t
+      (ibuffer-skip-properties '(ibuffer-filter-group-name)
+                               direction)
+      nil))
+  (defun ibuffer-previous-line (&optional arg)
+    "Move backwards ARG lines, wrapping around the list if necessary."
+    (interactive "P")
+    (or arg (setq arg 1))
+    (let (err1 err2)
+      (while (> arg 0)
+        (cl-decf arg)
+        (setq err1 (ibuffer-advance-motion -1)
+              err2 (if (not (get-text-property (point) 'ibuffer-title))
+                       t
+                     (goto-char (point-max))
+                     (beginning-of-line)
+                     (ibuffer-skip-properties '(ibuffer-summary
+                                                ibuffer-filter-group-name)
+                                              -1)
+                     nil)))
+      (and err1 err2)))
+  (defun ibuffer-next-line (&optional arg)
+    "Move forward ARG lines, wrapping around the list if necessary."
+    (interactive "P")
+    (or arg (setq arg 1))
+    (let (err1 err2)
+      (while (> arg 0)
+        (cl-decf arg)
+        (setq err1 (ibuffer-advance-motion 1)
+              err2 (if (not (get-text-property (point) 'ibuffer-summary))
+                       t
+                     (goto-char (point-min))
+                     (beginning-of-line)
+                     (ibuffer-skip-properties '(ibuffer-summary
+                                                ibuffer-filter-group-name
+                                                ibuffer-title)
+                                              1)
+                     nil)))
+      (and err1 err2)))
+
+  (setq mp/ibuffer-collapsed-groups (list "Git:~/" "Default"))
+
+  (defadvice ibuffer (after collapse-helm)
+    (dolist (group mp/ibuffer-collapsed-groups)
+      (progn
+        (goto-char 1)
+        (when (search-forward (concat "[ " group " ]") (point-max) t)
+          (progn
+            (move-beginning-of-line nil)
+            (ibuffer-toggle-filter-group)))))
+    (goto-char 1)
+    (search-forward "[ " (point-max) t))
+
+
+  (ad-activate 'ibuffer)
+
+  ;; Use human readable Size column instead of original one
+  (define-ibuffer-column size-h
+    (:name "Size" :inline t)
+    (cond
+     ((> (buffer-size) 1000000) (format "%7.1fM" (/ (buffer-size) 1000000.0)))
+     ((> (buffer-size) 100000) (format "%7.0fk" (/ (buffer-size) 1000.0)))
+     ((> (buffer-size) 1000) (format "%7.1fk" (/ (buffer-size) 1000.0)))
+     (t (format "%8d" (buffer-size)))))
+
+  ;; Modify the default ibuffer-formats
+  (setq ibuffer-formats
+        '((mark modified read-only " "
+                (name 18 18 :left :elide)
+                " "
+                (size-h 9 -1 :right)
+                " "
+                (mode 16 16 :left :elide)
+                " "
+                filename-and-process)))
+
+  (evilified-state-evilify ibuffer-mode ibuffer-mode-map
+    (kbd "j") 'ibuffer-next-line
+    (kbd "k") 'ibuffer-previous-line
+    (kbd "sl") 'ibuffer-redisplay
+    (kbd "v") 'ibuffer-visit-buffer
+    (kbd "SPC") nil
+    (kbd "SPC SPC") 'counsel-M-x
+    (kbd "TAB") 'ibuffer-toggle-filter-group
+    (kbd "f") 'ivy-switch-buffer
+    (kbd "n") 'ibuffer-forward-filter-group
+    (kbd "p") 'ibuffer-backward-filter-group)
+  (defadvice ibuffer (around ibuffer-point-to-most-recent) ()
+             "Open ibuffer with cursor pointed to most recent (non-minibuffer) buffer name"
+             (let ((recent-buffer-name
+                    (if (minibufferp (buffer-name))
+                        (buffer-name
+                         (window-buffer (minibuffer-selected-window)))
+                      (buffer-name (other-buffer)))))
+               ad-do-it
+               (ibuffer-jump-to-buffer recent-buffer-name)))
+  (ad-activate 'ibuffer))
 
 (global-set-key (kbd "C-x \\") #'align-regexp)
 (setq tab-always-indent 'complete)

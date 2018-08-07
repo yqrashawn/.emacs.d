@@ -123,8 +123,9 @@
   (evil-define-key 'normal ivy-occur-mode-map "w" 'ivy-wgrep-change-to-wgrep-mode)
   (ivy-set-occur 'spacemacs/counsel-search
                  'spacemacs//counsel-occur)
-  (evil-make-overriding-map ivy-occur-mode-map 'normal)
-  (define-key evil-normal-state-map "sb" 'ivy-switch-buffer))
+  (evil-make-overriding-map ivy-occur-mode-map 'normal))
+;; (define-key evil-normal-state-map "sb" 'ivy-switch-buffer)
+
 (use-package ivy-hydra
   :straight t
   :after ivy
@@ -217,8 +218,7 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
     ("q" (ivy-exit-with-action (lambda (_))) :exit t)
     ("D" (ivy-exit-with-action
           (lambda (_) (find-function 'hydra-ivy/body)))
-     :exit t))
-  )
+     :exit t)))
 
 (use-package wgrep
   :straight t
@@ -551,9 +551,9 @@ When ARG is non-nil search in junk files."
   :init (company-prescient-mode))
 
 (yq/update-evil-emacs-state-modes 'ibuffer-mode)
-(push 'ibuffer-mode evil-insert-state-modes)
-(define-key ibuffer-mode-map "j" 'ibuffer-forward-line)
-(define-key ibuffer-mode-map "k" 'ibuffer-backward-line)
+;; (push 'ibuffer-mode evil-insert-state-modes)
+;; (define-key ibuffer-mode-map "j" 'ibuffer-forward-line)
+;; (define-key ibuffer-mode-map "k" 'ibuffer-backward-line)
 (add-to-list 'ibuffer-never-show-predicates "^\\*Ibuffer")
 (add-to-list 'ibuffer-never-show-predicates "^\\*Straight")
 (add-to-list 'ibuffer-never-show-predicates "^\\*scratch")
