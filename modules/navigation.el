@@ -596,24 +596,64 @@ When ARG is non-nil search in junk files."
   :straight t
   :init (persp-mode 1)
   (setq persp-add-buffer-on-after-change-major-mode t)
+  (setq persp-add-buffer-on-find-file nil)
+  (setq persp-add-buffer-on-after-change-major-mode nil)
+  (setq persp-switch-to-added-buffer nil)
+  (setq persp-autokill-persp-when-removed-last-buffer 'kill)
+  ;; (setq persp-nil-name "YQ")
   :config
-  (with-eval-after-load 'projectile)
-  (defun spacemacs/ivy-persp-switch-project (arg)
-    (interactive "P")
-    (ivy-read "Switch to Project Perspective: "
-              (if (projectile-project-p)
-                  (cons (abbreviate-file-name (projectile-project-root))
-                        (projectile-relevant-known-projects))
-                projectile-known-projects)
-              :action (lambda (project)
-                        (let ((persp-reset-windows-on-nil-window-conf t))
-                          (persp-switch project)
-                          (let ((projectile-completion-system 'ivy))
-                            (projectile-switch-project-by-name project))))))
+
+  ;; after display
+  ;; (defvar after-display-buffer-functions nil)
+  ;; (defun after-display-buffer-adv (&rest r)
+  ;;   (apply #'run-hook-with-args 'after-display-buffer-functions r))
+  ;; (add-to-list 'after-display-buffer-functions 'persp-mode-projectile-bridge-hook-find-file)
+  ;; (advice-add #'display-buffer   :after #'after-display-buffer-adv)
+
+  ;; after siwtch
+  ;; (defvar after-switch-to-buffer-functions nil)
+  ;; (defun after-switch-to-buffer-adv (&rest r)
+  ;;   (message "%s" r)
+  ;;   (apply #'run-hook-with-args 'after-switch-to-buffer-functions r))
+  ;; (advice-add #'switch-to-buffer :after #'after-switch-to-buffer-adv)
+  ;; (setq after-switch-to-buffer-functions 'persp-mode-projectile-bridge-hook-find-file)
+  ;; (setq after-switch-to-buffer-functions nil)
+
+  ;; before siwtch
+  (defvar before-switch-to-buffer-functions nil)
+  (defun before-switch-to-buffer-adv (&rest r)
+    (apply #'run-hook-with-args 'before-switch-to-buffer-functions r))
+  (advice-add #'switch-to-buffer :before #'before-switch-to-buffer-adv)
+  (defun persp-mode-projectile-bridge-before-switch-buffer (&rest _args)
+    (let ((persp
+           (persp-mode-projectile-bridge-find-perspective-for-buffer
+            (car _args))))
+      (when persp
+        (persp-add-buffer (car _args) persp nil nil)
+        (persp-frame-switch (persp-name persp)))))
+  (setq before-switch-to-buffer-functions 'persp-mode-projectile-bridge-before-switch-buffer)
+
+
+
+
   ;; (add-hook 'persp-common-buffer-filter-functions
   ;;           ;; there is also `persp-add-buffer-on-after-change-major-mode-filter-functions'
   ;;           #'(lambda (b) (string-prefix-p "*" (buffer-name b))))
   (setq persp-autokill-buffer-on-remove 'kill-weak))
+
+(use-package persp-mode-projectile-bridge
+  :straight t
+  :after persp-mode
+  :commands (persp-mode-projectile-bridge-mode)
+  :init
+  (persp-mode-projectile-bridge-mode 1)
+  (persp-mode-projectile-bridge-find-perspectives-for-all-buffers)
+  :config
+  (add-hook 'persp-mode-projectile-bridge-mode-hook
+            #'(lambda ()
+                (if persp-mode-projectile-bridge-mode
+                    (persp-mode-projectile-bridge-find-perspectives-for-all-buffers)
+                  (persp-mode-projectile-bridge-kill-perspectives)))))
 
 (use-package persp-fr
   :straight t
