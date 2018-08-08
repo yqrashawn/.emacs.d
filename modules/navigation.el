@@ -601,49 +601,42 @@ When ARG is non-nil search in junk files."
   (setq persp-add-buffer-on-after-change-major-mode nil)
   (setq persp-switch-to-added-buffer nil)
   (setq persp-autokill-persp-when-removed-last-buffer 'kill)
-  ;; (setq persp-nil-name "YQ")
+  (define-key evil-normal-state-map "sb" 'persp-switch-to-buffer)
+  (define-key evil-normal-state-map "ss" 'persp-switch)
+  (define-key evil-normal-state-map "sB" 'persp-temporarily-display-buffer)
+  (spacemacs/set-leader-keys "sb" 'persp-switch-to-buffer)
+  (spacemacs/set-leader-keys "ss" 'persp-switch)
+  (spacemacs/set-leader-keys "sk" 'persp-kill)
+  (spacemacs/set-leader-keys "sB" 'persp-temporarily-display-buffer)
   :config
-
-  ;; after display
-  ;; (defvar after-display-buffer-functions nil)
-  ;; (defun after-display-buffer-adv (&rest r)
-  ;;   (apply #'run-hook-with-args 'after-display-buffer-functions r))
-  ;; (add-to-list 'after-display-buffer-functions 'persp-mode-projectile-bridge-hook-find-file)
-  ;; (advice-add #'display-buffer   :after #'after-display-buffer-adv)
-
   ;; after siwtch
-  ;; (defvar after-switch-to-buffer-functions nil)
-  ;; (defun after-switch-to-buffer-adv (&rest r)
-  ;;   (message "%s" r)
-  ;;   (apply #'run-hook-with-args 'after-switch-to-buffer-functions r))
-  ;; (advice-add #'switch-to-buffer :after #'after-switch-to-buffer-adv)
-  ;; (setq after-switch-to-buffer-functions 'persp-mode-projectile-bridge-hook-find-file)
+  (defvar after-switch-to-buffer-functions nil)
+  (defun after-switch-to-buffer-adv (&rest r)
+    (apply #'run-hook-with-args 'after-switch-to-buffer-functions r))
+  (advice-add #'switch-to-buffer :after #'after-switch-to-buffer-adv)
+  (setq after-switch-to-buffer-functions 'persp-mode-projectile-bridge-hook-find-file)
   ;; (setq after-switch-to-buffer-functions nil)
 
-  ;; before siwtch
-  (defvar before-switch-to-buffer-functions nil)
-  (defun before-switch-to-buffer-adv (&rest r)
-    (apply #'run-hook-with-args 'before-switch-to-buffer-functions r))
-  (advice-add #'switch-to-buffer :before #'before-switch-to-buffer-adv)
-  (defun persp-mode-projectile-bridge-before-switch-buffer (&rest _args)
-    (let ((persp
+  ;; select window
+  (defun yq/select-window-hook-persp (&rest _args)
+    (if (window-buffer)
+        (let ((persp))
            (persp-mode-projectile-bridge-find-perspective-for-buffer
-            (car _args))))
+           (window-buffer)))
       (when persp
-        (persp-add-buffer (car _args) persp nil nil)
+        (persp-add-buffer (window-buffer) persp nil nil)
         (persp-frame-switch (persp-name persp)))))
-  (setq before-switch-to-buffer-functions 'persp-mode-projectile-bridge-before-switch-buffer)
+  (defvar after-select-window-functions nil)
+  (defun after-select-window-adv (&rest r)
+    (apply #'run-hook-with-args 'after-select-window-functions r))
+  (advice-add #'select-window :after #'after-select-window-adv)
+  (setq after-select-window-functions 'yq/select-window-hook-persp)
+  ;; (setq after-select-window-functions nil)
 
-
-
-
-  ;; (add-hook 'persp-common-buffer-filter-functions
-  ;;           ;; there is also `persp-add-buffer-on-after-change-major-mode-filter-functions'
-  ;;           #'(lambda (b) (string-prefix-p "*" (buffer-name b))))
   (setq persp-autokill-buffer-on-remove 'kill-weak))
 
 (use-package persp-mode-projectile-bridge
-  :straight t
+  :straight (:host github :repo "yqrashawn/persp-mode-projectile-bridge.el")
   :after persp-mode
   :commands (persp-mode-projectile-bridge-mode)
   :init
@@ -657,8 +650,13 @@ When ARG is non-nil search in junk files."
                     (persp-mode-projectile-bridge-find-perspectives-for-all-buffers)
                   (persp-mode-projectile-bridge-kill-perspectives)))))
 
-;; (use-package persp-fr
-;;   :straight t
-;;   :after persp-mode
-;;   :commands (persp-fr-start)
-;;   :init (persp-fr-start))
+(use-package persp-fr
+  :straight t
+  :after persp-mode
+  :commands (persp-fr-start)
+  :init (persp-fr-start))
+
+(use-package frames-only-mode
+  :straight t
+  :commands (frames-only-mode)
+  :init (frames-only-mode 1))

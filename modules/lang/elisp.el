@@ -81,7 +81,7 @@ Start `ielm' if it's not already running."
   (push '("*lispy-message*" :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config))
 
 (use-package parinfer
-  :straight t
+  :straight (:host github :repo "yqrashawn/parinfer-mode")
   :after lispy
   :bind
   (("C-," . parinfer-toggle-mode))

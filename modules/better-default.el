@@ -1046,7 +1046,7 @@ otherwise it is scaled down."
   :init (define-key ibuffer-mode-map "K" 'ibuffer-kill-filter-group))
 
 (global-set-key (kbd "C-x C-b") 'ibuffer)
-(define-key evil-normal-state-map "sb" 'ibuffer)
+;; (define-key evil-normal-state-map "sb" 'ibuffer)
 (setq ibuffer-expert t)
 (setq ibuffer-show-empty-filter-groups nil)
 (add-hook 'ibuffer-mode-hook
