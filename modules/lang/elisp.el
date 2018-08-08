@@ -24,9 +24,10 @@ the current buffer."
 
 (use-package elisp-mode
   :mode ("\\.el\\'" . emacs-lisp-mode)
-  :diminish (emacs-lisp-mode . "ELISP")
+  :diminish (emacs-lisp-mode . "EL")
   :commands (emacs-lisp-mode)
   :config
+  (add-hook 'emacs-lisp-mode-hook (lambda () (setq mode-name "λ")))
   (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
   (defun bozhidar-visit-ielm ()
     "Switch to default `ielm' buffer.

@@ -156,16 +156,6 @@ Available PROPS:
   :init
   (define-key evil-insert-state-map (kbd "C-;") 'company-try-hard))
 
-;; (use-package company-quickhelp
-;;   :straight t
-;;   :hook (company-mode . company-quickhelp-mode))
-
-;; (use-package company-childframe
-;;   :straight t
-;;   :diminish company-childframe-mode
-;;   :config
-;;   (company-childframe-mode 1))
-
 (setq syntax-checking-enable-by-default t)
 
 (defun spacemacs/enable-flycheck (mode)
@@ -455,11 +445,11 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   :straight t
   :defer t)
 
-(use-package zop-to-char
-  :straight t
-  :init
-  (evil-define-key '(normal insert) 'global (kbd "s-m") 'zop-up-to-char)
-  (evil-define-key '(normal insert) 'global (kbd "s-M") 'zop-to-char))
+;; (use-package zop-to-char
+;;   :straight t
+;;   :init
+;;   (evil-define-key '(normal insert) 'global (kbd "s-m") 'zop-up-to-char)
+;;   (evil-define-key '(normal insert) 'global (kbd "s-M") 'zop-to-char))
 
 (with-eval-after-load 'hydra
   (defhydra hydra-change-mode (:hint nil :color pink)
@@ -497,3 +487,14 @@ _j_  js2      _T_     text   _f_  fundamental
   :straight t
   :defer t
   :mode ("\\.yaml\\'" . yaml-mode))
+(use-package company-posframe
+  :straight (:host github :repo "tumashu/company-posframe")
+  :after company
+  :diminish (company-posframe-mode)
+  :hook (company-mode . company-posframe-mode))
+
+(use-package flycheck-posframe
+  :straight t
+  :after flycheck
+  :diminish (flycheck-posframe-mode)
+  :hook (flycheck-mode . flycheck-posframe-mode))
