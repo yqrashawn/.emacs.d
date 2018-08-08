@@ -323,6 +323,11 @@ If the universal prefix argument is used then kill the buffer too."
   (add-hook 'delete-terminal-functions 'recentf-save-list)
   (recentf-mode 1)
   :config
+  ;; (defun yq/straight-recentf-push (old-func filename)
+  ;;   (if (string-match "straight/build" filename)
+  ;;       (old-func (replace-match "straight/repos" nil nil t))
+  ;;     (old-func filename)))
+  ;; (advice-add #'recentf-push :around 'yq/straight-recentf-push)
   (with-eval-after-load 'recentf
     (run-at-time nil (* 5 60) 'recentf-save-list)
     (add-to-list 'recentf-exclude
@@ -332,7 +337,8 @@ If the universal prefix argument is used then kill the buffer too."
     (add-to-list 'recentf-exclude "/usr/local/Cellar/emacs")
     (add-to-list 'recentf-exclude (concat user-home-directory "Dropbox/ORG"))
     (add-to-list 'recentf-exclude (concat user-home-directory "Dropbox/Books"))
-    (add-to-list 'recentf-exclude (concat user-emacs-directory "straight/build"))
+    (add-to-list 'recentf-exclude (expand-file-name (concat user-emacs-directory "straight/build")))
+    (add-to-list 'recentf-exclude (expand-file-name (concat user-emacs-directory "persp-confs/")))
     (add-to-list 'recentf-exclude "/var/folders/")
     (add-to-list 'recentf-exclude "/var/tmp/")
     (add-to-list 'recentf-exclude (expand-file-name (concat user-emacs-directory "recentf")))
@@ -1046,7 +1052,6 @@ otherwise it is scaled down."
   :init (define-key ibuffer-mode-map "K" 'ibuffer-kill-filter-group))
 
 (global-set-key (kbd "C-x C-b") 'ibuffer)
-;; (define-key evil-normal-state-map "sb" 'ibuffer)
 (setq ibuffer-expert t)
 (setq ibuffer-show-empty-filter-groups nil)
 (add-hook 'ibuffer-mode-hook

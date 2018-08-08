@@ -8,6 +8,7 @@
   :init
   (add-hook 'js2-mode-hook 'js2-imenu-extras-mode)
   :config
+  (add-hook 'js2-mode-hook (lambda () (setq mode-name "JS")))
   ;; @see https://github.com/mooz/js2-mode/issues/350
   (setq forward-sexp-function nil)
   (setq js2-mode-show-parse-errors t)

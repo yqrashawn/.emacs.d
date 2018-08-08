@@ -609,30 +609,29 @@ When ARG is non-nil search in junk files."
   (spacemacs/set-leader-keys "sk" 'persp-kill)
   (spacemacs/set-leader-keys "sB" 'persp-temporarily-display-buffer)
   :config
-  ;; after siwtch
-  (defvar after-switch-to-buffer-functions nil)
-  (defun after-switch-to-buffer-adv (&rest r)
-    (apply #'run-hook-with-args 'after-switch-to-buffer-functions r))
-  (advice-add #'switch-to-buffer :after #'after-switch-to-buffer-adv)
-  (setq after-switch-to-buffer-functions 'persp-mode-projectile-bridge-hook-find-file)
+  ;; auto switch persp after siwtch to buffer
+  ;; (defvar after-switch-to-buffer-functions nil)
+  ;; (defun after-switch-to-buffer-adv (&rest r)
+  ;;   (apply #'run-hook-with-args 'after-switch-to-buffer-functions r))
+  ;; (advice-add #'switch-to-buffer :after #'after-switch-to-buffer-adv)
+  ;; (setq after-switch-to-buffer-functions 'persp-mode-projectile-bridge-hook-find-file)
   ;; (setq after-switch-to-buffer-functions nil)
 
-  ;; select window
-  (defun yq/select-window-hook-persp (&rest _args)
-    (if (window-buffer)
-        (let ((persp))
-           (persp-mode-projectile-bridge-find-perspective-for-buffer
-           (window-buffer)))
-      (when persp
-        (persp-add-buffer (window-buffer) persp nil nil)
-        (persp-frame-switch (persp-name persp)))))
-  (defvar after-select-window-functions nil)
-  (defun after-select-window-adv (&rest r)
-    (apply #'run-hook-with-args 'after-select-window-functions r))
-  (advice-add #'select-window :after #'after-select-window-adv)
-  (setq after-select-window-functions 'yq/select-window-hook-persp)
+  ;; auto switch persp after select window
+  ;; (defun yq/select-window-hook-persp (&rest _args)
+  ;;   (if (window-buffer)
+  ;;       (let ((persp))
+  ;;         (persp-mode-projectile-bridge-find-perspective-for-buffer
+  ;;          (window-buffer)))
+  ;;     (when persp
+  ;;       (persp-add-buffer (window-buffer) persp nil nil)
+  ;;       (persp-frame-switch (persp-name persp)))))
+  ;; (defvar after-select-window-functions nil)
+  ;; (defun after-select-window-adv (&rest r)
+  ;;   (apply #'run-hook-with-args 'after-select-window-functions r))
+  ;; (advice-add #'select-window :after #'after-select-window-adv)
+  ;; (setq after-select-window-functions 'yq/select-window-hook-persp)
   ;; (setq after-select-window-functions nil)
-
   (setq persp-autokill-buffer-on-remove 'kill-weak))
 
 (use-package persp-mode-projectile-bridge

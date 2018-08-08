@@ -472,21 +472,18 @@ _j_  js2      _T_     text   _f_  fundamental
   ;; Use ivy-xref to display `xref.el' results.
   (setq xref-show-xrefs-function #'ivy-xref-show-xrefs))
 
-;; (use-package company-quickhelp
-;;   :straight t
-;;   :commands (company-quickhelp-manual-begin)
-;;   :init
-;;   (evil-define-key 'insert company-quickhelp-mode-map (kbd "C-k") 'company-select-previous)
-;;   (define-key company-active-map (kbd "M-h") #'company-quickhelp-manual-begin))
+(use-package all-the-icons
+  :straight t)
+
+(use-package company-box
+  :straight t
+  :after (company)
+  :hook (company-mode . company-box-mode))
+
 (use-package yaml-mode
   :straight t
   :defer t
   :mode ("\\.yaml\\'" . yaml-mode))
-(use-package company-posframe
-  :straight (:host github :repo "tumashu/company-posframe")
-  :after company
-  :diminish (company-posframe-mode)
-  :hook (company-mode . company-posframe-mode))
 
 (use-package flycheck-posframe
   :straight t
