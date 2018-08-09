@@ -133,10 +133,12 @@ has been changed to THEME."
 (spacemacs//adaptive-evil-highlight-persist-face)
 (add-hook 'spacemacs-post-theme-change-hook 'spacemacs//adaptive-evil-highlight-persist-face)
 
-(use-package moody
-  :straight (:host github :repo "tarsius/moody")
-  :config
-  (setq moody-mode-line-height 17)
-  (setq x-underline-at-descent-line t)
-  (moody-replace-mode-line-buffer-identification)
-  (moody-replace-vc-mode))
+;; (use-package moody
+;;   :straight (:host github :repo "tarsius/moody")
+;;   :config
+;;   (setq moody-mode-line-height 17)
+;;   (setq x-underline-at-descent-line t)
+;;   (moody-replace-mode-line-buffer-identification)
+;;   (moody-replace-vc-mode))
+
+(yq/get-modules "modeline.elc")

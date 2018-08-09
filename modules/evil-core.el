@@ -352,8 +352,19 @@ Example: (evil-map visual \"<\" \"<gv\")"
   :init
   (global-anzu-mode t)
   :config
-  (setq anzu-search-threshold 1000)
-  (setq anzu-cons-mode-line-p nil))
+  (setq anzu-cons-mode-line-p nil
+        anzu-minimum-input-length 1
+        anzu-search-threshold 250)
+
+  ;; Avoid anzu conflicts across buffers
+  (mapc #'make-variable-buffer-local
+        '(anzu--total-matched anzu--current-position anzu--state
+                              anzu--cached-count anzu--cached-positions anzu--last-command
+                              anzu--last-isearch-string anzu--overflow-p))
+
+  ;; Ensure anzu state is cleared when searches & iedit are done
+  (add-hook 'isearch-mode-end-hook #'anzu--reset-status t)
+  (add-hook 'iedit-mode-end-hook #'anzu--reset-status))
 
 (straight-use-package 'bind-map)
 (yq/get-modules "evil-evilified-state.el")

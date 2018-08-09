@@ -379,13 +379,6 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   ;; enable eldoc in IELM
   (add-hook 'ielm-mode-hook #'eldoc-mode))
 
-;; (use-package flycheck-posframe
-;;   :straight (:host github :repo "alexmurray/flycheck-posframe")
-;;   :after flycheck
-;;   :config
-;;   (add-hook 'flycheck-mode-hook #'flycheck-posframe-mode)
-;;   (set-face-attribute 'flycheck-posframe-error-face nil :inherit 'error))
-
 (use-package git-link
   :straight t
   :commands (git-link git-link-commit git-link-homepage)
@@ -489,4 +482,5 @@ _j_  js2      _T_     text   _f_  fundamental
   :straight t
   :after flycheck
   :diminish (flycheck-posframe-mode)
-  :hook (flycheck-mode . flycheck-posframe-mode))
+  :hook (flycheck-mode . flycheck-posframe-mode)
+  :config (set-face-attribute 'flycheck-posframe-error-face nil :inherit 'error))
