@@ -99,7 +99,7 @@ The return value is nil if no font was found, truthy otherwise."
                                      ;; "Anonymous Pro for Powerline"
                                      ;; "InconsolataG for Powerline"
                                      ;; "Source Code Pro for Powerline"
-                                     :size 18
+                                     :size 13
                                      :weight normal
                                      :width normal
                                      :powerline-scale 1.1))
