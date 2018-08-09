@@ -81,7 +81,8 @@ Start `ielm' if it's not already running."
   (evil-define-key 'normal lispy-mode-map "sl" 'lispy-goto)
   ;; (evil-define-key 'normal lispy-mode-map "b" 'sp-previous-sexp)
   ;; (evil-define-key 'normal lispy-mode-map "e" 'sp-next-sexp)
-  (push '("*lispy-message*" :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config))
+  (push '("*lispy-message*" :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config)
+  (define-key evil-normal-state-map (kbd "C-a") 'mwim-beginning-of-code-or-line))
 
 (use-package parinfer
   :straight (:host github :repo "yqrashawn/parinfer-mode")
