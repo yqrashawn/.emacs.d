@@ -593,6 +593,7 @@ When ARG is non-nil search in junk files."
   :init
   (evil-define-key 'normal helpful-mode-map "o" 'ace-link-help)
   (ace-link-setup-default))
+
 (use-package persp-mode
   :straight t
   :init (persp-mode 1)
