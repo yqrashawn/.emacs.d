@@ -87,7 +87,15 @@
   :straight (:host github :repo "akirak/emacs-playground"))
 
 (setq gc-cons-threshold 8388608)
-(toggle-frame-maximized)
+;; (toggle-frame-maximized)
+
+(use-package suggest
+  :straight t
+  :commands (suggest))
+
+(use-package which-func
+  :straight t
+  :commands (which-key-mode))
 
 ;; (straight-use-package 'suggest)
 ;; (straight-use-package 'edit-list)

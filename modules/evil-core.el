@@ -51,6 +51,8 @@
              (eq index mode-to-remove))
            evil-emacs-state-modes)))
   :config
+  (define-key evil-normal-state-map ">" 'evil-shift-right-line)
+  (define-key evil-normal-state-map "<" 'evil-shift-left-line)
   (add-hook 'edebug-mode-hook 'evil-insert-state)
   (mapc #'evil-declare-change-repeat
         '(company-complete-common
@@ -331,40 +333,25 @@ Example: (evil-map visual \"<\" \"<gv\")"
   :diminish anzu-mode
   :init
   (global-anzu-mode t)
-  :config
-  (defun yq/anzu-update-func (here total)
-    (when anzu--state
-      (let ((status (cl-case anzu--state
-                      (search (format "<%d/%d>" here total))
-                      (replace-query (format "(%d Replaces)" total))
-                      (replace (format "<%d/%d>" here total)))))
-        (propertize status 'face 'anzu-mode-line))))
-
-  (custom-set-variables
-   '(anzu-mode-line-update-function #'yq/anzu-update-func))
-  (setq anzu-cons-mode-line-p nil)
-  (setcar (cdr (assq 'isearch-mode minor-mode-alist))
-          '(:eval (anzu--update-mode-line))))
-
-(use-package evil-anzu
-  :straight t
-  :diminish anzu-mode
-  :init
-  (global-anzu-mode t)
-  :config
   (setq anzu-cons-mode-line-p nil
         anzu-minimum-input-length 1
         anzu-search-threshold 250)
-
+  :config
   ;; Avoid anzu conflicts across buffers
   (mapc #'make-variable-buffer-local
-        '(anzu--total-matched anzu--current-position anzu--state
-                              anzu--cached-count anzu--cached-positions anzu--last-command
-                              anzu--last-isearch-string anzu--overflow-p))
-
+        '(anzu--total-matched
+          anzu--current-position anzu--state
+          anzu--cached-count anzu--cached-positions anzu--last-command
+          anzu--last-isearch-string anzu--overflow-p))
+  (setcar (cdr (assq 'isearch-mode minor-mode-alist))
+          '(:eval (anzu--update-mode-line)))
   ;; Ensure anzu state is cleared when searches & iedit are done
   (add-hook 'isearch-mode-end-hook #'anzu--reset-status t)
   (add-hook 'iedit-mode-end-hook #'anzu--reset-status))
+
+(use-package evil-anzu
+  :straight t
+  :diminish anzu-mode)
 
 (straight-use-package 'bind-map)
 (yq/get-modules "evil-evilified-state.el")

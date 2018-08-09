@@ -9,11 +9,6 @@
   "Face used for the dirname part of the buffer path."
   :group '+doom-modeline)
 
-(defface doom-modeline-buffer-file
-  '((t (:inherit mode-line-buffer-id)))
-  "Face used for the filename part of the mode-line buffer path."
-  :group '+doom-modeline)
-
 (defface doom-modeline-buffer-modified
   '((t (:inherit error :background nil :bold t)))
   "Face used for the 'unsaved' symbol in the mode-line."
@@ -22,11 +17,6 @@
 (defface doom-modeline-buffer-major-mode
   '((t (:inherit mode-line-emphasis :bold t)))
   "Face used for the major-mode segment in the mode-line."
-  :group '+doom-modeline)
-
-(defface doom-modeline-highlight
-  '((t (:inherit mode-line-emphasis)))
-  "Face for bright segments of the mode-line."
   :group '+doom-modeline)
 
 (defface doom-modeline-panel
@@ -48,20 +38,6 @@
 (defface doom-modeline-urgent
   `((t (:inherit error :bold t)))
   "Face for errors in the modeline. Used by `*flycheck'"
-  :group '+doom-modeline)
-
-;; Bar
-(defface doom-modeline-bar '((t (:inherit highlight)))
-  "The face used for the left-most bar on the mode-line of an active window."
-  :group '+doom-modeline)
-
-(defface doom-modeline-eldoc-bar '((t (:inherit shadow)))
-  "The face used for the left-most bar on the mode-line when eldoc-eval is
-active."
-  :group '+doom-modeline)
-
-(defface doom-modeline-inactive-bar '((t (:inherit warning :inverse-video t)))
-  "The face used for the left-most bar on the mode-line of an inactive window."
   :group '+doom-modeline)
 
 (use-package shrink-path
@@ -88,10 +64,6 @@ can be used to add a number of spaces to the front and back of the string."
                   right)))
     (error (format "[%s]: (%s) (%s) (%s)" err left center right))))
 
-(defface modeline-buffer-major-mode-face
-  '((t (:inherit mode-line-emphasis :bold t)))
-  "Face used for the major-mode segment in the mode-line.")
-
 (defun fancy-buffer-name ()
   (if (buffer-file-name)
       (string-join
@@ -115,7 +87,7 @@ can be used to add a number of spaces to the front and back of the string."
                              (and (featurep 'face-remap)
                                   (/= text-scale-mode-amount 0)
                                   (format " (%+d)" text-scale-mode-amount)))
-                     'face (if (active) 'modeline-buffer-major-mode-face))))
+                     'face (if (active) 'doom-modeline-buffer-major-mode))))
 
 (defun fancy-vcs ()
   (format-mode-line (when (and vc-mode buffer-file-name)
@@ -246,6 +218,8 @@ can be used to add a number of spaces to the front and back of the string."
                                       :v-adjust -0.05)
                sep)))))
 
+(defvar anzu--state nil)
+(defvar iedit-mode nil)
 (defun fancy-anzu ()
   (format-mode-line
    (when (and anzu--state (not iedit-mode))

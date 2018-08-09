@@ -27,6 +27,7 @@ the current buffer."
   :diminish (emacs-lisp-mode . "EL")
   :commands (emacs-lisp-mode)
   :config
+  (add-hook 'emacs-lisp-mode-hook (lambda () (setq-local evil-shift-width 1)))
   (add-hook 'emacs-lisp-mode-hook (lambda () (setq mode-name "λ")))
   (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
   (defun bozhidar-visit-ielm ()
@@ -71,6 +72,7 @@ Start `ielm' if it's not already running."
   (yq/add-toggle lispy :mode lispy-mode)
   (spacemacs/set-leader-keys "," 'yq/toggle-lispy)
   :config
+  (advice-add #'special-lispy-eval :before (lambda () (or (fboundp 'cider--make-overlay) (require 'cider))))
   ;; (evil-define-key 'insert lispy-mode-map-special "o" 'evil-execute-in-normal-state)
   (evil-define-key 'insert lispy-mode-map (kbd "C-k") 'lispy-kill)
   (evil-define-key 'insert lispy-mode-map (kbd "C-d") 'lispy-delete)
