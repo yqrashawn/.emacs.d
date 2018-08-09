@@ -74,9 +74,9 @@
   :straight t
   :init
   :mode(("\\.json\\'" . json-mode)
-   ("\\manifest.webapp\\'" . json-mode )
-   ("\\.eslintrc\\'" . json-mode)
-   ("\\.tern-project\\'" . json-mode)))
+        ("\\manifest.webapp\\'" . json-mode)
+        ("\\.eslintrc\\'" . json-mode)
+        ("\\.tern-project\\'" . json-mode)))
 
 ;; (bound-and-true-p prettier-js-mode)
 (use-package prettier-js
@@ -129,7 +129,7 @@
 (use-package indium
   :straight t
   :after js2-mode
-  :diminish (indium-interaction-mode . "In" )
+  :diminish (indium-interaction-mode . "In")
   :hook (js2-mode . indium-interaction-mode)
   :commands (indium-launch indium-interaction-mode indium-run-node indium-run-chrome indium-debugger-mode)
   :init (setq indium-nodejs-inspect-brk t)
