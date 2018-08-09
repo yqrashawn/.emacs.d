@@ -650,12 +650,6 @@ When ARG is non-nil search in junk files."
                     (persp-mode-projectile-bridge-find-perspectives-for-all-buffers)
                   (persp-mode-projectile-bridge-kill-perspectives)))))
 
-(use-package persp-fr
-  :straight t
-  :after persp-mode
-  :commands (persp-fr-start)
-  :init (persp-fr-start))
-
 (use-package frames-only-mode
   :straight t
   :commands (frames-only-mode)
