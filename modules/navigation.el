@@ -123,8 +123,8 @@
   (evil-define-key 'normal ivy-occur-mode-map "w" 'ivy-wgrep-change-to-wgrep-mode)
   (ivy-set-occur 'spacemacs/counsel-search
                  'spacemacs//counsel-occur)
-  (evil-make-overriding-map ivy-occur-mode-map 'normal))
-;; (define-key evil-normal-state-map "sb" 'ivy-switch-buffer)
+  (evil-make-overriding-map ivy-occur-mode-map 'normal)
+  (define-key evil-normal-state-map "sB" 'ivy-switch-buffer))
 
 (use-package ivy-hydra
   :straight t
@@ -133,15 +133,6 @@
   (defun yq/ivy-call-kill-buffer-action ()
     "Call the current action without exiting completion."
     (interactive)
-    ;; (unless
-    ;;     (or
-    ;;      ;; this is needed for testing in ivy-with which seems to call ivy-call
-    ;;      ;; again, and this-command is nil in that case.
-    ;;      (null this-command)
-    ;;      (memq this-command '(ivy-done
-    ;;                           ivy-alt-done
-    ;;                           ivy-dispatching-done)))
-    ;;   (setq ivy-current-prefix-arg current-prefix-arg))
     (let ((action 'ivy--kill-buffer-action))
       (when action
         (let* ((collection (ivy-state-collection ivy-last))
@@ -238,16 +229,14 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
 
 (use-package counsel-projectile
   :straight t
-  :commands (counsel-projectile-mode)
   :init
-  (counsel-projectile-mode)
+  (counsel-projectile-mode +1)
   (spacemacs/set-leader-keys "p" nil)
   (spacemacs/set-leader-keys "pb" 'counsel-projectile-switch-to-buffer)
   (define-key evil-normal-state-map "sb" 'counsel-projectile-switch-to-buffer)
   (spacemacs/set-leader-keys "pf" 'counsel-projectile-find-file)
   (spacemacs/set-leader-keys "pd" 'counsel-projectile-find-dir)
   (spacemacs/set-leader-keys "pl" 'counsel-projectile-switch-project)
-
   (defun yq/find-emacsd-modules ()
     "find file in .emacs.d"
     (interactive) (counsel-fd "" "~/.emacs.d/" nil "-t f"))
