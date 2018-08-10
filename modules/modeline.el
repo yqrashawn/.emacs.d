@@ -165,10 +165,10 @@ can be used to add a number of spaces to the front and back of the string."
                              :v-adjust -0.05)
                             " ")))))))
 
-(defun fancy-persp ()
-  (if (bound-and-true-p persp-mode)
-      (safe-persp-name (get-frame-persp))
-    ""))
+;; (defun fancy-persp ()
+;;   (if (bound-and-true-p persp-mode)
+;;       (safe-persp-name (get-frame-persp))
+;;     ""))
 
 (defvar +doom-modeline-vspc
   (propertize " " 'face 'variable-pitch)
@@ -277,7 +277,7 @@ can be used to add a number of spaces to the front and back of the string."
 (setq-default mode-line-format
               '((:eval (yq/fancy-mode-line-render
                         (string-join (list evil-mode-line-tag (fancy-buffer-info)))
-                        (string-join (list (fancy-persp) " " (fancy-center)))
+                        (string-join (list (fancy-center)))
                         (string-join (list (fancy-anzu) (fancy-macro-recoding) (fancy-iedit) (fancy-evil-s) (fancy-flycheck) (fancy-vcs) " " (fancy-major-mode)))
                         0
                         1))))

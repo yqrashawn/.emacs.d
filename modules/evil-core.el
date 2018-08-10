@@ -130,6 +130,7 @@ Example: (evil-map visual \"<\" \"<gv\")"
   (define-key evil-normal-state-map (kbd "C-k") 'evil-toggle-fold)
   (define-key evil-normal-state-map "s" nil)
   (define-key evil-normal-state-map "sk" 'yq/kill-this-buffer)
+  (define-key evil-normal-state-map "sK" 'projectile-kill-buffers)
   (define-key evil-normal-state-map "sc" 'yq/delete-window)
   (define-key evil-normal-state-map "sh" 'save-buffer)
   (define-key evil-normal-state-map (kbd "C-e") 'mwim-end-of-code-or-line)
