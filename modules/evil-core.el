@@ -267,46 +267,32 @@ Example: (evil-map visual \"<\" \"<gv\")"
   (evil-embrace-enable-evil-surround-integration)
   :config
   (define-key evil-normal-state-map "gs" 'embrace-commander)
-  (define-key evil-iedit-state-map "s" 'embrace-commander)
+  ;; (define-key evil-iedit-state-map "s" 'embrace-commander)
   (define-key evil-visual-state-map "s" 'embrace-commander))
 
-;; (use-package evil-multiedit
-;;   :straight t
-;;   :config
-;;   (define-key evil-visual-state-map "v" 'evil-multiedit-match-all)
-;;   (define-key evil-normal-state-map (kbd "C-p") 'evil-multiedit-match-and-prev)
-;;   (define-key evil-normal-state-map (kbd "C-n") 'evil-multiedit-match-and-next)
-;;   (define-key evil-visual-state-map (kbd "C-p") 'evil-multiedit-and-prev)
-;;   (define-key evil-visual-state-map (kbd "C-n") 'evil-multiedit-and-next)
-;;   (define-key evil-multiedit-state-map (kbd "C-n") 'evil-multiedit-next)
-;;   (define-key evil-multiedit-state-map (kbd "C-p") 'evil-multiedit-prev)
-;;   (define-key evil-multiedit-insert-state-map (kbd "C-n") 'evil-multiedit-next)
-;;   (define-key evil-multiedit-insert-state-map (kbd "C-p") 'evil-multiedit-prev)
-;;   (define-key evil-motion-state-map (kbd "RET") 'evil-multiedit-toggle-or-restrict-region)
-;;   (define-key evil-multiedit-state-map (kbd "RET") 'evil-multiedit-toggle-or-restrict-region)
-;;   (define-key evil-insert-state-map (kbd "C-k") 'evil-multiedit-toggle-marker-here)
-;;   (evil-ex-define-cmd "ie[dit]" 'evil-multiedit-ex-match))
-
-;; (use-package evil-surround
-;;   :straight t
-;;   :init
-;;   (setq evil-surround-pairs-alist '((40 "(" . ")")
-;;                                     (91 "[" . "]")
-;;                                     (123 "{" . "}")
-;;                                     (41 "(" . ")")
-;;                                     (93 "[" . "]")
-;;                                     (125 "{" . "}")
-;;                                     (35 "#{" . "}")
-;;                                     (98 "(" . ")")
-;;                                     (66 "{" . "}")
-;;                                     (62 "<" . ">")
-;;                                     (116 . evil-surround-read-tag)
-;;                                     (60 . evil-surround-read-tag)
-;;                                     (102 . evil-surround-function)))
-;;   :config
-;;   (global-evil-surround-mode 1)
-;;   (evil-define-key 'visual evil-surround-mode-map "s" 'evil-surround-region)
-;;   (evil-define-key 'visual evil-surround-mode-map "S" 'evil-substitute))
+(use-package evil-multiedit
+  :straight t
+  :config
+  (define-key evil-iedit-state-map "V" nil)
+  (define-key evil-iedit-state-map "m" 'iedit-show/hide-unmatched-lines)
+  (define-key evil-visual-state-map "v" 'evil-multiedit-match-all)
+  (define-key evil-insert-state-map (kbd "M-n") 'evil-multiedit-match-and-next)
+  (define-key evil-insert-state-map (kbd "M-p") 'evil-multiedit-match-and-prev)
+  (define-key evil-normal-state-map (kbd "C-n") 'evil-multiedit-match-and-next)
+  (define-key evil-normal-state-map (kbd "C-p") 'evil-multiedit-match-and-prev)
+  (define-key evil-visual-state-map (kbd "C-n") 'evil-multiedit-match-and-next)
+  (define-key evil-visual-state-map (kbd "C-p") 'evil-multiedit-match-and-prev)
+  (define-key evil-multiedit-state-map (kbd "C-n") 'evil-multiedit-match-and-next)
+  (define-key evil-multiedit-state-map (kbd "C-p") 'evil-multiedit-match-and-prev)
+  (define-key evil-multiedit-state-map (kbd "n") 'evil-multiedit-next)
+  (define-key evil-multiedit-state-map (kbd "N") 'evil-multiedit-prev)
+  (define-key evil-multiedit-insert-state-map (kbd "C-n") 'evil-multiedit-match-and-next)
+  (define-key evil-multiedit-insert-state-map (kbd "C-p") 'evil-multiedit-match-and-prev)
+  (define-key evil-motion-state-map (kbd "RET") 'evil-multiedit-toggle-or-restrict-region)
+  (define-key evil-multiedit-state-map (kbd "C-k") 'evil-multiedit-toggle-or-restrict-region)
+  (define-key evil-visual-state-map (kbd "C-k") 'evil-multiedit-toggle-or-restrict-region)
+  (define-key evil-insert-state-map (kbd "C-k") 'evil-multiedit-toggle-marker-here)
+  (evil-ex-define-cmd "ie[dit]" 'evil-multiedit-ex-match))
 
 (use-package evil-args
   :straight t
@@ -336,22 +322,6 @@ Example: (evil-map visual \"<\" \"<gv\")"
 (use-package evil-indent-textobject
   :straight t
   :after evil)
-
-(use-package evil-mc
-  :straight t
-  :diminish evil-mc-mode
-  :init
-  (setq evil-mc-one-cursor-show-mode-line-text nil)
-  :init (add-hook 'after-init-hook #'global-evil-mc-mode)
-  :config
-  (advice-add 'keyboard-quit :before #'evil-mc-undo-all-cursors)
-  (setq evil-mc-mode-line-text-cursor-color t)
-  (define-key evil-normal-state-map (kbd "C-n") 'evil-mc-make-and-goto-next-match)
-  (define-key evil-normal-state-map (kbd "C-p") 'evil-mc-make-and-goto-prev-match)
-  (define-key evil-normal-state-map (kbd "C-S-n") 'evil-mc-skip-and-goto-next-match)
-  (define-key evil-normal-state-map (kbd "M-j") 'evil-mc-make-cursor-move-next-line)
-  (define-key evil-normal-state-map (kbd "M-k") 'evil-mc-make-cursor-move-prev-line)
-  (define-key evil-normal-state-map (kbd "<C-return>") 'evil-mc-make-all-cursors))
 
 (use-package evil-matchit
   :straight t

@@ -45,7 +45,8 @@
       (clojure/fancify-symbols m))))
 
 (use-package cider
-  :straight (:host github :repo "clojure-emacs/cider")
+  ;; :straight (:host github :repo "clojure-emacs/cider")
+  :straight t
   :defer t
   :init
   (spacemacs|add-company-backends
