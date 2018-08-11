@@ -63,22 +63,36 @@
           hippie-expand))
   (define-key evil-normal-state-map (kbd "C-i") 'evil-jump-forward)
   ;; (define-key evil-normal-state-map (kbd "<tab>") 'spacemacs/alternate-buffer)
-  (defmacro evil-map (state key seq)
-    "Map for a given STATE a KEY to a sequence SEQ of keys.
+  ;;   (defmacro evil-map (state key seq)
+  ;;     "Map for a given STATE a KEY to a sequence SEQ of keys.
+  ;; Can handle recursive definition only if KEY is the first key of SEQ.
+  ;; Example: (evil-map visual \"<\" \"<gv\")"
+  ;;     (let ((map (intern (format "evil-%S-state-map" state))))
+  ;;       `(define-key ,map ,key
+  ;;          (lambda ()
+  ;;            (interactive)
+  ;;            ,(if (string-equal key (substring seq 0 1))
+  ;;                 `(progn
+  ;;                    (call-interactively ',(lookup-key evil-normal-state-map key))
+  ;;                    (execute-kbd-macro ,(substring seq 1)))
+  ;;               (execute-kbd-macro ,seq))))))
+  ;;   (evil-map visual "<" "<gv")
+  ;;   (evil-map visual ">" ">gv")
+  (define-key evil-visual-state-map "<"
+    (lambda nil
+      (interactive)
+      (progn
+        (call-interactively
+         'evil-shift-right)
+        (execute-kbd-macro "gv"))))
 
-Can handle recursive definition only if KEY is the first key of SEQ.
-Example: (evil-map visual \"<\" \"<gv\")"
-    (let ((map (intern (format "evil-%S-state-map" state))))
-      `(define-key ,map ,key
-         (lambda ()
-           (interactive)
-           ,(if (string-equal key (substring seq 0 1))
-                `(progn
-                   (call-interactively ',(lookup-key evil-normal-state-map key))
-                   (execute-kbd-macro ,(substring seq 1)))
-              (execute-kbd-macro ,seq))))))
-  (evil-map visual "<" "<gv")
-  (evil-map visual ">" ">gv")
+  (define-key evil-visual-state-map ">"
+    (lambda nil
+      (interactive)
+      (progn
+        (call-interactively
+         'evil-shift-left)
+        (execute-kbd-macro "gv"))))
   ;; (define-key evil-normal-state-map "W" 'evil-forward-word-begin)
   ;; (define-key evil-normal-state-map "w" 'evil-forward-WORD-begin)
   ;; (define-key evil-normal-state-map "e" 'evil-forward-WORD-end)
@@ -273,8 +287,6 @@ Example: (evil-map visual \"<\" \"<gv\")"
 (use-package evil-multiedit
   :straight t
   :config
-  (define-key evil-iedit-state-map "V" nil)
-  (define-key evil-iedit-state-map "m" 'iedit-show/hide-unmatched-lines)
   (define-key evil-visual-state-map "v" 'evil-multiedit-match-all)
   (define-key evil-insert-state-map (kbd "M-n") 'evil-multiedit-match-and-next)
   (define-key evil-insert-state-map (kbd "M-p") 'evil-multiedit-match-and-prev)

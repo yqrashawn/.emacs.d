@@ -7,7 +7,10 @@
   (setq expand-region-contract-fast-key "V")
   expand-region-reset-fast-key "r")
 
-(use-package evil-iedit-state :straight t)
+(use-package evil-iedit-state :straight t
+  :config
+  (define-key evil-iedit-state-map "V" nil)
+  (define-key evil-iedit-state-map "m" 'iedit-show/hide-unmatched-lines))
 
 (global-set-key (kbd "M-/") 'hippie-expand)
 (setq hippie-expand-try-functions-list

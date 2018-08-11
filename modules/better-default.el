@@ -187,14 +187,21 @@ It runs `tabulated-list-revert-hook', then calls `tabulated-list-print'."
 (defun yq/indent-region-or-buffer ()
   "Indent a region if selected, otherwise the whole buffer."
   (interactive)
-  (unless (member major-mode yq-indent-sensitive-modes)
+  (unless (member
+           major-mode
+           yq-indent-sensitive-modes)
     (save-excursion
       (if (region-active-p)
           (progn
-            (indent-region (region-beginning) (region-end))
-            (message "Indented selected region."))
+            (indent-region
+             (region-beginning)
+             (region-end))
+            (message
+             "Indented selected region."))
         (progn
-          (evil-indent (point-min) (point-max))
+          (evil-indent
+           (point-min)
+           (point-max))
           (message "Indented buffer.")))
       (whitespace-cleanup))))
 
