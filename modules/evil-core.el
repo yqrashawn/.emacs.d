@@ -51,6 +51,8 @@
              (eq index mode-to-remove))
            evil-emacs-state-modes)))
   :config
+  (define-key evil-normal-state-map "H" 'evil-backward-section-begin)
+  (define-key evil-normal-state-map "L" 'evil-forward-section-begin)
   (define-key evil-normal-state-map ">" 'evil-shift-right-line)
   (define-key evil-normal-state-map "<" 'evil-shift-left-line)
   (add-hook 'edebug-mode-hook 'evil-insert-state)
@@ -61,28 +63,42 @@
           hippie-expand))
   (define-key evil-normal-state-map (kbd "C-i") 'evil-jump-forward)
   ;; (define-key evil-normal-state-map (kbd "<tab>") 'spacemacs/alternate-buffer)
-  (defmacro evil-map (state key seq)
-    "Map for a given STATE a KEY to a sequence SEQ of keys.
+  ;;   (defmacro evil-map (state key seq)
+  ;;     "Map for a given STATE a KEY to a sequence SEQ of keys.
+  ;; Can handle recursive definition only if KEY is the first key of SEQ.
+  ;; Example: (evil-map visual \"<\" \"<gv\")"
+  ;;     (let ((map (intern (format "evil-%S-state-map" state))))
+  ;;       `(define-key ,map ,key
+  ;;          (lambda ()
+  ;;            (interactive)
+  ;;            ,(if (string-equal key (substring seq 0 1))
+  ;;                 `(progn
+  ;;                    (call-interactively ',(lookup-key evil-normal-state-map key))
+  ;;                    (execute-kbd-macro ,(substring seq 1)))
+  ;;               (execute-kbd-macro ,seq))))))
+  ;;   (evil-map visual "<" "<gv")
+  ;;   (evil-map visual ">" ">gv")
+  (define-key evil-visual-state-map ">"
+    (lambda nil
+      (interactive)
+      (progn
+        (call-interactively
+         'evil-shift-right)
+        (execute-kbd-macro "gv"))))
 
-Can handle recursive definition only if KEY is the first key of SEQ.
-Example: (evil-map visual \"<\" \"<gv\")"
-    (let ((map (intern (format "evil-%S-state-map" state))))
-      `(define-key ,map ,key
-         (lambda ()
-           (interactive)
-           ,(if (string-equal key (substring seq 0 1))
-                `(progn
-                   (call-interactively ',(lookup-key evil-normal-state-map key))
-                   (execute-kbd-macro ,(substring seq 1)))
-              (execute-kbd-macro ,seq))))))
-  (evil-map visual "<" "<gv")
-  (evil-map visual ">" ">gv")
-  (define-key evil-normal-state-map "W" 'evil-forward-word-begin)
-  (define-key evil-normal-state-map "w" 'evil-forward-WORD-begin)
-  (define-key evil-normal-state-map "e" 'evil-forward-WORD-end)
-  (define-key evil-normal-state-map "E" 'evil-forward-word-end)
-  (define-key evil-normal-state-map "b" 'evil-backward-WORD-begin)
-  (define-key evil-normal-state-map "B" 'evil-backward-word-begin)
+  (define-key evil-visual-state-map "<"
+    (lambda nil
+      (interactive)
+      (progn
+        (call-interactively
+         'evil-shift-left)
+        (execute-kbd-macro "gv"))))
+  ;; (define-key evil-normal-state-map "W" 'evil-forward-word-begin)
+  ;; (define-key evil-normal-state-map "w" 'evil-forward-WORD-begin)
+  ;; (define-key evil-normal-state-map "e" 'evil-forward-WORD-end)
+  ;; (define-key evil-normal-state-map "E" 'evil-forward-word-end)
+  ;; (define-key evil-normal-state-map "b" 'evil-backward-WORD-begin)
+  ;; (define-key evil-normal-state-map "B" 'evil-backward-word-begin)
   (define-key evil-visual-state-map "J" (concat ":m '>+1" (kbd "RET") "gv=gv"))
   (define-key evil-visual-state-map "K" (concat ":m '<-2" (kbd "RET") "gv=gv"))
   (define-key evil-insert-state-map (kbd "C-r") 'evil-shift-left-line)
@@ -130,6 +146,7 @@ Example: (evil-map visual \"<\" \"<gv\")"
   (define-key evil-normal-state-map (kbd "C-k") 'evil-toggle-fold)
   (define-key evil-normal-state-map "s" nil)
   (define-key evil-normal-state-map "sk" 'yq/kill-this-buffer)
+  (define-key evil-normal-state-map "sK" 'projectile-kill-buffers)
   (define-key evil-normal-state-map "sc" 'yq/delete-window)
   (define-key evil-normal-state-map "sh" 'save-buffer)
   (define-key evil-normal-state-map (kbd "C-e") 'mwim-end-of-code-or-line)
@@ -258,26 +275,36 @@ Example: (evil-map visual \"<\" \"<gv\")"
   (setq evil-snipe-repeat-scope 'whole-buffer)
   (evil-snipe-override-mode 1))
 
-(use-package evil-surround
+(use-package evil-embrace
   :straight t
   :init
-  (setq evil-surround-pairs-alist '((40 "(" . ")")
-                                    (91 "[" . "]")
-                                    (123 "{" . "}")
-                                    (41 "(" . ")")
-                                    (93 "[" . "]")
-                                    (125 "{" . "}")
-                                    (35 "#{" . "}")
-                                    (98 "(" . ")")
-                                    (66 "{" . "}")
-                                    (62 "<" . ">")
-                                    (116 . evil-surround-read-tag)
-                                    (60 . evil-surround-read-tag)
-                                    (102 . evil-surround-function)))
+  (evil-embrace-enable-evil-surround-integration)
   :config
-  (global-evil-surround-mode 1)
-  (evil-define-key 'visual evil-surround-mode-map "s" 'evil-surround-region)
-  (evil-define-key 'visual evil-surround-mode-map "S" 'evil-substitute))
+  (define-key evil-normal-state-map "gs" 'embrace-commander)
+  ;; (define-key evil-iedit-state-map "s" 'embrace-commander)
+  (define-key evil-visual-state-map "s" 'embrace-commander))
+
+(use-package evil-multiedit
+  :straight t
+  :config
+  (define-key evil-visual-state-map "v" 'evil-multiedit-match-all)
+  (define-key evil-insert-state-map (kbd "M-n") 'evil-multiedit-match-and-next)
+  (define-key evil-insert-state-map (kbd "M-p") 'evil-multiedit-match-and-prev)
+  (define-key evil-normal-state-map (kbd "C-n") 'evil-multiedit-match-and-next)
+  (define-key evil-normal-state-map (kbd "C-p") 'evil-multiedit-match-and-prev)
+  (define-key evil-visual-state-map (kbd "C-n") 'evil-multiedit-match-and-next)
+  (define-key evil-visual-state-map (kbd "C-p") 'evil-multiedit-match-and-prev)
+  (define-key evil-multiedit-state-map (kbd "C-n") 'evil-multiedit-match-and-next)
+  (define-key evil-multiedit-state-map (kbd "C-p") 'evil-multiedit-match-and-prev)
+  (define-key evil-multiedit-state-map (kbd "n") 'evil-multiedit-next)
+  (define-key evil-multiedit-state-map (kbd "N") 'evil-multiedit-prev)
+  (define-key evil-multiedit-insert-state-map (kbd "C-n") 'evil-multiedit-match-and-next)
+  (define-key evil-multiedit-insert-state-map (kbd "C-p") 'evil-multiedit-match-and-prev)
+  (define-key evil-motion-state-map (kbd "RET") 'evil-multiedit-toggle-or-restrict-region)
+  (define-key evil-multiedit-state-map (kbd "C-k") 'evil-multiedit-toggle-or-restrict-region)
+  (define-key evil-visual-state-map (kbd "C-k") 'evil-multiedit-toggle-or-restrict-region)
+  (define-key evil-insert-state-map (kbd "C-k") 'evil-multiedit-toggle-marker-here)
+  (evil-ex-define-cmd "ie[dit]" 'evil-multiedit-ex-match))
 
 (use-package evil-args
   :straight t
@@ -299,32 +326,21 @@ Example: (evil-map visual \"<\" \"<gv\")"
 
 (use-package evil-textobj-anyblock
   :straight t
+  :after evil
   :config
   (define-key evil-inner-text-objects-map "f" 'evil-textobj-anyblock-inner-block)
   (define-key evil-outer-text-objects-map "f" 'evil-textobj-anyblock-a-block))
 
-(use-package evil-mc
+(use-package evil-indent-textobject
   :straight t
-  :diminish evil-mc-mode
-  :init
-  (setq evil-mc-one-cursor-show-mode-line-text nil)
-  :init (add-hook 'after-init-hook #'global-evil-mc-mode)
-  :config
-  (advice-add 'keyboard-quit :before #'evil-mc-undo-all-cursors)
-  (setq evil-mc-mode-line-text-cursor-color t)
-  (define-key evil-normal-state-map (kbd "C-n") 'evil-mc-make-and-goto-next-match)
-  (define-key evil-normal-state-map (kbd "C-p") 'evil-mc-make-and-goto-prev-match)
-  (define-key evil-normal-state-map (kbd "C-S-n") 'evil-mc-skip-and-goto-next-match)
-  (define-key evil-normal-state-map (kbd "M-j") 'evil-mc-make-cursor-move-next-line)
-  (define-key evil-normal-state-map (kbd "M-k") 'evil-mc-make-cursor-move-prev-line)
-  (define-key evil-normal-state-map (kbd "<C-return>") 'evil-mc-make-all-cursors))
+  :after evil)
 
 (use-package evil-matchit
   :straight t
   :init
   (add-hook 'after-init-hook #'global-evil-matchit-mode)
   :config
-  (define-key evil-normal-state-map (kbd "C-;") 'evilmi-select-items)
+  ;; (define-key evil-normal-state-map (kbd "C-;") 'evilmi-select-items)
   (define-key evil-visual-state-map (kbd "C-m") 'evilmi-jump-items)
   (define-key evil-normal-state-map (kbd "C-m") 'evilmi-jump-items))
 

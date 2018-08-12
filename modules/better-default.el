@@ -21,6 +21,9 @@
 (setq confirm-nonexistent-file-or-buffer nil)
 (setq kmacro-ring-max 30)
 
+;; https://emacs.stackexchange.com/questions/3673/how-to-make-vc-and-magit-treat-a-symbolic-link-to-a-real-file-in-git-repo-just
+(setq find-file-visit-truename t)
+
 (defvar dotspacemacs-auto-save-file-location 'cache
   "Location where to auto-save files. Possible values are `original' to
 auto-save the file in-place, `cache' to auto-save the file to another
@@ -187,14 +190,21 @@ It runs `tabulated-list-revert-hook', then calls `tabulated-list-print'."
 (defun yq/indent-region-or-buffer ()
   "Indent a region if selected, otherwise the whole buffer."
   (interactive)
-  (unless (member major-mode yq-indent-sensitive-modes)
+  (unless (member
+           major-mode
+           yq-indent-sensitive-modes)
     (save-excursion
       (if (region-active-p)
           (progn
-            (indent-region (region-beginning) (region-end))
-            (message "Indented selected region."))
+            (indent-region
+             (region-beginning)
+             (region-end))
+            (message
+             "Indented selected region."))
         (progn
-          (evil-indent (point-min) (point-max))
+          (evil-indent
+           (point-min)
+           (point-max))
           (message "Indented buffer.")))
       (whitespace-cleanup))))
 

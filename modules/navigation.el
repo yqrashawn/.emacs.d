@@ -44,7 +44,7 @@
   (spacemacs/set-leader-keys "fJ" 'spacemacs/open-junk-file)
   (define-key evil-normal-state-map "sf" 'counsel-rg)
   (define-key evil-normal-state-map "sl" 'spacemacs/counsel-jump-in-buffer)
-  (define-key evil-normal-state-map "sj" 'counsel-recentf)
+  (define-key evil-normal-state-map "sJ" 'counsel-recentf)
   (define-key evil-normal-state-map (kbd "s SPC") 'counsel-M-x)
   (define-key evil-normal-state-map (kbd "M-y" ) 'counsel-yank-pop)
   (defun counsel-recent-dir ()
@@ -123,8 +123,8 @@
   (evil-define-key 'normal ivy-occur-mode-map "w" 'ivy-wgrep-change-to-wgrep-mode)
   (ivy-set-occur 'spacemacs/counsel-search
                  'spacemacs//counsel-occur)
-  (evil-make-overriding-map ivy-occur-mode-map 'normal))
-;; (define-key evil-normal-state-map "sb" 'ivy-switch-buffer)
+  (evil-make-overriding-map ivy-occur-mode-map 'normal)
+  (define-key evil-normal-state-map "sB" 'ivy-switch-buffer))
 
 (use-package ivy-hydra
   :straight t
@@ -133,15 +133,6 @@
   (defun yq/ivy-call-kill-buffer-action ()
     "Call the current action without exiting completion."
     (interactive)
-    ;; (unless
-    ;;     (or
-    ;;      ;; this is needed for testing in ivy-with which seems to call ivy-call
-    ;;      ;; again, and this-command is nil in that case.
-    ;;      (null this-command)
-    ;;      (memq this-command '(ivy-done
-    ;;                           ivy-alt-done
-    ;;                           ivy-dispatching-done)))
-    ;;   (setq ivy-current-prefix-arg current-prefix-arg))
     (let ((action 'ivy--kill-buffer-action))
       (when action
         (let* ((collection (ivy-state-collection ivy-last))
@@ -234,23 +225,28 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   :straight t
   :diminish projectile-mode
   :init
-  (setq projectile-completion-system 'ivy))
+  (setq projectile-completion-system 'ivy)
+  :config
+  (define-key evil-normal-state-map "sj" 'projectile-recentf))
 
 (use-package counsel-projectile
   :straight t
-  :commands (counsel-projectile-mode)
   :init
-  (counsel-projectile-mode)
+  (counsel-projectile-mode +1)
   (spacemacs/set-leader-keys "p" nil)
-  (spacemacs/set-leader-keys "pb" 'counsel-projectile)
+  (spacemacs/set-leader-keys "pb" 'counsel-projectile-switch-to-buffer)
+  (define-key evil-normal-state-map "sb" 'counsel-projectile-switch-to-buffer)
   (spacemacs/set-leader-keys "pf" 'counsel-projectile-find-file)
   (spacemacs/set-leader-keys "pd" 'counsel-projectile-find-dir)
   (spacemacs/set-leader-keys "pl" 'counsel-projectile-switch-project)
-
-  (defun yq/find-emacsd-modules ()
-    "find file in .emacs.d"
-    (interactive) (counsel-fd "" "~/.emacs.d/" nil "-t f"))
-  (spacemacs/set-leader-keys "fef" 'yq/find-emacsd-modules)
+  (defun yq/.emacs.d ()
+    (interactive)
+    (counsel-fd "" "~/.emacs.d/" nil "-t f --no-ignore-vcs -E 'straight/build/*'"))
+  (defun yq/.emacs.d.el ()
+    (interactive)
+    (counsel-fd "" "~/.emacs.d/" nil "-t f -e el --no-ignore-vcs -E 'straight/build/*'"))
+  (spacemacs/set-leader-keys "fef" 'yq/.emacs.d.el)
+  (spacemacs/set-leader-keys "feF" 'yq/.emacs.d)
   (spacemacs/set-leader-keys "fel" 'counsel-find-library))
 
 (yq/get-modules "counsel-funcs.el")
@@ -344,12 +340,16 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
     "l" 'dired-find-file
     "s" 'nil
     "sk" 'yq/kill-this-buffer
-    "sj" 'counsel-recentf
+    "sJ" #'counsel-recentf
+    "sj" #'projectile-recentf
+    "sb" #'projectile-switch-to-buffer
+    "sm" #'find-file-in-project
+    "sB" #'ivy-switch-buffer
     (kbd "s SPC") 'counsel-M-x
-    "sf" 'counsel-rg
-    "ss" 'dired-sort-toggle-or-edit
+    "sf" #'counsel-rg
+    "ss" #'dired-sort-toggle-or-edit
     "sc" 'yq/delete-window
-    "f" 'dired-narrow-fuzzy))
+    "f" #'dired-narrow-fuzzy))
 (use-package dired-narrow
   :straight t
   :after dired
@@ -447,6 +447,7 @@ FD-PROMPT, if non-nil, is passed as `ivy-read' prompt argument."
 (spacemacs/set-leader-keys "3" 'yq/find-org|gtd)
 (spacemacs/set-leader-keys "4" 'yq/find-org|project)
 ;; (spacemacs/set-leader-keys "sm" 'counsel-fd)
+
 (defun yq/org ()
   (interactive)
   (counsel-fd "" "~/Dropbox/" nil "-t f -e org"))
@@ -594,61 +595,61 @@ When ARG is non-nil search in junk files."
   (evil-define-key 'normal helpful-mode-map "o" 'ace-link-help)
   (ace-link-setup-default))
 
-(use-package persp-mode
-  :straight t
-  :init (persp-mode 1)
-  (setq persp-add-buffer-on-after-change-major-mode t)
-  (setq persp-add-buffer-on-find-file nil)
-  (setq persp-add-buffer-on-after-change-major-mode nil)
-  (setq persp-switch-to-added-buffer nil)
-  (setq persp-autokill-persp-when-removed-last-buffer 'kill)
-  (define-key evil-normal-state-map "sb" 'persp-switch-to-buffer)
-  (define-key evil-normal-state-map "ss" 'persp-switch)
-  (define-key evil-normal-state-map "sB" 'persp-temporarily-display-buffer)
-  (spacemacs/set-leader-keys "sb" 'persp-switch-to-buffer)
-  (spacemacs/set-leader-keys "ss" 'persp-switch)
-  (spacemacs/set-leader-keys "sk" 'persp-kill)
-  (spacemacs/set-leader-keys "sB" 'persp-temporarily-display-buffer)
-  :config
-  ;; auto switch persp after siwtch to buffer
-  ;; (defvar after-switch-to-buffer-functions nil)
-  ;; (defun after-switch-to-buffer-adv (&rest r)
-  ;;   (apply #'run-hook-with-args 'after-switch-to-buffer-functions r))
-  ;; (advice-add #'switch-to-buffer :after #'after-switch-to-buffer-adv)
-  ;; (setq after-switch-to-buffer-functions 'persp-mode-projectile-bridge-hook-find-file)
-  ;; (setq after-switch-to-buffer-functions nil)
+;; (use-package persp-mode
+;;   :straight t
+;;   :init (persp-mode 1)
+;;   (setq persp-add-buffer-on-after-change-major-mode t)
+;;   (setq persp-add-buffer-on-find-file nil)
+;;   (setq persp-add-buffer-on-after-change-major-mode nil)
+;;   (setq persp-switch-to-added-buffer nil)
+;;   (setq persp-autokill-persp-when-removed-last-buffer 'kill)
+;;   (define-key evil-normal-state-map "sb" 'persp-switch-to-buffer)
+;;   (define-key evil-normal-state-map "ss" 'persp-switch)
+;;   (define-key evil-normal-state-map "sB" 'persp-temporarily-display-buffer)
+;;   (spacemacs/set-leader-keys "sb" 'persp-switch-to-buffer)
+;;   (spacemacs/set-leader-keys "ss" 'persp-switch)
+;;   (spacemacs/set-leader-keys "sk" 'persp-kill)
+;;   (spacemacs/set-leader-keys "sB" 'persp-temporarily-display-buffer)
+;;   :config
+;;   ;; auto switch persp after siwtch to buffer
+;;   ;; (defvar after-switch-to-buffer-functions nil)
+;;   ;; (defun after-switch-to-buffer-adv (&rest r)
+;;   ;;   (apply #'run-hook-with-args 'after-switch-to-buffer-functions r))
+;;   ;; (advice-add #'switch-to-buffer :after #'after-switch-to-buffer-adv)
+;;   ;; (setq after-switch-to-buffer-functions 'persp-mode-projectile-bridge-hook-find-file)
+;;   ;; (setq after-switch-to-buffer-functions nil)
 
-  ;; auto switch persp after select window
-  ;; (defun yq/select-window-hook-persp (&rest _args)
-  ;;   (if (window-buffer)
-  ;;       (let ((persp))
-  ;;         (persp-mode-projectile-bridge-find-perspective-for-buffer
-  ;;          (window-buffer)))
-  ;;     (when persp
-  ;;       (persp-add-buffer (window-buffer) persp nil nil)
-  ;;       (persp-frame-switch (persp-name persp)))))
-  ;; (defvar after-select-window-functions nil)
-  ;; (defun after-select-window-adv (&rest r)
-  ;;   (apply #'run-hook-with-args 'after-select-window-functions r))
-  ;; (advice-add #'select-window :after #'after-select-window-adv)
-  ;; (setq after-select-window-functions 'yq/select-window-hook-persp)
-  ;; (setq after-select-window-functions nil)
-  (setq persp-autokill-buffer-on-remove 'kill-weak))
+;;   ;; auto switch persp after select window
+;;   ;; (defun yq/select-window-hook-persp (&rest _args)
+;;   ;;   (if (window-buffer)
+;;   ;;       (let ((persp))
+;;   ;;         (persp-mode-projectile-bridge-find-perspective-for-buffer
+;;   ;;          (window-buffer)))
+;;   ;;     (when persp
+;;   ;;       (persp-add-buffer (window-buffer) persp nil nil)
+;;   ;;       (persp-frame-switch (persp-name persp)))))
+;;   ;; (defvar after-select-window-functions nil)
+;;   ;; (defun after-select-window-adv (&rest r)
+;;   ;;   (apply #'run-hook-with-args 'after-select-window-functions r))
+;;   ;; (advice-add #'select-window :after #'after-select-window-adv)
+;;   ;; (setq after-select-window-functions 'yq/select-window-hook-persp)
+;;   ;; (setq after-select-window-functions nil)
+;;   (setq persp-autokill-buffer-on-remove 'kill-weak))
 
-(use-package persp-mode-projectile-bridge
-  :straight (:host github :repo "yqrashawn/persp-mode-projectile-bridge.el")
-  :after persp-mode
-  :commands (persp-mode-projectile-bridge-mode)
-  :init
-  (setq persp-mode-projectile-bridge-persp-name-prefix "@")
-  (persp-mode-projectile-bridge-mode 1)
-  (persp-mode-projectile-bridge-find-perspectives-for-all-buffers)
-  :config
-  (add-hook 'persp-mode-projectile-bridge-mode-hook
-            #'(lambda ()
-                (if persp-mode-projectile-bridge-mode
-                    (persp-mode-projectile-bridge-find-perspectives-for-all-buffers)
-                  (persp-mode-projectile-bridge-kill-perspectives)))))
+;; (use-package persp-mode-projectile-bridge
+;;   :straight (:host github :repo "yqrashawn/persp-mode-projectile-bridge.el")
+;;   :after persp-mode
+;;   :commands (persp-mode-projectile-bridge-mode)
+;;   :init
+;;   (setq persp-mode-projectile-bridge-persp-name-prefix "@")
+;;   (persp-mode-projectile-bridge-mode 1)
+;;   (persp-mode-projectile-bridge-find-perspectives-for-all-buffers)
+;;   :config
+;;   (add-hook 'persp-mode-projectile-bridge-mode-hook
+;;             #'(lambda ()
+;;                 (if persp-mode-projectile-bridge-mode
+;;                     (persp-mode-projectile-bridge-find-perspectives-for-all-buffers)
+;;                   (persp-mode-projectile-bridge-kill-perspectives)))))
 
 (use-package frames-only-mode
   :straight t
