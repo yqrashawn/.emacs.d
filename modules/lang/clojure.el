@@ -54,7 +54,6 @@
     :modes
     cider-mode
     cider-repl-mode)
-  (setq cider-default-cljs-repl 'figwheel)
   (spacemacs|define-jump-handlers clojure-mode)
   (add-to-list (intern (format "spacemacs-jump-handlers-%S" 'clojure-mode))
                '(cider-find-dwim :async t))
