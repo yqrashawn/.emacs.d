@@ -78,7 +78,7 @@
   ;;               (execute-kbd-macro ,seq))))))
   ;;   (evil-map visual "<" "<gv")
   ;;   (evil-map visual ">" ">gv")
-  (define-key evil-visual-state-map "<"
+  (define-key evil-visual-state-map ">"
     (lambda nil
       (interactive)
       (progn
@@ -86,7 +86,7 @@
          'evil-shift-right)
         (execute-kbd-macro "gv"))))
 
-  (define-key evil-visual-state-map ">"
+  (define-key evil-visual-state-map "<"
     (lambda nil
       (interactive)
       (progn

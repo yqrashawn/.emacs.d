@@ -44,7 +44,7 @@
   (spacemacs/set-leader-keys "fJ" 'spacemacs/open-junk-file)
   (define-key evil-normal-state-map "sf" 'counsel-rg)
   (define-key evil-normal-state-map "sl" 'spacemacs/counsel-jump-in-buffer)
-  (define-key evil-normal-state-map "sj" 'counsel-recentf)
+  (define-key evil-normal-state-map "sJ" 'counsel-recentf)
   (define-key evil-normal-state-map (kbd "s SPC") 'counsel-M-x)
   (define-key evil-normal-state-map (kbd "M-y" ) 'counsel-yank-pop)
   (defun counsel-recent-dir ()
@@ -225,7 +225,9 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   :straight t
   :diminish projectile-mode
   :init
-  (setq projectile-completion-system 'ivy))
+  (setq projectile-completion-system 'ivy)
+  :config
+  (define-key evil-normal-state-map "sj" 'projectile-recentf))
 
 (use-package counsel-projectile
   :straight t
@@ -237,10 +239,14 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   (spacemacs/set-leader-keys "pf" 'counsel-projectile-find-file)
   (spacemacs/set-leader-keys "pd" 'counsel-projectile-find-dir)
   (spacemacs/set-leader-keys "pl" 'counsel-projectile-switch-project)
-  (defun yq/find-emacsd-modules ()
-    "find file in .emacs.d"
-    (interactive) (counsel-fd "" "~/.emacs.d/" nil "-t f"))
-  (spacemacs/set-leader-keys "fef" 'yq/find-emacsd-modules)
+  (defun yq/.emacs.d ()
+    (interactive)
+    (counsel-fd "" "~/.emacs.d/" nil "-t f --no-ignore-vcs -E 'straight/build/*'"))
+  (defun yq/.emacs.d.el ()
+    (interactive)
+    (counsel-fd "" "~/.emacs.d/" nil "-t f -e el --no-ignore-vcs -E 'straight/build/*'"))
+  (spacemacs/set-leader-keys "fef" 'yq/.emacs.d.el)
+  (spacemacs/set-leader-keys "feF" 'yq/.emacs.d)
   (spacemacs/set-leader-keys "fel" 'counsel-find-library))
 
 (yq/get-modules "counsel-funcs.el")
@@ -334,13 +340,16 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
     "l" 'dired-find-file
     "s" 'nil
     "sk" 'yq/kill-this-buffer
-    "sj" 'counsel-recentf
-    "sb" 'projectile-switch-to-buffer
+    "sJ" #'counsel-recentf
+    "sj" #'projectile-recentf
+    "sb" #'projectile-switch-to-buffer
+    "sm" #'find-file-in-project
+    "sB" #'ivy-switch-buffer
     (kbd "s SPC") 'counsel-M-x
-    "sf" 'counsel-rg
-    "ss" 'dired-sort-toggle-or-edit
+    "sf" #'counsel-rg
+    "ss" #'dired-sort-toggle-or-edit
     "sc" 'yq/delete-window
-    "f" 'dired-narrow-fuzzy))
+    "f" #'dired-narrow-fuzzy))
 (use-package dired-narrow
   :straight t
   :after dired
@@ -438,6 +447,7 @@ FD-PROMPT, if non-nil, is passed as `ivy-read' prompt argument."
 (spacemacs/set-leader-keys "3" 'yq/find-org|gtd)
 (spacemacs/set-leader-keys "4" 'yq/find-org|project)
 ;; (spacemacs/set-leader-keys "sm" 'counsel-fd)
+
 (defun yq/org ()
   (interactive)
   (counsel-fd "" "~/Dropbox/" nil "-t f -e org"))
