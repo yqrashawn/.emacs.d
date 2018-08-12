@@ -21,6 +21,9 @@
 (setq confirm-nonexistent-file-or-buffer nil)
 (setq kmacro-ring-max 30)
 
+;; https://emacs.stackexchange.com/questions/3673/how-to-make-vc-and-magit-treat-a-symbolic-link-to-a-real-file-in-git-repo-just
+(setq find-file-visit-truename t)
+
 (defvar dotspacemacs-auto-save-file-location 'cache
   "Location where to auto-save files. Possible values are `original' to
 auto-save the file in-place, `cache' to auto-save the file to another
