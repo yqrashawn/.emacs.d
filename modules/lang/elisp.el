@@ -19,13 +19,18 @@ the current buffer."
 
 (use-package ielm
   :straight t
-  :init(add-hook 'ielm-mode-hook #'rainbow-delimiters-mode)
+  :init
+  (add-hook 'ielm-mode-hook #'rainbow-delimiters-mode)
+  (spacemacs|define-jump-handlers ielm-mode)
   :config (define-key inferior-emacs-lisp-mode-map (kbd "C-c C-z") 'kill-buffer-and-window))
 
 (use-package elisp-mode
   :mode ("\\.el\\'" . emacs-lisp-mode)
   :diminish (emacs-lisp-mode . "EL")
   :commands (emacs-lisp-mode)
+  :init
+  (spacemacs|define-jump-handlers emacs-lisp-mode)
+  (spacemacs|define-jump-handlers lisp-interaction-mode)
   :config
   (add-hook 'emacs-lisp-mode-hook (lambda () (setq-local evil-shift-width 1)))
   (add-hook 'emacs-lisp-mode-hook (lambda () (setq mode-name "λ")))
@@ -36,8 +41,6 @@ Start `ielm' if it's not already running."
     (interactive)
     (crux-start-or-switch-to 'ielm "*ielm*"))
   (define-key emacs-lisp-mode-map (kbd "C-c C-z") #'bozhidar-visit-ielm)
-  (spacemacs|define-jump-handlers emacs-lisp-mode)
-  (spacemacs|define-jump-handlers lisp-interaction-mode)
   (define-key emacs-lisp-mode-map (kbd "C-c C-c") #'eval-defun)
   (define-key emacs-lisp-mode-map (kbd "C-c C-b") #'eval-buffer)
   (evil-define-key 'normal emacs-lisp-mode-map "," nil)
@@ -56,10 +59,19 @@ Start `ielm' if it's not already running."
   :defer t
   :hook (emacs-lisp-mode . elisp-slime-nav-mode)
   :init
-  (dolist (mode '(emacs-lisp-mode lisp-interaction-mode))
+  (dolist (mode '(emacs-lisp-mode lisp-interaction-mode ielm-mode))
     (evil-define-key 'normal emacs-lisp-mode-map ",hh" 'elisp-slime-nav-describe-elisp-thing-at-point)
     (let ((jumpl (intern (format "spacemacs-jump-handlers-%S" mode))))
       (add-to-list jumpl 'elisp-slime-nav-find-elisp-thing-at-point))))
+
+(use-package elisp-def
+  :straight t
+  :hook ((emacs-lisp-mode ielm-mode) . elisp-def-mode)
+  :after elisp-mode
+  :init
+  (dolist (mode '(emacs-lisp-mode lisp-interaction-mode ielm-mode))
+    (let ((jumpl (intern (format "spacemacs-jump-handlers-%S" mode))))
+      (add-to-list jumpl 'elisp-def))))
 
 (use-package lispy
   :straight t
