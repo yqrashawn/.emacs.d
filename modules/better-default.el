@@ -423,6 +423,8 @@ If the universal prefix argument is used then kill the buffer too."
 
 (use-package popwin
   :straight t
+  :init
+  (setq popwin:reuse-window 'visible)
   :config
   (popwin-mode 1)
   (spacemacs/set-leader-keys "bm" 'popwin:messages)

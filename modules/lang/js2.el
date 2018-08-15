@@ -136,42 +136,10 @@
   (add-to-list 'evil-insert-state-modes 'indium-repl-mode)
   (setq indium-debugger-inspect-when-eval t)
   (setq indium-chrome-executable "/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary")
-  (defun indium-v8--handle-ws-open (ws url nodejs)
-    "Setup indium for a new connection for the websocket WS.
-URL points to the browser tab.
 
-If NODEJS is non-nil, set an extra property in the connection."
-    (setq indium-current-connection (indium-v8--make-connection ws url nodejs))
-    (indium-v8--enable-tools)
-    (run-hooks 'indium-connection-open-hook))
-  (defun yq/indium-run-node (command)
-    "do not switch the process buffer compared to the original indium-run-node"
-    (interactive (list (read-shell-command "Node command: "
-                                           (or (car indium-nodejs-commands-history) "node ")
-                                           'indium-nodejs-commands-history)))
-    (indium-maybe-quit)
-    (unless indium-current-connection
-      (make-process :name "indium-nodejs-process"
-                    :buffer "*node process*"
-                    :filter #'indium-nodejs--process-filter
-                    :command (list shell-file-name
-                                   shell-command-switch
-                                   (indium-nodejs--add-flags command)))))
-  ;; if there's no connection, simply run current file with node
-  (defun indium-interaction--ensure-connection ()
-    "Signal an error if there is no indium connection."
-    (unless-indium-connected
-      (message "No Indium connection, defaultly run node on current file")
-      (if (string= (buffer-name) "*scratch*")
-          (write-file (concat (temporary-file-directory) (make-temp-name "indium-eval-"))))
-      (if (and (buffer-file-name) (file-exists-p (buffer-file-name)))
-          (yq/indium-run-node (concat "node " (buffer-file-name)))
-        (user-error "yq: invliad file name, something wrong"))))
   ;; launch indium
   (evil-define-key 'normal js2-mode-map ",il" 'indium-launch)
   (evil-define-key 'normal js2-mode-map ",iq" 'indium-quit)
-  (evil-define-key 'normal js2-mode-map ",in" 'yq/indium-run-node)
-  (evil-define-key 'normal js2-mode-map ",ic" 'indium-run-chrome)
   (evil-define-key 'normal js2-mode-map ",ir" 'indium-restart-node)
   (evil-define-key 'normal js2-mode-map (kbd "s-r") 'indium-restart-node)
   :config
@@ -211,7 +179,6 @@ If NODEJS is non-nil, set an extra property in the connection."
   (advice-add 'indium-debugger-mode :after (lambda (c) (evil-emacs-state) (evil-exit-emacs-state)))
   (evil-make-intercept-map indium-debugger-mode-map)
 
-  (evil-define-key 'normal js2-mode-map ",," 'hydra-indium/body)
   (evil-define-key 'normal js2-mode-map ",ee" 'indium-inspect-expression)
   (evil-define-key 'normal js2-mode-map ",eb" 'indium-eval-buffer)
   (evil-define-key 'normal js2-mode-map ",er" 'indium-eval-region)
@@ -254,6 +221,7 @@ Others      | _s_tack _n_ext/_p_rev stack _l_ocal _r_eload
     ("l" indium-debugger-locals :exit t)
     (",," (lambda ()(interactive)) :exit t)
     ("q" (lambda ()(interactive)) :exit t))
+  (evil-define-key 'normal js2-mode-map ",," 'hydra-indium/body)
   ;; (add-hook 'indium-script-parsed-hook (lambda (_) (interactive) (hydra-indium/body)))
   (add-hook 'indium-debugger-locals-mode-hook 'hydra-indium/lambda-q-and-exit)
   (add-hook 'indium-inspector-mode-hook 'hydra-indium/lambda-q-and-exit)
