@@ -87,7 +87,8 @@
     (interactive)
     (kill-current-buffer)
     (yq/delete-window))
-  (evil-define-key 'normal helpful-mode-map "q" 'yq/kill-buffer-and-window))
+  (evil-define-key 'normal helpful-mode-map "q" 'quit-window))
+  ;; (evil-define-key 'normal helpful-mode-map "q" 'yq/kill-buffer-and-window))
 
 (use-package ivy
   :straight (:host github :repo "abo-abo/swiper" :branch "master"
