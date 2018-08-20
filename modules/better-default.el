@@ -1217,3 +1217,10 @@ otherwise it is scaled down."
   :straight (:host github :repo "yqrashawn/evil-ex-shell-command")
   :init (global-set-key (kbd "s-l") 'evil-ex-shell-command))
 
+(use-package zoom
+  :straight t
+  :init
+  (defun size-callback ()
+    (cond ((> (frame-pixel-width) 1280) '(90 . 0.75))
+          (t                            '(0.5 . 0.5))))
+  (setq zoom-size 'size-callback))
