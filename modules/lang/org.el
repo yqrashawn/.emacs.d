@@ -466,7 +466,7 @@
     (shell-command (concat "> " (yq/create-daily-org-review-date "-finished")))
     (org-clock-out))
   (spacemacs/set-leader-keys (kbd "`") 'yq/daily-review)
-  (yq/daily-review 'startup)
+  ;; (yq/daily-review 'startup)
   :config
   (setq org-capture--clipboards t)
   (evil-define-key 'normal 'org-capture-mode
