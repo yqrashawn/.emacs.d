@@ -275,6 +275,27 @@
   (setq evil-snipe-repeat-scope 'whole-buffer)
   (evil-snipe-override-mode 1))
 
+(use-package evil-surround
+  :straight t
+  :init
+  (global-evil-surround-mode 1)
+  (setq evil-surround-pairs-alist '((40 "(" . ")")
+                                    (91 "[" . "]")
+                                    (123 "{" . "}")
+                                    (41 "(" . ")")
+                                    (93 "[" . "]")
+                                    (125 "{" . "}")
+                                    (35 "#{" . "}")
+                                    (98 "(" . ")")
+                                    (66 "{" . "}")
+                                    (62 "<" . ">")
+                                    (116 . evil-surround-read-tag)
+                                    (60 . evil-surround-read-tag)
+                                    (102 . evil-surround-function)))
+  :config
+  (evil-define-key 'visual evil-surround-mode-map "s" 'evil-surround-region))
+  ;; (evil-define-key 'visual evil-surround-mode-map "S" 'evil-substitute))
+
 (use-package evil-embrace
   :straight t
   :init
@@ -282,7 +303,7 @@
   :config
   (define-key evil-normal-state-map "gs" 'embrace-commander)
   ;; (define-key evil-iedit-state-map "s" 'embrace-commander)
-  (define-key evil-visual-state-map "s" 'embrace-commander))
+  (define-key evil-visual-state-map "S" 'embrace-commander))
 
 (use-package evil-multiedit
   :straight t
