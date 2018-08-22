@@ -279,6 +279,7 @@
   :straight t
   :init
   (global-evil-surround-mode 1)
+  :config
   (setq evil-surround-pairs-alist '((40 "(" . ")")
                                     (91 "[" . "]")
                                     (123 "{" . "}")
@@ -292,18 +293,15 @@
                                     (116 . evil-surround-read-tag)
                                     (60 . evil-surround-read-tag)
                                     (102 . evil-surround-function)))
-  :config
-  (evil-define-key 'visual evil-surround-mode-map "s" 'evil-surround-region))
-  ;; (evil-define-key 'visual evil-surround-mode-map "S" 'evil-substitute))
+  (evil-define-key 'visual evil-surround-mode-map "s" 'evil-surround-region)
+  (evil-define-key 'visual evil-surround-mode-map "S" 'evil-substitute))
 
 (use-package evil-embrace
   :straight t
   :init
   (evil-embrace-enable-evil-surround-integration)
   :config
-  (define-key evil-normal-state-map "gs" 'embrace-commander)
-  ;; (define-key evil-iedit-state-map "s" 'embrace-commander)
-  (define-key evil-visual-state-map "S" 'embrace-commander))
+  (define-key evil-normal-state-map "gs" 'embrace-commander))
 
 (use-package evil-multiedit
   :straight t
