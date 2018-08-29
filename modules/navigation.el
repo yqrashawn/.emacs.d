@@ -59,6 +59,7 @@
                                (split-string (shell-command-to-string "fasd -ld") "\n" t))))))
       (ivy-read "directories:" cands :action 'dired)))
   (define-key evil-normal-state-map "so" 'counsel-recent-dir))
+
 (use-package counsel-tramp
   :straight t
   :commands (counsel-tramp)
@@ -587,72 +588,18 @@ When ARG is non-nil search in junk files."
 
 (use-package rg
   :straight t
-  :commands (rg rg-dwim rg-literal rg-project))
+  :commands (rg rg-dwim rg-literal rg-project)
+  :init (evil-leader/set-key "rg" #'rg)
+        (evil-leader/set-key "rG" #'rg-literal))
 
 (use-package ace-link
   :straight t
   :commands (ace-link)
   :init
-  (evil-define-key 'normal helpful-mode-map "o" 'ace-link-help)
+  (evil-define-key 'normal helpful-mode-map "o" #'ace-link-help)
   (ace-link-setup-default))
 
-;; (use-package persp-mode
+;; (use-package frames-only-mode
 ;;   :straight t
-;;   :init (persp-mode 1)
-;;   (setq persp-add-buffer-on-after-change-major-mode t)
-;;   (setq persp-add-buffer-on-find-file nil)
-;;   (setq persp-add-buffer-on-after-change-major-mode nil)
-;;   (setq persp-switch-to-added-buffer nil)
-;;   (setq persp-autokill-persp-when-removed-last-buffer 'kill)
-;;   (define-key evil-normal-state-map "sb" 'persp-switch-to-buffer)
-;;   (define-key evil-normal-state-map "ss" 'persp-switch)
-;;   (define-key evil-normal-state-map "sB" 'persp-temporarily-display-buffer)
-;;   (spacemacs/set-leader-keys "sb" 'persp-switch-to-buffer)
-;;   (spacemacs/set-leader-keys "ss" 'persp-switch)
-;;   (spacemacs/set-leader-keys "sk" 'persp-kill)
-;;   (spacemacs/set-leader-keys "sB" 'persp-temporarily-display-buffer)
-;;   :config
-;;   ;; auto switch persp after siwtch to buffer
-;;   ;; (defvar after-switch-to-buffer-functions nil)
-;;   ;; (defun after-switch-to-buffer-adv (&rest r)
-;;   ;;   (apply #'run-hook-with-args 'after-switch-to-buffer-functions r))
-;;   ;; (advice-add #'switch-to-buffer :after #'after-switch-to-buffer-adv)
-;;   ;; (setq after-switch-to-buffer-functions 'persp-mode-projectile-bridge-hook-find-file)
-;;   ;; (setq after-switch-to-buffer-functions nil)
-
-;;   ;; auto switch persp after select window
-;;   ;; (defun yq/select-window-hook-persp (&rest _args)
-;;   ;;   (if (window-buffer)
-;;   ;;       (let ((persp))
-;;   ;;         (persp-mode-projectile-bridge-find-perspective-for-buffer
-;;   ;;          (window-buffer)))
-;;   ;;     (when persp
-;;   ;;       (persp-add-buffer (window-buffer) persp nil nil)
-;;   ;;       (persp-frame-switch (persp-name persp)))))
-;;   ;; (defvar after-select-window-functions nil)
-;;   ;; (defun after-select-window-adv (&rest r)
-;;   ;;   (apply #'run-hook-with-args 'after-select-window-functions r))
-;;   ;; (advice-add #'select-window :after #'after-select-window-adv)
-;;   ;; (setq after-select-window-functions 'yq/select-window-hook-persp)
-;;   ;; (setq after-select-window-functions nil)
-;;   (setq persp-autokill-buffer-on-remove 'kill-weak))
-
-;; (use-package persp-mode-projectile-bridge
-;;   :straight (:host github :repo "yqrashawn/persp-mode-projectile-bridge.el")
-;;   :after persp-mode
-;;   :commands (persp-mode-projectile-bridge-mode)
-;;   :init
-;;   (setq persp-mode-projectile-bridge-persp-name-prefix "@")
-;;   (persp-mode-projectile-bridge-mode 1)
-;;   (persp-mode-projectile-bridge-find-perspectives-for-all-buffers)
-;;   :config
-;;   (add-hook 'persp-mode-projectile-bridge-mode-hook
-;;             #'(lambda ()
-;;                 (if persp-mode-projectile-bridge-mode
-;;                     (persp-mode-projectile-bridge-find-perspectives-for-all-buffers)
-;;                   (persp-mode-projectile-bridge-kill-perspectives)))))
-
-(use-package frames-only-mode
-  :straight t
-  :commands (frames-only-mode)
-  :init (frames-only-mode 1))
+;;   :commands (frames-only-mode)
+;;   :init (frames-only-mode 1))

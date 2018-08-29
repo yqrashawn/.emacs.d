@@ -16,6 +16,7 @@
 
 (use-package git-commit
   :straight t)
+
 (use-package magit-popup
   :straight t)
 

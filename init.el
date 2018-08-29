@@ -106,8 +106,6 @@
   (fcitx-shell-command-turn-on)
   (fcitx-eval-expression-turn-on))
 
-;; (straight-use-package 'suggest)
-;; (straight-use-package 'edit-list)
 ;; (use-package zpresent)
 
 (global-set-key (kbd "s-?") 'info-display-manual)

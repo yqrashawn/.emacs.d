@@ -11,6 +11,8 @@
     elm-mode
     haml-mode
     haskell-mode
+    emacs-lisp-mode
+    clojure-mode
     slim-mode
     makefile-mode
     makefile-bsdmake-mode
@@ -19,16 +21,6 @@
     python-mode
     yaml-mode)
   "Modes for which auto-indenting is suppressed.")
-
-(defun spacemacs/evil-smart-doc-lookup ()
-  "Run documentation lookup command specific to the major mode.
-Use command bound to `SPC m h h` if defined, otherwise fall back
-to `evil-lookup'"
-  (interactive)
-  (let ((binding (key-binding (kbd (concat "SPC" " mhh")))))
-    (if (commandp binding)
-        (call-interactively binding)
-      (evil-lookup))))
 
 (defun spacemacs/mplist-get (plist prop)
   "Get the values associated to PROP in PLIST, a modified plist.

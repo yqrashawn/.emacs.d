@@ -196,7 +196,7 @@ Available PROPS:
 (use-package company-flx
   :straight t
   :init
-  (add-hook 'emacs-lisp-mode-hook 'company-flx-mode)
+  (add-hook 'lisp-mode-hook 'company-flx-mode)
   :config
   (company-flx-mode +1))
 
@@ -325,13 +325,12 @@ is not visible. Otherwise delegates to regular Emacs next-error."
     "eh" 'flycheck-describe-checker
     "el" 'spacemacs/toggle-flycheck-error-list
     "eL" 'spacemacs/goto-flycheck-error-list
-    "es" 'flycheck-select-checker
+    "eC" 'flycheck-select-checker
     "eS" 'flycheck-set-checker-executable
     "ev" 'flycheck-verify-setup
     "ex" 'flycheck-explain-error-at-point
     "en" 'spacemacs/next-error
-    "ep" 'spacemacs/previous-error
-    ))
+    "ep" 'spacemacs/previous-error))
 
 (use-package yasnippet
   :straight t
@@ -379,6 +378,7 @@ is not visible. Otherwise delegates to regular Emacs next-error."
     (require 'warnings))
   (add-to-list 'warning-suppress-types '(yasnippet backquote-change))
   (yas-reload-all))
+
 (use-package yasnippet-snippets
   :straight t
   :after yasnippet)
@@ -466,10 +466,10 @@ is not visible. Otherwise delegates to regular Emacs next-error."
 ;; }}
 (define-key isearch-mode-map (kbd "C-o") 'isearch-occur)
 
-(use-package mixed-pitch
-  :straight t
-  :hook
-  (org-mode . mixed-pitch-mode))
+;; (use-package mixed-pitch
+;;   :straight t
+;;   :hook
+;;   (org-mode . mixed-pitch-mode))
 
 (use-package hl-todo
   :straight t
@@ -504,8 +504,8 @@ _j_  js2      _T_     text   _f_  fundamental
     ("q" hydra-keyboard-quit :exit t))
   (define-key evil-normal-state-map (kbd "s <RET>") 'hydra-change-mode/body))
 
-(use-package ivy-xrefivy-xref
-  :defer t
+(use-package ivy-xref
+  :straight t
   :init
   (setq xref-prompt-for-identifier '(not xref-find-definitions
                                          xref-find-definitions-other-window

@@ -1,5 +1,6 @@
 (yq/get-modules "visual-funcs.el")
 (spacemacs/set-leader-keys "tf" 'yq/toggle-default-font)
+
 (use-package golden-ratio-scroll-screen
   :straight t
   :config
@@ -117,10 +118,10 @@ has been changed to THEME."
 ;;   (ivy-set-display-transformer 'ivy-switch-buffer
 ;;                                'ivy-rich-switch-buffer-transformer))
 
-(use-package evil-visual-mark-mode
-  :straight t
-  :config
-  (evil-visual-mark-mode 1))
+;; (use-package evil-visual-mark-mode
+;;   :straight t
+;;   :config
+;;   (evil-visual-mark-mode 1))
 
 (defun spacemacs//adaptive-evil-highlight-persist-face ()
   (set-face-attribute 'evil-search-highlight-persist-highlight-face nil
