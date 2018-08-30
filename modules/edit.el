@@ -4,6 +4,7 @@
   :straight t
   :config
   (define-key evil-normal-state-map "sv" 'er/expand-region)
+  (define-key evil-normal-state-map "K" 'er/expand-region)
   (setq expand-region-contract-fast-key "V")
   expand-region-reset-fast-key "r")
 

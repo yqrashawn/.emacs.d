@@ -5,7 +5,7 @@
   :config
   ;; (global-set-key (kbd "C-SPC") 'counsel-grep-or-swiper)
   ;; (global-set-key (kbd "^@") 'counsel-grep-or-swiper)
-  (define-key evil-normal-state-map (kbd "sn") 'spacemacs/swiper-all-region-or-symbol)
+  ;; (define-key evil-normal-state-map (kbd "sn") 'spacemacs/swiper-all-region-or-symbol)
   (global-set-key (kbd "C-SPC") 'swiper)
   (global-set-key (kbd "^@") 'swiper)
   (global-set-key (kbd "C-S-SPC") 'spacemacs/swiper-region-or-symbol))
@@ -583,7 +583,8 @@ When ARG is non-nil search in junk files."
 (use-package avy
   :straight t
   :init
-  (define-key evil-normal-state-map "si" 'avy-goto-subword-1)
+  (define-key evil-normal-state-map "su" 'avy-goto-word-1-above)
+  (define-key evil-normal-state-map "sn" 'avy-goto-word-1-below)
   (define-key evil-normal-state-map "sI" 'avy-goto-char-2))
 
 (use-package rg

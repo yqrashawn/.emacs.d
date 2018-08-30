@@ -92,7 +92,7 @@
   :straight t
   :commands (suggest))
 
-(use-package which-func
+(use-package which-key
   :straight t
   :commands (which-key-mode))
 

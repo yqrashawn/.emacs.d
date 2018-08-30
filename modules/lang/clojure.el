@@ -30,7 +30,6 @@
   :straight t
   :diminish clojure-mode
   :diminish clojurescript-mode
-  :defer t
   :init
   (add-to-list 'auto-mode-alist '("\\.boot\\'" . clojure-mode))
   ;; This regexp matches shebang expressions like `#!/usr/bin/env boot'
@@ -47,7 +46,7 @@
 (use-package cider
   ;; :straight (:host github :repo "clojure-emacs/cider")
   :straight t
-  :defer t
+  :after cider
   :init
   (spacemacs|add-company-backends
     :backends company-capf
@@ -308,7 +307,9 @@
 
 (use-package flycheck-clojure
   :straight t
-  :after (flycheck cider))
+  :after (flycheck cider)
+  :init
+  (add-hook 'clojure-mode-hook #'flycheck-clojure-setup))
 
 (use-package clojure-mode-extra-font-locking
   :straight t
@@ -331,30 +332,22 @@
 
 (use-package sayid
   :straight t
-  :defer t
+  :commands (sayid-setup-package)
+  :after (clojure-mode cider)
   :init
-  (setq sayid--key-binding-prefixes
-        '(("mdt" . "trace")))
+  (defun yq/jump-to-sayid-buffer ()
+    (interactive)
+    (if (get-buffer-window "*sayid*")
+        (pop-to-buffer "*sayid*")))
 
-  (evilified-state-evilify sayid-mode sayid-mode-map
-    (kbd "H") 'sayid-buf-show-help
-    (kbd "n") 'sayid-buffer-nav-to-next
-    (kbd "N") 'sayid-buffer-nav-to-prev
-    (kbd "C-s v") 'sayid-toggle-view
-    (kbd "C-s V") 'sayid-set-view
-    (kbd "L") 'sayid-buf-back
-    (kbd "e") 'sayid-gen-instance-expr) ;Originally this was bound to 'g', but I feel this is still mnemonic and doesn't overlap with evil
+  (advice-add #'sayid-get-workspace :after 'yq/jump-to-sayid-buffer)
 
-  (evilified-state-evilify sayid-pprint-mode sayid-pprint-mode-map
-    (kbd "h") 'sayid-pprint-buf-show-help
-    (kbd "n") 'sayid-pprint-buf-next
-    (kbd "N") 'sayid-pprint-buf-prev
-    (kbd "l") 'sayid-pprint-buf-exit)
+  (defun yq/sayid-load-enable-clear(arg)
+    (interactive "P")
+    (sayid-load-enable-clear)
+    (if arg (yq/jump-to-sayid-buffer)))
 
-  (evilified-state-evilify sayid-traced-mode sayid-traced-mode-map
-    (kbd "l") 'sayid-show-traced
-    (kbd "h") 'sayid-traced-buf-show-help)
-  :config
+  (add-hook 'clojure-mode-hook 'sayid-setup-package)
   (dolist (map (list clojure-mode-map
                      clojurec-mode-map
                      clojurescript-mode-map
@@ -362,6 +355,7 @@
     (evil-define-key* 'normal map
                       ;;These keybindings mostly preserved from the default sayid bindings
                       ",d!" 'sayid-load-enable-clear
+                      ",," 'yq/sayid-load-enable-clear
                       ",dE" 'sayid-eval-last-sexp ;in default sayid bindings this is lowercase e, but that was already used in clojure mode
                       ",dc" 'sayid-clear-log
                       ",df" 'sayid-query-form-at-point
@@ -381,7 +375,25 @@
                       ",dty" 'sayid-trace-all-ns-in-dir
                       ",dV" 'sayid-set-view
                       ",dw" 'sayid-get-workspace
-                      ",dx" 'sayid-reset-workspace
-                      )))
+                      ",dx" 'sayid-reset-workspace))
+  :config
+  (evilified-state-evilify sayid-mode sayid-mode-map
+    (kbd "H") 'sayid-buf-forward
+    (kbd "n") 'sayid-buffer-nav-to-next
+    (kbd "N") 'sayid-buffer-nav-to-prev
+    (kbd "C-s v") 'sayid-toggle-view
+    (kbd "C-s V") 'sayid-set-view
+    (kbd "L") 'sayid-buf-back
+    (kbd "e") 'sayid-gen-instance-expr) ;Originally this was bound to 'g', but I feel this is still mnemonic and doesn't overlap with evil
+
+  (evilified-state-evilify sayid-pprint-mode sayid-pprint-mode-map
+    (kbd "h") 'sayid-pprint-buf-show-help
+    (kbd "n") 'sayid-pprint-buf-next
+    (kbd "N") 'sayid-pprint-buf-prev
+    (kbd "l") 'sayid-pprint-buf-exit)
+
+  (evilified-state-evilify sayid-traced-mode sayid-traced-mode-map
+    (kbd "l") 'sayid-show-traced
+    (kbd "h") 'sayid-traced-buf-show-help))
 (provide 'clojure)
 ;;; clojure.el ends here
