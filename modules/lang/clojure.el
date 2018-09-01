@@ -65,12 +65,14 @@
   (spacemacs/register-repl 'cider 'cider-jack-in "cider")
   (evil-define-key 'normal clojure-mode-map ",c" 'cider-cheatsheet)
 
+  (setq cider-font-lock-dynamically '(macro core function var deprecated))
   (setq cider-stacktrace-default-filters '(tooling dup)
         cider-repl-pop-to-buffer-on-connect nil
         cider-repl-display-in-current-window t
         ;; cider-repl-display-in-current-window nil
         cider-prompt-save-file-on-load nil
         cider-auto-select-error-buffer nil
+        cider-save-file-on-load t
         cider-eval-result-prefix ";; => "
         cider-repl-result-prefix ";; => "
         cider-repl-use-clojure-font-lock t
@@ -80,7 +82,10 @@
         cider-repl-history-show-preview t
         cider-repl-history-display-duplicates nil
         cider-repl-history-highlight-inserted-item t
-        cider-repl-history-file (concat spacemacs-cache-directory "cider-repl-history"))
+        cider-repl-history-file (concat spacemacs-cache-directory "cider-repl-history")
+        nrepl-hide-special-buffers t
+        cider-eldoc-display-context-dependent-info t
+        cider-pprint-fn 'fipp)
   (add-hook 'clojure-mode-hook 'cider-mode)
   (add-hook 'clojure-mode-hook #'rainbow-delimiters-mode)
   (dolist (x '(spacemacs-jump-handlers-clojure-mode
@@ -269,9 +274,9 @@
 (use-package clj-refactor
   :straight t
   :diminish clj-refactor-mode
-  :defer t
+  :hook (clojure-mode . clj-refactor-mode)
   :init
-  (add-hook 'clojure-mode-hook 'clj-refactor-mode)
+  (evil-define-key 'normal clojure-mode-map (kbd ", ESC") 'hydra-cljr-help-menu/body)
   :config
   (cljr-add-keybindings-with-prefix "C-c C-f")
 
@@ -291,11 +296,6 @@
           (when (not (string-prefix-p "hydra" (symbol-name func)))
             (evil-define-key 'normal map
               (concat ",r" binding) func)))))))
-
-;; (use-package helm-cider
-;;   :straight t
-;;   :commands (helm-cider-mode)
-;;   :hook ((clojure-mode cider-repl-mode cider-docview-mode cider-inspector-mode) . helm-cider-mode))
 
 (use-package cider-eval-sexp-fu
   :straight t
@@ -327,9 +327,6 @@
 ;;     (evil-define-key 'normal map
 ;;       ",hc" 'clojure-cheatsheet)))
 
-(use-package clojure-snippets
-  :defer t)
-
 (use-package sayid
   :straight t
   :commands (sayid-setup-package)
@@ -340,10 +337,26 @@
     (if (get-buffer-window "*sayid*")
         (pop-to-buffer "*sayid*")))
 
-  (advice-add #'sayid-get-workspace :after 'yq/jump-to-sayid-buffer)
-
-  (defun yq/sayid-load-enable-clear(arg)
+  (defun yq/jump-to-sayid-trace-buffer (arg)
     (interactive "P")
+    (if (get-buffer-window "*sayid-traced*")
+        (pop-to-buffer "*sayid-traced*")))
+
+  (advice-add #'sayid-get-workspace :after 'yq/jump-to-sayid-buffer)
+  (advice-add #'sayid-show-traced :after 'yq/jump-to-sayid-trace-buffer)
+  (advice-add #'sayid-show-traced-ns :after 'yq/jump-to-sayid-trace-buffer)
+
+  (defun yq/sayid-trace-fn-load-enable-clear(arg)
+    (interactive "P")
+    (cider-ns-refresh 'refresh-all)
+    (sayid-trace-fn-enable)
+    (sayid-load-enable-clear)
+    (if arg (yq/jump-to-sayid-buffer)))
+
+  (defun yq/sayid-trace-file-load-enable-clear(arg)
+    (interactive "P")
+    (cider-ns-refresh 'refresh-all)
+    (sayid-trace-ns-in-file)
     (sayid-load-enable-clear)
     (if arg (yq/jump-to-sayid-buffer)))
 
@@ -354,8 +367,9 @@
                      cider-repl-mode-map))
     (evil-define-key* 'normal map
                       ;;These keybindings mostly preserved from the default sayid bindings
-                      ",d!" 'sayid-load-enable-clear
-                      ",," 'yq/sayid-load-enable-clear
+                      ;; ",d!" 'sayid-load-enable-clear
+                      ",," 'yq/sayid-trace-file-load-enable-clear
+                      ", " 'yq/sayid-trace-fn-load-enable-clear
                       ",dE" 'sayid-eval-last-sexp ;in default sayid bindings this is lowercase e, but that was already used in clojure mode
                       ",dc" 'sayid-clear-log
                       ",df" 'sayid-query-form-at-point
@@ -367,12 +381,12 @@
                       ",dtD" 'sayid-trace-disable-all
                       ",dte" 'sayid-trace-fn-enable
                       ",dtE" 'sayid-trace-enable-all
-                      ",dtK" 'sayid-kill-all-traces
-                      ",dtn" 'sayid-inner-trace-fn
-                      ",dto" 'sayid-outer-trace-fn
+                      ",dtU" 'sayid-kill-all-traces
+                      ",di" 'sayid-inner-trace-fn
+                      ",dI" 'sayid-outer-trace-fn
                       ",dtp" 'sayid-trace-ns-by-pattern
                       ",dtr" 'sayid-remove-trace-fn
-                      ",dty" 'sayid-trace-all-ns-in-dir
+                      ",dT" 'sayid-trace-all-ns-in-dir
                       ",dV" 'sayid-set-view
                       ",dw" 'sayid-get-workspace
                       ",dx" 'sayid-reset-workspace))

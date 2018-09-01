@@ -518,10 +518,10 @@ _j_  js2      _T_     text   _f_  fundamental
 (use-package all-the-icons
   :straight t)
 
-(use-package company-box
-  :straight t
-  :after (company)
-  :hook (company-mode . company-box-mode))
+;; (use-package company-box
+;;   :straight t
+;;   :after (company)
+;;   :hook (company-mode . company-box-mode))
 
 (use-package yaml-mode
   :straight t
