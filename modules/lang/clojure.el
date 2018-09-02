@@ -337,8 +337,8 @@
     (if (get-buffer-window "*sayid*")
         (pop-to-buffer "*sayid*")))
 
-  (defun yq/jump-to-sayid-trace-buffer (arg)
-    (interactive "P")
+  (defun yq/jump-to-sayid-trace-buffer ()
+    (interactive)
     (if (get-buffer-window "*sayid-traced*")
         (pop-to-buffer "*sayid-traced*")))
 
