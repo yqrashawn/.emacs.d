@@ -51,6 +51,7 @@
              (eq index mode-to-remove))
            evil-emacs-state-modes)))
   :config
+  (define-key evil-normal-state-map (kbd "C-b") 'evil-execute-in-emacs-state)
   (define-key evil-normal-state-map "H" 'evil-backward-section-begin)
   (define-key evil-normal-state-map "L" 'evil-forward-section-begin)
   (define-key evil-normal-state-map ">" 'evil-shift-right-line)

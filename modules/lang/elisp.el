@@ -106,8 +106,6 @@ Start `ielm' if it's not already running."
          (lisp-mode . parinfer-mode))
   :commands (parinfer-mode parinfer-mode-enable parinfer-toggle-mode)
   :init
-  (setq parinfer-auto-switch-indent-mode t)
-  (setq parinfer-auto-switch-indent-mode-when-closing t)
   (setq parinfer-lighters '(" Par:I" . " Par:P"))
   (setq parinfer-extensions
         '(defaults       ; should be included.

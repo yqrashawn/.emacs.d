@@ -8,7 +8,7 @@
   "Default shell to use in Spacemacs. Possible values are `eshell', `shell',
 `term' and `ansi-term'.")
 
-(defvar shell-default-position 'bottom
+(defvar shell-default-position 'top
   "Position of the shell. Possible values are `top', `bottom', `full',
 `left' and `right'.")
 
@@ -134,6 +134,7 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
   :init
   (spacemacs/register-repl 'multi-term 'multi-term)
   (setq shell-pop-shell-type '("multi-term" "*multi-term" 'multi-term))
+  (setq multi-term-program "/usr/local/bin/zsh")
   :config
   (add-to-list 'term-bind-key-alist '("<tab>" . term-send-tab))
   ;; multi-term commands to create terminals and move through them.
