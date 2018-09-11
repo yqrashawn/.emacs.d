@@ -422,7 +422,7 @@ FD-PROMPT, if non-nil, is passed as `ivy-read' prompt argument."
                                  (car (split-string counsel-fd-base-command))
                                  " in directory: ")))))
   (counsel-require-program (car (split-string counsel-fd-base-command)))
-  (ivy-set-prompt 'counsel-fd counsel-prompt-function)
+  (ivy-set-prompt 'counsel-fd #'counsel-prompt-function-default)
   (setq counsel-fd-current-dir (or initial-directory default-directory))
   (ivy-read (or fd-prompt (car (split-string counsel-fd-base-command)))
             (lambda (string)
