@@ -103,6 +103,7 @@
   :config
   ;; TODO: having this work for cider-macroexpansion-mode would be nice,
   ;;       but the problem is that it uses clojure-mode as its major-mode
+  (define-key cider-repl-mode-map (kbd "s-k") 'cider-quit)
   (dolist (map (list clojure-mode-map
                      clojurec-mode-map
                      clojurescript-mode-map
