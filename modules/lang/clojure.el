@@ -197,8 +197,8 @@
                       ",rc(" 'clojure-convert-collection-to-list
                       ",rc:" 'clojure-toggle-keyword-string
                       ",rc[" 'clojure-convert-collection-to-vector
-                      ",rc{" 'clojure-convert-collection-to-map
-                      ))
+                      ",rc{" 'clojure-convert-collection-to-map))
+                      
   ;; (add-hook 'cider-connected-hook (lambda ()
   ;;                                   (interactive)
   ;;                                   (cider-load-file
@@ -410,5 +410,9 @@
   (evilified-state-evilify sayid-traced-mode sayid-traced-mode-map
     (kbd "l") 'sayid-show-traced
     (kbd "h") 'sayid-traced-buf-show-help))
+
+(use-package 4clojure
+  :straight t)
+
 (provide 'clojure)
 ;;; clojure.el ends here
