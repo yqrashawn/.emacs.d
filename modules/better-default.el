@@ -1226,3 +1226,5 @@ otherwise it is scaled down."
   (setq zoom-size 'size-callback)
   (setq zoom-ignored-major-modes '(term-mode))
   (zoom-mode))
+
+(add-hook 'makefile-mode-hook 'whitespace-mode)

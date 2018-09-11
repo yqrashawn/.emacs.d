@@ -25,9 +25,17 @@
   :straight org-plus-contrib
   ;; :ensure t
   :init
+  (setq org-insert-mode-line-in-empty-file t)
+  (setq org-enforce-todo-checkbox-dependencies t)
+  (setq org-agenda-inhibit-startup nil)
+  (setq org-cycle-emulate-tab 'white)
+  (setq org-catch-invisible-edits 'smart)
+  (setq org-goto-auto-isearch nil)
+  (setq org-goto-interface 'outline-path-comletion)
   ;; automatically change status of a heading to DONE when all children are done
   ;; src block have same indentation with #+BEGIN_SRC
   (require 'org-agenda)
+  (global-set-key (kbd "C-c b") 'org-switchb)
   (setq org-edit-src-content-indentation 0)
   (defun my-sparse-tree-with-tag-filter()
     "asks for a tag and generates sparse tree for all open tasks in current Org buffer

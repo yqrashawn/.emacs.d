@@ -107,6 +107,8 @@ Start `ielm' if it's not already running."
   :commands (parinfer-mode parinfer-mode-enable parinfer-toggle-mode)
   :init
   (setq parinfer-lighters '(" Par:I" . " Par:P"))
+  (setq parinfer-display-error t)
+  (setq parinfer-indent-mode-confirm nil)
   (setq parinfer-extensions
         '(defaults       ; should be included.
            pretty-parens  ; different paren styles for different modes.
