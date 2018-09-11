@@ -313,7 +313,6 @@
   (advice-add 'keyboard-quit :before #'evil-mc-undo-all-cursors)
   (define-key evil-normal-state-map (kbd "M-j") 'evil-mc-make-cursor-move-next-line)
   (define-key evil-normal-state-map (kbd "M-k") 'evil-mc-make-cursor-move-prev-line)
-  (define-key evil-normal-state-map (kbd "<C-return>") 'evil-mc-make-all-cursors)
   :config
   (add-to-list 'evil-mc-known-commands '(mwim-beginning-of-code-or-line (:default . evil-first-non-blank)))
   (add-to-list 'evil-mc-known-commands '(mwim-end-of-code-or-line (:default . evil-end-of-line))))

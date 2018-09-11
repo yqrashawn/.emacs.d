@@ -1111,9 +1111,7 @@ otherwise it is scaled down."
                                               1)
                      nil)))
       (and err1 err2)))
-
   (setq mp/ibuffer-collapsed-groups (list "Default"))
-
   (defadvice ibuffer (after collapse-helm)
     (dolist (group mp/ibuffer-collapsed-groups)
       (progn
@@ -1124,8 +1122,6 @@ otherwise it is scaled down."
             (ibuffer-toggle-filter-group)))))
     (goto-char 1)
     (search-forward "[ " (point-max) t))
-
-
   (ad-activate 'ibuffer)
 
   ;; Use human readable Size column instead of original one

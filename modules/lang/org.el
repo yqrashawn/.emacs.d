@@ -32,6 +32,7 @@
   (setq org-catch-invisible-edits 'smart)
   (setq org-goto-auto-isearch nil)
   (setq org-goto-interface 'outline-path-comletion)
+  (setq org-M-RET-may-split-line nil)
   ;; automatically change status of a heading to DONE when all children are done
   ;; src block have same indentation with #+BEGIN_SRC
   (require 'org-agenda)
@@ -331,13 +332,16 @@
     ",id" 'org-insert-drawer
     ",ie" 'org-set-effort
     ",if" 'org-footnote-new
+    ",hh" 'org-insert-heading-respect-content
+    ",ht" 'org-insert-todo-heading-respect-content
+    ",hs" 'org-insert-subheading
     ",ih" 'org-insert-heading
     ",iH" 'org-insert-heading-after-current
     ",iK" 'spacemacs/insert-keybinding-org
     ",il" 'org-insert-link
     ",ip" 'org-set-property
     ",is" 'org-insert-subheading
-    ",it" 'org-set-tags
+    ",it" 'org-set-tags-command
     ",xb" (spacemacs|org-emphasize spacemacs/org-bold ?*)
     ",xc" (spacemacs|org-emphasize spacemacs/org-code ?~)
     ",xi" (spacemacs|org-emphasize spacemacs/org-italic ?/)

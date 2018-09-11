@@ -77,6 +77,7 @@
   :commands (helpful-variable helpful-key helpful-function)
   :init
   (spacemacs/set-leader-keys "hdv" 'helpful-variable)
+  (spacemacs/set-leader-keys "hdV" 'describe-variable)
   (spacemacs/set-leader-keys "hdk" 'helpful-key)
   (spacemacs/set-leader-keys "hdf" 'helpful-function)
   (evil-define-key 'normal helpful-mode-map "Q"
@@ -560,12 +561,12 @@ When ARG is non-nil search in junk files."
 ;; (define-key ibuffer-mode-map "k" 'ibuffer-backward-line)
 (add-to-list 'ibuffer-never-show-predicates "^\\*Ibuffer")
 (add-to-list 'ibuffer-never-show-predicates "^\\*Straight")
-(add-to-list 'ibuffer-never-show-predicates "^\\*scratch")
-(add-to-list 'ibuffer-never-show-predicates "^\\*Messages")
-(add-to-list 'ibuffer-never-show-predicates "^\\*Warnings")
+;; (add-to-list 'ibuffer-never-show-predicates "^\\*scratch")
+;; (add-to-list 'ibuffer-never-show-predicates "^\\*Messages")
+;; (add-to-list 'ibuffer-never-show-predicates "^\\*Warnings")
 (add-to-list 'ibuffer-never-show-predicates "^\\*:Buffers:")
 (add-to-list 'ibuffer-never-show-predicates "^\\*mu4e")
-(add-to-list 'ibuffer-never-show-predicates "^\\*Help")
+;; (add-to-list 'ibuffer-never-show-predicates "^\\*Help")
 
 ;; (use-package session
 ;;   :straight t
