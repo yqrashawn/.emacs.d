@@ -62,7 +62,15 @@
         org-directory "~/Dropbox/ORG" ;; needs to be defined for `org-default-notes-file'
         org-default-notes-file (expand-file-name "notes.org" org-directory)
         org-log-done 'time
-        org-image-actual-width nil)
+        org-image-actual-width nil
+
+        ;; agenda
+        org-agenda-include-diary t
+        org-stuck-projects
+        '("+LEVEL=1/-DONE"
+          ("TODO" "NEXT" "SOMEDAY" "PRIORITY=\"C\"")
+          ("NOSTUCK")
+          ""))
 
   ;; recache refile targets if emacs idle for 8min
   (run-with-idle-timer 400 t (lambda ()
@@ -167,8 +175,8 @@
            "NEXT(n!)"
            "STARTED(s!)"
            "WAITING(w@)"
-           "SOMEDAY(S@/!)"
            "|"
+           "SOMEDAY(S@/!)"
            "DONE(d!/!)"
            "CANCELLED(c@)")))
   (setq org-todo-repeat-to-state "NEXT")
@@ -402,6 +410,7 @@ SCHEDULED: %^T
 :CREATED: %U
 :END:
 "
+           :tree-type 'week
            :clock-resume t)))
   :config
   (setq org-capture--clipboards t)
@@ -492,8 +501,10 @@ SCHEDULED: %^T
   :straight t
   :commands (org-projectile-capture-for-current-project)
   :init
+  (org-projectile-single-file)
   (setq org-projectile-projects-file "~/Dropbox/ORG/project.org")
   (setq org-projectile-capture-template "* TODO %? %^G\n%U")
+  (setq org-projectile-per-project-filepath nil)
   (spacemacs/set-leader-keys "pc" 'org-projectile-capture-for-current-project)
   (with-eval-after-load 'org-capture
     (unless (featurep 'org-projectile)
