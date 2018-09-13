@@ -76,10 +76,11 @@
   :after counsel
   :commands (helpful-variable helpful-key helpful-function)
   :init
-  (spacemacs/set-leader-keys "hdv" 'helpful-variable)
-  (spacemacs/set-leader-keys "hdV" 'describe-variable)
+  (spacemacs/set-leader-keys "hdV" 'helpful-variable)
+  (spacemacs/set-leader-keys "hdv" 'describe-variable)
   (spacemacs/set-leader-keys "hdk" 'helpful-key)
-  (spacemacs/set-leader-keys "hdf" 'helpful-function)
+  (spacemacs/set-leader-keys "hdF" 'helpful-function)
+  (spacemacs/set-leader-keys "hdf" 'describe-function)
   (evil-define-key 'normal helpful-mode-map "Q"
     (lambda ()
       (interactive)

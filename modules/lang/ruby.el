@@ -65,6 +65,7 @@
   :defer t
   :init (setq rake-cache-file (concat spacemacs-cache-directory "rake.cache")))
 
+
 (use-package ruby-mode
   :defer t
   :mode (("Appraisals\\'" . ruby-mode)
@@ -95,7 +96,6 @@
         popwin:special-display-config)
   (push '("*rake-compilation*" :dedicated t :position bottom :stick t :noselect t :height 0.4)
         popwin:special-display-config))
-;; (add-to-list 'org-babel-load-languages '(ruby . t))
 
 (use-package enh-ruby-mode
   :straight t

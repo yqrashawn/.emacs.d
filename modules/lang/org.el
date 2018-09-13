@@ -25,39 +25,54 @@
   :straight org-plus-contrib
   ;; :ensure t
   :init
-  (setq org-insert-mode-line-in-empty-file t)
-  (setq org-enforce-todo-checkbox-dependencies t)
-  (setq org-agenda-inhibit-startup nil)
-  (setq org-cycle-emulate-tab 'white)
-  (setq org-catch-invisible-edits 'smart)
-  (setq org-goto-auto-isearch nil)
-  (setq org-goto-interface 'outline-path-comletion)
-  (setq org-M-RET-may-split-line nil)
-  ;; automatically change status of a heading to DONE when all children are done
-  ;; src block have same indentation with #+BEGIN_SRC
+  (setq org-insert-mode-line-in-empty-file t
+
+        ;; automatically change status of a heading to DONE when all children are done
+        org-enforce-todo-checkbox-dependencies t
+        org-agenda-inhibit-startup nil
+        org-cycle-emulate-tab 'white
+
+        org-catch-invisible-edits 'smart
+        org-goto-auto-isearch nil
+        org-goto-interface 'outline-path-comletion
+
+        ;; src block have same indentation with #+BEGIN_SRC
+        org-edit-src-content-indentation 0
+        org-M-RET-may-split-line nil
+        org-archive-location "~/Dropbox/ORG/Archive/%s_archive::"
+
+        ;; make refile able to use top level heading as target
+        org-refile-use-outline-path 'file
+
+        ;; make refile prompt fancy, separate heading with /
+        org-outline-path-complete-in-steps nil
+        org-refile-use-cache t
+        org-refile-targets '(("~/Dropbox/ORG/gtd.org" :maxlevel . 2)
+                             ("~/Dropbox/ORG/project.org" :maxlevel . 1)
+                             ("~/Dropbox/ORG/notes.org" :maxlevel . 2)
+                             ("~/Dropbox/ORG/snippets.org" :maxlevel . 2))
+        org-tag-alist '(("OFFICE" . ?w) ("HOME" . ?h))
+        org-startup-with-inline-images t
+        org-src-fontify-natively t
+        org-imenu-depth 8
+        org-src-tab-acts-natively t
+        org-clock-persist-file (concat spacemacs-cache-directory "org-clock-save.el")
+        org-id-locations-file (concat spacemacs-cache-directory ".org-id-locations")
+        org-publish-timestamp-directory (concat spacemacs-cache-directory ".org-timestamps/")
+        org-directory "~/Dropbox/ORG" ;; needs to be defined for `org-default-notes-file'
+        org-default-notes-file (expand-file-name "notes.org" org-directory)
+        org-log-done 'time
+        org-image-actual-width nil)
+
+  ;; recache refile targets if emacs idle for 8min
+  (run-with-idle-timer 400 t (lambda ()
+                               (org-refile-cache-clear)
+                               (org-refile-get-targets)))
+
   (require 'org-agenda)
-  (global-set-key (kbd "C-c b") 'org-switchb)
-  (setq org-edit-src-content-indentation 0)
-  (defun my-sparse-tree-with-tag-filter()
-    "asks for a tag and generates sparse tree for all open tasks in current Org buffer
-  that are associated with this tag"
-    (interactive "*")
-    (setq tag-for-filter
-          (org-trim
-           (org-icompleting-read "Tags: "
-                                 'org-tags-completion-function
-                                 nil nil nil 'org-tags-history)))
-    (org-occur
-     (concat "^\\*+ \\(NEXT\\|TODO\\|WAITING\\|STARTED\\) .+:"
-             tag-for-filter
-             ":")))
-  (evil-define-key 'normal org-mode-map "ss" #'my-sparse-tree-with-tag-filter)
-
-  (setq org-tag-alist '(("OFFICE" . ?w)
-                        ("HOME" . ?h)))
-
   ;; Add global evil-leader mappings. Used to access org-agenda
   ;; functionalities – and a few others commands – from any other mode.
+
   (spacemacs/set-leader-keys
     ;; org-agenda
     "ao#" 'org-agenda-list-stuck-projects
@@ -76,57 +91,18 @@
     "aot" 'org-todo-list
     ;; SPC C- capture/colors
     "Cc" 'org-capture)
-  (add-hook 'org-mode-hook 'hs-minor-mode)
+  (add-hook 'org-mode-hook (lambda () (hs-minor-mode 1)))
   (define-key global-map "\C-cl" 'org-store-link)
   (define-key global-map "\C-ca" 'org-agenda)
   (define-key global-map "\C-cc" 'org-capture)
-  (setq org-startup-with-inline-images t
-        org-src-fontify-natively t
-        ;; this is consistent with the value of
-        ;; `helm-org-headings-max-depth'.
-        org-imenu-depth 8)
-  (setq org-clock-persist-file (concat spacemacs-cache-directory
-                                       "org-clock-save.el")
-        org-id-locations-file (concat spacemacs-cache-directory
-                                      ".org-id-locations")
-        org-publish-timestamp-directory (concat spacemacs-cache-directory
-                                                ".org-timestamps/")
-        org-directory "~/Dropbox/ORG" ;; needs to be defined for `org-default-notes-file'
-        org-default-notes-file (expand-file-name "notes.org" org-directory)
-        org-log-done t
-        org-startup-with-inline-images t
-        org-image-actual-width nil
-        org-src-fontify-natively t
-        org-src-tab-acts-natively t
-        ;; this is consistent with the value of
-        ;; `helm-org-headings-max-depth'.
-        org-imenu-depth 8)
+  (define-key global-map "\C-cb" 'org-switchb)
   :config
+  (require 'org-id)
+  ;; https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=887332
+  ;; auto save all org buffers after archive
+  (advice-add 'org-archive-default-command :after #'org-save-all-org-buffers)
   (evil-define-key 'normal org-mode-map (kbd "<tab>") 'org-cycle)
-  ;; https://www.reddit.com/r/orgmode/comments/7gqsif/is_it_possible_to_auto_sort_a_file_or_subtree_by/
-  (defun yant/org-entry-has-subentries ()
-    "Any entry with subheadings."
-    (let ((subtree-end (save-excursion (org-end-of-subtree t))))
-      (save-excursion
-        (org-back-to-heading)
-        (forward-line 1)
-        (when (< (point) subtree-end)
-          (re-search-forward "^\*+ " subtree-end t)))))
 
-  (defun yant/org-entry-sort-by-property nil
-    "Apply property sort on current entry. The sorting is done using property with the name from value of :SORT: property.
-      For example, :SORT: DEADLINE will apply org-sort-entries by DEADLINE property on current entry."
-    (let ((property (org-entry-get (point) "SORT" 'INHERIT)))
-      (when (and (not (seq-empty-p property))
-                 (yant/org-entry-has-subentries))
-        (funcall #'org-sort-entries nil ?r nil nil property))))
-
-  (defun yant/org-buffer-sort-by-property (&optional MATCH)
-    "Sort all subtrees in buffer by the property, which is the value of their :SORT: property.
-        Only subtrees, matching MATCH are selected"
-    (org-map-entries #'yant/org-entry-sort-by-property MATCH 'file))
-
-  (add-hook 'org-mode-hook #'yant/org-buffer-sort-by-property)
   (defun my-handle-tsfile-link (querystring)
     (let ((querystring
            (if (s-contains-p "/" querystring)
@@ -157,12 +133,11 @@
                    (spacemacs//open-in-external-app (if (= 1 (length queryresults))
                                                         (car queryresults)
                                                       (completing-read "Choose: " queryresults)))))))))
-  (setf org-blank-before-new-entry '((heading . nil) (plain-list-item . nil)))
   (org-link-set-parameters
    "tsfile"
    :follow (lambda (path) (my-handle-tsfile-link path))
    :help-echo "Opens the linked file with your default application")
-  (add-to-list 'org-modules 'org-habit)
+
   (setq org-todo-state-tags-triggers
         (quote (("CANCELLED"
                  ("ARCHIVE" . t))
@@ -186,62 +161,50 @@
       (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
   (add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
 
-  (setq org-log-note-headings '((done . "CLOSING NOTE %t")
-                                (state . "State %-12s from %-12S %T")
-                                (note . "Note taken on %t")
-                                (reschedule . "Rescheduled from %S on %t")
-                                (delschedule . "Not scheduled, was %S on %t")
-                                (redeadline . "New deadline from %S on %t")
-                                (deldeadline . "Removed deadline, was %S on %t")
-                                (refile . "Refiled on %t")
-                                (clock-out . "")))
-  (setq org-log-note-headings '((done . "CLOSING DONE NOTE %t")
-                                (state . "State %-12s from %-12S %t")
-                                (note . "Note taken on %t")
-                                (reschedule . "Rescheduled from %S on %t")
-                                (delschedule . "Not scheduled, was %S on %t")
-                                (redeadline . "New deadline from %S on %t")
-                                (deldeadline . "Removed deadline, was %S on %t")
-                                (refile . "Refiled on %t")
-                                (clock-out . "")))
-  (setq org-todo-keywords (quote
-                           ((sequence "TODO(t)" "NEXT(n!)" "STARTED(s!)" "WAITING(w@)" "SOMEDAY(S@/!)" "|" "DONE(d!/!)" "CANCELLED(c@)"))))
+  (setq org-todo-keywords
+        '((sequence
+           "TODO(t)"
+           "NEXT(n!)"
+           "STARTED(s!)"
+           "WAITING(w@)"
+           "SOMEDAY(S@/!)"
+           "|"
+           "DONE(d!/!)"
+           "CANCELLED(c@)")))
   (setq org-todo-repeat-to-state "NEXT")
 
   ;; https://github.com/novoid/dot-emacs/blob/28c146f785c1d87dc821514e8448e3dfe82e56ce/config.org
-  (setq org-log-done (quote time))
   (setq org-id-method 'org)
+  (setq org-id-include-domain t)
   (setq org-log-into-drawer t)
-  (setq org-log-redeadline (quote note));; record when the deadline date of a tasks is modified
-  (setq org-log-reschedule (quote time))
+  (setq org-log-redeadline 'note);; record when the deadline date of a tasks is modified
+  (setq org-log-reschedule 'time)
   (setq org-return-follows-link t)
   (setq org-remove-highlights-with-change nil)
   (setq org-read-date-prefer-future 'time)
-  (setq org-deadline-warning-days 1)
+  (setq org-deadline-warning-days 3)
   (setq org-enforce-todo-dependencies t)
   (setq org-startup-indented t)
   (setq org-adapt-indentation nil);; do not indent drawers/body according to heading level
-  (setq org-insert-heading-respect-content nil)
-  (setq org-reverse-note-order nil)
+  (setq org-insert-heading-respect-content t)
   (setq org-special-ctrl-a/e t)
   (setq org-special-ctrl-k t)
   (setq org-hierarchical-todo-statistics t)
   (setq org-log-note-clock-out t)
   (setq org-yank-adjusted-subtrees t)
-  (setq org-list-demote-modify-bullet (quote (("+" . "-")
-                                              ("*" . "-")
-                                              ("1." . "-")
-                                              ("1)" . "-"))))
-  (setq org-blank-before-new-entry (quote ((heading . t)
-                                           (plain-list-item . nil))))
+  (setq org-list-demote-modify-bullet '(("+" . "-")
+                                        ("*" . "-")
+                                        ("1." . "-")
+                                        ("1)" . "-")))
+  (setq org-blank-before-new-entry nil)
   (font-lock-add-keywords
    'org-mode '(("\\(@@html:<kbd>@@\\) \\(.*\\) \\(@@html:</kbd>@@\\)"
                 (1 font-lock-comment-face prepend)
                 (2 font-lock-function-name-face)
                 (3 font-lock-comment-face prepend))))
-  ;; Open links and files with RET in normal state
-  (evil-define-key 'normal org-mode-map (kbd "RET") 'org-open-at-point)
 
+  ;; Open links and files with RET in normal state
+  ;; (evil-define-key 'normal org-mode-map (kbd "RET") 'org-open-at-point)
   (evil-define-key 'normal org-mode-map
     "t" 'org-todo
     ",'" 'org-edit-special
@@ -406,8 +369,7 @@
       (beginning-of-line 0)
       (org-remove-empty-drawer-at (point))))
   (add-hook 'org-clock-out-hook 'bh/remove-empty-drawer-on-clock-out 'append)
-  (setq  org-log-done 'time
-         org-clock-idle-time 10
+  (setq  org-clock-idle-time 10
          org-clock-into-drawer "CLOCKING"
          org-clock-continuously nil
          org-clock-persist t
@@ -418,67 +380,29 @@
          ;; Too many clock entries clutter up a heading
          org-log-into-drawer t))
 
-;; (use-package org-expiry
-;;   :after org
-;;   :commands (org-expiry-insinuate
-;;              org-expiry-deinsinuate
-;;              org-expiry-insert-created
-;;              org-expiry-insert-expiry
-;;              org-expiry-add-keyword
-;;              org-expiry-archive-subtree
-;;              org-expiry-process-entry
-;;              org-expiry-process-entries)
-;;   :init (org-expiry-insinuate))
-
 (with-eval-after-load 'org-indent
   (diminish 'org-indent-mode))
 
 (use-package org-capture
   :commands (org-capture)
   :init
-  (setq yq/org-daily-review-file "~/Dropbox/ORG/review/daily-review.org")
   (setq org-capture-templates
-        '(("s" "Some day" entry
-           (file+olp "~/Dropbox/ORG/notes.org" "notes" "some day")
-           "*** TODO %? %^C %^G\n%U")
-          ("n" "notes" entry
-           (file+olp "~/Dropbox/ORG/notes.org" "notes" "note")
+        '(("n" "notes" entry
+           (file+olp "~/Dropbox/ORG/snippets.org" "notes" "inbox")
            "*** %?\n   %U")
-          ("c" "code snipptes" entry
-           (file+olp "~/Dropbox/ORG/snipptes.org" "snipptes")
+          ("s" "snipptes" entry
+           (file+olp "~/Dropbox/ORG/snipptes.org" "snipptes" "inbox")
            "**** %?\n%U")
-          ("f" "file TODOs" entry
-           (file "~/Dropbox/ORG/gtd.org")
-           "* TODO %? \n %a\n%U")
-          ("t" "TODOs" entry
-           (file+olp "~/Dropbox/ORG/gtd.org" "misc")
-           "* TODO %? \n%U")
-          ("D" "Review: Daily Review" entry (file+olp+datetree "~/Dropbox/ORG/review/daily-review.org")
-           (file "~/Dropbox/ORG/daily-review-template.org"))))
-
-  (defun yq/create-daily-org-review-date (&optional suffix)
-    (concat "~/Dropbox/ORG/.review/daily/" (format-time-string "%Y-%m-%d") suffix))
-  (defun yq/daily-review (&optional startup)
-    (interactive)
-    (let ((review-file (yq/create-daily-org-review-date)))
-      (unless (and startup (file-exists-p (yq/create-daily-org-review-date "-finished")))
-        (if (file-exists-p review-file)
-            (progn
-              (find-file yq/org-daily-review-file))
-              ;; (org-speed-move-safe 'outline-up-heading)
-          (progn
-            (shell-command (concat "> " review-file))
-            (org-capture nil "D")
-            (org-capture-finalize t)
-            (save-buffer))))))
-            ;; (org-speed-move-safe 'outline-up-heading)
-
-  (defun yq/daily-review-finished ()
-    (interactive)
-    (shell-command (concat "> " (yq/create-daily-org-review-date "-finished")))
-    (org-clock-out))
-  (spacemacs/set-leader-keys (kbd "`") 'yq/daily-review)
-  ;; (yq/daily-review 'startup)
+          ("j" "Queue job" entry
+           (file+olp+datetree
+            "~/Dropbox/ORG/gtd.org" "queue")
+           "** TODO %?
+SCHEDULED: %^T
+:PROPERTIES:
+:CREATED: %U
+:END:
+"
+           :clock-resume t)))
   :config
   (setq org-capture--clipboards t)
   (evil-define-key 'normal 'org-capture-mode
@@ -507,17 +431,22 @@
     (add-to-list
      'org-capture-templates
      '("l" "Capture a link from clipboard" entry
-       (file+olp "~/Dropbox/ORG/notes.org" "notes" "read")
+       (file+olp "~/Dropbox/ORG/notes.org" "Reads" "read")
        #'mkm-org-capture/link))))
 
 (use-package evil-org
   :straight t
   :defer t
   :diminish evil-org-mode
+  :hook (org-mode . evil-org-mode)
   :init
-  (setq evil-org-key-theme `(textobjects
-                             navigation
-                             additional)))
+  ;; https://github.com/Somelauw/evil-org-mode/blob/b6d652a9163d3430a9e0933a554bdbee5244bbf6/doc/keythemes.org
+  (setq evil-org-key-theme
+        `(textobjects
+          navigation
+          additional))
+  (evil-define-key 'normal evil-org-mode-map ">" 'evil-org->)
+  (evil-define-key 'normal evil-org-mode-map "<" 'evil-org-<))
 
 (use-package org-agenda
   :defer t
@@ -570,9 +499,20 @@
     (unless (featurep 'org-projectile)
       (require 'org-projectile))))
 
+(use-package org-download
+  :straight t
+  :after org
+  :hook ((dired-mode org-mode) . org-download-enable))
+
 (use-package ob
   :defer t
   :init
+  (setq org-babel-load-languages
+        '((emacs-lisp . t)
+          (clojure . t)
+          (shell . t)
+          (restclient . t)
+          (js . t)))
   (defun spacemacs//org-babel-do-load-languages ()
     "Load all the languages declared in `org-babel-load-languages'."
     (org-babel-do-load-languages 'org-babel-load-languages
@@ -584,6 +524,14 @@
     (when org-inline-image-overlays
       (org-redisplay-inline-images)))
   (add-hook 'org-babel-after-execute-hook 'spacemacs/ob-fix-inline-images))
+
+(use-package ob-async
+  :straight t
+  :after ob)
+
+(use-package ob-restclient
+  :straight t
+  :after ob)
 
 (use-package org-fancy-priorities
   :straight t
@@ -625,6 +573,7 @@ Clock   In/out^     ^Edit^   ^Summary     (_?_)
   (setq org-mru-clock-how-many 100
         org-mru-clock-completing-read #'ivy-completing-read))
 ;; (straight-use-package 'org-download)
+
 (use-package org-sticky-header
   :straight ( :host github :repo "alphapapa/org-sticky-header")
   :after org-mode
