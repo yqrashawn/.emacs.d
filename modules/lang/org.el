@@ -646,7 +646,7 @@ Clock   In/out^     ^Edit^   ^Summary     (_?_)
 (use-package org-sticky-header
   :straight ( :host github :repo "alphapapa/org-sticky-header")
   :after org-mode
-  :hook (org-mode .org-sticky-header-mode))
+  :hook (org-mode . org-sticky-header-mode))
 
 ;; (use-package ox-clip
 ;;   :straight t

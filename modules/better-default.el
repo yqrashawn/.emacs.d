@@ -340,13 +340,13 @@ If the universal prefix argument is used then kill the buffer too."
   ;; (advice-add #'recentf-push :around 'yq/straight-recentf-push)
   (with-eval-after-load 'recentf
     (run-at-time nil (* 5 60) 'recentf-save-list)
-    (add-to-list 'recentf-exclude
-                 (file-truename spacemacs-cache-directory))
+    ;; (add-to-list 'recentf-exclude
+    ;;              (file-truename spacemacs-cache-directory))
     (add-to-list 'recentf-exclude "COMMIT_EDITMSG\\'")
     (add-to-list 'recentf-exclude "/private/var/folders/")
     (add-to-list 'recentf-exclude "/usr/local/Cellar/emacs")
-    (add-to-list 'recentf-exclude (concat user-home-directory "Dropbox/ORG"))
-    (add-to-list 'recentf-exclude (concat user-home-directory "Dropbox/Books"))
+    ;; (add-to-list 'recentf-exclude (concat user-home-directory "Dropbox/ORG"))
+    ;; (add-to-list 'recentf-exclude (concat user-home-directory "Dropbox/Books"))
     (add-to-list 'recentf-exclude (expand-file-name (concat user-emacs-directory "straight/build")))
     (add-to-list 'recentf-exclude (expand-file-name (concat user-emacs-directory "persp-confs/")))
     (add-to-list 'recentf-exclude "/var/folders/")
@@ -1053,6 +1053,7 @@ otherwise it is scaled down."
   (setq garbage-collection-timer
         (run-with-idle-timer 60 t 'garbage-collect)))
 
+;; ibuffer
 (use-package ibuffer-vc
   :straight t
   :after ibuffer
@@ -1165,6 +1166,168 @@ otherwise it is scaled down."
                ad-do-it
                (ibuffer-jump-to-buffer recent-buffer-name)))
   (ad-activate 'ibuffer))
+
+(use-package hydra
+  :straight t
+  :init
+  ;; ibuffer
+  (defhydra hydra-ibuffer-main (:color pink :hint nil)
+    "
+  ^Mark^        | ^Actions^        | ^View^
+  -^----^--------+-^-------^--------+-^----^-------
+  _m_: mark     | _D_: delete      | _g_: refresh
+  _u_: unmark   | _S_: save        | _s_: sort
+  _*_: specific | _a_: all actions | _/_: filter
+  ^----------^-+-^----^--------+-^-------^--------+-^----^-------
+  "
+    ;; ("j" ibuffer-forward-line)
+    ("RET" ibuffer-visit-buffer :color blue)
+    ;; ("k" ibuffer-backward-line)
+
+    ("m" ibuffer-mark-forward)
+    ("u" ibuffer-unmark-forward)
+    ("*" hydra-ibuffer-mark/body :color blue)
+
+    ("D" ibuffer-do-delete)
+    ("S" ibuffer-do-save)
+    ("a" hydra-ibuffer-action/body :color blue)
+
+    ("g" ibuffer-update)
+    ("s" hydra-ibuffer-sort/body :color blue)
+    ("/" hydra-ibuffer-filter/body :color blue)
+
+    ("o" ibuffer-visit-buffer-other-window "other window" :color blue)
+    ("q" quit-window "quit ibuffer" :color blue)
+    ("." nil "toggle hydra" :color blue))
+  (defhydra hydra-ibuffer-mark (:color teal :columns 5
+                                       :after-exit (hydra-ibuffer-main/body))
+    "Mark"
+    ("*" ibuffer-unmark-all "unmark all")
+    ("M" ibuffer-mark-by-mode "mode")
+    ("m" ibuffer-mark-modified-buffers "modified")
+    ("u" ibuffer-mark-unsaved-buffers "unsaved")
+    ("s" ibuffer-mark-special-buffers "special")
+    ("r" ibuffer-mark-read-only-buffers "read-only")
+    ("/" ibuffer-mark-dired-buffers "dired")
+    ("e" ibuffer-mark-dissociated-buffers "dissociated")
+    ("h" ibuffer-mark-help-buffers "help")
+    ("z" ibuffer-mark-compressed-file-buffers "compressed")
+    ("b" hydra-ibuffer-main/body "back" :color blue))
+  (defhydra hydra-ibuffer-action (:color teal :columns 4
+                                         :after-exit
+                                         (if (eq major-mode 'ibuffer-mode)
+                                             (hydra-ibuffer-main/body)))
+    "Action"
+    ("A" ibuffer-do-view "view")
+    ("E" ibuffer-do-eval "eval")
+    ("F" ibuffer-do-shell-command-file "shell-command-file")
+    ("I" ibuffer-do-query-replace-regexp "query-replace-regexp")
+    ("H" ibuffer-do-view-other-frame "view-other-frame")
+    ("N" ibuffer-do-shell-command-pipe-replace "shell-cmd-pipe-replace")
+    ("M" ibuffer-do-toggle-modified "toggle-modified")
+    ("O" ibuffer-do-occur "occur")
+    ("P" ibuffer-do-print "print")
+    ("Q" ibuffer-do-query-replace "query-replace")
+    ("R" ibuffer-do-rename-uniquely "rename-uniquely")
+    ("T" ibuffer-do-toggle-read-only "toggle-read-only")
+    ("U" ibuffer-do-replace-regexp "replace-regexp")
+    ("V" ibuffer-do-revert "revert")
+    ("W" ibuffer-do-view-and-eval "view-and-eval")
+    ("X" ibuffer-do-shell-command-pipe "shell-command-pipe")
+    ("b" nil "back"))
+  (defhydra hydra-ibuffer-sort (:color amaranth :columns 3)
+    "Sort"
+    ("i" ibuffer-invert-sorting "invert")
+    ("a" ibuffer-do-sort-by-alphabetic "alphabetic")
+    ("v" ibuffer-do-sort-by-recency "recently used")
+    ("s" ibuffer-do-sort-by-size "size")
+    ("f" ibuffer-do-sort-by-filename/process "filename")
+    ("m" ibuffer-do-sort-by-major-mode "mode")
+    ("b" hydra-ibuffer-main/body "back" :color blue))
+  (defhydra hydra-ibuffer-filter (:color amaranth :columns 4)
+    "Filter"
+    ("m" ibuffer-filter-by-used-mode "mode")
+    ("M" ibuffer-filter-by-derived-mode "derived mode")
+    ("n" ibuffer-filter-by-name "name")
+    ("c" ibuffer-filter-by-content "content")
+    ("e" ibuffer-filter-by-predicate "predicate")
+    ("f" ibuffer-filter-by-filename "filename")
+    (">" ibuffer-filter-by-size-gt "size")
+    ("<" ibuffer-filter-by-size-lt "size")
+    ("/" ibuffer-filter-disable "disable")
+    ("b" hydra-ibuffer-main/body "back" :color blue))
+  (with-eval-after-load 'ibuffer
+    (define-key ibuffer-mode-map "." 'hydra-ibuffer-main/body)
+    (add-hook 'ibuffer-hook #'hydra-ibuffer-main/body))
+
+  ;; Info mode
+  (defhydra hydra-info (:color blue :hint nil)
+    "
+Info-mode:
+
+  ^^_]_ forward  (next logical node)       ^^_l_ast (←)        _u_p (↑)                             _f_ollow reference       _T_OC
+  ^^_[_ backward (prev logical node)       ^^_r_eturn (→)      _m_enu (↓) (C-u for new window)      _i_ndex                  _d_irectory
+  ^^_n_ext (same level only)               ^^_H_istory         _g_oto (C-u for new window)          _,_ next index item      _c_opy node name
+  ^^_p_rev (same level only)               _<_/_t_op           _b_eginning of buffer                virtual _I_ndex          _C_lone buffer
+  regex _s_earch (_S_ case sensitive)      ^^_>_ final         _e_nd of buffer                      ^^                       _a_propos
+
+  _1_ .. _9_ Pick first .. ninth item in the node's menu.
+
+"
+    ("]" Info-forward-node)
+    ("[" Info-backward-node)
+    ("n" Info-next)
+    ("p" Info-prev)
+    ("s" Info-search)
+    ("S" Info-search-case-sensitively)
+
+    ("h" evil-backward-char)
+    ("j" evil-next-line)
+    ("k" evil-previous-line)
+    ("l" evil-forward-char)
+    ("L" Info-history-back)
+    ("r" Info-history-forward)
+    ("H" Info-history)
+    ("t" Info-top-node)
+    ("<" Info-top-node)
+    (">" Info-final-node)
+
+    ("u" Info-up)
+    ("^" Info-up)
+    ("m" Info-menu)
+    ("g" Info-goto-node)
+    ("b" beginning-of-buffer)
+    ("e" end-of-buffer)
+
+    ("f" Info-follow-reference)
+    ("i" Info-index)
+    ("," Info-index-next)
+    ("I" Info-virtual-index)
+
+    ("T" Info-toc)
+    ("d" Info-directory)
+    ("c" Info-copy-current-node-name)
+    ("C" clone-buffer)
+    ("a" info-apropos)
+
+    ("1" Info-nth-menu-item)
+    ("2" Info-nth-menu-item)
+    ("3" Info-nth-menu-item)
+    ("4" Info-nth-menu-item)
+    ("5" Info-nth-menu-item)
+    ("6" Info-nth-menu-item)
+    ("7" Info-nth-menu-item)
+    ("8" Info-nth-menu-item)
+    ("9" Info-nth-menu-item)
+
+    ("?" Info-summary "Info summary")
+    ("h" Info-help "Info help")
+    ("q" Info-exit "Info exit")
+    ("." nil "toggle hydra" :color blue)
+    ("C-g" nil "cancel" :color blue))
+
+  ;; (add-hook 'Info-mode-hook #'hydra-info/body)
+  (define-key Info-mode-map "." 'hydra-info/body))
 
 (global-set-key (kbd "C-x \\") #'align-regexp)
 (setq tab-always-indent 'complete)
