@@ -78,67 +78,54 @@
                                (org-refile-get-targets)))
 
   (require 'org-agenda)
+  (setq org-log-note-headings '((done . "CLOSING NOTE T:%t")
+                                (state . "State %-12s from %-12S T:%t")
+                                (note . "Note taken on T:%t")
+                                (reschedule . "Rescheduled from %S on T:%t")
+                                (delschedule . "Not scheduled, was %S on T:%t")
+                                (redeadline . "New deadline from %S on T:%t")
+                                (deldeadline . "Removed deadline, was %S on T:%t")
+                                (refile . "Refiled on T:%t")
+                                (clock-out . "Clocked out on T:%t")))
 
-  ;; updated this week
+  ;; recent activity
   ;; https://stackoverflow.com/questions/8039416/custom-searches-using-timestamps-in-logbook-in-org-mode
-  (defun zin/since-state (since todo-state &optional done all)
-    "List Agenda items that are older than SINCE.
-
-TODO-STATE is a regexp for matching to TODO states.  It is provided to
-`zin/find-state' to match inactive timestamps.
-SINCE is compared to the result of `zin/org-date-diff'.  If
-`zin/org-date-diff' is greater than SINCE, the entry is shown in the
-Agenda.
-Optional argument DONE allows for done and not-done headlines to be
-evaluated.  If DONE is non-nil, match completed tasks.
-Optional argument ALL is passed to `zin/find-state' to specify whether
-to search for any possible match of STATE, or only in the most recent
-log entry."
-    (let ((next-headline (save-excursion (or (outline-next-heading) (point-max)))))
-      ;; If DONE is non-nil, look for done keywords, if nil look for not-done
-      (if (member (org-get-todo-state)
-                  (if done
-                      org-done-keywords
-                    org-not-done-keywords))
-          (let* ((subtree-end (save-excursion (org-end-of-subtree t)))
-                 (subtree-valid (save-excursion
-                                  (forward-line 1)
-                                  (if (and (< (point) subtree-end)
-                                           ;; Find the timestamp to test
-                                           (zin/find-state todo-state subtree-end all))
-                                      (let ((startpoint (point)))
-                                        (forward-word 3)
-                                        ;; Convert timestamp into days difference from today
-                                        (zin/org-date-diff startpoint (point)))))))
-            (if (or (not subtree-valid)
-                    (<= subtree-valid since))
-                next-headline
-              nil))
-        (or next-headline (point-max)))))
-
-  (defun zin/find-state (state &optional end all)
+  (defun +org/find-state (&optional end)
     "Used to search through the logbook of subtrees.
 
-  Tests to see if the first line of the logbook is a change of todo
-  status to status STATE
-  - Status \"STATE\" from ...
-  The search brings the point to the start of YYYY-MM-DD in inactive timestamps.
+    Looking for T:[2018-09-14 Fri 10:50] kind of time stamp in logbook."
+    (let* ((created (re-search-forward "^:CREATED: \\[" nil t))
+           (logbook (re-search-forward ".*T:\\[" end t))
+           (result (or logbook created)))
+      result))
 
-  Optional argument END defines the point at which to stop searching.
-  Optional argument ALL when non-nil specifies to look for any occurence
-  of STATE in the subtree, not just in the most recent entry."
-    (let ((drawer (if all "" ":.*:\\W")))
-      (re-search-forward (concat drawer ".*State \\\"" state "\\\"\\W+from.*\\[") end t)))
-
-  (defun zin/org-date-diff (start end &optional compare)
+  (defun +org/date-diff (start end &optional compare)
     "Calculate difference between  selected timestamp to current date.
 
-The difference between the dates is calculated in days.
-START and END define the region within which the timestamp is found.
-Optional argument COMPARE allows for comparison to a specific date rather than to current date."
+  The difference between the dates is calculated in days.
+  START and END define the region within which the timestamp is found.
+  Optional argument COMPARE allows for comparison to a specific date rather than to current date."
     (let* ((start-date (if compare compare (calendar-current-date))))
       (- (calendar-absolute-from-gregorian start-date) (org-time-string-to-absolute (buffer-substring-no-properties start end)))))
 
+  (defun +org/last-update-before (since)
+    "List Agenda items that updated before SINCE day."
+    (let ((next-headline (save-excursion (or (outline-next-heading) (point-max)))))
+      ;; If DONE is non-nil, look for done keywords, if nil look for not-done
+      (let* ((subtree-end (save-excursion (org-end-of-subtree t)))
+             (subtree-valid (save-excursion
+                              (forward-line 1)
+                              (if (and (< (point) subtree-end)
+                                       ;; Find the timestamp to test
+                                       (+org/find-state subtree-end))
+                                  (let ((startpoint (point)))
+                                    (forward-word 3)
+                                    ;; Convert timestamp into days difference from today
+                                    (+org/date-diff startpoint (point)))
+                                (point-max)))))
+        (if (and subtree-valid (>= subtree-valid since))
+            next-headline
+          nil))))
 
   ;; Add global evil-leader mappings. Used to access org-agenda
   ;; functionalities – and a few others commands – from any other mode.
@@ -230,7 +217,7 @@ Optional argument COMPARE allows for comparison to a specific date rather than t
                  ("CANCELLED")))))
   (defun org-summary-todo (n-done n-not-done)
     "Switch entry to DONE when all subentries are done, to TODO otherwise."
-    (let (org-log-done org-log-states)   ; turn off logging
+    (let (org-log-done org-log-states)  ; turn off logging
       (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
   (add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
 
@@ -250,7 +237,7 @@ Optional argument COMPARE allows for comparison to a specific date rather than t
   (setq org-id-method 'org)
   (setq org-id-include-domain t)
   (setq org-log-into-drawer t)
-  (setq org-log-redeadline 'note);; record when the deadline date of a tasks is modified
+  (setq org-log-redeadline 'note) ;; record when the deadline date of a tasks is modified
   (setq org-log-reschedule 'time)
   (setq org-return-follows-link t)
   (setq org-remove-highlights-with-change nil)
@@ -258,7 +245,7 @@ Optional argument COMPARE allows for comparison to a specific date rather than t
   (setq org-deadline-warning-days 3)
   (setq org-enforce-todo-dependencies t)
   (setq org-startup-indented t)
-  (setq org-adapt-indentation nil);; do not indent drawers/body according to heading level
+  (setq org-adapt-indentation nil) ;; do not indent drawers/body according to heading level
   (setq org-insert-heading-respect-content t)
   (setq org-special-ctrl-a/e t)
   (setq org-special-ctrl-k t)
@@ -462,10 +449,16 @@ Optional argument COMPARE allows for comparison to a specific date rather than t
   (setq org-capture-templates
         '(("n" "notes" entry
            (file+olp "~/Dropbox/ORG/snippets.org" "notes" "inbox")
-           "*** %?\n   %U")
+           "*** %?
+:PROPERTIES:
+:CREATED: %U
+:END:")
           ("s" "snipptes" entry
            (file+olp "~/Dropbox/ORG/snipptes.org" "snipptes" "inbox")
-           "**** %?\n%U")
+           "*** %?
+:PROPERTIES:
+:CREATED: %U
+:END:")
           ("j" "Queue job" entry
            (file+olp+datetree
             "~/Dropbox/ORG/gtd.org" "queue")
@@ -473,9 +466,8 @@ Optional argument COMPARE allows for comparison to a specific date rather than t
 SCHEDULED: %^T
 :PROPERTIES:
 :CREATED: %U
-:END:
-"
-           :tree-type 'week
+:END:"
+           :tree-type week
            :clock-resume t)))
   :config
   (setq org-capture--clipboards t)
@@ -499,6 +491,7 @@ SCHEDULED: %^T
                   page-title " %^g"
                   "\n\t:PROPERTIES:\n\t:URL: "
                   url-string
+                  "\n\t:CREATED: %U"
                   "\n\t:END:\n\s\s%?")))))
 
   (with-eval-after-load 'org-capture
