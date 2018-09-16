@@ -1384,6 +1384,7 @@ Info-mode:
           (t                            '(0.5 . 0.5))))
   (setq zoom-size 'size-callback)
   (setq zoom-ignored-major-modes '(term-mode))
-  (zoom-mode))
+  (yq/add-toggle zoom :mode zoom-mode)
+  (evil-leader/set-key "tz" 'yq/toggle-zoom))
 
 (add-hook 'makefile-mode-hook 'whitespace-mode)

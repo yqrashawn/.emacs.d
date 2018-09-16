@@ -94,9 +94,10 @@
     "Used to search through the logbook of subtrees.
 
     Looking for T:[2018-09-14 Fri 10:50] kind of time stamp in logbook."
-    (let* ((created (re-search-forward "^:CREATED: \\[" nil t))
-           (logbook (re-search-forward ".*T:\\[" end t))
-           (result (or logbook created)))
+    (let* ((closed (re-search-forward "^CLOSED: \\[" end t))
+           (created (if (not closed) (re-search-forward "^:CREATED: \\[" end t)))
+           (logbook (if (not closed) (re-search-forward ".*T:\\[" end t)))
+           (result (or closed logbook created)))
       result))
 
   (defun +org/date-diff (start end &optional compare)
@@ -157,6 +158,17 @@
     (if (y-or-n-p "Create a unique ID for this section?")
         (org-id-get-create)))
   :config
+  (add-hook 'org-capture-mode-hook #'evil-insert-state)
+  (advice-add 'org-todo :after #'org-save-all-org-buffers)
+  (advice-add 'org-store-log-note :after #'org-save-all-org-buffers)
+  (advice-add 'org-refile :after #'org-save-all-org-buffers)
+  (advice-add 'org-agenda-quit :before #'org-save-all-org-buffers)
+  (advice-add 'org-agenda-priority :before #'org-save-all-org-buffers)
+  (advice-add 'org-agenda-todo :after #'org-save-all-org-buffers)
+  (advice-add 'org-agenda-deadline :after #'org-save-all-org-buffers)
+  (advice-add 'org-agenda-schedule :after #'org-save-all-org-buffers)
+  (advice-add 'org-agenda-refile :after #'org-save-all-org-buffers)
+  (add-hook 'org-capture-after-finalize-hook (lambda () (org-save-all-org-buffers)))
   (require 'org-id)
   ;; https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=887332
   ;; auto save all org buffers after archive
@@ -449,25 +461,25 @@
   (setq org-capture-templates
         '(("n" "notes" entry
            (file+olp "~/Dropbox/ORG/snippets.org" "notes" "inbox")
-           "*** %?
+           "*** %?  %^G
 :PROPERTIES:
 :CREATED: %U
 :END:")
           ("s" "snipptes" entry
            (file+olp "~/Dropbox/ORG/snipptes.org" "snipptes" "inbox")
-           "*** %?
+           "*** %?  %^G
 :PROPERTIES:
 :CREATED: %U
 :END:")
           ("j" "Queue job" entry
            (file+olp+datetree
             "~/Dropbox/ORG/gtd.org" "queue")
-           "** TODO %?
+           "** TODO %?  %^G
 SCHEDULED: %^T
 :PROPERTIES:
 :CREATED: %U
 :END:"
-           :tree-type week
+           ;; :tree-type week
            :clock-resume t)))
   :config
   (setq org-capture--clipboards t)
@@ -488,7 +500,7 @@ SCHEDULED: %^T
       (unless pdf
         (let ((page-title (org-web-tools--html-title (org-web-tools--get-url url-string))))
           (concat "* TODO "
-                  page-title " %^g"
+                  page-title " %^G"
                   "\n\t:PROPERTIES:\n\t:URL: "
                   url-string
                   "\n\t:CREATED: %U"
