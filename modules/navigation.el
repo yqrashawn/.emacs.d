@@ -484,6 +484,8 @@ FD-PROMPT, if non-nil, is passed as `ivy-read' prompt argument."
   (if (derived-mode-p 'dired-mode)
       (yq/open-with-call-alfred-osascript (dired-get-filename nil t))
     (and (file-exists-p buffer-file-name) (yq/open-with-call-alfred-osascript buffer-file-name))))
+
+(define-key evil-normal-state-map (kbd "s.") 'yq/open-with-alfred)
 (spacemacs/set-leader-keys "bb" 'yq/open-with-alfred)
 
 (use-package find-file-in-project

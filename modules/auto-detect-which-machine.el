@@ -14,8 +14,8 @@
   "Load macbook theme and font size."
   (interactive)
   (if (yq/day-p)
-      ;; (load-theme 'spacemacs-light)
-      (load-theme 'zenburn)
+      (load-theme 'spacemacs-light)
+    ;; (load-theme 'zenburn)
     (load-theme 'zenburn))
   (spacemacs/set-default-font yq/large-screen-default-font))
 
@@ -26,7 +26,7 @@
       ;; (load-theme 'spacemacs-light)
       (load-theme 'zenburn)
     (load-theme 'zenburn))
-  (spacemacs/set-default-font yq/huge-screen-default-font))
+  (spacemacs/set-default-font yq/large-screen-default-font))
 
 
 (defun yq/day-p ()
@@ -35,7 +35,6 @@
   (let ((current-hour (nth 2 (decode-time))))
     (and (> current-hour 8) (< current-hour 18))))
 
-;; (if (file-exists-p "~/yq.machine.macbook") (yq/macbook) (yq/imac))
 (cond ((file-exists-p "~/yq.machine.macbook") (yq/macbook))
       ((file-exists-p "~/yq.machine.home-imac") (yq/home-imac))
       (t (yq/imac)))

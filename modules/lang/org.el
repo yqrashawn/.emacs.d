@@ -158,21 +158,22 @@
     (if (y-or-n-p "Create a unique ID for this section?")
         (org-id-get-create)))
   :config
+  (defun +org/save-all-buffers (&optional arg) (interactive) (org-save-all-org-buffers))
   (add-hook 'org-capture-mode-hook #'evil-insert-state)
-  (advice-add 'org-todo :after #'org-save-all-org-buffers)
-  (advice-add 'org-store-log-note :after #'org-save-all-org-buffers)
-  (advice-add 'org-refile :after #'org-save-all-org-buffers)
-  (advice-add 'org-agenda-quit :before #'org-save-all-org-buffers)
-  (advice-add 'org-agenda-priority :before #'org-save-all-org-buffers)
-  (advice-add 'org-agenda-todo :after #'org-save-all-org-buffers)
-  (advice-add 'org-agenda-deadline :after #'org-save-all-org-buffers)
-  (advice-add 'org-agenda-schedule :after #'org-save-all-org-buffers)
-  (advice-add 'org-agenda-refile :after #'org-save-all-org-buffers)
-  (add-hook 'org-capture-after-finalize-hook (lambda () (org-save-all-org-buffers)))
+  (advice-add 'org-todo :after '+org/save-all-buffers)
+  (advice-add 'org-store-log-note :after '+org/save-all-buffers)
+  (advice-add 'org-refile :after '+org/save-all-buffers)
+  (advice-add 'org-agenda-quit :before '+org/save-all-buffers)
+  (advice-add 'org-agenda-priority :before '+org/save-all-buffers)
+  (advice-add 'org-agenda-todo :after '+org/save-all-buffers)
+  (advice-add 'org-agenda-deadline :after '+org/save-all-buffers)
+  (advice-add 'org-agenda-schedule :after '+org/save-all-buffers)
+  (advice-add 'org-agenda-refile :after '+org/save-all-buffers)
+  (add-hook 'org-capture-after-finalize-hook #'+org/save-all-buffers)
   (require 'org-id)
   ;; https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=887332
   ;; auto save all org buffers after archive
-  (advice-add 'org-archive-default-command :after #'org-save-all-org-buffers)
+  (advice-add 'org-archive-default-command :after '+org/save-all-buffers)
   (evil-define-key 'normal org-mode-map (kbd "<tab>") 'org-cycle)
 
   (defun my-handle-tsfile-link (querystring)
@@ -573,7 +574,11 @@ SCHEDULED: %^T
   :init
   (org-projectile-single-file)
   (setq org-projectile-projects-file "~/Dropbox/ORG/project.org")
-  (setq org-projectile-capture-template "* TODO %? %^G\n%U")
+  (setq org-projectile-capture-template "* TODO %?  %^G
+SCHEDULED: %^T
+:PROPERTIES:
+:CREATED: %U
+:END:")
   (setq org-projectile-per-project-filepath nil)
   (spacemacs/set-leader-keys "pc" 'org-projectile-capture-for-current-project)
   (with-eval-after-load 'org-capture
