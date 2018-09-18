@@ -23,7 +23,6 @@
 
 (use-package org
   :straight org-plus-contrib
-  ;; :ensure t
   :init
   (setq org-insert-mode-line-in-empty-file t
 
@@ -78,15 +77,15 @@
                                (org-refile-get-targets)))
 
   (require 'org-agenda)
-  (setq org-log-note-headings '((done . "CLOSING NOTE T:%t")
-                                (state . "State %-12s from %-12S T:%t")
-                                (note . "Note taken on T:%t")
-                                (reschedule . "Rescheduled from %S on T:%t")
-                                (delschedule . "Not scheduled, was %S on T:%t")
-                                (redeadline . "New deadline from %S on T:%t")
-                                (deldeadline . "Removed deadline, was %S on T:%t")
-                                (refile . "Refiled on T:%t")
-                                (clock-out . "Clocked out on T:%t")))
+  (setq org-log-note-headings '((done . "CLOSING NOTE T: %t")
+                                (state . "State %-12s from %-12S T: %t")
+                                (note . "Note taken on T: %t")
+                                (reschedule . "Rescheduled from %S on T: %t")
+                                (delschedule . "Not scheduled, was %S on T: %t")
+                                (redeadline . "New deadline from %S on T: %t")
+                                (deldeadline . "Removed deadline, was %S on T: %t")
+                                (refile . "Refiled on T: %t")
+                                (clock-out . "Clocked out on T: %t")))
 
   ;; recent activity
   ;; https://stackoverflow.com/questions/8039416/custom-searches-using-timestamps-in-logbook-in-org-mode
@@ -96,7 +95,7 @@
     Looking for T:[2018-09-14 Fri 10:50] kind of time stamp in logbook."
     (let* ((closed (re-search-forward "^CLOSED: \\[" end t))
            (created (if (not closed) (re-search-forward "^:CREATED: \\[" end t)))
-           (logbook (if (not closed) (re-search-forward ".*T:\\[" end t)))
+           (logbook (if (not closed) (re-search-forward ".*T: \\[" end t)))
            (result (or closed logbook created)))
       result))
 

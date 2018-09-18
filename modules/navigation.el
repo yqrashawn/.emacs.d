@@ -16,6 +16,11 @@
                    :upstream (:host github :repo "abo-abo/swiper"))
   :diminish counsel-mode
   :config
+  (defun counsel-imenu-comments ()
+    "Imenu display comments."
+    (interactive)
+    (let* ((imenu-create-index-function 'evilnc-imenu-create-index-function))
+      (counsel-imenu)))
   (counsel-mode 1)
   (setq counsel-find-file-occur-cmd "ls | grep -i -E '%s' | gxargs -d '\n' ls")
   (define-key ivy-minibuffer-map (kbd "C-c C-e") 'spacemacs//counsel-edit)
