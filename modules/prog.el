@@ -242,6 +242,7 @@ If the error list is visible, hide it.  Otherwise, show it."
     :mode flycheck-mode)
   (spacemacs/set-leader-keys "ts" 'yq/toggle-syntax-checking)
   (global-flycheck-mode 1)
+  (setq flycheck-json-python-json-executable "/usr/local/bin/python3")
 
   ;; Custom fringe indicator
   (define-fringe-bitmap 'my-flycheck-fringe-indicator

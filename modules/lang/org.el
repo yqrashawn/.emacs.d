@@ -480,6 +480,16 @@ SCHEDULED: %^T
 :CREATED: %U
 :END:"
            ;; :tree-type week
+           :clock-resume t)
+
+          ("s" "Queue job" entry
+           (file+olp+datetree
+            "~/Dropbox/ORG/gtd.org" "queue")
+           "** SOMEDAY %?  %^G
+:PROPERTIES:
+:CREATED: %U
+:END:"
+           ;; :tree-type week
            :clock-resume t)))
   :config
   (setq org-capture--clipboards t)
