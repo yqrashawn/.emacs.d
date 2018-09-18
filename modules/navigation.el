@@ -16,6 +16,11 @@
                    :upstream (:host github :repo "abo-abo/swiper"))
   :diminish counsel-mode
   :config
+  (defun counsel-imenu-comments ()
+    "Imenu display comments."
+    (interactive)
+    (let* ((imenu-create-index-function 'evilnc-imenu-create-index-function))
+      (counsel-imenu)))
   (counsel-mode 1)
   (setq counsel-find-file-occur-cmd "ls | grep -i -E '%s' | gxargs -d '\n' ls")
   (define-key ivy-minibuffer-map (kbd "C-c C-e") 'spacemacs//counsel-edit)
@@ -484,6 +489,8 @@ FD-PROMPT, if non-nil, is passed as `ivy-read' prompt argument."
   (if (derived-mode-p 'dired-mode)
       (yq/open-with-call-alfred-osascript (dired-get-filename nil t))
     (and (file-exists-p buffer-file-name) (yq/open-with-call-alfred-osascript buffer-file-name))))
+
+(define-key evil-normal-state-map (kbd "s.") 'yq/open-with-alfred)
 (spacemacs/set-leader-keys "bb" 'yq/open-with-alfred)
 
 (use-package find-file-in-project

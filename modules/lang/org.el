@@ -23,7 +23,6 @@
 
 (use-package org
   :straight org-plus-contrib
-  ;; :ensure t
   :init
   (setq org-insert-mode-line-in-empty-file t
 
@@ -78,15 +77,15 @@
                                (org-refile-get-targets)))
 
   (require 'org-agenda)
-  (setq org-log-note-headings '((done . "CLOSING NOTE T:%t")
-                                (state . "State %-12s from %-12S T:%t")
-                                (note . "Note taken on T:%t")
-                                (reschedule . "Rescheduled from %S on T:%t")
-                                (delschedule . "Not scheduled, was %S on T:%t")
-                                (redeadline . "New deadline from %S on T:%t")
-                                (deldeadline . "Removed deadline, was %S on T:%t")
-                                (refile . "Refiled on T:%t")
-                                (clock-out . "Clocked out on T:%t")))
+  (setq org-log-note-headings '((done . "CLOSING NOTE T: %t")
+                                (state . "State %-12s from %-12S T: %t")
+                                (note . "Note taken on T: %t")
+                                (reschedule . "Rescheduled from %S on T: %t")
+                                (delschedule . "Not scheduled, was %S on T: %t")
+                                (redeadline . "New deadline from %S on T: %t")
+                                (deldeadline . "Removed deadline, was %S on T: %t")
+                                (refile . "Refiled on T: %t")
+                                (clock-out . "Clocked out on T: %t")))
 
   ;; recent activity
   ;; https://stackoverflow.com/questions/8039416/custom-searches-using-timestamps-in-logbook-in-org-mode
@@ -96,7 +95,7 @@
     Looking for T:[2018-09-14 Fri 10:50] kind of time stamp in logbook."
     (let* ((closed (re-search-forward "^CLOSED: \\[" end t))
            (created (if (not closed) (re-search-forward "^:CREATED: \\[" end t)))
-           (logbook (if (not closed) (re-search-forward ".*T:\\[" end t)))
+           (logbook (if (not closed) (re-search-forward ".*T: \\[" end t)))
            (result (or closed logbook created)))
       result))
 
@@ -158,21 +157,22 @@
     (if (y-or-n-p "Create a unique ID for this section?")
         (org-id-get-create)))
   :config
+  (defun +org/save-all-buffers (&optional arg) (interactive) (org-save-all-org-buffers))
   (add-hook 'org-capture-mode-hook #'evil-insert-state)
-  (advice-add 'org-todo :after #'org-save-all-org-buffers)
-  (advice-add 'org-store-log-note :after #'org-save-all-org-buffers)
-  (advice-add 'org-refile :after #'org-save-all-org-buffers)
-  (advice-add 'org-agenda-quit :before #'org-save-all-org-buffers)
-  (advice-add 'org-agenda-priority :before #'org-save-all-org-buffers)
-  (advice-add 'org-agenda-todo :after #'org-save-all-org-buffers)
-  (advice-add 'org-agenda-deadline :after #'org-save-all-org-buffers)
-  (advice-add 'org-agenda-schedule :after #'org-save-all-org-buffers)
-  (advice-add 'org-agenda-refile :after #'org-save-all-org-buffers)
-  (add-hook 'org-capture-after-finalize-hook (lambda () (org-save-all-org-buffers)))
+  (advice-add 'org-todo :after '+org/save-all-buffers)
+  (advice-add 'org-store-log-note :after '+org/save-all-buffers)
+  (advice-add 'org-refile :after '+org/save-all-buffers)
+  (advice-add 'org-agenda-quit :before '+org/save-all-buffers)
+  (advice-add 'org-agenda-priority :before '+org/save-all-buffers)
+  (advice-add 'org-agenda-todo :after '+org/save-all-buffers)
+  (advice-add 'org-agenda-deadline :after '+org/save-all-buffers)
+  (advice-add 'org-agenda-schedule :after '+org/save-all-buffers)
+  (advice-add 'org-agenda-refile :after '+org/save-all-buffers)
+  (add-hook 'org-capture-after-finalize-hook #'+org/save-all-buffers)
   (require 'org-id)
   ;; https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=887332
   ;; auto save all org buffers after archive
-  (advice-add 'org-archive-default-command :after #'org-save-all-org-buffers)
+  (advice-add 'org-archive-default-command :after '+org/save-all-buffers)
   (evil-define-key 'normal org-mode-map (kbd "<tab>") 'org-cycle)
 
   (defun my-handle-tsfile-link (querystring)
@@ -480,6 +480,16 @@ SCHEDULED: %^T
 :CREATED: %U
 :END:"
            ;; :tree-type week
+           :clock-resume t)
+
+          ("s" "Queue job" entry
+           (file+olp+datetree
+            "~/Dropbox/ORG/gtd.org" "queue")
+           "** SOMEDAY %?  %^G
+:PROPERTIES:
+:CREATED: %U
+:END:"
+           ;; :tree-type week
            :clock-resume t)))
   :config
   (setq org-capture--clipboards t)
@@ -573,7 +583,11 @@ SCHEDULED: %^T
   :init
   (org-projectile-single-file)
   (setq org-projectile-projects-file "~/Dropbox/ORG/project.org")
-  (setq org-projectile-capture-template "* TODO %? %^G\n%U")
+  (setq org-projectile-capture-template "* TODO %?  %^G
+SCHEDULED: %^T
+:PROPERTIES:
+:CREATED: %U
+:END:")
   (setq org-projectile-per-project-filepath nil)
   (spacemacs/set-leader-keys "pc" 'org-projectile-capture-for-current-project)
   (with-eval-after-load 'org-capture
