@@ -94,18 +94,24 @@
 (use-package rjsx-mode
   :straight t
   :defer t
-  :mode (("\\.jsx\\'" . rjsx-mode))
+  :mode (("\\.jsx\\'" . rjsx-mode) ("components\\/.*\\.js\\'" . rjsx-mode))
   :commands (rjsx-delete-creates-full-tag rjsx-electric-gt rjsx-electric-lt rjsx-rename-tag-at-point)
   :init
-  (add-to-list 'auto-mode-alist '("components\/.*\.js\'" . rjsx-mode))
-  :config (progn (evil-define-key 'insert rjsx-mode-map (kbd "C-d") 'rjsx-delete-creates-full-tag
-                   (spacemacs/set-leader-keys-for-major-mode 'rjsx-mode "=" 'prettier-js)
-                   (spacemacs/set-leader-keys-for-major-mode 'rjsx-mode "m" 'js2-mode)))
-  :commands (rjsx-mode))
+  :config
+  (defadvice js-jsx-indent-line (after js-jsx-indent-line-after-hack activate)
+    "Workaround sgml-mode and follow airbnb component style."
+    (save-excursion
+      (beginning-of-line)
+      (if (looking-at-p "^ +\/?> *$")
+          (delete-char sgml-basic-offset))))
+  (evil-define-key 'insert rjsx-mode-map (kbd "C-d") 'rjsx-delete-creates-full-tag
+    (spacemacs/set-leader-keys-for-major-mode 'rjsx-mode "=" 'prettier-js)
+    (spacemacs/set-leader-keys-for-major-mode 'rjsx-mode "m" 'js2-mode)))
 
 (use-package js2-refactor
   :straight t
   :after js2-mode
+  :hook (js2-mode . js2-refactor-mode)
   :commands (js2r-inline-var
              js2r-rename-var
              js2r-var-to-this

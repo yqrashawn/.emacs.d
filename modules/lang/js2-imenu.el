@@ -1,4 +1,22 @@
 ;; (eval-when-compile (require 'cl))
+(use-package js-comint
+  :straight t
+  :after js2-mode
+  :init
+  (setq inferior-js-program-command "node")
+  (setq inferior-js-program-arguments '("--interactive"))
+  (add-hook 'js2-mode-hook
+            (lambda ()
+              (local-set-key (kbd "C-x C-e") 'js-send-last-sexp)
+              (local-set-key (kbd "C-M-x") 'js-send-last-sexp-and-go)
+              (local-set-key (kbd "C-c b") 'js-send-buffer)
+              (local-set-key (kbd "C-c C-b") 'js-send-buffer-and-go)
+              (local-set-key (kbd "C-c l") 'js-load-file-and-go)))
+  :config
+  (defun inferior-js-mode-hook-setup ()
+    (add-hook 'comint-output-filter-functions 'js-comint-process-output))
+  (add-hook 'inferior-js-mode-hook 'inferior-js-mode-hook-setup t))
+
 
 (setq-default js2-use-font-lock-faces t
               js2-mode-must-byte-compile nil
@@ -34,8 +52,7 @@
         ("Function" "^[ \t]*\\([A-Za-z_$][A-Za-z0-9_$]+\\)[ \t]*([a-zA-Z0-9, ]*) *\{ *$" 1) ;; es6 fn1 () { }
         ("Function" "^[ \t]*\\([A-Za-z_$][A-Za-z0-9_$]+\\)[ \t]*=[ \t]*(?[a-zA-Z0-9, ]*)?[ \t]*=>" 1) ;; es6 fn1 = (e) =>
         ;; }}
-        ("Task" "[. \t]task([ \t]*['\"]\\([^'\"]+\\)" 1)
-        ))
+        ("Task" "[. \t]task([ \t]*['\"]\\([^'\"]+\\)" 1)))
 
 ;; js-mode imenu enhancement
 ;; @see http://stackoverflow.com/questions/20863386/idomenu-not-working-in-javascript-mode
@@ -44,8 +61,9 @@
     (imenu--generic-function javascript-common-imenu-regex-list)))
 
 (defun mo-js-mode-hook ()
-  (when (not (derived-mode-p 'js2-mode))
-    (setq imenu-create-index-function 'mo-js-imenu-make-index)))
+  (when (and (not (is-buffer-file-temp)) (not (derived-mode-p 'js2-mode)))
+    (setq imenu-create-index-function 'mo-js-imenu-make-index)
+    (flymake-mode 1)))
 
 (add-hook 'js-mode-hook 'mo-js-mode-hook)
 (eval-after-load 'js-mode
@@ -224,6 +242,21 @@ Merge RLT and EXTRA-RLT, items in RLT has *higher* priority."
   (setq extra-rlt (js2-imenu--remove-duplicate-items extra-rlt))
   (append rlt extra-rlt))
 
+;; {{ print json path, will be removed when latest STABLE js2-mode released
+(defun js2-get-element-index-from-array-node (elem array-node &optional hardcoded-array-index)
+  "Get index of ELEM from ARRAY-NODE or 0 and return it as string."
+  (let* ((idx 0) elems (rlt hardcoded-array-index))
+    (setq elems (js2-array-node-elems array-node))
+    (if (and elem (not hardcoded-array-index))
+        (setq rlt (catch 'nth-elt
+                    (dolist (x elems)
+                      ;; We know the ELEM does belong to ARRAY-NODE,
+                      (if (eq elem x) (throw 'nth-elt idx))
+                      (setq idx (1+ idx)))
+                    0)))
+    (format "[%s]" rlt)))
+;; }}
+
 (eval-after-load 'js2-mode
   '(progn
      (defadvice js2-mode-create-imenu-index (around my-js2-mode-create-imenu-index activate)
@@ -236,14 +269,24 @@ Merge RLT and EXTRA-RLT, items in RLT has *higher* priority."
          ad-return-value))))
 ;; }}
 
-(add-to-list 'auto-mode-alist '("\\.babelrc\\'" . js2-mode))
+(defun my-js2-mode-setup()
+  (unless (is-buffer-file-temp)
+    (js2-imenu-extras-mode)))
 
-(defadvice js-jsx-indent-line (after js-jsx-indent-line-after-hack activate)
-  "Workaround sgml-mode and follow airbnb component style."
-  (save-excursion
-    (beginning-of-line)
-    (if (looking-at-p "^ +\/?> *$")
-        (delete-char sgml-basic-offset))))
+(add-hook 'js2-mode-hook 'my-js2-mode-setup)
+
+(setq auto-mode-alist (cons '("\\.json$" . js-mode) auto-mode-alist))
+(setq auto-mode-alist (cons '("\\.jason$" . js-mode) auto-mode-alist))
+(setq auto-mode-alist (cons '("\\.jshintrc$" . js-mode) auto-mode-alist))
+
+(cond
+ ((not *no-memory*)
+  (setq auto-mode-alist (cons '("\\.js\\(\\.erb\\)?\\'" . js2-mode) auto-mode-alist))
+  (add-to-list 'interpreter-mode-alist (cons "node" 'js2-mode)))
+ (t
+  (setq auto-mode-alist (cons '("\\.js\\(\\.erb\\)?\\'" . js-mode) auto-mode-alist))))
+(add-to-list 'auto-mode-alist '("\\.babelrc\\'" . js-mode))
+
 
 (setq-default js2-additional-externs
               '("$"
@@ -272,18 +315,18 @@ Merge RLT and EXTRA-RLT, items in RLT has *higher* priority."
                 "clearTimeout"
                 "command" ; Keysnail
                 "content" ; Keysnail
+                "decodeURI"
                 "define"
                 "describe"
-                "documentRef"
-                "global"
-                "Bimsop"
-                "THREE"
                 "display" ; Keysnail
+                "documentRef"
                 "element"
+                "encodeURI"
                 "expect"
                 "ext" ; Keysnail
                 "fetch"
                 "gBrowser" ; Keysnail
+                "global"
                 "goDoCommand" ; Keysnail
                 "hook" ; Keysnail
                 "inject"
@@ -303,4 +346,6 @@ Merge RLT and EXTRA-RLT, items in RLT has *higher* priority."
                 "shell" ; Keysnail
                 "tileTabs" ; Firefox addon
                 "util" ; Keysnail
-                "utag"))
+                "utag"
+                "THREE"
+                "Bimsop"))
