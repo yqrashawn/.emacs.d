@@ -465,8 +465,8 @@
 :PROPERTIES:
 :CREATED: %U
 :END:")
-          ("s" "snipptes" entry
-           (file+olp "~/Dropbox/ORG/snipptes.org" "snipptes" "inbox")
+          ("s" "snippets" entry
+           (file+olp "~/Dropbox/ORG/snippets.org" "snippets" "inbox")
            "*** %?  %^G
 :PROPERTIES:
 :CREATED: %U
