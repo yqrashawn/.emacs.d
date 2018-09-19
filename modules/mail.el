@@ -12,15 +12,15 @@
   (message-kill-buffer-on-exit 't)
   (mu4e-maildir-shortcuts
    '(("/gmail/Inbox" . ?i)
-     ("/gmail/[Gmail]/Important" . ?I)
-     ("/gmail/[Gmail]/All Mail" . ?a)
-     ("/gmail/[Gmail]/Sent Mail" . ?s)
+     ("/gmail/[Gmail]/Starred" . ?s)
+     ;; ("/gmail/[Gmail]/All Mail" . ?a)
+     ("/gmail/[Gmail]/Sent Mail" . ?S)
      ("/gmail/[Gmail]/Trash" . ?d)
      ("/gmail/[Gmail]/Drafts" . ?D)
      ("/gmail/Starred" . ?S)))
   (mu4e-sent-folder "/gmail/[Gmail]/Sent Mail")
   (mu4e-drafts-folder "/gmail/[Gmail]/Drafts")
-  (mu4e-refile-folder "/gmail/[Gmail]/All Mail")
+  (mu4e-refile-folder "/gmail/[Gmail]/Starred")
   (mu4e-trash-folder "/gmail/[Gmail]/Trash")
   (mu4e-change-filenames-when-moving t)
   (mu4e-update-interval nil)
@@ -47,8 +47,8 @@
                (make-mu4e-bookmark
                 :name  "Unread filtered"
                 :query "flag:unread and not maildir:/INBOX.gitlab and not maildir:/INBOX.github and not maildir:/INBOX.mailinglist.something-user and not maildir:/INBOX.mailinglist.other-user"
-                :key ?n)
-               )
+                :key ?n))
+
   (defun jcs-view-in-eww (msg)
     (eww-browse-url (concat "file://" (mu4e~write-body-to-html msg))))
   (add-to-list 'mu4e-view-actions '("eww view" . jcs-view-in-eww) t)
