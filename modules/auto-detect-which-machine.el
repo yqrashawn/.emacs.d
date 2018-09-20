@@ -8,7 +8,7 @@
       ;; (load-theme 'spacemacs-light)
       (load-theme 'zenburn)
     (load-theme 'zenburn))
-  (spacemacs/set-default-font yq/small-screen-default-font))
+  (spacemacs/set-default-font yq/font13))
 
 (defun yq/imac ()
   "Load macbook theme and font size."
@@ -17,7 +17,7 @@
       (load-theme 'spacemacs-light)
     ;; (load-theme 'zenburn)
     (load-theme 'zenburn))
-  (spacemacs/set-default-font yq/large-screen-default-font))
+  (spacemacs/set-default-font yq/font13))
 
 (defun yq/home-imac ()
   "Load macbook theme and font size."
@@ -26,7 +26,7 @@
       ;; (load-theme 'spacemacs-light)
       (load-theme 'zenburn)
     (load-theme 'zenburn))
-  (spacemacs/set-default-font yq/large-screen-default-font))
+  (spacemacs/set-default-font yq/font15))
 
 
 (defun yq/day-p ()

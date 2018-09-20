@@ -74,25 +74,25 @@ The return value is nil if no font was found, truthy otherwise."
 
 (defvar yq/default-font-kind "small")
 
-(setq yq/small-screen-default-font '("Hack"
-                                     ;;"Menlo"
-                                     ;; "Anonymous Pro for Powerline"
-                                     ;; "InconsolataG for Powerline"
-                                     ;; "Source Code Pro for Powerline"
-                                     :size 15
-                                     :weight normal
-                                     :width normal
-                                     :powerline-scale 1.1))
+(setq yq/font15 '("Hack"
+                  ;;"Menlo"
+                  ;; "Anonymous Pro for Powerline"
+                  ;; "InconsolataG for Powerline"
+                  ;; "Source Code Pro for Powerline"
+                  :size 15
+                  :weight normal
+                  :width normal
+                  :powerline-scale 1.1))
 
-(setq yq/large-screen-default-font '("Hack"
-                                     ;;"Menlo"
-                                     ;; "Anonymous Pro for Powerline"
-                                     ;; "InconsolataG for Powerline"
-                                     ;; "Source Code Pro for Powerline"
-                                     :size 13
-                                     :weight normal
-                                     :width normal
-                                     :powerline-scale 1.1))
+(setq yq/font13 '("Hack"
+                  ;;"Menlo"
+                  ;; "Anonymous Pro for Powerline"
+                  ;; "InconsolataG for Powerline"
+                  ;; "Source Code Pro for Powerline"
+                  :size 13
+                  :weight normal
+                  :width normal
+                  :powerline-scale 1.1))
 
 
 ;; (spacemacs/set-default-font yq/small-screen-default-font)
@@ -102,10 +102,10 @@ The return value is nil if no font was found, truthy otherwise."
   (interactive)
   (if (string= yq/default-font-kind "small")
       (progn (setq yq/default-font-kind "large")
-             (spacemacs/set-default-font yq/large-screen-default-font))
+             (spacemacs/set-default-font yq/font13))
     (if (string= yq/default-font-kind "large")
         (progn (setq yq/default-font-kind "small")
-               (spacemacs/set-default-font yq/small-screen-default-font)))))
+               (spacemacs/set-default-font yq/font15)))))
 
 (defun disable-all-themes ()
   (interactive)
