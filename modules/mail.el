@@ -20,7 +20,7 @@
      ("/gmail/Starred" . ?S)))
   (mu4e-sent-folder "/gmail/[Gmail]/Sent Mail")
   (mu4e-drafts-folder "/gmail/[Gmail]/Drafts")
-  (mu4e-refile-folder "/gmail/[Gmail]/Starred")
+  (mu4e-refile-folder "/gmail/[Gmail]/All Mail")
   (mu4e-trash-folder "/gmail/[Gmail]/Trash")
   (mu4e-change-filenames-when-moving t)
   (mu4e-update-interval nil)
