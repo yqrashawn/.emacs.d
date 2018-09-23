@@ -130,110 +130,151 @@
   (evil-define-key 'normal js2-mode-map ",k" 'js2r-kill)
   (evil-define-key 'normal js2-mode-map ",ta" 'js2r-toggle-function-async)
   (evil-define-key 'normal js2-mode-map ",ep" 'js2r-expand-node-at-point)
-  (evil-define-key 'normal js2-mode-map ",ec" 'js2r--expand-contract-node-at-point))
-
-(use-package indium
-  :straight t
-  :after js2-mode
-  :diminish (indium-interaction-mode . "In")
-  :hook (js2-mode . indium-interaction-mode)
-  :commands (indium-launch indium-interaction-mode indium-run-node indium-run-chrome indium-debugger-mode)
-  :init (setq indium-nodejs-inspect-brk t)
-  (add-to-list 'evil-insert-state-modes 'indium-repl-mode)
-  (setq indium-debugger-inspect-when-eval t)
-  (setq indium-chrome-executable "/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary")
-
-  ;; launch indium
-  (evil-define-key 'normal js2-mode-map ",il" 'indium-launch)
-  (evil-define-key 'normal js2-mode-map ",ic" 'indium-connect)
-  (evil-define-key 'normal js2-mode-map ",iq" 'indium-quit)
-  :config
-  ;; indium debugger mode
-  (define-key indium-debugger-mode-map "h" nil)
-  (define-key indium-debugger-mode-map "l" nil)
-  (define-key indium-debugger-mode-map "s" nil)
-  (define-key indium-debugger-mode-map "n" nil)
-  (define-key indium-debugger-mode-map "p" nil)
-  (define-key indium-debugger-mode-map "e" nil)
-  (define-key indium-debugger-mode-map " " nil)
-  (define-key indium-interaction-mode-map (kbd "C-c C-v") 'indium-switch-to-debugger)
-  (define-key indium-repl-mode-map (kbd "C-c C-v") 'indium-switch-to-debugger)
-
-  (evil-define-key 'normal indium-debugger-locals-mode-map "f" 'next-buffer)
-  (evil-define-key 'normal indium-debugger-locals-mode-map "b" 'previous-buffer)
-  (evil-define-key 'normal indium-debugger-locals-mode-map "q" 'quit-window)
-  (evil-define-key 'normal indium-debugger-frames-mode-map "q" 'quit-window)
-
-  (evil-define-key 'normal indium-repl-mode-map (kbd "C-a") 'evil-first-non-blank)
-  (evil-define-key 'normal indium-repl-mode-map (kbd "C-e") 'evil-end-of-line)
-  (evil-define-key 'insert indium-repl-mode-map (kbd "C-p") 'indium-repl-previous-input)
-  (evil-define-key 'insert indium-repl-mode-map (kbd "C-n") 'indium-repl-next-input)
-
-  ;; inspector
-  (evil-define-key 'normal indium-inspector-mode-map "l" nil)
-  (evil-define-key 'normal indium-inspector-mode-map "g" nil)
-  (evil-define-key 'normal indium-inspector-mode-map "f" 'next-buffer)
-  (evil-define-key 'normal indium-inspector-mode-map "b" 'previous-buffer)
-  (evil-define-key 'normal indium-inspector-mode-map "q" 'quit-window)
-  (evil-define-key 'normal indium-inspector-mode-map "u" 'indium-inspector-refresh)
-  (evil-define-key 'normal indium-inspector-mode-map "o" 'indium-inspector-pop)
-  (evil-define-key 'normal indium-inspector-mode-map "n" 'indium-inspector-next-reference)
-  (evil-define-key 'normal indium-inspector-mode-map "p" 'indium-inspector-previous-reference)
-
-  ;; make intercept enable automatically
-  ;; (advice-add 'indium-debugger-mode :after (lambda (c) (evil-emacs-state) (evil-exit-emacs-state)))
-  ;; (evil-make-intercept-map indium-debugger-mode-map)
-
-  (evil-define-key 'normal js2-mode-map ",ee" 'indium-inspect-expression)
-  (evil-define-key 'normal js2-mode-map ",eb" 'indium-eval-buffer)
-  (evil-define-key 'normal js2-mode-map ",er" 'indium-eval-region)
-  (evil-define-key 'normal js2-mode-map ",ef" 'indium-eval-defun)
-  (evil-define-key 'normal js2-mode-map ",bb" 'indium-add-breakpoint)
-  (evil-define-key 'normal js2-mode-map ",bc" 'indium-add-conditional-breakpoint)
-  (evil-define-key 'normal js2-mode-map ",bu" 'indium-remove-breakpoint)
-  (evil-define-key 'normal js2-mode-map ",bU" 'indium-remove-all-breakpoints-from-buffer)
-  (evil-define-key 'normal js2-mode-map ",be" 'indium-edit-breakpoint-condition)
-  (evil-define-key 'normal js2-mode-map ",bl" 'indium-list-breakpoints)
-  (evil-define-key 'normal js2-mode-map ",bd" 'indium-deactivate-breakpoints)
-  (evil-define-key 'normal js2-mode-map ",bd" 'indium-activate-breakpoints)
-  (define-key js2-mode-map (kbd "C-c :") 'indium-inspect-expression)
-
-  (defhydra hydra-indium (:hint nil :color pink :foreign-keys run)
+  (evil-define-key 'normal js2-mode-map ",ec" 'js2r--expand-contract-node-at-point)
+  (evil-define-key 'normal js2-mode-map ",," 'js2-refactor-hydra/body)
+  (defhydra js2-refactor-hydra (:color blue :hint nil)
     "
-Breakpoint  | _b_ add   _u_ remove  _t_oggle
-            | _l_ist _C_ondition _E_dit
-Debug       | _H_ere  step _i_n/_o_ut _SPC_ step over _c_ontinue _e_/_E_valuate
-Others      | _s_tack _n_ext/_p_rev stack _l_ocal _r_eload
-    "
-    ("b" indium-add-breakpoint)
-    ("u" indium-remove-breakpoint)
-    ("U" indium-remove-all-breakpoints-from-buffer)
-    ("t" indium-toggle-breakpoint)
-    ;; ("a" indium-activate-breakpoints)
-    ;; ("d" indium-deactivate-breakpoints)
-    ("C" indium-add-conditional-breakpoint)
-    ("E" indium-edit-breakpoint-condition)
-    ("H" indium-debugger-here)
-    ("i" indium-debugger-step-into)
-    ("o" indium-debugger-step-out)
-    ("SPC" indium-debugger-step-over)
-    ("c" indium-debugger-resume)
-    ;; ("s" indium-debugger-stack-frames :exit t)
-    ("s" indium-debugger-stack-frames)
-    ("n" indium-debugger-next-frame)
-    ("p" indium-debugger-previous-frame)
-    ("E" indium-inspect-expression)
-    ("e" indium-inspect-last-node)
-    ("r" indium-reload)
-    ;; ("l" indium-debugger-locals :exit t)
-    ("l" indium-debugger-locals)
-    (",," (lambda ()(interactive)) :exit t)
-    ("q" (lambda ()(interactive)) :exit t))
-  (evil-define-key 'normal js2-mode-map ",," 'hydra-indium/body)
-  ;; (add-hook 'indium-script-parsed-hook (lambda (_) (interactive) (hydra-indium/body)))
-  (add-hook 'indium-debugger-locals-mode-hook 'hydra-indium/lambda-q-and-exit)
-  (add-hook 'indium-inspector-mode-hook 'hydra-indium/lambda-q-and-exit)
-  (add-hook 'indium-debugger-frames-mode-hook 'hydra-indium/lambda-q-and-exit))
+^Functions^                    ^Variables^               ^Buffer^                      ^sexp^               ^Debugging^
+------------------------------------------------------------------------------------------------------------------------------
+[_lp_] Localize Parameter      [_ev_] Extract variable   [_wi_] Wrap buffer in IIFE    [_k_]  js2 kill      [_lt_] log this
+[_ef_] Extract function        [_iv_] Inline variable    [_ig_] Inject global in IIFE  [_ss_] split string  [_dt_] debug this
+[_ip_] Introduce parameter     [_rv_] Rename variable    [_ee_] Expand node at point   [_sl_] forward slurp
+[_em_] Extract method          [_vt_] Var to this        [_cc_] Contract node at point [_ba_] forward barf
+[_ao_] Arguments to object     [_sv_] Split var decl.    [_uw_] unwrap
+[_tf_] Toggle fun exp and decl [_ag_] Add var to globals
+[_ta_] Toggle fun expr and =>  [_ti_] Ternary to if
+[_q_]  quit"
+    ("ee" js2r-expand-node-at-point)
+    ("cc" js2r-contract-node-at-point)
+    ("ef" js2r-extract-function)
+    ("em" js2r-extract-method)
+    ("tf" js2r-toggle-function-expression-and-declaration)
+    ("ta" js2r-toggle-arrow-function-and-expression)
+    ("ip" js2r-introduce-parameter)
+    ("lp" js2r-localize-parameter)
+    ("wi" js2r-wrap-buffer-in-iife)
+    ("ig" js2r-inject-global-in-iife)
+    ("ag" js2r-add-to-globals-annotation)
+    ("ev" js2r-extract-var)
+    ("iv" js2r-inline-var)
+    ("rv" js2r-rename-var)
+    ("vt" js2r-var-to-this)
+    ("ao" js2r-arguments-to-object)
+    ("ti" js2r-ternary-to-if)
+    ("sv" js2r-split-var-declaration)
+    ("ss" js2r-split-string)
+    ("uw" js2r-unwrap)
+    ("lt" js2r-log-this)
+    ("dt" js2r-debug-this)
+    ("sl" js2r-forward-slurp)
+    ("ba" js2r-forward-barf)
+    ("k" js2r-kill)
+    ("q" nil)
+    (",," nil)))
+
+
+;; (use-package indium
+;;   :straight t
+;;   :after js2-mode
+;;   :diminish (indium-interaction-mode . "In")
+;;   :hook (js2-mode . indium-interaction-mode)
+;;   :commands (indium-launch indium-interaction-mode indium-run-node indium-run-chrome indium-debugger-mode)
+;;   :init (setq indium-nodejs-inspect-brk t)
+;;   (add-to-list 'evil-insert-state-modes 'indium-repl-mode)
+;;   (setq indium-debugger-inspect-when-eval t)
+;;   (setq indium-chrome-executable "/Applications/Google Chrome Canary.app/Contents/MacOS/Google Chrome Canary")
+
+;;   ;; launch indium
+;;   (evil-define-key 'normal js2-mode-map ",il" 'indium-launch)
+;;   (evil-define-key 'normal js2-mode-map ",ic" 'indium-connect)
+;;   (evil-define-key 'normal js2-mode-map ",iq" 'indium-quit)
+;;   :config
+;;   ;; indium debugger mode
+;;   (define-key indium-debugger-mode-map "h" nil)
+;;   (define-key indium-debugger-mode-map "l" nil)
+;;   (define-key indium-debugger-mode-map "s" nil)
+;;   (define-key indium-debugger-mode-map "n" nil)
+;;   (define-key indium-debugger-mode-map "p" nil)
+;;   (define-key indium-debugger-mode-map "e" nil)
+;;   (define-key indium-debugger-mode-map " " nil)
+;;   (define-key indium-interaction-mode-map (kbd "C-c C-v") 'indium-switch-to-debugger)
+;;   (define-key indium-repl-mode-map (kbd "C-c C-v") 'indium-switch-to-debugger)
+
+;;   (evil-define-key 'normal indium-debugger-locals-mode-map "f" 'next-buffer)
+;;   (evil-define-key 'normal indium-debugger-locals-mode-map "b" 'previous-buffer)
+;;   (evil-define-key 'normal indium-debugger-locals-mode-map "q" 'quit-window)
+;;   (evil-define-key 'normal indium-debugger-frames-mode-map "q" 'quit-window)
+
+;;   (evil-define-key 'normal indium-repl-mode-map (kbd "C-a") 'evil-first-non-blank)
+;;   (evil-define-key 'normal indium-repl-mode-map (kbd "C-e") 'evil-end-of-line)
+;;   (evil-define-key 'insert indium-repl-mode-map (kbd "C-p") 'indium-repl-previous-input)
+;;   (evil-define-key 'insert indium-repl-mode-map (kbd "C-n") 'indium-repl-next-input)
+
+;;   ;; inspector
+;;   (evil-define-key 'normal indium-inspector-mode-map "l" nil)
+;;   (evil-define-key 'normal indium-inspector-mode-map "g" nil)
+;;   (evil-define-key 'normal indium-inspector-mode-map "f" 'next-buffer)
+;;   (evil-define-key 'normal indium-inspector-mode-map "b" 'previous-buffer)
+;;   (evil-define-key 'normal indium-inspector-mode-map "q" 'quit-window)
+;;   (evil-define-key 'normal indium-inspector-mode-map "u" 'indium-inspector-refresh)
+;;   (evil-define-key 'normal indium-inspector-mode-map "o" 'indium-inspector-pop)
+;;   (evil-define-key 'normal indium-inspector-mode-map "n" 'indium-inspector-next-reference)
+;;   (evil-define-key 'normal indium-inspector-mode-map "p" 'indium-inspector-previous-reference)
+
+;;   ;; make intercept enable automatically
+;;   ;; (advice-add 'indium-debugger-mode :after (lambda (c) (evil-emacs-state) (evil-exit-emacs-state)))
+;;   ;; (evil-make-intercept-map indium-debugger-mode-map)
+
+;;   (evil-define-key 'normal js2-mode-map ",ee" 'indium-inspect-expression)
+;;   (evil-define-key 'normal js2-mode-map ",eb" 'indium-eval-buffer)
+;;   (evil-define-key 'normal js2-mode-map ",er" 'indium-eval-region)
+;;   (evil-define-key 'normal js2-mode-map ",ef" 'indium-eval-defun)
+;;   (evil-define-key 'normal js2-mode-map ",bb" 'indium-add-breakpoint)
+;;   (evil-define-key 'normal js2-mode-map ",bc" 'indium-add-conditional-breakpoint)
+;;   (evil-define-key 'normal js2-mode-map ",bu" 'indium-remove-breakpoint)
+;;   (evil-define-key 'normal js2-mode-map ",bU" 'indium-remove-all-breakpoints-from-buffer)
+;;   (evil-define-key 'normal js2-mode-map ",be" 'indium-edit-breakpoint-condition)
+;;   (evil-define-key 'normal js2-mode-map ",bl" 'indium-list-breakpoints)
+;;   (evil-define-key 'normal js2-mode-map ",bd" 'indium-deactivate-breakpoints)
+;;   (evil-define-key 'normal js2-mode-map ",bd" 'indium-activate-breakpoints)
+;;   (define-key js2-mode-map (kbd "C-c :") 'indium-inspect-expression)
+
+;;   (defhydra hydra-indium (:hint nil :color pink :foreign-keys run)
+;;     "
+;; Breakpoint  | _b_ add   _u_ remove  _t_oggle
+;;             | _l_ist _C_ondition _E_dit
+;; Debug       | _H_ere  step _i_n/_o_ut _SPC_ step over _c_ontinue _e_/_E_valuate
+;; Others      | _s_tack _n_ext/_p_rev stack _l_ocal _r_eload
+;;     "
+;;     ("b" indium-add-breakpoint)
+;;     ("u" indium-remove-breakpoint)
+;;     ("U" indium-remove-all-breakpoints-from-buffer)
+;;     ("t" indium-toggle-breakpoint)
+;;     ;; ("a" indium-activate-breakpoints)
+;;     ;; ("d" indium-deactivate-breakpoints)
+;;     ("C" indium-add-conditional-breakpoint)
+;;     ("E" indium-edit-breakpoint-condition)
+;;     ("H" indium-debugger-here)
+;;     ("i" indium-debugger-step-into)
+;;     ("o" indium-debugger-step-out)
+;;     ("SPC" indium-debugger-step-over)
+;;     ("c" indium-debugger-resume)
+;;     ;; ("s" indium-debugger-stack-frames :exit t)
+;;     ("s" indium-debugger-stack-frames)
+;;     ("n" indium-debugger-next-frame)
+;;     ("p" indium-debugger-previous-frame)
+;;     ("E" indium-inspect-expression)
+;;     ("e" indium-inspect-last-node)
+;;     ("r" indium-reload)
+;;     ;; ("l" indium-debugger-locals :exit t)
+;;     ("l" indium-debugger-locals)
+;;     (",," (lambda ()(interactive)) :exit t)
+;;     ("q" (lambda ()(interactive)) :exit t))
+;;   (evil-define-key 'normal js2-mode-map ",," 'hydra-indium/body)
+;;   ;; (add-hook 'indium-script-parsed-hook (lambda (_) (interactive) (hydra-indium/body)))
+;;   (add-hook 'indium-debugger-locals-mode-hook 'hydra-indium/lambda-q-and-exit)
+;;   (add-hook 'indium-inspector-mode-hook 'hydra-indium/lambda-q-and-exit)
+;;   (add-hook 'indium-debugger-frames-mode-hook 'hydra-indium/lambda-q-and-exit))
 ;; webpack config
 ;; output : {
 ;;   devtoolModuleFilenameTemplate: '[absolute-resource-path]',
