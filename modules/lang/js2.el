@@ -239,3 +239,8 @@ Others      | _s_tack _n_ext/_p_rev stack _l_ocal _r_eload
 ;;   devtoolModuleFilenameTemplate: '[absolute-resource-path]',
 ;;   devtoolFallbackModuleFilenameTemplate: '[absolute-resource-path]?[hash]'
 ;; }
+
+(use-package add-node-modules-path
+  :straight t
+  :after js2-mode
+  :hook (js2-mode . #'add-node-modules-path))
