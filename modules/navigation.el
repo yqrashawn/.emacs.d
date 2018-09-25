@@ -108,6 +108,18 @@
   ;; :init
   ;; (add-to-list 'ivy-re-builders-alist '(t . spacemacs/ivy--regex-plus))
   :config
+  (defun +ivy/siwtch-buffer-next-line ()
+    (interactive)
+    (if (eq this-command 'ivy-switch-buffer)
+        (ivy-next-line)
+      (ivy-switch-buffer)))
+  (defun +ivy/siwtch-buffer-previous-line ()
+    (interactive)
+    (if (eq this-command 'ivy-switch-buffer)
+        (ivy-previous-line)
+      (ivy-switch-buffer)))
+  (global-set-key (kbd "C-x C-8 j") '+ivy/siwtch-buffer-next-line)
+  (global-set-key (kbd "C-x C-8 k") '+ivy/siwtch-buffer-previous-line)
   (ivy-mode 1)
   (setq ivy-height 16)
   (setq ivy-use-virtual-buffers t)
