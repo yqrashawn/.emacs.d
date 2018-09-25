@@ -632,17 +632,13 @@ When ARG is non-nil search in junk files."
   :straight (:host github :repo "manateelazycat/awesome-tab")
   :after projectile
   :init
-  (defface awesome-tab-unselected)
-  '((t
-     (:inherit awesome-tab-default
-               :foreground "MediumPurple4" :overline "dark green")))
-  "Face used for unselected tabs."
-  :group 'awesome-tab
 
-  (defface awesome-tab-selected
-    '((t (:inherit awesome-tab-default :weight ultra-bold :width semi-expanded
-                   :foreground "purple1" :overline "green3")))
-    "Face used for the selected tab."
+  (defface awesome-tab-default
+    '(
+      (t
+       :inherit default
+       :height 1))
+    "Default face used in the tab bar."
     :group 'awesome-tab)
   (setq awesome-tab-cycle-scope 'tabs)
   (global-set-key (kbd "C-x C-9 i") #'awesome-tab-select-beg-tab)
