@@ -1416,3 +1416,13 @@ Info-mode:
       (setq cached-normal-file-full-path f)
       (setq rlt nil)))
     rlt))
+
+;; https://ambrevar.xyz/emacs2/
+(defun ambrevar/current-minor-modes ()
+  "Return the list of minor modes enabled in the current buffer."
+  (interactive)
+  (delq nil)
+  (mapcar (lambda (mode))
+      (if (and (boundp mode) (symbol-value mode))
+          mode)
+    minor-mode-list))

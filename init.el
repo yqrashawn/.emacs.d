@@ -26,7 +26,14 @@
 (setq url-proxy-services
       '(("http" . "127.0.0.1:6152")
         ("https" . "127.0.0.1:6152")))
-(setq gc-cons-threshold 100000000)
+
+;;; Temporarily reduce garbage collection during startup. Inspect `gcs-done'.
+(defun ambrevar/reset-gc-cons-threshold ()
+  (setq gc-cons-threshold (car (get 'gc-cons-threshold 8388608))))
+(setq gc-cons-threshold (* 64 1024 1024))
+(add-hook 'after-init-hook #'ambrevar/reset-gc-cons-threshold)
+
+(setq gc-cons-threshold 8388608)
 
 (defun my-minibuffer-setup-hook ()
   (setq gc-cons-threshold most-positive-fixnum))
@@ -34,6 +41,13 @@
   (setq gc-cons-threshold (* 8 1024 1024)))
 (add-hook 'minibuffer-setup-hook #'my-minibuffer-setup-hook)
 (add-hook 'minibuffer-exit-hook #'my-minibuffer-exit-hook)
+
+;;; Temporarily disable the file name handler.
+(setq default-file-name-handler-alist file-name-handler-alist)
+(setq file-name-handler-alist nil)
+(defun ambrevar/reset-file-name-handler-alist ()
+  (setq file-name-handler-alist default-file-name-handler-alist))
+(add-hook 'after-init-hook #'ambrevar/reset-file-name-handler-alist)
 
 (let ((bootstrap-file (concat user-emacs-directory "straight/repos/straight.el/bootstrap.el"))
       (bootstrap-version 3))
@@ -85,7 +99,7 @@
 (use-package playground
   :straight (:host github :repo "akirak/emacs-playground"))
 
-(setq gc-cons-threshold 8388608)
+
 ;; (toggle-frame-maximized)
 
 (use-package suggest
