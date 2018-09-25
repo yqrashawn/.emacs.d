@@ -95,8 +95,8 @@
   ;; (setq magithub-enabled-by-default t)
   (magithub-feature-autoinject 'all)
   (setq magithub-feature-autoinject 'all
-        magithub-clone-default-directory "~/workspace/THIRD/"))
-        ;; magithub-dir "~/Dropbox/sync/magithub"))
+        magithub-clone-default-directory "~/workspace/THIRD/"
+        magithub-dir spacemacs-cache-directory))
 
 (use-package diff-hl
   :straight t

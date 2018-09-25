@@ -621,37 +621,22 @@ When ARG is non-nil search in junk files."
 ;;   :commands (frames-only-mode)
 ;;   :init (frames-only-mode 1))
 
-;; (use-package iflipb
-;;   :straight (:host github :repo "jrosdahl/iflipb")
-;;   :init
-;;   (global-set-key (kbd "<C-M-S-s-kp-1>") #'iflipb-previous-buffer)
-;;   (global-set-key (kbd "<C-M-S-s-kp-2>") #'iflipb-next-buffer)
-;;   (defun +iflipb/ignore-buffer (buffername)
-;;     (or
-;;      (string-match "\\*.*\\*" buffername)
-;;      (string-match "magit.*" buffername)
-;;      (string-match "helpful.*" buffername)
-;;      (string-match "\\*straight-process\\*" buffername)
-;;      (string-match "^[ ]+"         buffername)
-;;      ;; (string-match "[Cc]ompletio" buffername)
-;;      ;; (string-match "slime-events" buffername)
-;;      ;; (string-match "SLIME Note" buffername)
-;;      ;; (string-match "inferior-lisp" buffername)
-;;      (string-match "[Cc]ompil" buffername)))
-;;   (setq iflipb-always-ignore-buffers '+iflipb/ignore-buffer))
-
 (use-package awesome-tab
   :straight (:host github :repo "manateelazycat/awesome-tab")
   :after projectile
   :init
-
   (defface awesome-tab-default
-    '(
-      (t
-       :inherit default
-       :height 1))
-    "Default face used in the tab bar."
-    :group 'awesome-tab)
+    '((t :inherit font-lock-doc-face :height 1))
+    "Default face used in the tab bar." :group 'awesome-tab)
+  (defface awesome-tab-unselected
+    '((t (:inherit awesome-tab-default)))
+    "Face used for unselected tabs." :group 'awesome-tab)
+  (defface awesome-tab-selected
+    '((t (:inherit font-lock-keyword-face :weight ultra-bold)))
+    "Face used for the selected tab." :group 'awesome-tab)
+  (defface awesome-tab-button
+    '((t :inherit awesome-tab-default :foreground "dark red"))
+    "Face used for tab bar buttons." :group 'awesome-tab)
   (setq awesome-tab-cycle-scope 'tabs)
   (global-set-key (kbd "C-x C-9 i") #'awesome-tab-select-beg-tab)
   (global-set-key (kbd "C-x C-9 o") #'awesome-tab-select-end-tab)
@@ -660,4 +645,5 @@ When ARG is non-nil search in junk files."
   (global-set-key (kbd "C-x C-9 j") #'awesome-tab-forward-group)
   (global-set-key (kbd "C-x C-9 k") #'awesome-tab-backward-group)
   (global-set-key (kbd "C-x C-9 [") #'awesome-tab-move-current-tab-to-left)
-  (global-set-key (kbd "C-x C-9 ]") #'awesome-tab-move-current-tab-to-right))
+  (global-set-key (kbd "C-x C-9 ]") #'awesome-tab-move-current-tab-to-right)
+  (awesome-tab-mode 1))
