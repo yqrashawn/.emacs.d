@@ -115,7 +115,9 @@ Start `ielm' if it's not already running."
            evil           ; If you use Evil.
            lispy          ; If you use Lispy. With this extension, you should install Lispy and do not enable lispy-mode directly.
            smart-tab      ; C-b & C-f jump positions and smart shift with tab & S-tab.
-           smart-yank)))
+           smart-yank))
+  :config
+  (evil-define-key 'normal parinfer-mode-map "si" #'lispy-mark-symbol))
 
 (use-package eval-sexp-fu
   :straight t
