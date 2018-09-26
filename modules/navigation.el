@@ -626,7 +626,7 @@ When ARG is non-nil search in junk files."
   :after projectile
   :init
   (defface awesome-tab-default
-    '((t :inherit font-lock-doc-face :height 1))
+    '((t :inherit default :height 1))
     "Default face used in the tab bar." :group 'awesome-tab)
   (defface awesome-tab-unselected
     '((t (:inherit awesome-tab-default)))
