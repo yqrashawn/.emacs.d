@@ -27,12 +27,6 @@
       '(("http" . "127.0.0.1:6152")
         ("https" . "127.0.0.1:6152")))
 
-;;; Temporarily reduce garbage collection during startup. Inspect `gcs-done'.
-(defun ambrevar/reset-gc-cons-threshold ()
-  (setq gc-cons-threshold (car (get 'gc-cons-threshold 8388608))))
-(setq gc-cons-threshold (* 64 1024 1024))
-(add-hook 'after-init-hook #'ambrevar/reset-gc-cons-threshold)
-
 (setq gc-cons-threshold 8388608)
 
 (defun my-minibuffer-setup-hook ()

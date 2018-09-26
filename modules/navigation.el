@@ -646,4 +646,4 @@ When ARG is non-nil search in junk files."
   (global-set-key (kbd "C-x C-9 k") #'awesome-tab-backward-group)
   (global-set-key (kbd "C-x C-9 [") #'awesome-tab-move-current-tab-to-left)
   (global-set-key (kbd "C-x C-9 ]") #'awesome-tab-move-current-tab-to-right)
-  (awesome-tab-mode 1))
+  (add-hook 'spacemacs-post-theme-change-hook (lambda () (awesome-tab-mode 1))))
