@@ -626,24 +626,54 @@ When ARG is non-nil search in junk files."
   :after projectile
   :init
   (defface awesome-tab-default
-    '((t :inherit default :height 1))
+    '((t :inherit default :height 1 :box (:line-width 1 :color "dark cyan" :style released-button)))
     "Default face used in the tab bar." :group 'awesome-tab)
   (defface awesome-tab-unselected
     '((t (:inherit awesome-tab-default)))
     "Face used for unselected tabs." :group 'awesome-tab)
   (defface awesome-tab-selected
-    '((t (:inherit font-lock-keyword-face :weight ultra-bold)))
+    '((t (:inherit font-lock-keyword-face :weight ultra-bold :box (:line-width 1 :color "dark cyan" :style released-button))))
     "Face used for the selected tab." :group 'awesome-tab)
   (defface awesome-tab-button
     '((t :inherit awesome-tab-default :foreground "dark red"))
     "Face used for tab bar buttons." :group 'awesome-tab)
   (setq awesome-tab-cycle-scope 'tabs)
+  (defun awesome-tab-switch-group (&optional groupname)
+    "Switch tab groups using ido."
+    (interactive)
+    (let* ((tab-buffer-list (mapcar
+                             #'(lambda (b)
+                                 (with-current-buffer b
+                                   (list (current-buffer)
+                                         (buffer-name)
+                                         (funcall awesome-tab-buffer-groups-function))))
+                             (funcall awesome-tab-buffer-list-function)))
+           (groups (awesome-tab-get-groups))
+           (group-name (or groupname (ivy-read "Groups: " groups))))
+      (catch 'done
+        (mapc
+         #'(lambda (group)
+             (when (equal group-name (car (car (cdr (cdr group)))))
+               (throw 'done (switch-to-buffer (car (cdr group))))))
+         tab-buffer-list))))
+  (defun +awesome-tab-switch-group-next-line ()
+    (interactive)
+    (if (minibufferp) ( ivy-next-line)
+      (awesome-tab-switch-group)))
+  (defun +awesome-tab-switch-group-prevouse-line ()
+    (interactive)
+    (if (minibufferp) (ivy-previous-line)
+      (awesome-tab-switch-group)))
+  (defun +awesome-tab-forward-tab-or-ivy-done ()
+    (interactive)
+    (if (minibufferp) (ivy-done)
+      (awesome-tab-forward-tab)))
   (global-set-key (kbd "C-x C-9 i") #'awesome-tab-select-beg-tab)
   (global-set-key (kbd "C-x C-9 o") #'awesome-tab-select-end-tab)
-  (global-set-key (kbd "C-x C-9 l") #'awesome-tab-forward-tab)
+  (global-set-key (kbd "C-x C-9 l") '+awesome-tab-forward-tab-or-ivy-done)
   (global-set-key (kbd "C-x C-9 h") #'awesome-tab-backward-tab)
-  (global-set-key (kbd "C-x C-9 j") #'awesome-tab-forward-group)
-  (global-set-key (kbd "C-x C-9 k") #'awesome-tab-backward-group)
+  (global-set-key (kbd "C-x C-9 j") '+awesome-tab-switch-group-next-line)
+  (global-set-key (kbd "C-x C-9 k") '+awesome-tab-switch-group-prevouse-line)
   (global-set-key (kbd "C-x C-9 [") #'awesome-tab-move-current-tab-to-left)
   (global-set-key (kbd "C-x C-9 ]") #'awesome-tab-move-current-tab-to-right)
   (add-hook 'spacemacs-post-theme-change-hook (lambda () (awesome-tab-mode 1))))
