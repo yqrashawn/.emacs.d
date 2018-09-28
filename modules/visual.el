@@ -131,4 +131,4 @@ has been changed to THEME."
 (spacemacs//adaptive-evil-highlight-persist-face)
 (add-hook 'spacemacs-post-theme-change-hook 'spacemacs//adaptive-evil-highlight-persist-face)
 
-(yq/get-modules "modeline.elc")
+;; (yq/get-modules "modeline.elc")

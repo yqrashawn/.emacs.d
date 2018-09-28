@@ -1269,8 +1269,10 @@ Info-mode:
 (use-package smtpmail-async
   :commands (async-smtpmail-send-it)
   :init
-  (setq message-send-mail-function 'async-smtpmail-send-it)
-  (setq send-mail-function 'async-smtpmail-send-it))
+  (setq send-mail-function 'smtpmail-send-it
+        message-send-mail-function 'smtpmail-send-it)
+  (setq send-mail-function 'async-smtpmail-send-it
+        message-send-mail-function 'async-smtpmail-send-it))
 
 (use-package auth-source
   :no-require t
@@ -1325,12 +1327,8 @@ Info-mode:
       (setq rlt nil)))
     rlt))
 
-;; https://ambrevar.xyz/emacs2/
-(defun ambrevar/current-minor-modes ()
-  "Return the list of minor modes enabled in the current buffer."
-  (interactive)
-  (delq nil)
-  (mapcar (lambda (mode))
-      (if (and (boundp mode) (symbol-value mode))
-          mode)
-    minor-mode-list))
+(setq url-privacy-level '(email agent cookies lastloc))
+;; (setq url-privacy-level 'none)
+;; (setq url-privacy-level 'none)
+;; (setq url-privacy-level 'high)
+;; (setq url-privacy-level 'paranoid)

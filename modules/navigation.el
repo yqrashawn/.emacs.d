@@ -638,6 +638,8 @@ When ARG is non-nil search in junk files."
     '((t :inherit awesome-tab-default :foreground "dark red"))
     "Face used for tab bar buttons." :group 'awesome-tab)
   (setq awesome-tab-cycle-scope 'tabs)
+  (add-hook 'spacemacs-post-theme-change-hook (lambda () (awesome-tab-mode 1)))
+  :config
   (defun awesome-tab-switch-group (&optional groupname)
     "Switch tab groups using ido."
     (interactive)
@@ -675,5 +677,4 @@ When ARG is non-nil search in junk files."
   (global-set-key (kbd "C-x C-9 j") '+awesome-tab-switch-group-next-line)
   (global-set-key (kbd "C-x C-9 k") '+awesome-tab-switch-group-prevouse-line)
   (global-set-key (kbd "C-x C-9 [") #'awesome-tab-move-current-tab-to-left)
-  (global-set-key (kbd "C-x C-9 ]") #'awesome-tab-move-current-tab-to-right)
-  (add-hook 'spacemacs-post-theme-change-hook (lambda () (awesome-tab-mode 1))))
+  (global-set-key (kbd "C-x C-9 ]") #'awesome-tab-move-current-tab-to-right))

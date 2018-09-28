@@ -1,3 +1,21 @@
+(setq
+ ;; user-mail-address "namy.19@gmail.com"
+ user-mail-address "hi@yqrashawn.com"
+ ;; smtpmail-starttls-credentials '(("smtp.gmail.com" "587" nil nil))
+ smtpmail-starttls-credentials '(("smtp.zoho.com" "587" nil nil))
+ smtpmail-auth-credentials (expand-file-name "~/.authinfo.gpg")
+ smtpmail-stream-type 'starttls
+ ;; smtpmail-default-smtp-server "smtp.gmail.com"
+ ;; smtpmail-smtp-server "smtp.gmail.com"
+ smtpmail-default-smtp-server "smtp.zoho.com"
+ smtpmail-smtp-server "smtp.zoho.com"
+ smtpmail-smtp-service 587
+ smtpmail-debug-info t
+ starttls-extra-arguments nil
+ starttls-gnutls-program "/usr/local/bin/gnutls-cli"
+ starttls-extra-arguments nil
+ starttls-use-gnutls t)
+
 (use-package mu4e
   :straight t
   :custom
