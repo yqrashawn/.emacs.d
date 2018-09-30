@@ -158,15 +158,23 @@
         (org-id-get-create)))
   :config
   (defun +org/save-all-buffers (&optional arg) (interactive) (org-save-all-org-buffers))
+  (defun +org/save-all-buffers2 (&optional arg arg2) (interactive) (org-save-all-org-buffers))
+  (defun +org/save-all-buffers3 (&optional arg arg2 arg4 arg5 arg6) (interactive)
+         (print arg)
+         (print arg2)
+         (print arg4)
+         (print arg5)
+         (print arg6)
+         (org-save-all-org-buffers))
   (add-hook 'org-capture-mode-hook #'evil-insert-state)
   (advice-add 'org-todo :after '+org/save-all-buffers)
   (advice-add 'org-store-log-note :after '+org/save-all-buffers)
   (advice-add 'org-refile :after '+org/save-all-buffers)
-  (advice-add 'org-agenda-quit :before '+org/save-all-buffers)
-  (advice-add 'org-agenda-priority :before '+org/save-all-buffers)
+  (advice-add 'org-agenda-quit :after '+org/save-all-buffers)
+  (advice-add 'org-agenda-priority :after '+org/save-all-buffers)
   (advice-add 'org-agenda-todo :after '+org/save-all-buffers)
-  (advice-add 'org-agenda-deadline :after '+org/save-all-buffers)
-  (advice-add 'org-agenda-schedule :after '+org/save-all-buffers)
+  ;; (advice-add 'org-agenda-deadline :after '+org/save-all-buffers3)
+  ;; (advice-add 'org-agenda-schedule :after '+org/save-all-buffers)
   (advice-add 'org-agenda-refile :after '+org/save-all-buffers)
   (add-hook 'org-capture-after-finalize-hook #'+org/save-all-buffers)
   (require 'org-id)
@@ -636,19 +644,28 @@ SCHEDULED: %^T
 
 (yq/get-modules "org-agenda.el")
 
+(use-package counsel-org-clock
+  :straight t
+  :init
+  (spacemacs/set-leader-keys "4" 'counsel-org-clock-history)
+  (spacemacs/set-leader-keys "4" 'counsel-org-clock-context))
+
 (use-package org-mru-clock
   :straight t
   :init
+  (add-hook 'org-clock-in-hook (lambda () (call-process "/usr/bin/osascript" nil 0 nil "-e" (concat "tell application \"org-clock-statusbar\" to clock in \"" (replace-regexp-in-string "\"" "\\\\\"" org-clock-current-task) "\""))))
+  (add-hook 'org-clock-out-hook (lambda () (call-process "/usr/bin/osascript" nil 0 nil "-e" "tell application \"org-clock-statusbar\" to clock out")))
   (defhydra hydra-org-clock (:color blue :hint nil)
     "
 Clock   In/out^     ^Edit^   ^Summary     (_?_)
 -----------------------------------------
         _i_n         _e_dit   _g_oto entry
         _c_ontinue   _C_ancel _d_isplay
-        _o_ut        ^ ^      _r_eport
-      "
+        _o_ut        _s_elect _r_eport
+    "
     ("i" org-mru-clock-in)
     ("o" org-clock-out)
+    ("s" org-mru-clock-select-recent-task)
     ("c" org-clock-in-last)
     ("e" org-clock-modify-effort-estimate)
     ("C" org-clock-cancel)
@@ -657,8 +674,7 @@ Clock   In/out^     ^Edit^   ^Summary     (_?_)
     ("d" org-clock-display)
     ("r" org-clock-report)
     ("?" (org-info "Clocking commands")))
-  (setq org-mru-clock-completing-read #'ivy-completing-read)
-  (setq org-mru-clock-keep-formatting t)
+  (spacemacs/set-leader-keys "3" 'hydra-org-clock/body)
   (spacemacs/set-leader-keys "cc" 'hydra-org-clock/body)
   (spacemacs/set-leader-keys "ci" 'org-mru-clock-in)
   (spacemacs/set-leader-keys "co" 'org-clock-out)
@@ -666,8 +682,8 @@ Clock   In/out^     ^Edit^   ^Summary     (_?_)
   (spacemacs/set-leader-keys "cD" 'org-clock-report)
   (spacemacs/set-leader-keys "cj" 'org-mru-clock-select-recent-task)
   (setq org-mru-clock-how-many 100
-        org-mru-clock-completing-read #'ivy-completing-read))
-;; (straight-use-package 'org-download)
+        org-mru-clock-completing-read #'ivy-completing-read
+        org-mru-clock-keep-formatting t))
 
 (use-package org-sticky-header
   :straight ( :host github :repo "alphapapa/org-sticky-header")
@@ -686,3 +702,91 @@ Clock   In/out^     ^Edit^   ^Summary     (_?_)
 ;;       ;; if buffer is narrowed, this will work on visible; if not, it will capture whole buffer
 ;;       (ox-clip-formatted-copy (point-min) (point-max))))
 ;;   (define-key org-mode-map (kbd "C-c x") 'ox-clip-dwim))
+
+;; Hydra for org agenda (graciously taken from Spacemacs)
+(defhydra hydra-org-agenda (:pre (setq which-key-inhibit t)
+                                 :post (setq which-key-inhibit nil)
+                                 :hint none)
+  "
+Org agenda (_q_uit)
+
+^Clock^      ^Visit entry^              ^Date^             ^Other^
+^-----^----  ^-----------^------------  ^----^-----------  ^-----^---------
+_ci_ in      _SPC_ in other window      _ds_ schedule      _gr_ reload
+_co_ out     _TAB_ & go to location     _dd_ set deadline  _gt_ go to today
+_cq_ cancel  _RET_ & del other windows  _dt_ timestamp     _gd_ go to date
+_cj_ jump    _o_   link                 _+_  do later      ^^
+^^           ^^                         _-_  do earlier    ^^
+^^           ^^                         ^^                 ^^
+^View^          ^Filter^                 ^Headline^         ^Toggle mode^
+^----^--------  ^------^---------------  ^--------^-------  ^-----------^----
+_vd_ day        _ft_ by tag              _ht_ set status    _tf_ follow
+_vw_ week       _fr_ refine by tag       _hk_ kill          _tl_ log
+_vt_ fortnight  _fc_ by category         _hr_ refile        _ta_ archive trees
+_vm_ month      _fh_ by top headline     _hA_ archive       _tA_ archive files
+_vy_ year       _fx_ by regexp           _h:_ set tags      _tr_ clock report
+_vn_ next span  _fd_ delete all filters  _hp_ set priority  _td_ diaries
+_vp_ prev span  ^^                       ^^                 ^^
+_vr_ reset      ^^                       ^^                 _._ toggle hydra
+^^              ^^                       ^^                 ^^
+"
+  ;; Entry
+  ("j" org-agenda-next-line)
+  ("k" org-agenda-previous-line)
+  ("hA" org-agenda-archive-default)
+  ("hk" org-agenda-kill)
+  ("hp" org-agenda-priority)
+  ("hr" org-agenda-refile)
+  ("h:" org-agenda-set-tags)
+  ("ht" org-agenda-todo)
+  ;; Visit entry
+  ("o"   link-hint-open-link :exit t)
+  ("<tab>" org-agenda-goto :exit t)
+  ("TAB" org-agenda-goto :exit t)
+  ("SPC" org-agenda-show-and-scroll-up)
+  ("RET" org-agenda-switch-to :exit t)
+  ;; Date
+  ("dt" org-agenda-date-prompt)
+  ("dd" org-agenda-deadline)
+  ("+" org-agenda-do-date-later)
+  ("-" org-agenda-do-date-earlier)
+  ("ds" org-agenda-schedule)
+  ;; View
+  ("vd" org-agenda-day-view)
+  ("vw" org-agenda-week-view)
+  ("vt" org-agenda-fortnight-view)
+  ("vm" org-agenda-month-view)
+  ("vy" org-agenda-year-view)
+  ("vn" org-agenda-later)
+  ("vp" org-agenda-earlier)
+  ("vr" org-agenda-reset-view)
+  ;; Toggle mode
+  ("ta" org-agenda-archives-mode)
+  ("tA" (org-agenda-archives-mode 'files))
+  ("tr" org-agenda-clockreport-mode)
+  ("tf" org-agenda-follow-mode)
+  ("tl" org-agenda-log-mode)
+  ("td" org-agenda-toggle-diary)
+  ;; Filter
+  ("fc" org-agenda-filter-by-category)
+  ("fx" org-agenda-filter-by-regexp)
+  ("ft" org-agenda-filter-by-tag)
+  ("fr" org-agenda-filter-by-tag-refine)
+  ("fh" org-agenda-filter-by-top-headline)
+  ("fd" org-agenda-filter-remove-all)
+  ;; Clock
+  ("cq" org-agenda-clock-cancel)
+  ("cj" org-agenda-clock-goto :exit t)
+  ("ci" org-agenda-clock-in :exit t)
+  ("co" org-agenda-clock-out)
+  ;; Other
+  ("q" nil :exit t)
+  ("gd" org-agenda-goto-date)
+  ("gt" org-agenda-goto-today)
+  ;; ("." org-agenda-goto-today)
+  ("." nil :exit t)
+  ("gr" org-agenda-redo))
+
+(define-key org-agenda-mode-map (kbd ".") 'hydra-org-agenda/body)
+(spacemacs/set-leader-keys "2" (lambda () (interactive) (org-agenda nil "r")))
+;; (add-hook 'org-agenda-mode-hook 'hydra-org-agenda/body)

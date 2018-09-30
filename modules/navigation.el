@@ -465,8 +465,8 @@ FD-PROMPT, if non-nil, is passed as `ivy-read' prompt argument."
 
 (defun yq/find-org|gtd () (interactive) (find-file "~/Dropbox/ORG/gtd.org"))
 (defun yq/find-org|project () (interactive) (find-file "~/Dropbox/ORG/project.org"))
-(spacemacs/set-leader-keys "3" 'yq/find-org|gtd)
-(spacemacs/set-leader-keys "4" 'yq/find-org|project)
+;; (spacemacs/set-leader-keys "3" 'yq/find-org|gtd)
+;; (spacemacs/set-leader-keys "4" 'yq/find-org|project)
 ;; (spacemacs/set-leader-keys "sm" 'counsel-fd)
 
 (defun yq/org ()
