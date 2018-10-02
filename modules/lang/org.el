@@ -76,7 +76,7 @@
                                (org-refile-cache-clear)
                                (org-refile-get-targets)))
 
-  (require 'org-agenda)
+  ;; (require 'org-agenda)
   (setq org-log-note-headings '((done . "CLOSING NOTE T: %t")
                                 (state . "State %-12s from %-12S T: %t")
                                 (note . "Note taken on T: %t")
@@ -89,65 +89,65 @@
 
   ;; recent activity
   ;; https://stackoverflow.com/questions/8039416/custom-searches-using-timestamps-in-logbook-in-org-mode
-  (defun +org/find-state (&optional end)
-    "Used to search through the logbook of subtrees.
+  ;; (defun +org/find-state (&optional end)
+  ;;   "Used to search through the logbook of subtrees.
 
-    Looking for T:[2018-09-14 Fri 10:50] kind of time stamp in logbook."
-    (let* ((closed (re-search-forward "^CLOSED: \\[" end t))
-           (created (if (not closed) (re-search-forward "^:CREATED: \\[" end t)))
-           (logbook (if (not closed) (re-search-forward ".*T: \\[" end t)))
-           (result (or closed logbook created)))
-      result))
+  ;;   Looking for T:[2018-09-14 Fri 10:50] kind of time stamp in logbook."
+  ;;   (let* ((closed (re-search-forward "^CLOSED: \\[" end t))
+  ;;          (created (if (not closed) (re-search-forward "^:CREATED: \\[" end t)))
+  ;;          (logbook (if (not closed) (re-search-forward ".*T: \\[" end t)))
+  ;;          (result (or closed logbook created)))
+  ;;     result))
 
-  (defun +org/date-diff (start end &optional compare)
-    "Calculate difference between  selected timestamp to current date.
+  ;; (defun +org/date-diff (start end &optional compare)
+  ;;   "Calculate difference between  selected timestamp to current date.
 
-  The difference between the dates is calculated in days.
-  START and END define the region within which the timestamp is found.
-  Optional argument COMPARE allows for comparison to a specific date rather than to current date."
-    (let* ((start-date (if compare compare (calendar-current-date))))
-      (- (calendar-absolute-from-gregorian start-date) (org-time-string-to-absolute (buffer-substring-no-properties start end)))))
+  ;; The difference between the dates is calculated in days.
+  ;; START and END define the region within which the timestamp is found.
+  ;; Optional argument COMPARE allows for comparison to a specific date rather than to current date."
+  ;;   (let* ((start-date (if compare compare (calendar-current-date))))
+  ;;     (- (calendar-absolute-from-gregorian start-date) (org-time-string-to-absolute (buffer-substring-no-properties start end)))))
 
-  (defun +org/last-update-before (since)
-    "List Agenda items that updated before SINCE day."
-    (let ((next-headline (save-excursion (or (outline-next-heading) (point-max)))))
-      ;; If DONE is non-nil, look for done keywords, if nil look for not-done
-      (let* ((subtree-end (save-excursion (org-end-of-subtree t)))
-             (subtree-valid (save-excursion
-                              (forward-line 1)
-                              (if (and (< (point) subtree-end)
-                                       ;; Find the timestamp to test
-                                       (+org/find-state subtree-end))
-                                  (let ((startpoint (point)))
-                                    (forward-word 3)
-                                    ;; Convert timestamp into days difference from today
-                                    (+org/date-diff startpoint (point)))
-                                (point-max)))))
-        (if (and subtree-valid (>= subtree-valid since))
-            next-headline
-          nil))))
+  ;; (defun +org/last-update-before (since)
+  ;;   "List Agenda items that updated before SINCE day."
+  ;;   (let ((next-headline (save-excursion (or (outline-next-heading) (point-max)))))
+  ;;     ;; If DONE is non-nil, look for done keywords, if nil look for not-done
+  ;;     (let* ((subtree-end (save-excursion (org-end-of-subtree t)))
+  ;;            (subtree-valid (save-excursion
+  ;;                             (forward-line 1)
+  ;;                             (if (and (< (point) subtree-end)
+  ;;                                      ;; Find the timestamp to test
+  ;;                                      (+org/find-state subtree-end))
+  ;;                                 (let ((startpoint (point)))
+  ;;                                   (forward-word 3)
+  ;;                                   ;; Convert timestamp into days difference from today
+  ;;                                   (+org/date-diff startpoint (point)))
+  ;;                               (point-max)))))
+  ;;       (if (and subtree-valid (>= subtree-valid since))
+  ;;           next-headline
+  ;;         nil))))
 
   ;; Add global evil-leader mappings. Used to access org-agenda
   ;; functionalities – and a few others commands – from any other mode.
 
-  (spacemacs/set-leader-keys
-    ;; org-agenda
-    "ao#" 'org-agenda-list-stuck-projects
-    "ao/" 'org-occur-in-agenda-files
-    "aoa" 'org-agenda-list
-    "aoc" 'org-capture
-    "aoe" 'org-store-agenda-views
-    "aoki" 'org-clock-in-last
-    "aokj" 'org-clock-jump-to-current-clock
-    "aoko" 'org-clock-out
-    "aokr" 'org-resolve-clocks
-    "aol" 'org-store-link
-    "aom" 'org-tags-view
-    "aoo" 'org-agenda
-    "aos" 'org-search-view
-    "aot" 'org-todo-list
-    ;; SPC C- capture/colors
-    "Cc" 'org-capture)
+  ;; (spacemacs/set-leader-keys
+  ;;   ;; org-agenda
+  ;;   "ao#" 'org-agenda-list-stuck-projects
+  ;;   "ao/" 'org-occur-in-agenda-files
+  ;;   "aoa" 'org-agenda-list
+  ;;   "aoc" 'org-capture
+  ;;   "aoe" 'org-store-agenda-views
+  ;;   "aoki" 'org-clock-in-last
+  ;;   "aokj" 'org-clock-jump-to-current-clock
+  ;;   "aoko" 'org-clock-out
+  ;;   "aokr" 'org-resolve-clocks
+  ;;   "aol" 'org-store-link
+  ;;   "aom" 'org-tags-view
+  ;;   "aoo" 'org-agenda
+  ;;   "aos" 'org-search-view
+  ;;   "aot" 'org-todo-list
+  ;;   ;; SPC C- capture/colors
+  ;;   "Cc" 'org-capture)
   (add-hook 'org-mode-hook (lambda () (hs-minor-mode 1)))
   (define-key global-map "\C-cl" 'org-store-link)
   (define-key global-map "\C-ca" 'org-agenda)
@@ -545,40 +545,40 @@ SCHEDULED: %^T
   (evil-define-key 'normal evil-org-mode-map ">" 'evil-org->)
   (evil-define-key 'normal evil-org-mode-map "<" 'evil-org-<))
 
-(use-package org-agenda
-  :defer t
-  :init
-  (setq org-agenda-restore-windows-after-quit t)
-  (dolist (prefix '(("mC" . "clocks")
-                    ("md" . "dates")
-                    ("mi" . "insert")
-                    ("ms" . "trees/subtrees")))
-    (evil-define-key 'normal 'org-agenda-mode
-      (car prefix) (cdr prefix)))
-  (evil-define-key 'normal 'org-agenda-mode
-    ",a" 'org-agenda
-    ",Cc" 'org-agenda-clock-cancel
-    ",Ci" 'org-agenda-clock-in
-    ",Co" 'org-agenda-clock-out
-    ",dd" 'org-agenda-deadline
-    ",ds" 'org-agenda-schedule
-    ",ie" 'org-agenda-set-effort
-    ",ip" 'org-agenda-set-property
-    ",it" 'org-agenda-set-tags
-    ",sr" 'org-agenda-refile)
-  :config
-  (evilified-state-evilify-map org-agenda-mode-map
-    :mode org-agenda-mode
-    :bindings
-    "j" 'org-agenda-next-line
-    "k" 'org-agenda-previous-line
-    (kbd "M-j") 'org-agenda-next-item
-    (kbd "M-k") 'org-agenda-previous-item
-    (kbd "M-h") 'org-agenda-earlier
-    (kbd "M-l") 'org-agenda-later
-    (kbd "gd") 'org-agenda-toggle-time-grid
-    (kbd "gr") 'org-agenda-redo
-    (kbd "M-RET") 'org-agenda-show-and-scroll-up))
+;; (use-package org-agenda
+;;   :defer t
+;;   :init
+;;   (setq org-agenda-restore-windows-after-quit t)
+;;   (dolist (prefix '(("mC" . "clocks")
+;;                     ("md" . "dates")
+;;                     ("mi" . "insert")
+;;                     ("ms" . "trees/subtrees")))
+;;     (evil-define-key 'normal 'org-agenda-mode
+;;       (car prefix) (cdr prefix)))
+;;   (evil-define-key 'normal 'org-agenda-mode
+;;     ",a" 'org-agenda
+;;     ",Cc" 'org-agenda-clock-cancel
+;;     ",Ci" 'org-agenda-clock-in
+;;     ",Co" 'org-agenda-clock-out
+;;     ",dd" 'org-agenda-deadline
+;;     ",ds" 'org-agenda-schedule
+;;     ",ie" 'org-agenda-set-effort
+;;     ",ip" 'org-agenda-set-property
+;;     ",it" 'org-agenda-set-tags
+;;     ",sr" 'org-agenda-refile)
+;;   :config
+;;   (evilified-state-evilify-map org-agenda-mode-map
+;;     :mode org-agenda-mode
+;;     :bindings
+;;     "j" 'org-agenda-next-line
+;;     "k" 'org-agenda-previous-line
+;;     (kbd "M-j") 'org-agenda-next-item
+;;     (kbd "M-k") 'org-agenda-previous-item
+;;     (kbd "M-h") 'org-agenda-earlier
+;;     (kbd "M-l") 'org-agenda-later
+;;     (kbd "gd") 'org-agenda-toggle-time-grid
+;;     (kbd "gr") 'org-agenda-redo
+;;     (kbd "M-RET") 'org-agenda-show-and-scroll-up))
 
 (use-package org-bullets
   :straight t
@@ -642,7 +642,7 @@ SCHEDULED: %^T
   :config
   (setq org-fancy-priorities-list '("HIGH" "MID" "OPTIONAL" "LOW")))
 
-(yq/get-modules "org-agenda.el")
+;; (yq/get-modules "org-agenda.el")
 
 (use-package counsel-org-clock
   :straight t
@@ -704,89 +704,89 @@ Clock   In/out^     ^Edit^   ^Summary     (_?_)
 ;;   (define-key org-mode-map (kbd "C-c x") 'ox-clip-dwim))
 
 ;; Hydra for org agenda (graciously taken from Spacemacs)
-(defhydra hydra-org-agenda (:pre (setq which-key-inhibit t)
-                                 :post (setq which-key-inhibit nil)
-                                 :hint none)
-  "
-Org agenda (_q_uit)
+;; (defhydra hydra-org-agenda (:pre (setq which-key-inhibit t)
+;;                                  :post (setq which-key-inhibit nil)
+;;                                  :hint none)
+;;   "
+;; Org agenda (_q_uit)
 
-^Clock^      ^Visit entry^              ^Date^             ^Other^
-^-----^----  ^-----------^------------  ^----^-----------  ^-----^---------
-_ci_ in      _SPC_ in other window      _ds_ schedule      _gr_ reload
-_co_ out     _TAB_ & go to location     _dd_ set deadline  _gt_ go to today
-_cq_ cancel  _RET_ & del other windows  _dt_ timestamp     _gd_ go to date
-_cj_ jump    _o_   link                 _+_  do later      ^^
-^^           ^^                         _-_  do earlier    ^^
-^^           ^^                         ^^                 ^^
-^View^          ^Filter^                 ^Headline^         ^Toggle mode^
-^----^--------  ^------^---------------  ^--------^-------  ^-----------^----
-_vd_ day        _ft_ by tag              _ht_ set status    _tf_ follow
-_vw_ week       _fr_ refine by tag       _hk_ kill          _tl_ log
-_vt_ fortnight  _fc_ by category         _hr_ refile        _ta_ archive trees
-_vm_ month      _fh_ by top headline     _hA_ archive       _tA_ archive files
-_vy_ year       _fx_ by regexp           _h:_ set tags      _tr_ clock report
-_vn_ next span  _fd_ delete all filters  _hp_ set priority  _td_ diaries
-_vp_ prev span  ^^                       ^^                 ^^
-_vr_ reset      ^^                       ^^                 _._ toggle hydra
-^^              ^^                       ^^                 ^^
-"
-  ;; Entry
-  ("j" org-agenda-next-line)
-  ("k" org-agenda-previous-line)
-  ("hA" org-agenda-archive-default)
-  ("hk" org-agenda-kill)
-  ("hp" org-agenda-priority)
-  ("hr" org-agenda-refile)
-  ("h:" org-agenda-set-tags)
-  ("ht" org-agenda-todo)
-  ;; Visit entry
-  ("o"   link-hint-open-link :exit t)
-  ("<tab>" org-agenda-goto :exit t)
-  ("TAB" org-agenda-goto :exit t)
-  ("SPC" org-agenda-show-and-scroll-up)
-  ("RET" org-agenda-switch-to :exit t)
-  ;; Date
-  ("dt" org-agenda-date-prompt)
-  ("dd" org-agenda-deadline)
-  ("+" org-agenda-do-date-later)
-  ("-" org-agenda-do-date-earlier)
-  ("ds" org-agenda-schedule)
-  ;; View
-  ("vd" org-agenda-day-view)
-  ("vw" org-agenda-week-view)
-  ("vt" org-agenda-fortnight-view)
-  ("vm" org-agenda-month-view)
-  ("vy" org-agenda-year-view)
-  ("vn" org-agenda-later)
-  ("vp" org-agenda-earlier)
-  ("vr" org-agenda-reset-view)
-  ;; Toggle mode
-  ("ta" org-agenda-archives-mode)
-  ("tA" (org-agenda-archives-mode 'files))
-  ("tr" org-agenda-clockreport-mode)
-  ("tf" org-agenda-follow-mode)
-  ("tl" org-agenda-log-mode)
-  ("td" org-agenda-toggle-diary)
-  ;; Filter
-  ("fc" org-agenda-filter-by-category)
-  ("fx" org-agenda-filter-by-regexp)
-  ("ft" org-agenda-filter-by-tag)
-  ("fr" org-agenda-filter-by-tag-refine)
-  ("fh" org-agenda-filter-by-top-headline)
-  ("fd" org-agenda-filter-remove-all)
-  ;; Clock
-  ("cq" org-agenda-clock-cancel)
-  ("cj" org-agenda-clock-goto :exit t)
-  ("ci" org-agenda-clock-in :exit t)
-  ("co" org-agenda-clock-out)
-  ;; Other
-  ("q" nil :exit t)
-  ("gd" org-agenda-goto-date)
-  ("gt" org-agenda-goto-today)
-  ;; ("." org-agenda-goto-today)
-  ("." nil :exit t)
-  ("gr" org-agenda-redo))
+;; ^Clock^      ^Visit entry^              ^Date^             ^Other^
+;; ^-----^----  ^-----------^------------  ^----^-----------  ^-----^---------
+;; _ci_ in      _SPC_ in other window      _ds_ schedule      _gr_ reload
+;; _co_ out     _TAB_ & go to location     _dd_ set deadline  _gt_ go to today
+;; _cq_ cancel  _RET_ & del other windows  _dt_ timestamp     _gd_ go to date
+;; _cj_ jump    _o_   link                 _+_  do later      ^^
+;; ^^           ^^                         _-_  do earlier    ^^
+;; ^^           ^^                         ^^                 ^^
+;; ^View^          ^Filter^                 ^Headline^         ^Toggle mode^
+;; ^----^--------  ^------^---------------  ^--------^-------  ^-----------^----
+;; _vd_ day        _ft_ by tag              _ht_ set status    _tf_ follow
+;; _vw_ week       _fr_ refine by tag       _hk_ kill          _tl_ log
+;; _vt_ fortnight  _fc_ by category         _hr_ refile        _ta_ archive trees
+;; _vm_ month      _fh_ by top headline     _hA_ archive       _tA_ archive files
+;; _vy_ year       _fx_ by regexp           _h:_ set tags      _tr_ clock report
+;; _vn_ next span  _fd_ delete all filters  _hp_ set priority  _td_ diaries
+;; _vp_ prev span  ^^                       ^^                 ^^
+;; _vr_ reset      ^^                       ^^                 _._ toggle hydra
+;; ^^              ^^                       ^^                 ^^
+;; "
+;;   ;; Entry
+;;   ("j" org-agenda-next-line)
+;;   ("k" org-agenda-previous-line)
+;;   ("hA" org-agenda-archive-default)
+;;   ("hk" org-agenda-kill)
+;;   ("hp" org-agenda-priority)
+;;   ("hr" org-agenda-refile)
+;;   ("h:" org-agenda-set-tags)
+;;   ("ht" org-agenda-todo)
+;;   ;; Visit entry
+;;   ("o"   link-hint-open-link :exit t)
+;;   ("<tab>" org-agenda-goto :exit t)
+;;   ("TAB" org-agenda-goto :exit t)
+;;   ("SPC" org-agenda-show-and-scroll-up)
+;;   ("RET" org-agenda-switch-to :exit t)
+;;   ;; Date
+;;   ("dt" org-agenda-date-prompt)
+;;   ("dd" org-agenda-deadline)
+;;   ("+" org-agenda-do-date-later)
+;;   ("-" org-agenda-do-date-earlier)
+;;   ("ds" org-agenda-schedule)
+;;   ;; View
+;;   ("vd" org-agenda-day-view)
+;;   ("vw" org-agenda-week-view)
+;;   ("vt" org-agenda-fortnight-view)
+;;   ("vm" org-agenda-month-view)
+;;   ("vy" org-agenda-year-view)
+;;   ("vn" org-agenda-later)
+;;   ("vp" org-agenda-earlier)
+;;   ("vr" org-agenda-reset-view)
+;;   ;; Toggle mode
+;;   ("ta" org-agenda-archives-mode)
+;;   ("tA" (org-agenda-archives-mode 'files))
+;;   ("tr" org-agenda-clockreport-mode)
+;;   ("tf" org-agenda-follow-mode)
+;;   ("tl" org-agenda-log-mode)
+;;   ("td" org-agenda-toggle-diary)
+;;   ;; Filter
+;;   ("fc" org-agenda-filter-by-category)
+;;   ("fx" org-agenda-filter-by-regexp)
+;;   ("ft" org-agenda-filter-by-tag)
+;;   ("fr" org-agenda-filter-by-tag-refine)
+;;   ("fh" org-agenda-filter-by-top-headline)
+;;   ("fd" org-agenda-filter-remove-all)
+;;   ;; Clock
+;;   ("cq" org-agenda-clock-cancel)
+;;   ("cj" org-agenda-clock-goto :exit t)
+;;   ("ci" org-agenda-clock-in :exit t)
+;;   ("co" org-agenda-clock-out)
+;;   ;; Other
+;;   ("q" nil :exit t)
+;;   ("gd" org-agenda-goto-date)
+;;   ("gt" org-agenda-goto-today)
+;;   ;; ("." org-agenda-goto-today)
+;;   ("." nil :exit t)
+;;   ("gr" org-agenda-redo))
 
-(define-key org-agenda-mode-map (kbd ".") 'hydra-org-agenda/body)
+;; (define-key org-agenda-mode-map (kbd ".") 'hydra-org-agenda/body)
 (spacemacs/set-leader-keys "2" (lambda () (interactive) (org-agenda nil "r")))
 ;; (add-hook 'org-agenda-mode-hook 'hydra-org-agenda/body)
