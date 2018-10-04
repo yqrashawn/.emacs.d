@@ -1327,7 +1327,7 @@ Info-mode:
       (setq rlt nil)))
     rlt))
 
-(setq url-privacy-level '(email cookies lastloc))
+(setq url-privacy-level 'high)
 ;; (setq url-privacy-level 'none)
 ;; (setq url-privacy-level 'none)
 ;; (setq url-privacy-level 'high)

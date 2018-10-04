@@ -144,6 +144,7 @@
   (define-key evil-normal-state-map "sK" 'projectile-kill-buffers)
   (define-key evil-normal-state-map "sc" 'yq/delete-window)
   (define-key evil-normal-state-map "sh" 'save-buffer)
+  (define-key evil-normal-state-map "so" 'dired-jump)
   (define-key evil-normal-state-map (kbd "C-e") 'mwim-end-of-code-or-line)
   (define-key evil-normal-state-map (kbd "C-m") 'evil-jump-item)
   (define-key evil-visual-state-map (kbd "C-m") 'evil-jump-item)
