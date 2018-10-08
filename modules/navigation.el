@@ -508,9 +508,10 @@ FD-PROMPT, if non-nil, is passed as `ivy-read' prompt argument."
 
     -- Show file actions
     tell application \"System Events\"
-      -- Press \"fn\" to show file actions
-      key code 63
+      -- Press \"tab\" to show file actions
+      key code 48
     end tell'" file))))
+
 (defun yq/open-with-alfred ()
   (interactive)
   (if (derived-mode-p 'dired-mode)
