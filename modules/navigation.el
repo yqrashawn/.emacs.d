@@ -711,3 +711,9 @@ When ARG is non-nil search in junk files."
   (global-set-key (kbd "C-M-S-s-n") '+awesome-tab-switch-group-next-line)
   (global-set-key (kbd "C-M-S-s-p") '+awesome-tab-switch-group-prevouse-line))
 
+
+(use-package loccur
+  :straight t
+  :init
+  (loccur-mode 1)
+  (define-key evil-normal-state-map "ss" #'loccur-current))
