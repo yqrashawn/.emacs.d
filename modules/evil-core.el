@@ -407,3 +407,10 @@
 (yq/get-modules "evil-evilified-state.el")
 (evilified-state-evilify-map occur-mode-map
   :mode occur-mode)
+
+
+(use-package evil-numbers
+  :straight t
+  :init
+  (global-set-key (kbd "C-c +") #'evil-numbers/inc-at-pt)
+  (global-set-key (kbd "C-c -") #'evil-numbers/dec-at-pt))
