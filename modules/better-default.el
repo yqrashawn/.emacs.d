@@ -1332,3 +1332,21 @@ Info-mode:
 ;; (setq url-privacy-level 'none)
 ;; (setq url-privacy-level 'high)
 ;; (setq url-privacy-level 'paranoid)
+
+(defun +file-metadata ()
+  (interactive)
+  (let* ((fname (buffer-file-name))
+         (data (file-attributes fname))
+         (access (current-time-string (nth 4 data)))
+         (mod (current-time-string (nth 5 data)))
+         (change (current-time-string (nth 6 data)))
+         (size (nth 7 data))
+         (mode (nth 8 data)))
+    (message
+     "%s:
+  Accessed: %s
+  Modified: %s
+  Changed: %s
+  Size: %s bytes
+  Mode: %s"
+     fname access mod change size mode)))
