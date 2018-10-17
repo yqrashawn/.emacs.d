@@ -49,7 +49,7 @@
   (spacemacs/set-leader-keys "fJ" 'spacemacs/open-junk-file)
   (define-key evil-normal-state-map "sf" 'counsel-rg)
   (define-key evil-normal-state-map "sl" 'spacemacs/counsel-jump-in-buffer)
-  (define-key evil-normal-state-map "sJ" 'counsel-recentf)
+  (define-key evil-normal-state-map "sj" 'counsel-recentf)
   (define-key evil-normal-state-map (kbd "s SPC") 'counsel-M-x)
   (define-key evil-normal-state-map (kbd "M-y" ) 'counsel-yank-pop)
   (defun counsel-recent-dir ()
@@ -252,7 +252,7 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   :init
   (setq projectile-completion-system 'ivy)
   :config
-  (define-key evil-normal-state-map "sj" 'projectile-recentf))
+  (define-key evil-normal-state-map "sJ" 'projectile-recentf))
 
 (use-package counsel-projectile
   :straight t
@@ -273,10 +273,10 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
     (if (minibufferp) (ivy-previous-line)
       (counsel-projectile-switch-to-buffer)))
 
-  (global-set-key (kbd "C-x C-9 j") '+counsel-projectile-switch-buffer-next-line)
-  (global-set-key (kbd "C-x C-9 k") '+counsel-projectile-switch-buffer-prev-line)
-  (global-set-key (kbd "C-M-S-s-j") '+counsel-projectile-switch-buffer-next-line)
-  (global-set-key (kbd "C-M-S-s-k") '+counsel-projectile-switch-buffer-prev-line)
+  (global-set-key (kbd "C-x C-9 n") '+counsel-projectile-switch-buffer-next-line)
+  (global-set-key (kbd "C-x C-9 p") '+counsel-projectile-switch-buffer-prev-line)
+  (global-set-key (kbd "C-M-S-s-n") '+counsel-projectile-switch-buffer-next-line)
+  (global-set-key (kbd "C-M-S-s-p") '+counsel-projectile-switch-buffer-prev-line)
   (defun yq/.emacs.d ()
     (interactive)
     (counsel-fd "" "~/.emacs.d/" nil "-t f --no-ignore-vcs -E 'straight/build/*'"))
@@ -700,16 +700,16 @@ When ARG is non-nil search in junk files."
   ;; terminal without repeat
   (global-set-key (kbd "C-x C-9 h") #'awesome-tab-backward-tab)
   (global-set-key (kbd "C-x C-9 l") '+awesome-tab-forward-tab-or-ivy-done)
-  (global-set-key (kbd "C-x C-9 n") '+awesome-tab-switch-group-next-line)
-  (global-set-key (kbd "C-x C-9 p") '+awesome-tab-switch-group-prevouse-line)
+  (global-set-key (kbd "C-x C-9 j") '+awesome-tab-switch-group-next-line)
+  (global-set-key (kbd "C-x C-9 k") '+awesome-tab-switch-group-prevouse-line)
   (global-set-key (kbd "C-x C-9 [") #'awesome-tab-move-current-tab-to-left)
   (global-set-key (kbd "C-x C-9 ]") #'awesome-tab-move-current-tab-to-right)
 
   ;; gui with repeat
   (global-set-key (kbd "C-M-S-s-h") #'awesome-tab-backward-tab)
   (global-set-key (kbd "C-M-S-s-l") '+awesome-tab-forward-tab-or-ivy-done)
-  (global-set-key (kbd "C-M-S-s-n") '+awesome-tab-switch-group-next-line)
-  (global-set-key (kbd "C-M-S-s-p") '+awesome-tab-switch-group-prevouse-line))
+  (global-set-key (kbd "C-M-S-s-j") '+awesome-tab-switch-group-next-line)
+  (global-set-key (kbd "C-M-S-s-k") '+awesome-tab-switch-group-prevouse-line))
 
 
 (use-package loccur
