@@ -11,27 +11,32 @@
   "Pretty symbols for Clojure's anonymous functions and sets,
    like (λ [a] (+ a 5)), ƒ(+ % 5), and ∈{2 4 6}."
   (font-lock-add-keywords mode
-                          `(("(\\(fn\\)[\[[:space:]]"
+                          `(("(\\(fn\\)[[[:space:]]"
                              (0 (progn (compose-region (match-beginning 1)
-                                                       (match-end 1) "λ"))))
-                            ("(\\(partial\\)[\[[:space:]]"
+                                                       (match-end 1) "λ")
+                                       nil)))
+                            ("(\\(partial\\)[[[:space:]]"
                              (0 (progn (compose-region (match-beginning 1)
-                                                       (match-end 1) "Ƥ"))))
-                            ("(\\(comp\\)[\[[:space:]]"
+                                                       (match-end 1) "Ƥ")
+                                       nil)))
+                            ("(\\(comp\\)[[[:space:]]"
                              (0 (progn (compose-region (match-beginning 1)
-                                                       (match-end 1) "∘"))))
+                                                       (match-end 1) "∘")
+                                       nil)))
                             ("\\(#\\)("
                              (0 (progn (compose-region (match-beginning 1)
-                                                       (match-end 1) "ƒ"))))
+                                                       (match-end 1) "ƒ")
+                                       nil)))
                             ("\\(#\\){"
                              (0 (progn (compose-region (match-beginning 1)
-                                                       (match-end 1) "∈")))))))
+                                                       (match-end 1) "∈")
+                                       nil))))))
 
 (defun spacemacs//cider-eval-in-repl-no-focus (form)
   "Insert FORM in the REPL buffer and eval it."
   (while (string-match "\\`[ \t\n\r]+\\|[ \t\n\r]+\\'" form)
     (setq form (replace-match "" t t form)))
-  (with-current-buffer (cider-current-repl-buffer)
+  (with-current-buffer (cider-current-connection)
     (let ((pt-max (point-max)))
       (goto-char pt-max)
       (insert form)
@@ -165,8 +170,9 @@ If called with a prefix argument, uses the other-window instead."
 
 (defun spacemacs/cider-debug-setup ()
   "Initialize debug mode."
-  (evil-make-overriding-map cider--debug-mode-map 'normal)
-  (evil-normalize-keymaps))
+  (when (memq dotspacemacs-editing-style '(hybrid vim))
+    (evil-make-overriding-map cider--debug-mode-map 'normal)
+    (evil-normalize-keymaps)))
 
 (defun spacemacs/clj-find-var ()
   "Attempts to jump-to-definition of the symbol-at-point. If CIDER fails, or not available, falls back to dumb-jump"

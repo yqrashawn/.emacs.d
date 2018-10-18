@@ -198,7 +198,7 @@
                       ",rc:" 'clojure-toggle-keyword-string
                       ",rc[" 'clojure-convert-collection-to-vector
                       ",rc{" 'clojure-convert-collection-to-map))
-                      
+
   ;; (add-hook 'cider-connected-hook (lambda ()
   ;;                                   (interactive)
   ;;                                   (cider-load-file
@@ -218,6 +218,13 @@
   (evil-set-initial-state 'cider-stacktrace-mode 'motion)
   (evil-set-initial-state 'cider-popup-buffer-mode 'motion)
   (add-hook 'cider--debug-mode-hook 'spacemacs/cider-debug-setup)
+
+  (evilified-state-evilify cider-browse-ns-mode cider-browse-ns-mode-map
+    (kbd "d") 'cider-browse-ns-doc-at-point
+    (kbd "RET") 'cider-browse-ns-operate-at-point
+    (kbd "u") 'cider-browse-ns-all
+    (kbd "s") 'cider-browse-ns-find-at-point
+    (kbd "q") 'cider-popup-buffer-quit-function)
 
   (evilified-state-evilify cider-stacktrace-mode cider-stacktrace-mode-map
     (kbd "C-j") 'cider-stacktrace-next-cause
@@ -240,7 +247,11 @@
   (setq cider-prompt-for-symbol nil)
 
   (evilified-state-evilify cider-docview-mode cider-docview-mode-map
-    (kbd "q") 'cider-popup-buffer-quit)
+    (kbd "q") 'cider-popup-buffer-quit
+    (kbd "dj") 'cider-docview-javadoc
+    (kbd "dw") 'cider-docview-grimoire-web
+    (kbd "dg") 'cider-docview-grimoire
+    (kbd "ds") 'cider-docview-source)
 
   (add-hook 'cider-inspector-mode-hook 'visual-line-mode)
   (evilified-state-evilify cider-inspector-mode cider-inspector-mode-map
