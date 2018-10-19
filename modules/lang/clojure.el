@@ -425,5 +425,79 @@
 (use-package 4clojure
   :straight t)
 
+(defun ms/in-comment-p ()
+  (nth 4 (syntax-ppss)))
+
+(defun ms/in-literal-p ()
+  (nth 3 (syntax-ppss)))
+
+(defun clojure|js-object-key-to-clojure-keyword (begin end)
+  (interactive "r")
+  (let ((txt (delete-and-extract-region begin end)))
+    (insert (concat ":" (replace-regexp-in-string " " "-" (replace-regexp-in-string "\"" "" txt))))))
+
+(defun clojure|js-object-to-clojure-edn (begin end)
+  (interactive "r")
+  (let ((txt (buffer-substring begin end)))
+    (with-temp-buffer
+      (insert txt)
+      (js2-mode)
+
+      ;; remove comma
+      (goto-char (point-min))
+      (while (search-forward "," nil t)
+        ;; (goto-char (match-beginning))
+        (if (and (not (ms/in-comment-p))
+                 (not (ms/in-literal-p)))
+            (replace-match "")))
+
+      ;; replace // with ;;
+      (goto-char (point-min))
+      (while (search-forward "//" nil t)
+        (if (ms/in-comment-p)
+            (replace-match ";;")))
+
+      ;; process "foo bar":
+      (goto-char (point-min))
+      (while (search-forward-regexp "[a-z_]+[ ]*:" nil t)
+        (if (not (ms/in-literal-p))
+            (replace-match (concat
+                            ":"
+                            (replace-regexp-in-string
+                             "[ ]*:"
+                             ""
+                             (match-string-no-properties 0))))))
+
+      ;; process foo:
+      (goto-char (point-min))
+      (while (search-forward-regexp "\"[a-z_ ]+\"[ ]*:" nil t)
+        (if (not (ms/in-literal-p))
+            (replace-match (concat
+                            ":"
+                            (replace-regexp-in-string
+                             " "
+                             "-"
+                             (replace-regexp-in-string
+                              "[ ]*:"
+                              ""
+                              (replace-regexp-in-string
+                               "\""
+                               ""
+                               (match-string-no-properties 0))))))))
+
+      ;; {\n to {
+      (goto-char (point-min))
+      (while (search-forward-regexp "{\n" nil t)
+        (if (not (ms/in-literal-p)) (replace-match "{")))
+
+      (clojure-mode)
+      (parinfer--switch-to-paren-mode)
+      (ignore-errors (parinfer--reindent-sexp))
+
+      (while (search-forward-regexp "{[ ]+:" nil t)
+        (if (not (ms/in-literal-p)) (replace-match "{:")))
+
+      (kill-ring-save (point-min) (point-max)))))
+
 (provide 'clojure)
 ;;; clojure.el ends here
