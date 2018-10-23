@@ -69,6 +69,9 @@
   :straight t
   :commands (counsel-tramp)
   :init
+  ;; if zsh still failed
+  ;; https://www.emacswiki.org/emacs/TrampMode#toc7
+  ;; (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash"))
   (spacemacs/set-leader-keys "fT" 'counsel-tramp))
 
 (use-package imenu-anywhere

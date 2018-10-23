@@ -1350,3 +1350,7 @@ Info-mode:
   Size: %s bytes
   Mode: %s"
      fname access mod change size mode)))
+
+(with-eval-after-load 'proced
+  (evilified-state-evilify proced-mode proced-mode-map
+    "K" #'proced-send-signal))
