@@ -17,7 +17,7 @@
       (load-theme 'spacemacs-light)
     ;; (load-theme 'zenburn)
     (load-theme 'zenburn))
-  (spacemacs/set-default-font yq/font13))
+  (spacemacs/set-default-font yq/font15))
 
 (defun yq/home-imac ()
   "Load macbook theme and font size."
