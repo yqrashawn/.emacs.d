@@ -338,6 +338,7 @@ If the universal prefix argument is used then kill the buffer too."
   ;;       (old-func (replace-match "straight/repos" nil nil t))
   ;;     (old-func filename)))
   ;; (advice-add #'recentf-push :around 'yq/straight-recentf-push)
+  (setq recentf-max-saved-items 1000)
   (with-eval-after-load 'recentf
     (run-at-time nil (* 5 60) 'recentf-save-list)
     ;; (add-to-list 'recentf-exclude
