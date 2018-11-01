@@ -13,3 +13,9 @@
 (yq/get-modules "lang/lua.el")
 (yq/get-modules "lang/clojure.el")
 (yq/get-modules "lang/restclient.el")
+
+(use-package groovy-mode
+  :straight t
+  :mode (("\\Jenkinsfile\\'" . groovy-mode))
+  :init
+  (setq groovy-indent-offset 2))
