@@ -381,8 +381,8 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
     "l" 'dired-find-file
     "s" 'nil
     "sk" 'yq/kill-this-buffer
-    "sJ" #'counsel-recentf
-    "sj" #'projectile-recentf
+    "sj" #'counsel-recentf
+    "sJ" #'projectile-recentf
     "sb" #'projectile-switch-to-buffer
     "sm" #'find-file-in-project
     "sB" #'ivy-switch-buffer

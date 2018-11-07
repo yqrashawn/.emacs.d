@@ -24,8 +24,9 @@
   :straight t
   :init
   (magit-auto-revert-mode 1)
-  (setq magit-bury-buffer-function #'magit-mode-quit-window)
-  (setq magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1)
+  (setq magit-bury-buffer-function #'magit-restore-window-configuration)
+  ;; (setq magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1)
+  (setq magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
   (setq magit-save-repository-buffers 'dontask)
   (setq magit-commit-ask-to-stage t)
   (setq magit-fetch-modules-jobs 10)
