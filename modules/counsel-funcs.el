@@ -46,7 +46,7 @@ than this amount.")
   '(;; --line-number forces line numbers (disabled by default on windows)
     ;; no --vimgrep because it adds column numbers that wgrep can't handle
     ;; see https://github.com/syl20bnr/spacemacs/pull/8065
-    ("rg" . "rg --smart-case --no-heading --color never --line-number --max-columns 150 %s %S ."))
+    ("rg" . "rg --smart-case --no-heading --color never --line-number --max-columns 200 %s %S ."))
   "An alist of search commands and their corresponding commands
 with options to run in the shell.")
 
@@ -393,7 +393,7 @@ To prevent this error we just wrap `describe-mode' to defeat the
    (cond
     ((eq major-mode 'org-mode) 'counsel-org-goto)
     (t 'counsel-imenu))))
- 
+
 ;; Ivy
 
 (defun spacemacs//ivy-command-not-implemented-yet (key)

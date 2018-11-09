@@ -578,7 +578,6 @@ When ARG is non-nil search in junk files."
   :straight (:host github :repo "yqrashawn/evil-ex-fasd")
   :init (define-key evil-normal-state-map (kbd "C-f") 'evil-ex-fasd))
 
-
 (use-package dired-rsync
   :straight t
   :commands (dired-rsync)
