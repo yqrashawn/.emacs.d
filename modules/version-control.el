@@ -93,10 +93,8 @@
   :straight t
   :after magit
   :config
-  ;; (setq magithub-enabled-by-default t)
-  (magithub-feature-autoinject 'all)
-  (setq magithub-feature-autoinject 'all
-        magithub-clone-default-directory "~/workspace/THIRD/"
+  (magithub-feature-autoinject '(completion commit-browse))
+  (setq magithub-clone-default-directory "~/workspace/THIRD/"
         magithub-dir spacemacs-cache-directory))
 
 (use-package diff-hl
