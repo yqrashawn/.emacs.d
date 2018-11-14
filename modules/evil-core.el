@@ -187,62 +187,10 @@
   :straight t
   :commands evilnc-comment-operator
   :init
-  (progn
-    ;; double all the commenting functions so that the inverse operations
-    ;; can be called without setting a flag
-    (defun spacemacs/comment-or-uncomment-lines-inverse (&optional arg)
-      (interactive "p")
-      (let ((evilnc-invert-comment-line-by-line t))
-        (evilnc-comment-or-uncomment-lines arg)))
-
-    (defun spacemacs/comment-or-uncomment-lines (&optional arg)
-      (interactive "p")
-      (let ((evilnc-invert-comment-line-by-line nil))
-        (evilnc-comment-or-uncomment-lines arg)))
-
-    (defun spacemacs/copy-and-comment-lines-inverse (&optional arg)
-      (interactive "p")
-      (let ((evilnc-invert-comment-line-by-line t))
-        (evilnc-copy-and-comment-lines arg)))
-
-    (defun spacemacs/copy-and-comment-lines (&optional arg)
-      (interactive "p")
-      (let ((evilnc-invert-comment-line-by-line nil))
-        (evilnc-copy-and-comment-lines arg)))
-
-    (defun spacemacs/quick-comment-or-uncomment-to-the-line-inverse
-        (&optional arg)
-      (interactive "p")
-      (let ((evilnc-invert-comment-line-by-line t))
-        (evilnc-comment-or-uncomment-to-the-line arg)))
-
-    (defun spacemacs/quick-comment-or-uncomment-to-the-line (&optional arg)
-      (interactive "p")
-      (let ((evilnc-invert-comment-line-by-line nil))
-        (evilnc-comment-or-uncomment-to-the-line arg)))
-
-    (defun spacemacs/comment-or-uncomment-paragraphs-inverse (&optional arg)
-      (interactive "p")
-      (let ((evilnc-invert-comment-line-by-line t))
-        (evilnc-comment-or-uncomment-paragraphs arg)))
-
-    (defun spacemacs/comment-or-uncomment-paragraphs (&optional arg)
-      (interactive "p")
-      (let ((evilnc-invert-comment-line-by-line nil))
-        (evilnc-comment-or-uncomment-paragraphs arg)))
-    (define-key evil-visual-state-map (kbd "C-x C-;") 'evilnc-comment-or-uncomment-lines)
-    (define-key evil-normal-state-map "gc" 'evilnc-comment-operator)
-    (define-key evil-normal-state-map "gY" 'spacemacs/copy-and-comment-lines)
-    (spacemacs/set-leader-keys
-      ";"  'evilnc-comment-operator
-      "cl" 'spacemacs/comment-or-uncomment-lines
-      "cL" 'spacemacs/comment-or-uncomment-lines-inverse
-      "cp" 'spacemacs/comment-or-uncomment-paragraphs
-      "cP" 'spacemacs/comment-or-uncomment-paragraphs-inverse
-      "ct" 'spacemacs/quick-comment-or-uncomment-to-the-line
-      "cT" 'spacemacs/quick-comment-or-uncomment-to-the-line-inverse
-      "cy" 'spacemacs/copy-and-comment-lines
-      "cY" 'spacemacs/copy-and-comment-lines-inverse)))
+  (define-key evil-visual-state-map (kbd "C-x C-;") 'evilnc-comment-or-uncomment-lines)
+  (define-key evil-normal-state-map "gc" 'evilnc-comment-operator)
+  (define-key evil-normal-state-map "gc" 'evilnc-comment-operator)
+  (define-key evil-normal-state-map "gY" 'spacemacs/copy-and-comment-lines))
 
 (use-package evil-snipe
   :straight t
@@ -412,5 +360,5 @@
 (use-package evil-numbers
   :straight t
   :init
-  (global-set-key (kbd "C-c +") #'evil-numbers/inc-at-pt)
+  (global-set-key (kbd "C-c =") #'evil-numbers/inc-at-pt)
   (global-set-key (kbd "C-c -") #'evil-numbers/dec-at-pt))
