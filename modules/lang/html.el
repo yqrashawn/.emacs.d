@@ -4,6 +4,7 @@
   (("\\.phtml\\'"      . web-mode)
    ("\\.tpl\\.php\\'"  . web-mode)
    ("\\.twig\\'"       . web-mode)
+   ("\\.vue\\'"        . web-mode)
    ("\\.xml\\'"        . web-mode)
    ("\\.html\\'"       . web-mode)
    ("\\.htm\\'"        . web-mode)

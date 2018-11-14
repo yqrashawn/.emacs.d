@@ -187,6 +187,10 @@
   :straight t
   :commands evilnc-comment-operator
   :init
+  (defun spacemacs/copy-and-comment-lines (&optional arg)
+    (interactive "p")
+    (let ((evilnc-invert-comment-line-by-line nil))
+      (evilnc-copy-and-comment-lines arg)))
   (define-key evil-visual-state-map (kbd "C-x C-;") 'evilnc-comment-or-uncomment-lines)
   (define-key evil-normal-state-map "gc" 'evilnc-comment-operator)
   (define-key evil-normal-state-map "gc" 'evilnc-comment-operator)

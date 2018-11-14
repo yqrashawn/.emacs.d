@@ -1,6 +1,6 @@
 (use-package vue-mode
   :straight t
-  :mode ("\\.vue\\'" . vue-mode)
+  ;; :mode ("\\.vue\\'" . vue-mode)
   :hook (vue-mode . hs-minor-mode)
   :hook (vue-mode . prettier-js-mode)
   :config
@@ -8,13 +8,13 @@
   (spacemacs/enable-flycheck 'vue-mode))
 
 (use-package lsp-mode
-  :straight t
-  :after vue-mode)
+  :mode ("\\.vue\\'" . lsp-mode)
+  :straight t)
 
 (use-package lsp-vue
   :straight t
-  :after lsp-mode
-  :hook (vue-mode-hook . lsp-vue-mm-enable))
+  :mode ("\\.vue\\'" . lsp-vue-mm-enable)
+  :after lsp-mode)
 
 (use-package company-lsp
   :straight t
@@ -22,7 +22,7 @@
   :config
   (spacemacs|add-company-backends
     :backends company-lsp
-    :modes vue-mode))
+    :modes web-mode))
 
 (use-package lsp-ui
   :straight t
