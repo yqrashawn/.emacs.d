@@ -11,10 +11,6 @@
                    (*linux* nil)
                    (t nil)))
 
-;; emacs 24.3-
-(setq *emacs24old*  (or (and (= emacs-major-version 24) (= emacs-minor-version 3))
-                        (not *emacs24*)))
-
 (customize-set-variable 'inhibit-startup-screen t)
 (customize-set-variable 'inhibit-startup-message t)
 (customize-set-variable 'inhibit-startup-echo-area-message t)
@@ -24,7 +20,7 @@
 ;; https://emacs.stackexchange.com/questions/3673/how-to-make-vc-and-magit-treat-a-symbolic-link-to-a-real-file-in-git-repo-just
 (setq find-file-visit-truename t)
 
-(defvar dotspacemacs-auto-save-file-location 'cache
+(defvar dotspacemacs-auto-save-file-location 'nil
   "Location where to auto-save files. Possible values are `original' to
 auto-save the file in-place, `cache' to auto-save the file to another
 file stored in the cache directory and `nil' to disable auto-saving.")
@@ -55,8 +51,13 @@ file stored in the cache directory and `nil' to disable auto-saving.")
 (put 'narrow-to-region 'disabled nil)
 (put 'narrow-to-page 'disabled nil)
 (add-hook 'prog-mode-hook 'goto-address-prog-mode)
-(add-hook 'prog-mode-hook 'bug-reference-prog-mode)
+
+;; not using this right now, maybe add bug url format for jira
+;; (add-hook 'prog-mode-hook 'bug-reference-prog-mode)
+
+;; prettify symbol eg. lambda to λ
 ;; (global-prettify-symbols-mode +1)
+
 (setq help-window-select 't)
 (setq compilation-scroll-output 'first-error)
 (setq ffap-machine-p-known 'reject)
@@ -67,7 +68,6 @@ file stored in the cache directory and `nil' to disable auto-saving.")
 (add-to-list 'global-auto-revert-ignore-modes 'Buffer-menu-mode)
 (xterm-mouse-mode 1)
 (setq initial-major-mode 'text-mode)
-(setq longlines-show-hard-newlines t)
 (setq delete-by-moving-to-trash t)
 (setq-default fill-column 80)
 (use-package abbrev
@@ -89,31 +89,21 @@ file stored in the cache directory and `nil' to disable auto-saving.")
 (setq column-number-mode t)
 (blink-cursor-mode -1)
 (setq x-underline-at-descent-line t)
+
 ;; don't let the cursor go into minibuffer prompt
 ;; Tip taken from Xah Lee: http://ergoemacs.org/emacs/emacs_stop_cursor_enter_prompt.html
-(setq minibuffer-prompt-properties
-      '(read-only t point-entered minibuffer-avoid-prompt face minibuffer-prompt))
-(setq initial-scratch-message nil)
-(setq make-backup-files nil)
-(setq auto-save-default (not (null dotspacemacs-auto-save-file-location)))
-(setq auto-save-list-file-prefix (concat spacemacs-auto-save-directory))
+(customize-set-variable
+ 'minibuffer-prompt-properties
+ '(read-only t cursor-intangible t face minibuffer-prompt))
 
-;; Hack to fix a bug with tabulated-list.el
-;; see: http://redd.it/2dgy52
-(defun tabulated-list-revert (&rest ignored)
-  "The `revert-buffer-function' for `tabulated-list-mode'.
-It runs `tabulated-list-revert-hook', then calls `tabulated-list-print'."
-  (interactive)
-  (unless (derived-mode-p 'tabulated-list-mode)
-    (error "The current buffer is not in Tabulated List mode"))
-  (run-hooks 'tabulated-list-revert-hook)
-  ;; hack is here
-  ;; (tabulated-list-print t)
-  (tabulated-list-print))
+(setq initial-scratch-message nil)
+
 
 (setq-default indent-tabs-mode nil
               tab-width 2)
 (fset 'yes-or-no-p 'y-or-n-p)
+
+(setq make-backup-files nil)
 
 ;; Auto-save file
 (setq auto-save-default (not (null dotspacemacs-auto-save-file-location)))
@@ -121,14 +111,12 @@ It runs `tabulated-list-revert-hook', then calls `tabulated-list-print'."
 
 ;; always save TRAMP URLs to cache directory no matter what is the value
 ;; of `dotspacemacs-auto-save-file-location'
-
-;; (let ((autosave-dir (concat spacemacs-auto-save-directory "dist/")))
-;;   (setq auto-save-file-name-transforms
-;;         `(("\\`/[^/]*:\\([^/]*/\\)*\\([^/]*\\)\\'" ,autosave-dir  t)))
-;;   (unless (or (file-exists-p autosave-dir)
-;;               (null dotspacemacs-auto-save-file-location))
-;;     (make-directory autosave-dir t)))
-
+(let ((autosave-dir (concat spacemacs-auto-save-directory "dist/")))
+  (setq auto-save-file-name-transforms
+        `(("\\`/[^/]*:\\([^/]*/\\)*\\([^/]*\\)\\'" ,autosave-dir  t)))
+  (unless (or (file-exists-p autosave-dir)
+              (null dotspacemacs-auto-save-file-location))
+    (make-directory autosave-dir t)))
 
 ;; Choose auto-save location
 (cl-case dotspacemacs-auto-save-file-location
@@ -144,9 +132,6 @@ It runs `tabulated-list-revert-hook', then calls `tabulated-list-print'."
 ;; remove annoying ellipsis when printing sexp in message buffer
 (setq eval-expression-print-length nil
       eval-expression-print-level nil)
-
-;; cache files
-;; (setq tramp-persistency-file-name (concat spacemacs-cache-directory "tramp"))
 
 ;; seems pointless to warn. There's always undo.
 (put 'narrow-to-region 'disabled nil)
@@ -237,7 +222,7 @@ If the universal prefix argument is used then kill the buffer too."
       (call-interactively #'kill-region)
     (backward-kill-word arg)))
 
-(global-set-key (kbd "C-w") 'yq/backward-kill-word-or-region)
+(define-key evil-insert-state-map (kbd "C-w") 'yq/backward-kill-word-or-region)
 
 (use-package mwim
   :straight t
@@ -263,6 +248,8 @@ If the universal prefix argument is used then kill the buffer too."
         ("C-x 7 w k" . 'windmove-up)))
 
 (use-package winner
+  :bind(("C-x 7 w u". 'winner-undo)
+        ("C-x 7 w r". 'winner-redo))
   :init
   (winner-mode t)
   (setq spacemacs/winner-boring-buffers '("*Completions*"
@@ -366,12 +353,6 @@ If the universal prefix argument is used then kill the buffer too."
   ;; Save point position between sessions
   (setq save-place-file (concat spacemacs-cache-directory "places")))
 
-(use-package uniquify
-  :config
-  (setq uniquify-buffer-name-style 'post-forward-angle-brackets
-        ;; don't screw special buffers
-        uniquify-ignore-buffers-re "^\\*"))
-
 (use-package whitespace
   :defer t
   :diminish whitespace-mode
@@ -419,8 +400,7 @@ If the universal prefix argument is used then kill the buffer too."
   :init
   (setq bookmark-default-file (concat spacemacs-cache-directory "bookmarks")
         ;; autosave each change
-        bookmark-save-flag 1)
-  (spacemacs/set-leader-keys "fb" 'bookmark-jump))
+        bookmark-save-flag 1))
 
 (use-package popwin
   :straight t
@@ -539,7 +519,7 @@ If the universal prefix argument is used then will the windows too."
 (spacemacs/set-leader-keys "Ts" 'load-theme)
 
 (yq/add-toggle auto-fill :mode auto-fill-mode)
-(spacemacs/set-leader-keys "tf" 'yq/toggle-auto-fill)
+(spacemacs/set-leader-keys "tF" 'yq/toggle-auto-fill)
 
 ;; (use-package edit-server
 ;;   :straight t
@@ -551,6 +531,7 @@ If the universal prefix argument is used then will the windows too."
 
 ;; https://emacs.stackexchange.com/questions/28736/emacs-pointcursor-movement-lag/28746
 (setq auto-window-vscroll nil)
+
 
 (defun spacemacs/rename-file (filename &optional new-filename)
   "Rename FILENAME to NEW-FILENAME.
@@ -646,6 +627,8 @@ initialized with the current filename."
                 ;; ?\a = C-g, ?\e = Esc and C-[
                 ((memq key '(?\a ?\e)) (keyboard-quit))))))))
 
+(spacemacs/set-leader-keys "rb" 'spacemacs/rename-current-buffer-file)
+
 (defun spacemacs/delete-file (filename &optional ask-user)
   "Remove specified file or directory.
 
@@ -665,6 +648,8 @@ removal."
       (when (and (configuration-layer/package-used-p 'projectile)
                  (projectile-project-p))
         (call-interactively #'projectile-invalidate-cache)))))
+
+(spacemacs/set-leader-keys "fd" 'spacemacs/delete-file)
 
 (defun spacemacs/delete-file-confirm (filename)
   "Remove specified file or directory after users approval.
@@ -690,33 +675,26 @@ FILENAME is deleted using `spacemacs/delete-file' function.."
           (call-interactively #'projectile-invalidate-cache))
         (message "File '%s' successfully removed" filename)))))
 
-;; from magnars
 (defun spacemacs/sudo-edit (&optional arg)
   (interactive "P")
-  ;; (require 'tramp)
   (let ((fname (if (or arg (not buffer-file-name))
                    (read-file-name "File: ")
                  buffer-file-name)))
     (find-file
-     (if (not (tramp-tramp-file-p fname))
-         (concat "/sudo:root@localhost:" fname)
-       (with-parsed-tramp-file-name fname parsed
-         (when (equal parsed-user "root")
-           (error "Already root!"))
-         (let* ((new-hop (tramp-make-tramp-file-name parsed-method
-                                                     parsed-user
-                                                     parsed-host
-                                                     nil
-                                                     parsed-hop))
+     (cond ((string-match-p "^/ssh:" fname)
+            (with-temp-buffer
+              (insert fname)
+              (search-backward ":")
+              (let ((last-match-end nil)
+                    (last-ssh-hostname nil))
+                (while (string-match "@\\\([^:|]+\\\)" fname last-match-end)
+                  (setq last-ssh-hostname (or (match-string 1 fname)
+                                              last-ssh-hostname))
+                  (setq last-match-end (match-end 0)))
+                (insert (format "|sudo:%s" (or last-ssh-hostname "localhost"))))
+              (buffer-string)))
+           (t (concat "/sudo:root@localhost:" fname))))))
 
-                (new-hop (substring new-hop 1 -1))
-                (new-hop (concat new-hop "|"))
-                (new-fname (tramp-make-tramp-file-name "sudo"
-                                                       "root"
-                                                       parsed-host
-                                                       parsed-localname
-                                                       new-hop)))
-           new-fname))))))
 (use-package ssh-config-mode
   :straight t
   :mode ("~/.ssh/config". ssh-config-mode))
@@ -818,7 +796,6 @@ otherwise it is scaled down."
                       (throw 'tag nil))
                   (setq n (- n 1)))))
             (buffer-list))))
-
 (defun switch-to-most-recent-buffer ()
   (interactive)
   (switch-to-nth-buffer 1))
@@ -838,9 +815,10 @@ otherwise it is scaled down."
 
 ;; (add-hook 'edebug-mode-hook 'yq/toggle-show-paren-off)
 
-(use-package carbon-now-sh
-  :commands (carbon-now-sh)
-  :straight (:host github :repo "veelenga/carbon-now-sh.el"))
+;; generate image of marked region
+;; (use-package carbon-now-sh
+;;   :commands (carbon-now-sh)
+;;   :straight (:host github :repo "veelenga/carbon-now-sh.el"))
 
 ;; If you tramp is hanging, you can uncomment below line.
 ;; (setq tramp-ssh-controlmaster-options "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no")
@@ -872,34 +850,17 @@ otherwise it is scaled down."
 ;; updated line number every second
 (setq linum-delay t)
 
-;; don't let the cursor go into minibuffer prompt
-(setq minibuffer-prompt-properties (quote (read-only t point-entered minibuffer-avoid-prompt face minibuffer-prompt)))
-
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 
 (setq history-delete-duplicates t)
 
-;; {{ @see http://emacsredux.com/blog/2013/04/21/edit-files-as-root/
-(defun sudo-edit (&optional arg)
-  "Edit currently visited file as root.\nWith a prefix ARG prompt for a file to visit.\nWill also prompt for a file to visit if current\nbuffer is not visiting a file.\nYou may insert below line into ~/.authinfo.gpg to type less:\nmachine 127.0.0.1 login root password ****** port sudo\nSee \"Reusing passwords for several connections\" from INFO.\n"
-  (interactive "P")
-  (if (or arg (not buffer-file-name))
-      (find-file (concat "/sudo:root@127.0.0.1:"
-                         (read-file-name "Find file(as root): ")))
-    (find-alternate-file (concat "/sudo:@127.0.0.1:"
-                                 buffer-file-name))))
-
-(defadvice ido-find-file (after find-file-sudo activate)
+(defadvice counsel-find-file (after find-file-sudo activate)
   "Find file as root if necessary."
-  (if (and (not (and buffer-file-name
-                     (file-writable-p buffer-file-name)))
-           ;; sudo edit only physical file
-           buffer-file-name
-           ;; sudo edit only /etc/**/*
-           (string-match-p "^/etc/" buffer-file-name))
-      (find-alternate-file (concat "/sudo:root@127.0.0.1:"
-                                   buffer-file-name))))
-;; }}
+  (let ((dir (f-dirname (buffer-file-name)))
+        (file (buffer-file-name)))
+    (unless (and file (f-writable? file))
+      (when (and (f-exists? dir) (not (f-writable? dir)))
+        (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))))
 
 (setq imenu-max-item-length 256)
 
@@ -939,6 +900,7 @@ otherwise it is scaled down."
        (add-to-list 'grep-find-ignored-files v))))
 ;; }}
 
+;; not used right know
 (defun optimize-emacs-startup ()
   "Speedup emacs startup by compiling."
   (interactive)
@@ -949,10 +911,6 @@ otherwise it is scaled down."
       (when (string-match-p ".*\.el$" f)
         (let* ((default-directory dir))
           (byte-compile-file (file-truename f) t))))))
-
-;; (use-package carbon-now-sh
-;;   :straight t
-;;   :commands (carbon-now-sh))
 
 ;; idle garbage collection
 (defvar garbage-collection-timer nil
@@ -1241,24 +1199,15 @@ Info-mode:
 (global-set-key (kbd "C-x \\") #'align-regexp)
 (setq tab-always-indent 'complete)
 
-;; nice scroll
-;; (setq scroll-margin 0
-;;       scroll-conservatively 100000
-;;       scroll-preserve-screen-position 1)
 
 (use-package uniquify
   :config
-  (setq uniquify-buffer-name-style 'forward)
+  (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
   (setq uniquify-separator "/")
   ;; rename after killing uniquified
   (setq uniquify-after-kill-buffer-p t)
   ;; don't muck with special buffers
   (setq uniquify-ignore-buffers-re "^\\*"))
-
-;; auto save buffers when they lost focus
-;; (use-package super-save
-;;   :config
-;; (super-save-mode +1))
 
 (use-package async
   :straight t
@@ -1287,16 +1236,17 @@ Info-mode:
   :straight (:host github :repo "yqrashawn/evil-ex-shell-command")
   :init (global-set-key (kbd "s-l") 'evil-ex-shell-command))
 
-(use-package zoom
-  :straight t
-  :init
-  (defun size-callback ()
-    (cond ((> (frame-pixel-width) 1280) '(90 . 0.75))
-          (t                            '(0.5 . 0.5))))
-  (setq zoom-size 'size-callback)
-  (setq zoom-ignored-major-modes '(term-mode))
-  (yq/add-toggle zoom :mode zoom-mode)
-  (evil-leader/set-key "tz" 'yq/toggle-zoom))
+;; like golden ratio mode
+;; (use-package zoom
+;;   :straight t
+;;   :init
+;;   (defun size-callback ()
+;;     (cond ((> (frame-pixel-width) 1280) '(90 . 0.75))
+;;           (t                            '(0.5 . 0.5))))
+;;   (setq zoom-size 'size-callback)
+;;   (setq zoom-ignored-major-modes '(term-mode))
+;;   (yq/add-toggle zoom :mode zoom-mode)
+;;   (evil-leader/set-key "tz" 'yq/toggle-zoom))
 
 (add-hook 'makefile-mode-hook 'whitespace-mode)
 
@@ -1334,6 +1284,7 @@ Info-mode:
 ;; (setq url-privacy-level 'high)
 ;; (setq url-privacy-level 'paranoid)
 
+;; func to check file metadata
 (defun +file-metadata ()
   (interactive)
   (let* ((fname (buffer-file-name))
