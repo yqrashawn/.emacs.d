@@ -27,11 +27,6 @@
 ;;       '(("http" . "127.0.0.1:6152")
 ;;         ("https" . "127.0.0.1:6152")))
 
-;; (setq url-gateway-method 'socks)
-;; (setq socks-server '("Default server" "127.0.0.1" 6153 5))
-;; (setq socks-username ""
-;;       socks-password "")
-
 (setq gc-cons-threshold 8388608)
 
 (defun my-minibuffer-setup-hook ()
@@ -48,8 +43,11 @@
   (setq file-name-handler-alist default-file-name-handler-alist))
 (add-hook 'after-init-hook #'ambrevar/reset-file-name-handler-alist)
 
-(let ((bootstrap-file (concat user-emacs-directory "straight/repos/straight.el/bootstrap.el"))
-      (bootstrap-version 3))
+
+(defvar bootstrap-version)
+(let ((bootstrap-file
+       (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
   (unless (file-exists-p bootstrap-file)
     (with-current-buffer
         (url-retrieve-synchronously
