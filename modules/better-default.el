@@ -211,19 +211,6 @@ If the universal prefix argument is used then kill the buffer too."
       (kill-buffer-and-window)
     (delete-window)))
 
-(defun yq/backward-kill-word-or-region (&optional arg)
-  "Calls `kill-region' when a region is active and
-`backward-kill-word' otherwise. ARG is passed to
-`backward-kill-word' if no region is active."
-  (interactive "p")
-  (if (region-active-p)
-      ;; call interactively so kill-region handles rectangular selection
-      ;; correctly (see https://github.com/syl20bnr/yq/issues/3278)
-      (call-interactively #'kill-region)
-    (backward-kill-word arg)))
-
-(define-key evil-insert-state-map (kbd "C-w") 'yq/backward-kill-word-or-region)
-
 (use-package mwim
   :straight t
   :config
