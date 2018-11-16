@@ -83,6 +83,7 @@ Available PROPS:
     if non-nil then hooked functions are called right away."
   (declare (indent 0))
   (let* ((backends (spacemacs/mplist-get-values props :backends))
+         (backends (add-to-list 'backends #'company-tabnine))
          (modes (spacemacs/mplist-get-values props :modes))
          (variables (spacemacs/mplist-get-values props :variables))
          (from (spacemacs/mplist-get-value props :from))
@@ -535,3 +536,20 @@ _j_  js2      _T_     text   _f_  fundamental
   :diminish (flycheck-posframe-mode)
   :hook (flycheck-mode . flycheck-posframe-mode)
   :config (set-face-attribute 'flycheck-posframe-error-face nil :inherit 'error))
+
+(use-package company-tabnine
+  :straight t
+  :init
+  ;; Trigger completion immediately.
+  (setq company-idle-delay 0)
+
+  ;; Number the candidates (use M-1, M-2 etc to select completions).
+  (setq company-show-numbers t)
+
+  ;; Use the tab-and-go frontend.
+  ;; Allows TAB to select and complete at the same time.
+  (company-tng-configure-default)
+  (add-to-list 'company-frontends #'company-tng-frontend)
+  (add-to-list 'company-frontends #'company-pseudo-tooltip-frontend)
+  (add-to-list 'company-frontends #'company-echo-metadata-frontend)
+  :config (add-to-list 'company-backends #'company-tabnine))

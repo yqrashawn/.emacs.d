@@ -28,7 +28,8 @@
         web-mode-enable-css-colorization t
         web-mode-enable-auto-pairing t
         web-mode-enable-comment-keywords t
-        web-mode-enable-current-element-highlight t)
+        web-mode-enable-current-column-highlight nil
+        web-mode-enable-current-element-highlight nil)
   (evil-define-key 'normal web-mode-map
     (kbd "C-m") 'evilmi-jump-items
     ",El" 'web-mode-dom-errors-show

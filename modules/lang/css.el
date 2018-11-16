@@ -19,8 +19,8 @@
         (let ((beg (point)))
           (newline)
           (search-forward ";")
-          (indent-region beg (point))
-          ))
+          (indent-region beg (point))))
+          
       (newline)))
 
   (defun css-contract-statement ()
@@ -36,7 +36,8 @@
     ",zo" 'css-expand-statement))
 (use-package counsel-css
   :straight t
-  :commands counsel-css)
+  :commands counsel-css
+  :init (evil-define-key 'normal web-mode-map ",l" #'counsel-css))
 
 (use-package less-css-mode
   :straight t
