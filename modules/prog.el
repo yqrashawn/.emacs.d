@@ -1,4 +1,4 @@
-(defvar auto-completion-enable-snippets-in-popup t
+(defvar auto-completion-enable-snippets-in-popup nil
   "If non nil show snippets in the auto-completion popup.")
 
 (defun spacemacs//show-snippets-in-company (backend)
@@ -480,10 +480,6 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   :straight t
   :hook (prog-mode . hl-todo-mode))
 
-;; (use-package magit-todos
-;;   :straight (:host github :repo "alphapapa/magit-todos")
-;;   :hook (magit-status-mode . magit-todos-mode))
-
 (use-package rainbow-delimiters
   :straight t
   :defer t)
@@ -522,16 +518,6 @@ _j_  js2      _T_     text   _f_  fundamental
 
 (use-package all-the-icons
   :straight t)
-
-;; (use-package company-box
-;;   :straight t
-;;   :after (company)
-;;   :hook (company-mode . company-box-mode))
-
-(use-package yaml-mode
-  :straight t
-  :defer t
-  :mode ("\\.yaml\\'" . yaml-mode))
 
 (use-package flycheck-posframe
   :straight t

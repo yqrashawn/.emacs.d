@@ -14,6 +14,11 @@
 (yq/get-modules "lang/clojure.el")
 (yq/get-modules "lang/restclient.el")
 
+(use-package yaml-mode
+  :straight t
+  :defer t
+  :mode ("\\.yaml\\'" . yaml-mode))
+
 (use-package groovy-mode
   :straight t
   :mode (("\\Jenkinsfile\\'" . groovy-mode))
