@@ -9,8 +9,8 @@
             '(:with company-yasnippet))))
 
 (defvar spacemacs-default-company-backends
-  '((company-dabbrev-code company-gtags company-etags company-keywords)
-    company-files company-dabbrev)
+  '((company-dabbrev-code company-keywords
+                          company-files company-dabbrev))
   "The list of default company backends used by spacemacs.
 This variable is used to configure mode-specific company backends in spacemacs.
 Backends in this list will always be active in these modes, as well as any
@@ -155,19 +155,20 @@ Available PROPS:
   :straight t
   :diminish company-mode
   :init
-  (setq company-idle-delay 0.3
+  (setq company-idle-delay 0
         company-selection-wrap-around t
-        company-minimum-prefix-length 2
+        company-show-numbers nil
+        company-minimum-prefix-length 1
         company-require-match nil
         company-dabbrev-ignore-case t
         company-tooltip-align-annotations t
-        company-tooltip-flip-when-above t
+        company-tooltip-flip-when-above nil
         company-dabbrev-downcase nil
         company-dabbrev-minimum-length 2
-        company-dabbrev-time-limit .5
+        company-dabbrev-time-limit 1
         company-dabbrev-code-everywhere t
         company-dabbrev-code-other-buffers 'all
-        company-dabbrev-code-time-limit .5)
+        company-dabbrev-code-time-limit 1)
   (setq company-search-regexp-function 'company-search-flex-regexp)
   :config
   (setq company-backends '(company-capf
@@ -177,7 +178,9 @@ Available PROPS:
                             company-keywords)
                            company-files
                            company-dabbrev))
-  (add-to-list 'company-frontends 'company-tng-frontend)
+  (add-to-list 'company-frontends #'company-tng-frontend)
+  (add-to-list 'company-frontends #'company-pseudo-tooltip-frontend)
+  (add-to-list 'company-frontends #'company-echo-metadata-frontend)
   (define-key company-active-map (kbd "C-j") 'company-select-next)
   (define-key company-active-map (kbd "C-k") 'company-select-previous)
   (evil-define-key 'insert company-active-map (kbd "C-j") 'company-select-next)
@@ -540,16 +543,9 @@ _j_  js2      _T_     text   _f_  fundamental
 (use-package company-tabnine
   :straight t
   :init
-  ;; Trigger completion immediately.
-  (setq company-idle-delay 0)
-
   ;; Number the candidates (use M-1, M-2 etc to select completions).
-  (setq company-show-numbers t)
 
   ;; Use the tab-and-go frontend.
   ;; Allows TAB to select and complete at the same time.
   (company-tng-configure-default)
-  (add-to-list 'company-frontends #'company-tng-frontend)
-  (add-to-list 'company-frontends #'company-pseudo-tooltip-frontend)
-  (add-to-list 'company-frontends #'company-echo-metadata-frontend)
   :config (add-to-list 'company-backends #'company-tabnine))
