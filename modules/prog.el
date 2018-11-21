@@ -199,10 +199,19 @@ Available PROPS:
 
 (use-package company-flx
   :straight t
+  :commands (company-flx-mode)
   :init
-  (add-hook 'lisp-mode-hook 'company-flx-mode)
-  :config
   (company-flx-mode +1))
+
+(use-package company-tabnine
+  :straight t
+  :init
+  ;; Number the candidates (use M-1, M-2 etc to select completions).
+
+  ;; Use the tab-and-go frontend.
+  ;; Allows TAB to select and complete at the same time.
+  (company-tng-configure-default)
+  :config (add-to-list 'company-backends #'company-tabnine))
 
 (use-package company-try-hard
   :straight t
@@ -414,8 +423,9 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   :straight t
   :config
   (spacemacs/set-leader-keys "jq" #'dumb-jump-quick-look)
-  (define-key evil-normal-state-map "gl" 'dumb-jump-go)
-  (define-key evil-normal-state-map "gL" 'dumb-jump-go-other-window)
+  (define-key evil-normal-state-map "gp" #'dumb-jump-quick-look)
+  (define-key evil-normal-state-map "gl" #'dumb-jump-go)
+  (define-key evil-normal-state-map "gL" #'dumb-jump-go-other-window)
   (setq dumb-jump-prefer-searcher 'rg)
   (setq dumb-jump-force-searcher 'rg)
   (setq dumb-jump-selector 'ivy)
@@ -459,7 +469,6 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   (add-to-list 'git-link-commit-remote-alist
                '("917\\.bimsop\\.com" git-link-commit-gogs))
   (setq git-link-open-in-browser t))
-
 ;; {{ shell and conf
 (add-to-list 'auto-mode-alist '("\\.[^b][^a][a-zA-Z]*rc$" . conf-mode))
 (add-to-list 'auto-mode-alist '("\\.aspell\\.en\\.pws\\'" . conf-mode))
@@ -469,6 +478,7 @@ is not visible. Otherwise delegates to regular Emacs next-error."
 (add-to-list 'auto-mode-alist '("\\.?muttrc\\'" . conf-mode))
 (add-to-list 'auto-mode-alist '("\\.mailcap\\'" . conf-mode))
 ;; }}
+
 (define-key isearch-mode-map (kbd "C-o") 'isearch-occur)
 
 ;; (use-package mixed-pitch
@@ -525,13 +535,3 @@ _j_  js2      _T_     text   _f_  fundamental
   :diminish (flycheck-posframe-mode)
   :hook (flycheck-mode . flycheck-posframe-mode)
   :config (set-face-attribute 'flycheck-posframe-error-face nil :inherit 'error))
-
-(use-package company-tabnine
-  :straight t
-  :init
-  ;; Number the candidates (use M-1, M-2 etc to select completions).
-
-  ;; Use the tab-and-go frontend.
-  ;; Allows TAB to select and complete at the same time.
-  (company-tng-configure-default)
-  :config (add-to-list 'company-backends #'company-tabnine))

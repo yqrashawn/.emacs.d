@@ -100,7 +100,6 @@
     (kill-current-buffer)
     (yq/delete-window))
   (evil-define-key 'normal helpful-mode-map "q" 'quit-window))
-;; (evil-define-key 'normal helpful-mode-map "q" 'yq/kill-buffer-and-window))
 
 (use-package ivy
   :straight (:host github :repo "abo-abo/swiper" :branch "master"
@@ -253,7 +252,7 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
 (use-package smex
   :straight t
   :init
-  (setq-default smex-history-length 32)
+  (setq-default smex-history-length 100)
   (setq-default smex-save-file (concat yq-emacs-cache-dir ".smex-items")))
 
 (use-package projectile
@@ -301,6 +300,7 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
 (ivy-set-actions
  'counsel-recentf
  spacemacs--ivy-file-actions)
+
 (spacemacs/set-leader-keys "s" nil)
 (spacemacs/set-leader-keys "sd" 'spacemacs/search-dir-rg)
 (spacemacs/set-leader-keys "sD" 'spacemacs/search-dir-rg-region-or-symbol)
@@ -584,23 +584,6 @@ When ARG is non-nil search in junk files."
   :commands (dired-rsync)
   :init
   (bind-key "C-c C-r" 'dired-rsync dired-mode-map))
-
-(use-package prescient
-  :straight t
-  :commands (prescient-persist-mode)
-  :init (prescient-persist-mode))
-
-(use-package ivy-prescient
-  :straight t
-  :commands (ivy-prescient-mode)
-  :init
-  ;; (add-to-list 'ivy-prescient-excluded-commands 'counsel-fd)
-  (ivy-prescient-mode))
-
-(use-package company-prescient
-  :straight t
-  :commands (company-prescient-mode)
-  :init (company-prescient-mode))
 
 (yq/update-evil-emacs-state-modes 'ibuffer-mode)
 ;; (push 'ibuffer-mode evil-insert-state-modes)

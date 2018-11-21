@@ -49,12 +49,13 @@
   (evil-define-key 'normal js2-mode-map ",tn" 'tern-find-definition-by-name)
   (evil-define-key 'normal js2-mode-map ",tp" 'tern-pop-find-definition)
   (evil-define-key 'normal js2-mode-map ",tt" 'tern-get-type))
+
 (use-package tern
   :defer t
   :commands (tern-mode)
   :diminish tern-mode
+  :hook (js2-mode . tern-mode)
   :init
-  (add-hook 'js2-mode-hook 'tern-mode)
   (spacemacs//tern-detect)
   :config
   (add-to-list 'tern-command "--no-port-file" 'append)

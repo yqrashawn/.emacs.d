@@ -20,7 +20,7 @@
           (newline)
           (search-forward ";")
           (indent-region beg (point))))
-          
+
       (newline)))
 
   (defun css-contract-statement ()
@@ -34,6 +34,7 @@
   (evil-define-key 'normal css-mode-map
     ",zc" 'css-contract-statement
     ",zo" 'css-expand-statement))
+
 (use-package counsel-css
   :straight t
   :commands counsel-css
