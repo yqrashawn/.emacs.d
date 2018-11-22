@@ -44,10 +44,18 @@ file stored in the cache directory and `nil' to disable auto-saving.")
 
 ;; more useful frame title, that show either a file or a
 ;; buffer name (if the buffer isn't visiting a file)
-(setq frame-title-format
-      '((:eval (if (buffer-file-name)
-                   (abbreviate-file-name (buffer-file-name))
-                 "%b"))))
+(setq-default frame-title-format
+              '(:eval
+                (format "%s@%s: %s"
+                        (or (file-remote-p default-directory 'user)
+                            user-real-login-name)
+                        (or (file-remote-p default-directory 'host)
+                            system-name)
+                        (cond
+                         (buffer-file-truename buffer-file-truename)
+                         (dired-directory dired-directory)
+                         (t "%b")))))
+
 (put 'narrow-to-region 'disabled nil)
 (put 'narrow-to-page 'disabled nil)
 (add-hook 'prog-mode-hook 'goto-address-prog-mode)
