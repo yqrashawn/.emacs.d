@@ -131,4 +131,15 @@ has been changed to THEME."
 (spacemacs//adaptive-evil-highlight-persist-face)
 (add-hook 'spacemacs-post-theme-change-hook 'spacemacs//adaptive-evil-highlight-persist-face)
 
+;; (use-package all-the-icons
+;;   :straight t)
+;; (straight-use-package 'all-the-icons)
+
+(use-package doom-modeline
+  :straight t
+  :hook (after-init . doom-modeline-init)
+  :init (setq doom-modeline-height 15
+              doom-modeline-icon nil
+              doom-modeline-buffer-file-name-style 'truncate-upto-project))
+
 ;; (yq/get-modules "modeline.elc")

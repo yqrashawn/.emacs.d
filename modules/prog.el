@@ -526,9 +526,6 @@ _j_  js2      _T_     text   _f_  fundamental
   ;; Use ivy-xref to display `xref.el' results.
   (setq xref-show-xrefs-function #'ivy-xref-show-xrefs))
 
-(use-package all-the-icons
-  :straight t)
-
 (use-package flycheck-posframe
   :straight t
   :after flycheck
