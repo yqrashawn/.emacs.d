@@ -626,7 +626,6 @@ When ARG is non-nil search in junk files."
     "L" 'rg-list-searches
     "I" 'rg-rerun-toggle-ignore
     "R" 'rg-rerun-change-regexp))
-  ;; (evilified-state-evilify-map  rg-mode-map :mode rg-mode))
 
 (use-package ace-link
   :straight t
@@ -635,11 +634,6 @@ When ARG is non-nil search in junk files."
   (define-key evil-normal-state-map "go" #'ace-link)
   (evil-define-key 'normal helpful-mode-map "o" #'ace-link-help)
   (ace-link-setup-default))
-
-;; (use-package frames-only-mode
-;;   :straight t
-;;   :commands (frames-only-mode)
-;;   :init (frames-only-mode 1))
 
 (use-package awesome-tab
   :straight (:host github :repo "manateelazycat/awesome-tab")
@@ -712,7 +706,6 @@ When ARG is non-nil search in junk files."
   (global-set-key (kbd "C-M-S-s-l") '+awesome-tab-forward-tab-or-ivy-done)
   (global-set-key (kbd "C-M-S-s-n") '+awesome-tab-switch-group-next-line)
   (global-set-key (kbd "C-M-S-s-p") '+awesome-tab-switch-group-prevouse-line))
-
 
 (use-package loccur
   :straight t
