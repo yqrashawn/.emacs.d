@@ -141,5 +141,3 @@ has been changed to THEME."
   :init (setq doom-modeline-height 15
               doom-modeline-icon nil
               doom-modeline-buffer-file-name-style 'truncate-upto-project))
-
-;; (yq/get-modules "modeline.elc")

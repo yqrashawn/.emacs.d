@@ -153,10 +153,13 @@
 
   (setq ivy-use-selectable-prompt t)
   (evil-define-key 'normal ivy-occur-mode-map "w" 'ivy-wgrep-change-to-wgrep-mode)
+  (evil-define-key 'normal ivy-occur-mode-map "s" 'wgrep-save-all-buffers)
   (ivy-set-occur 'spacemacs/counsel-search
                  'spacemacs//counsel-occur)
+  (evil-set-initial-state 'ivy-occur-grep-mode 'normal)
   (evil-make-overriding-map ivy-occur-mode-map 'normal)
-  (define-key evil-normal-state-map "sB" 'ivy-switch-buffer))
+  (define-key evil-normal-state-map "sB" 'ivy-switch-buffer)
+  (ido-mode -1))
 
 (use-package ivy-hydra
   :straight t
