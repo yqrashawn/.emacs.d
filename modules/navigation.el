@@ -715,3 +715,12 @@ When ARG is non-nil search in junk files."
   :init
   (loccur-mode 1)
   (define-key evil-normal-state-map "ss" #'loccur-current))
+
+(use-package color-rg
+  :straight (:host github :repo "manateelazycat/color-rg")
+  :commands (color-rg-search-input
+             color-rg-search-symbol
+             color-rg-search-project
+             color-rg-search-project-rails)
+  :config
+  (evil-set-initial-state 'color-rg-mode 'insert))
