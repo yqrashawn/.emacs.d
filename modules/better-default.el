@@ -1301,3 +1301,7 @@ Info-mode:
 (with-eval-after-load 'proced
   (evilified-state-evilify proced-mode proced-mode-map
     "K" #'proced-send-signal))
+
+;; check this out when it's finished
+;; (use-package so-lang
+;;   :straight (:repo "https://git.savannah.nongnu.org/git/so-long.git"))
