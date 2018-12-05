@@ -18,6 +18,20 @@
    ("\\.eco\\'"        . web-mode)
    ("\\.ejs\\'"        . web-mode)
    ("\\.djhtml\\'"     . web-mode))
+  :init
+  (defun jjpandari/merge-imenu (index-fun)
+    (interactive)
+    (let ((mode-imenu (funcall index-fun))
+          (custom-imenu (imenu--generic-function imenu-generic-expression)))
+      (append custom-imenu mode-imenu)))
+  (add-hook
+   'web-mode-hook
+   (lambda ()
+     (setq imenu-create-index-function (lambda () (jjpandari/merge-imenu 'web-mode-imenu-index)))
+     (when (equal (file-name-extension buffer-file-name) "vue")
+       (setq
+        imenu-generic-expression
+        '(("Method" "^[\s\t]*(async\s*[a-zA-Z0-9_]+\s*\(.*\)\s*|[a-zA-Z0-9_]+\s*:\s*(async)*\s*function\s*\(.*\)\s*\{\s*$|[a-zA-Z0-9_]+\s*:\s*(async)*\s*\(.*\)\s*=>\s*{\s*$)" 1))))))
   :config
   (setq web-mode-markup-indent-offset 2
         web-mode-css-indent-offset 2
