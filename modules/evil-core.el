@@ -9,8 +9,13 @@
   :diminish undo-tree-mode
   :defer t
   :config
-  (setq undo-tree-history-directory-alist
-        `((".*" . ,temporary-file-directory)))
+  (setq undo-limit 78643200)
+  (setq undo-outer-limit 104857600)
+  (setq undo-strong-limit 157286400)
+  (setq undo-tree-enable-undo-in-region nil)
+  (setq undo-tree-history-directory-alist '(("." . "~/emacs.d/.cache/undo")))
+  ;; (setq undo-tree-history-directory-alist
+  ;;       `((".*" . ,temporary-file-directory)))
   (setq undo-tree-auto-save-history t)
   (global-undo-tree-mode)
   (global-set-key (kbd "s-y") 'undo-tree-redo))
@@ -33,6 +38,7 @@
   :straight t
   :init
   (setq local-function-key-map (delq '(kp-tab . [9]) local-function-key-map))
+  (setq evil-want-find-undo t)
   (customize-set-variable 'evil-intercept-maps nil)
   (customize-set-variable 'evil-move-cursor-back nil)
   (customize-set-variable 'evil-want-C-u-scroll t)

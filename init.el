@@ -106,16 +106,6 @@
   :straight t
   :commands (which-key-mode))
 
-;; brew install fcitx-remote-for-osx  --with-input-method=squirrel-rime
-(use-package fcitx
-  :straight t
-  :init
-  (fcitx-prefix-keys-add "M-SPC")
-  (fcitx-aggressive-setup)
-  (fcitx-M-x-turn-on)
-  (fcitx-shell-command-turn-on)
-  (fcitx-eval-expression-turn-on))
-
 ;; (use-package zpresent)
 
 (global-set-key (kbd "s-?") 'info-display-manual)
