@@ -4,7 +4,7 @@
          ("Procfile\\'" . yaml-mode))
   :init (add-hook 'yaml-mode-hook 'yq/toggle-aggressive-indent-on)
   :config
-  (spacemacs|add-company-backends :modes yaml-mode)
+  (spacemacs|add-company-backends :modes yaml-mode :after-hook t)
   (spacemacs/enable-flycheck 'yaml-mode)
   (add-hook 'yaml-mode-hook
             '(lambda ()

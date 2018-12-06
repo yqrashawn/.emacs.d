@@ -52,7 +52,8 @@
     :backends company-capf
     :modes
     cider-mode
-    cider-repl-mode)
+    cider-repl-mode
+    :after-hook t)
   (spacemacs|define-jump-handlers clojure-mode)
   (add-to-list (intern (format "spacemacs-jump-handlers-%S" 'clojure-mode))
                '(cider-find-dwim :async t))

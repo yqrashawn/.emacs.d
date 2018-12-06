@@ -22,7 +22,8 @@
   :config
   (spacemacs|add-company-backends
     :backends company-lsp
-    :modes web-mode))
+    :modes web-mode
+    :after-hook t))
 
 (use-package lsp-ui
   :straight t

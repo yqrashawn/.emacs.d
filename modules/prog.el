@@ -108,6 +108,7 @@ Available PROPS:
                   t))
          (call-hooks (when (memq :call-hooks props)
                        (spacemacs/mplist-get-value props :call-hooks)))
+         (after-hook (spacemacs/mplist-get-value props :after-hook))
          (result '(progn)))
     (dolist (mode modes)
       (let ((backends-var-name (intern (format "company-backends-%S" mode)))
@@ -166,7 +167,8 @@ Available PROPS:
             (push `(add-hook ',mode-hook-name ',vars-func-name t) result)))
         (when hooks
           (push `(add-hook ',mode-hook-name 'company-mode t) result))
-        (push `(add-hook ',mode-hook-name 'yq/after-spacemacs-setting-company-backends t) result)))
+        (when after-hook
+          (push `(add-hook ',mode-hook-name 'yq/after-spacemacs-setting-company-backends t) result))))
     ;; return the expanded macro in correct order
     (reverse result)))
 

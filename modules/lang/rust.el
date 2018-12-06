@@ -10,7 +10,8 @@
   (spacemacs|add-company-backends
     :backends company-capf
     :modes rust-mode
-    :variables company-tooltip-align-annotations t)
+    :variables company-tooltip-align-annotations t
+    :after-hook t)
   (defun spacemacs/rust-quick-run ()
     "Quickly run a Rust file using rustc.
 Meant for a quick-prototype flow only - use `spacemacs/open-junk-file' to

@@ -45,7 +45,8 @@
   (add-hook 'lua-mode-hook
             (lambda () (spacemacs|add-company-backends
                          :backends company-lua
-                         :modes lua-mode))))
+                         :modes lua-mode
+                         :after-hook t))))
 
 (provide 'lua)
 ;;; lua.el ends here

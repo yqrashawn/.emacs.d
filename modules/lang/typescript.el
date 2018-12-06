@@ -59,7 +59,8 @@ and 'typescript-formatter .")
   (spacemacs/enable-flycheck 'typescript-mode)
   (spacemacs|add-company-backends
     :backends company-tide
-    :modes typescript-mode web-mode js2-mode)
+    :modes typescript-mode web-mode js2-mode
+    :after-hook t)
   :config
   (evil-define-key 'normal typescript-mode-map ",gb" 'tide-jump-back)
   (evil-define-key 'normal typescript-mode-map ",gt" 'typescript/jump-to-type-def)

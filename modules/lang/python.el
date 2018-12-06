@@ -42,7 +42,8 @@
   :init
   (spacemacs|add-company-backends
     :backends company-anaconda
-    :modes python-mode))
+    :modes python-mode
+    :after-hook t))
 
 (use-package importmagic
   :straight t

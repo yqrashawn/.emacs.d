@@ -63,4 +63,5 @@
     :modes web-mode
     :variables
     ;; see https://github.com/osv/company-web/issues/4
-    company-minimum-prefix-length 0))
+    company-minimum-prefix-length 0
+    :after-hook t))

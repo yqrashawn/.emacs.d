@@ -69,7 +69,8 @@
   :init
   (spacemacs|add-company-backends
     :backends company-tern
-    :modes js2-mode))
+    :modes js2-mode
+    :after-hook t))
 
 (use-package json-mode
   :straight t
