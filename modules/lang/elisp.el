@@ -34,6 +34,14 @@ the current buffer."
   :config
   (add-hook 'emacs-lisp-mode-hook (lambda () (setq-local evil-shift-width 1)))
   (add-hook 'emacs-lisp-mode-hook (lambda () (setq mode-name "λ")))
+  (add-hook 'emacs-lisp-mode-hook (lambda () (setq-local company-backends '(company-capf
+                                                                            company-tabnine
+                                                                            (company-dabbrev-code
+                                                                             company-gtags
+                                                                             company-etags
+                                                                             company-keywords)
+                                                                            company-files
+                                                                            company-dabbrev))))
   (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
   (defun bozhidar-visit-ielm ()
     "Switch to default `ielm' buffer.

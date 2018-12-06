@@ -106,9 +106,11 @@
   :straight t
   :commands (which-key-mode))
 
+(use-package ix
+  :straight t
+  :commands (ix))
+
 ;; (use-package zpresent)
 
 (global-set-key (kbd "s-?") 'info-display-manual)
 (global-set-key (kbd "M-0") 'delete-frame)
-
-
