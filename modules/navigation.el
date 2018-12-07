@@ -38,6 +38,7 @@
   (spacemacs/set-leader-keys "f" nil)
   (spacemacs/set-leader-keys "fe" nil)
   (spacemacs/set-leader-keys "fed" 'yq/edit-dotfile)
+  (spacemacs/set-leader-keys "fek" (lambda () (interactive) (find-file-existing "~/.config/karabiner.edn")))
   (spacemacs/set-leader-keys "ff" 'counsel-find-file)
   (spacemacs/set-leader-keys "fF" 'find-file-other-window)
   (spacemacs/set-leader-keys "h" nil)
@@ -45,7 +46,6 @@
   (spacemacs/set-leader-keys "hdf" 'counsel-describe-function)
   (spacemacs/set-leader-keys "hdv" 'counsel-describe-variable)
   (spacemacs/set-leader-keys "hdk" 'describe-key)
-  (spacemacs/set-leader-keys "hdh" 'counsel-describe-symbol-history)
   (spacemacs/set-leader-keys "hdl" 'view-lossage)
   (spacemacs/set-leader-keys "fJ" 'spacemacs/open-junk-file)
   (define-key evil-normal-state-map "sf" 'counsel-rg)
@@ -511,9 +511,14 @@ FD-PROMPT, if non-nil, is passed as `ivy-read' prompt argument."
   (interactive)
   (counsel-fd "" "~/Dropbox/"))
 
+(defun yq/workspace ()
+  (interactive)
+  (counsel-fd "" "~/workspace/"))
+
 (spacemacs/set-leader-keys "fo" 'yq/org)
 (spacemacs/set-leader-keys "fb" 'yq/books)
 (spacemacs/set-leader-keys "f1" 'yq/dropbox)
+(spacemacs/set-leader-keys "fw" 'yq/workspace)
 
 (defun yq/open-with-call-alfred-osascript (file)
   (shell-command (concat "osascript -e '" (format "-- Search for the file

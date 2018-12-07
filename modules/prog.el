@@ -191,7 +191,8 @@ Available PROPS:
         company-dabbrev-code-other-buffers 'all
         company-dabbrev-code-time-limit 1)
   (setq company-search-regexp-function 'company-search-flex-regexp)
-  (customize-set-variable 'company-backends '(company-capf
+  (customize-set-variable 'company-backends '(company-tabnine
+                                              company-capf
                                               (company-dabbrev-code
                                                company-keywords)
                                               company-files
