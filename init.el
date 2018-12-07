@@ -92,8 +92,8 @@
 (use-package server)
 (unless (server-running-p) (server-start))
 
-(use-package playground
-  :straight (:host github :repo "akirak/emacs-playground"))
+;; (use-package playground
+;;   :straight (:host github :repo "akirak/emacs-playground"))
 
 
 ;; (toggle-frame-maximized)
