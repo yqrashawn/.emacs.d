@@ -22,7 +22,11 @@
 
 (use-package goto-chg
   :straight (:host github :repo "emacs-evil/goto-chg")
-  :defer t)
+  :defer t
+  :init
+  (customize-set-variable 'glc-default-span 4)
+  (global-set-key (kbd "C-x C-8 [") #'goto-last-change)
+  (global-set-key (kbd "C-x C-8 ]") #'goto-last-change-reverse))
 
 (use-package evil-leader
   :straight t
