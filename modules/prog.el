@@ -203,7 +203,9 @@ Available PROPS:
 `company-mode-completion-cancel-keywords'"
     (unless (member company-prefix company-mode-completion-cancel-keywords)
       candidates))
-  (setq company-transformers '(spacemacs//company-transformer-cancel company-sort-by-occurrence))
+  ;; lag
+  ;; (setq company-transformers '(spacemacs//company-transformer-cancel company-sort-by-occurrence))
+  (setq company-transformers '(spacemacs//company-transformer-cancel))
   (add-to-list 'company-frontends #'company-tng-frontend)
   (add-to-list 'company-frontends #'company-pseudo-tooltip-frontend)
   (add-to-list 'company-frontends #'company-echo-metadata-frontend)
