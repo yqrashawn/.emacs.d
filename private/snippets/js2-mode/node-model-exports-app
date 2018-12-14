@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: model exports app
+# key: mea
+# --
+module.exports = function(app){
+  $0
+}
