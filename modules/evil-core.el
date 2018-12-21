@@ -313,6 +313,7 @@
 (use-package evil-search-highlight-persist
   :straight t
   :diminish global-highlight-parentheses-mode
+  :init (setq evil-search-highlight-persist-all-windows t)
   :config
   (set-face-attribute 'evil-search-highlight-persist-highlight-face nil
                       :inherit 'lazy-highlight

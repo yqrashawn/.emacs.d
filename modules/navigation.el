@@ -158,7 +158,7 @@
                  'spacemacs//counsel-occur)
   (evil-set-initial-state 'ivy-occur-grep-mode 'normal)
   (evil-make-overriding-map ivy-occur-mode-map 'normal)
-  (define-key evil-normal-state-map "sB" 'ivy-switch-buffer)
+  (define-key evil-normal-state-map "sb" 'ivy-switch-buffer)
   (ido-mode -1))
 
 (use-package ivy-hydra
@@ -272,7 +272,7 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   (counsel-projectile-mode +1)
   (spacemacs/set-leader-keys "p" nil)
   (spacemacs/set-leader-keys "pb" 'counsel-projectile-switch-to-buffer)
-  (define-key evil-normal-state-map "sb" 'counsel-projectile-switch-to-buffer)
+  (define-key evil-normal-state-map "sB" 'counsel-projectile-switch-to-buffer)
   (spacemacs/set-leader-keys "pf" 'counsel-projectile-find-file)
   (spacemacs/set-leader-keys "pd" 'counsel-projectile-find-dir)
   (spacemacs/set-leader-keys "pl" 'counsel-projectile-switch-project)
@@ -393,9 +393,9 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
     "sk" 'yq/kill-this-buffer
     "sj" #'counsel-recentf
     "sJ" #'projectile-recentf
-    "sb" #'projectile-switch-to-buffer
+    "sB" #'projectile-switch-to-buffer
     "sm" #'find-file-in-project
-    "sB" #'ivy-switch-buffer
+    "sb" #'ivy-switch-buffer
     (kbd "s SPC") 'counsel-M-x
     "sf" #'counsel-rg
     "ss" #'dired-sort-toggle-or-edit

@@ -697,6 +697,8 @@
     ("owrk" "work" nil :count 0)
     ("owuld" "would" nil :count 0)
     ("oxident" "oxidant" nil :count 0)
+    ("pacakge" "package" nil :count 0)
+    ("pacakges" "packages" nil :count 0)
     ("papaer" "paper" nil :count 0)
     ("parliment" "parliament" nil :count 0)
     ("partof" "part of" nil :count 0)

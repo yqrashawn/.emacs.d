@@ -22,7 +22,7 @@
 (use-package zenburn-theme
   :straight t
   :defer t)
-(use-package spacemacs-theme
+(use-package doom-themes
   :straight t
   :defer t)
 
@@ -140,4 +140,27 @@ has been changed to THEME."
   :hook (after-init . doom-modeline-init)
   :init (setq doom-modeline-height 15
               doom-modeline-icon nil
-              doom-modeline-buffer-file-name-style 'truncate-upto-project))
+              doom-modeline-buffer-file-name-style 'truncate-upto-project
+              doom-modeline-minor-modes t
+              doom-modeline-lsp t)
+  :config
+  (doom-modeline-def-modeline 'main
+    '(bar workspace-number window-number evil-state matches " " buffer-info remote-host " " selection-info)
+    '(global lsp minor-modes buffer-encoding major-mode process vcs flycheck))
+
+  (doom-modeline-def-modeline 'minimal
+    '(bar matches " " buffer-info)
+    '(media-info major-mode))
+
+  (doom-modeline-def-modeline 'special
+    '(bar window-number evil-state matches " " buffer-info-simple " " selection-info)
+    '(global lsp minor-modes input-method buffer-encoding major-mode process flycheck))
+
+  (doom-modeline-def-modeline 'project
+    '(bar window-number buffer-default-directory)
+    '(global major-mode))
+
+  (doom-modeline-def-modeline 'media
+    '(bar window-number " %b  ")
+    '(global media-info major-mode)))
+

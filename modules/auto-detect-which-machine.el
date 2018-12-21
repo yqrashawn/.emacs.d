@@ -5,7 +5,7 @@
   "Load macbook theme and font size."
   (interactive)
   (if (yq/day-p)
-      ;; (load-theme 'spacemacs-light)
+      ;; (load-theme 'doom-nord-light)
       (load-theme 'zenburn)
     (load-theme 'zenburn))
   (spacemacs/set-default-font yq/font13))
@@ -14,7 +14,7 @@
   "Load macbook theme and font size."
   (interactive)
   (if (yq/day-p)
-      (load-theme 'spacemacs-light)
+      (load-theme 'doom-nord-light)
     ;; (load-theme 'zenburn)
     (load-theme 'zenburn))
   (spacemacs/set-default-font yq/font15))
@@ -23,7 +23,7 @@
   "Load macbook theme and font size."
   (interactive)
   (if (yq/day-p)
-      ;; (load-theme 'spacemacs-light)
+      ;; (load-theme 'doom-nord-light)
       (load-theme 'zenburn)
     (load-theme 'zenburn))
   (spacemacs/set-default-font yq/font15))
