@@ -146,7 +146,7 @@ has been changed to THEME."
   :config
   (doom-modeline-def-modeline 'main
     '(bar workspace-number window-number evil-state matches " " buffer-info remote-host " " selection-info)
-    '(global lsp minor-modes buffer-encoding major-mode process vcs flycheck))
+    '(misc-info persp-name lsp debug minor-modes buffer-encoding major-mode process vcs flycheck))
 
   (doom-modeline-def-modeline 'minimal
     '(bar matches " " buffer-info)
@@ -154,13 +154,12 @@ has been changed to THEME."
 
   (doom-modeline-def-modeline 'special
     '(bar window-number evil-state matches " " buffer-info-simple " " selection-info)
-    '(global lsp minor-modes input-method buffer-encoding major-mode process flycheck))
+    '(misc-info lsp debug minor-modes buffer-encoding major-mode process flycheck))
 
   (doom-modeline-def-modeline 'project
     '(bar window-number buffer-default-directory)
-    '(global major-mode))
+    '(misc-info major-mode))
 
   (doom-modeline-def-modeline 'media
     '(bar window-number " %b  ")
-    '(global media-info major-mode)))
-
+    '(misc-info media-info major-mode)))

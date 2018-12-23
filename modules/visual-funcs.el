@@ -74,6 +74,15 @@ The return value is nil if no font was found, truthy otherwise."
 
 (defvar yq/default-font-kind "small")
 
+(setq yq/font18 '("Hack"
+                  ;;"Menlo"
+                  ;; "Anonymous Pro for Powerline"
+                  ;; "InconsolataG for Powerline"
+                  ;; "Source Code Pro for Powerline"
+                  :size 18
+                  :weight normal
+                  :width normal
+                  :powerline-scale 1.1))
 (setq yq/font15 '("Hack"
                   ;;"Menlo"
                   ;; "Anonymous Pro for Powerline"
