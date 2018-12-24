@@ -115,7 +115,7 @@ with options to run in the shell.")
                              (prog1 (pop split)
                                (setq string (mapconcat #'identity split " -- "))))
                          ""))
-                 (regex (counsel-unquote-regex-parens
+                 (regex (counsel--elisp-to-pcre
                          (setq ivy--old-re
                                (ivy--regex string)))))
             (setq spacemacs--counsel-search-cmd (format base-cmd args regex))

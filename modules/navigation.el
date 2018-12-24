@@ -15,7 +15,9 @@
                    :files ("counsel.el")
                    :upstream (:host github :repo "abo-abo/swiper"))
   :diminish counsel-mode
+  :init
   :config
+  (and (fboundp 'counsel--elisp-to-pcre) (defalias 'counsel-unquote-regex-parens 'counsel--elisp-to-pcre))
   (defun counsel-imenu-comments ()
     "Imenu display comments."
     (interactive)
