@@ -83,9 +83,10 @@
 
 (use-package with-editor
   :straight t
-  :commands (with-editor-mode)
+  :commands (with-editor-mode shell-command-with-editor-mode)
   :hook (git-commit-mode-hook . with-editor-hook)
   :init
+  (shell-command-with-editor-mode)
   (add-hook 'with-editor-mode-hook 'evil-insert-state)
   (spacemacs/set-leader-keys "hdK" 'describe-keymap))
 

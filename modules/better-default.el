@@ -1305,3 +1305,13 @@ Info-mode:
 ;; check this out when it's finished
 ;; (use-package so-lang
 ;;   :straight (:repo "https://git.savannah.nongnu.org/git/so-long.git"))
+
+;; (use-package outline-minor-faces
+;;   :straight t
+;;   :after outline
+;;   :config (add-hook 'outline-minor-mode-hook
+;;                     'outline-minor-faces-add-font-lock-keywords))
+;; (use-package backline
+;;   :straight t
+;;   :after outline
+;;   :config (advice-add 'outline-flag-region :after 'backline-update))
