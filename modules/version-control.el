@@ -92,11 +92,24 @@
 
 (use-package magithub
   :straight t
+  :disabled
   :after magit
   :config
   (magithub-feature-autoinject '(completion commit-browse))
   (setq magithub-clone-default-directory "~/workspace/THIRD/"
         magithub-dir spacemacs-cache-directory))
+
+
+(straight-use-package 'closql)
+(use-package forge
+  :straight t
+  :after magit
+  :bind ((:map forge-issue-section-map
+               ("C-c C-v" . forge-browse-topic))
+         (:map forge-pullreq-section-map
+               ("C-c C-v" . forge-browse-topic)))
+  :init
+  (define-key magit-mode-map "L" #'forge-dispatch))
 
 (use-package diff-hl
   :straight t
