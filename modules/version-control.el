@@ -109,7 +109,14 @@
          (:map forge-pullreq-section-map
                ("C-c C-v" . forge-browse-topic)))
   :init
-  (define-key magit-mode-map "L" #'forge-dispatch))
+  (define-key magit-mode-map "L" #'forge-dispatch)
+  :config
+  (add-to-list 'forge-alist '("917.bimsop.com" "917.bimsop.com/api/v1" "917.bimsop.com" forge-gogs-repository)))
+
+;; (use-package magit-todos
+;;   :straight t
+;;   :after magit
+;;   :init magit-todos-mode)
 
 (use-package diff-hl
   :straight t
