@@ -1324,7 +1324,14 @@ Info-mode:
     "Pick a good default command to use for DIR."
     (cond
      ((eq system-type 'darwin)
-      (list "/Applications/Alacritty.app/Contents/MacOS/alacritty" "-e" "setup-emacs-alacritty" "-t" "emacs-temp-alacritty" "--working-directory" (expand-file-name _dir)))
+      (list
+       "/Applications/Alacritty.app/Contents/MacOS/alacritty"
+       ;; "-e"
+       ;; "setup-emacs-alacritty"
+       "-t"
+       "emacs-temp-alacritty"
+       "--working-directory"
+       (expand-file-name _dir)))
 
      ;; From http://stackoverflow.com/a/13509208/874671
      ((memq system-type '(windows-nt ms-dos cygwin))
