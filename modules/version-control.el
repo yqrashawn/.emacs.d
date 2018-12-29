@@ -1,18 +1,5 @@
 (setq vc-handled-backends '(Git))
 (remove-hook 'find-file-hooks 'vc-find-file-hook)
-(defun git-get-current-file-relative-path ()
-  (replace-regexp-in-string (concat "^" (file-name-as-directory default-directory))
-                            ""
-                            buffer-file-name))
-
-(defun git-add-current-file ()
-  "git add file of current buffer"
-  (interactive)
-  (let ((filename))
-    (when buffer-file-name
-      (setq filename (git-get-current-file-relative-path))
-      (shell-command (concat "git add " filename))
-      (message "DONE! git add %s" filename))))
 
 (use-package git-commit
   :straight t)
@@ -98,7 +85,6 @@
   (magithub-feature-autoinject '(completion commit-browse))
   (setq magithub-clone-default-directory "~/workspace/THIRD/"
         magithub-dir spacemacs-cache-directory))
-
 
 (straight-use-package 'closql)
 (use-package forge
