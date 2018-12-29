@@ -624,6 +624,7 @@ When ARG is non-nil search in junk files."
 
 (use-package rg
   :straight t
+  :disabled
   :commands (rg rg-dwim rg-literal rg-project)
   :init
   (rg-enable-default-bindings)
@@ -729,5 +730,14 @@ When ARG is non-nil search in junk files."
              color-rg-search-symbol
              color-rg-search-project
              color-rg-search-project-rails)
+  :init
+  (spacemacs/set-leader-keys "rg" 'color-rg-search-project)
+  (spacemacs/set-leader-keys "rG" 'color-rg-search-input)
+  (define-key evil-normal-state-map "se" 'color-rg-search-project)
+  ;; (evilified-state-evilify color-rg-mode color-rg-mode-map
+  ;;   "h" #'color-rg-jump-prev-file
+  ;;   "l" #'color-rg-jump-next-file)
   :config
+  (define-key color-rg-mode-map "h" #'color-rg-jump-prev-file)
+  (define-key color-rg-mode-map "l" #'color-rg-jump-next-file)
   (evil-set-initial-state 'color-rg-mode 'insert))
