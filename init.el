@@ -113,5 +113,3 @@
 
 (global-set-key (kbd "s-?") 'info-display-manual)
 (global-set-key (kbd "M-0") 'delete-frame)
-
-

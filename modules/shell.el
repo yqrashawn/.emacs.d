@@ -138,7 +138,7 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
   :config
   (add-to-list 'term-bind-key-alist '("<tab>" . term-send-tab))
   ;; multi-term commands to create terminals and move through them.
-  (evil-leader/set-key "p'" 'spacemacs/projectile-shell-pop)
+  (spacemacs/set-leader-keys "p'" 'spacemacs/projectile-shell-pop)
   (define-key term-mode-map (kbd "s-[") 'multi-term-prev)
   (define-key term-mode-map (kbd "s-<return>") 'multi-term)
   (define-key term-mode-map (kbd "s-]" ) 'multi-term-next)

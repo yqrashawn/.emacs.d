@@ -22,6 +22,7 @@
 (use-package zenburn-theme
   :straight t
   :defer t)
+
 (use-package doom-themes
   :straight t
   :defer t)
@@ -107,21 +108,6 @@ has been changed to THEME."
                                :foreground (face-background 'mode-line))))
 
 (add-hook 'spacemacs-post-theme-change-hook 'spacemacs/set-state-faces)
-
-;; (use-package ivy-rich
-;;   :straight t
-;;   :defer t
-;;   :init
-;;   (setq ivy-rich-abbreviate-paths t
-;;         ivy-virtual-abbreviate 'full
-;;         ivy-rich-switch-buffer-align-virtual-buffer t)
-;;   (ivy-set-display-transformer 'ivy-switch-buffer
-;;                                'ivy-rich-switch-buffer-transformer))
-
-;; (use-package evil-visual-mark-mode
-;;   :straight t
-;;   :config
-;;   (evil-visual-mark-mode 1))
 
 (defun spacemacs//adaptive-evil-highlight-persist-face ()
   (set-face-attribute 'evil-search-highlight-persist-highlight-face nil
