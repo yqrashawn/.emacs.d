@@ -6,10 +6,7 @@
     (setq-local company-backends backends)))
 
 (defvar company-mode-completion-cancel-keywords
-  '("do"
-    "then"
-    "begin"
-    "case")
+  '("do" "then" "begin" "case")
   "Keywords on which to cancel completion so that you can use RET
 to complet without blocking common line endings.")
 
@@ -199,8 +196,7 @@ Available PROPS:
                                               company-dabbrev))
   :config
   (defun spacemacs//company-transformer-cancel (candidates)
-    "Cancel completion if prefix is in the list
-`company-mode-completion-cancel-keywords'"
+    "Cancel completion if prefix is in the list `company-mode-completion-cancel-keywords'"
     (unless (member company-prefix company-mode-completion-cancel-keywords)
       candidates))
   ;; lag
@@ -496,6 +492,7 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   (add-to-list 'git-link-commit-remote-alist
                '("917\\.bimsop\\.com" git-link-commit-gogs))
   (setq git-link-open-in-browser t))
+
 ;; {{ shell and conf
 (add-to-list 'auto-mode-alist '("\\.[^b][^a][a-zA-Z]*rc$" . conf-mode))
 (add-to-list 'auto-mode-alist '("\\.aspell\\.en\\.pws\\'" . conf-mode))

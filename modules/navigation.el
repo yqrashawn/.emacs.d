@@ -608,35 +608,12 @@ When ARG is non-nil search in junk files."
 (add-to-list 'ibuffer-never-show-predicates "^\\*mu4e")
 ;; (add-to-list 'ibuffer-never-show-predicates "^\\*Help")
 
-;; (use-package deadgrep
-;;   :straight t
-;;   :commands (deadgrep)
-;;   :config
-;;   (evil-define-key 'normal deadgrep-mode-map (kbd "RET") 'deadgrep-visit-result)
-;;   (evil-define-key 'normal deadgrep-mode-map (kbd "TAB") 'deadgrep-toggle-file-results))
-
 (use-package avy
   :straight t
   :init
   (define-key evil-normal-state-map "su" 'avy-goto-word-1-above)
   (define-key evil-normal-state-map "sn" 'avy-goto-word-1-below)
   (define-key evil-normal-state-map "sI" 'avy-goto-char-2))
-
-(use-package rg
-  :straight t
-  :disabled
-  :commands (rg rg-dwim rg-literal rg-project)
-  :init
-  (rg-enable-default-bindings)
-  (evil-leader/set-key "rg" #'rg)
-  (evil-leader/set-key "rG" #'rg-literal)
-  (evilified-state-evilify rg-mode rg-mode-map
-    "C-n" 'next-error-no-select
-    "C-p" 'previous-error-no-select
-    "F" 'rg-rerun-change-files
-    "L" 'rg-list-searches
-    "I" 'rg-rerun-toggle-ignore
-    "R" 'rg-rerun-change-regexp))
 
 (use-package ace-link
   :straight t
