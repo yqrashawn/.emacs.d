@@ -734,10 +734,37 @@ When ARG is non-nil search in junk files."
   (spacemacs/set-leader-keys "rg" 'color-rg-search-project)
   (spacemacs/set-leader-keys "rG" 'color-rg-search-input)
   (define-key evil-normal-state-map "se" 'color-rg-search-project)
-  ;; (evilified-state-evilify color-rg-mode color-rg-mode-map
-  ;;   "h" #'color-rg-jump-prev-file
-  ;;   "l" #'color-rg-jump-next-file)
   :config
-  (define-key color-rg-mode-map "h" #'color-rg-jump-prev-file)
-  (define-key color-rg-mode-map "l" #'color-rg-jump-next-file)
-  (evil-set-initial-state 'color-rg-mode 'insert))
+  (evilified-state-evilify color-rg-mode color-rg-mode-map
+    (kbd "C-a") 'color-rg-beginning-of-line
+    (kbd "<tab>") 'color-rg-jump-next-keyword
+    (kbd "<backtab>") 'color-rg-jump-prev-keyword
+
+    (kbd "RET") 'color-rg-open-file
+    (kbd "C-m") 'color-rg-open-file
+
+    "r" 'color-rg-replace-all-matches
+    "f" 'color-rg-filter-match-results
+    "F" 'color-rg-filter-mismatch-results
+
+    "x" 'color-rg-filter-match-files
+    "X" 'color-rg-filter-mismatch-files
+    "u" 'color-rg-unfilter
+
+    "D" 'color-rg-remove-line-from-results
+
+    "i" 'color-rg-rerun-toggle-ignore
+    "t" 'color-rg-rerun-literal
+    "c" 'color-rg-rerun-toggle-case
+    "s" 'color-rg-rerun-regexp
+    "d" 'color-rg-rerun-change-dir
+    "z" 'color-rg-rerun-change-files
+
+    "e" #'color-rg-switch-to-edit-mode
+    "q" #'color-rg-quit
+
+    "j" #'color-rg-jump-next-keyword
+    "k" #'color-rg-jump-prev-keyword
+    "h" #'color-rg-jump-prev-file
+    "l" #'color-rg-jump-next-file))
+  ;; (evil-set-initial-state 'color-rg-mode 'insert))
