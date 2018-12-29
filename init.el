@@ -43,7 +43,6 @@
   (setq file-name-handler-alist default-file-name-handler-alist))
 (add-hook 'after-init-hook #'ambrevar/reset-file-name-handler-alist)
 
-
 (defvar bootstrap-version)
 (let ((bootstrap-file
        (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))

@@ -728,12 +728,11 @@ When ARG is non-nil search in junk files."
   :straight (:host github :repo "manateelazycat/color-rg")
   :commands (color-rg-search-input
              color-rg-search-symbol
-             color-rg-search-project
-             color-rg-search-project-rails)
+             color-rg-search-project)
   :init
-  (spacemacs/set-leader-keys "rg" 'color-rg-search-project)
-  (spacemacs/set-leader-keys "rG" 'color-rg-search-input)
-  (define-key evil-normal-state-map "se" 'color-rg-search-project)
+  (spacemacs/set-leader-keys "rg" #'color-rg-search-project)
+  (spacemacs/set-leader-keys "rG" #'color-rg-search-input)
+  (define-key evil-normal-state-map "se" #'color-rg-search-project)
   :config
   (evilified-state-evilify color-rg-mode color-rg-mode-map
     (kbd "C-a") 'color-rg-beginning-of-line
@@ -743,28 +742,39 @@ When ARG is non-nil search in junk files."
     (kbd "RET") 'color-rg-open-file
     (kbd "C-m") 'color-rg-open-file
 
-    "r" 'color-rg-replace-all-matches
-    "f" 'color-rg-filter-match-results
-    "F" 'color-rg-filter-mismatch-results
+    "r" #'color-rg-replace-all-matches
+    "f" #'color-rg-filter-match-results
+    "F" #'color-rg-filter-mismatch-results
 
-    "x" 'color-rg-filter-match-files
-    "X" 'color-rg-filter-mismatch-files
-    "u" 'color-rg-unfilter
+    "x" #'color-rg-filter-match-files
+    "X" #'color-rg-filter-mismatch-files
+    "u" #'color-rg-unfilter
 
-    "D" 'color-rg-remove-line-from-results
+    "D" #'color-rg-remove-line-from-results
 
-    "i" 'color-rg-rerun-toggle-ignore
-    "t" 'color-rg-rerun-literal
-    "c" 'color-rg-rerun-toggle-case
-    "s" 'color-rg-rerun-regexp
-    "d" 'color-rg-rerun-change-dir
-    "z" 'color-rg-rerun-change-files
+    "I" #'color-rg-rerun-toggle-ignore
+    "t" #'color-rg-rerun-literal
+    "c" #'color-rg-rerun-toggle-case
+    "s" #'color-rg-rerun-regexp
+    "d" #'color-rg-rerun-change-dir
+    "z" #'color-rg-rerun-change-files
 
-    "e" #'color-rg-switch-to-edit-mode
+    "i" (lambda () (interactive) (color-rg-switch-to-edit-mode) (evil-insert-state))
     "q" #'color-rg-quit
 
     "j" #'color-rg-jump-next-keyword
     "k" #'color-rg-jump-prev-keyword
     "h" #'color-rg-jump-prev-file
-    "l" #'color-rg-jump-next-file))
-  ;; (evil-set-initial-state 'color-rg-mode 'insert))
+    "l" #'color-rg-jump-next-file)
+
+  (evil-define-key 'insert color-rg-mode-edit-map (kbd "<escape>")
+    (lambda ()
+      (interactive)
+      (color-rg-switch-to-view-mode)
+      (evil-evilified-state)))
+
+  (define-key color-rg-mode-edit-map (kbd "C-c C-c")
+    (lambda ()
+      (interactive)
+      (color-rg-apply-changed)
+      (evil-evilified-state))))
