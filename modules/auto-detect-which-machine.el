@@ -26,7 +26,7 @@
       ;; (load-theme 'doom-nord-light)
       (load-theme 'zenburn)
     (load-theme 'zenburn))
-  (spacemacs/set-default-font yq/font15))
+  (spacemacs/set-default-font yq/font18))
 
 
 (defun yq/day-p ()
