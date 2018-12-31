@@ -236,12 +236,6 @@ If the universal prefix argument is used then kill the buffer too."
 (yq/add-toggle show-paren :mode show-paren-mode)
 (add-hook 'prog-mode-hook 'show-paren-mode)
 
-(use-package windmove
-  :bind(("C-x 7 w h" . 'windmove-left)
-        ("C-x 7 w l" . 'windmove-right)
-        ("C-x 7 w j" . 'windmove-down)
-        ("C-x 7 w k" . 'windmove-up)))
-
 (use-package winner
   :bind(("C-x 7 w u". 'winner-undo)
         ("C-x 7 w r". 'winner-redo))
