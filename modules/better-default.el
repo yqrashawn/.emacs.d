@@ -1345,38 +1345,3 @@ Info-mode:
      (t '("x-terminal-emulator")))))
 
 ;; echo window shadow <cgwindowid> 0 | nc 127.0.0.1 5050
-
-
-
-;; (defun get-emacs-winid ()
-;;   (setq emacs-winid nil)
-;;   (let ((proc (start-process "GetWindowID" "GetWindowID" "GetWindowID" "Emacs" "--list")))
-;;     (set-process-filter proc (lambda (proc line)
-;;                                (setq emacs-winid line)
-;;                                (message "process output: %s" line)))
-;;     (string-join
-;;      (split-string
-;;       (kbd (seq-drop
-;;             emacs-winid
-;;             (string-match
-;;              "^\".*@.*\.*:.*size.*id.*\n"
-;;              emacs-winid)))
-;;       "\""))))
-
-
-;; (setq test-str "\"\" size=162x14 id=78251
-;; \"\" size=468x40 id=73280
-;; \"Focus Proxy\" size=1x1 id=69104
-;; \"Rashawn@officeimac-710.local: ~/.emacs.d/modules/better-default.el\" size=1433x2526 id=69032
-;; ")
-
-;; ;; regex @.*\.*:.*size.*id
-
-;; (string-join
-;;  (split-string
-;;   (kbd (seq-drop
-;;         emacs-winid
-;;         (string-match
-;;          "^\".*@.*\.*:.*size.*id.*\n"
-;;          emacs-winid)))
-;;   "\""))
