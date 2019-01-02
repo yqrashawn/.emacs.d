@@ -11,8 +11,6 @@
                    (*linux* nil)
                    (t nil)))
 
-(setq-default mac-option-modifier 'meta)
-(setq-default mac-command-modifier 'super)
 (customize-set-variable 'inhibit-startup-screen t)
 (customize-set-variable 'inhibit-startup-message t)
 (customize-set-variable 'inhibit-startup-echo-area-message t)
@@ -767,6 +765,7 @@ otherwise it is scaled down."
   :straight t
   :commands (info)
   :config
+  (spacemacs/set-leader-keys "?" #'info-display-manual)
   (define-key Info-mode-map "s" nil)
   (define-key Info-mode-map "ss" 'Info-search)
   (define-key Info-mode-map "sj" 'counsel-recentf)

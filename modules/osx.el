@@ -1,3 +1,9 @@
+(setq-default mac-option-modifier 'meta)
+(setq-default mac-command-modifier 'super)
+(global-set-key (kbd "s-w") #'delete-window)
+(global-set-key (kbd "s-q") #'save-buffers-kill-emacs)
+(and (boundp 'ns-do-hide-emacs) (global-set-key (kbd "s-h" #'ns-do-hide-emacs)))
+
 (use-package reveal-in-osx-finder
   :straight t
   :if (spacemacs/system-is-mac)

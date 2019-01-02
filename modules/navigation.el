@@ -596,9 +596,6 @@ When ARG is non-nil search in junk files."
   (bind-key "C-c C-r" 'dired-rsync dired-mode-map))
 
 (yq/update-evil-emacs-state-modes 'ibuffer-mode)
-;; (push 'ibuffer-mode evil-insert-state-modes)
-;; (define-key ibuffer-mode-map "j" 'ibuffer-forward-line)
-;; (define-key ibuffer-mode-map "k" 'ibuffer-backward-line)
 (add-to-list 'ibuffer-never-show-predicates "^\\*Ibuffer")
 (add-to-list 'ibuffer-never-show-predicates "^\\*Straight")
 ;; (add-to-list 'ibuffer-never-show-predicates "^\\*scratch")
