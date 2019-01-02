@@ -608,8 +608,12 @@ When ARG is non-nil search in junk files."
 (use-package avy
   :straight t
   :init
-  (define-key evil-normal-state-map "su" 'avy-goto-word-1-above)
-  (define-key evil-normal-state-map "sn" 'avy-goto-word-1-below)
+  (setq avy-indent-line-overlay t)
+  (setq avy-timeout-seconds 0.3)
+  (setq avy-enter-times-out nil)
+  (setq avy-background t)
+  (setq avy-highlight-first t)
+  (define-key evil-normal-state-map "sn" 'avy-goto-char-timer)
   (define-key evil-normal-state-map "sI" 'avy-goto-char-2))
 
 (use-package ace-link
