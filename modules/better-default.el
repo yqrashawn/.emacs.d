@@ -11,6 +11,8 @@
                    (*linux* nil)
                    (t nil)))
 
+(setq-default mac-option-modifier 'meta)
+(setq-default mac-command-modifier 'super)
 (customize-set-variable 'inhibit-startup-screen t)
 (customize-set-variable 'inhibit-startup-message t)
 (customize-set-variable 'inhibit-startup-echo-area-message t)
@@ -210,6 +212,8 @@ If the universal prefix argument is used then kill also the window."
     (if (equal '(4) arg)
         (kill-buffer-and-window)
       (kill-buffer))))
+
+(global-set-key (kbd "s-k") 'yq/kill-this-buffer)
 
 (defun yq/delete-window (&optional arg)
   "Delete the current window.
