@@ -37,11 +37,12 @@
     (unless found
       (message "tern binary not found!"))
     found))
+
 (defun yq//set-tern-key-bindings (mode)
   "Set the key bindings for tern and the given MODE."
   (add-to-list 'tern-command "--no-port-file" 'append)
   (add-to-list (intern (format "spacemacs-jump-handlers-%S" mode))
-               '(tern-find-definition :async t))
+               '(tern-find-definition :async t) t)
   (evil-define-key 'normal js2-mode-map ",t" nil)
   (evil-define-key 'normal js2-mode-map ",tf" 'tern-find-definition)
   (evil-define-key 'normal js2-mode-map ",tr" 'tern-rename-variable)
