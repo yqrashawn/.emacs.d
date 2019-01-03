@@ -596,9 +596,6 @@ When ARG is non-nil search in junk files."
   (bind-key "C-c C-r" 'dired-rsync dired-mode-map))
 
 (yq/update-evil-emacs-state-modes 'ibuffer-mode)
-;; (push 'ibuffer-mode evil-insert-state-modes)
-;; (define-key ibuffer-mode-map "j" 'ibuffer-forward-line)
-;; (define-key ibuffer-mode-map "k" 'ibuffer-backward-line)
 (add-to-list 'ibuffer-never-show-predicates "^\\*Ibuffer")
 (add-to-list 'ibuffer-never-show-predicates "^\\*Straight")
 ;; (add-to-list 'ibuffer-never-show-predicates "^\\*scratch")
@@ -611,8 +608,12 @@ When ARG is non-nil search in junk files."
 (use-package avy
   :straight t
   :init
-  (define-key evil-normal-state-map "su" 'avy-goto-word-1-above)
-  (define-key evil-normal-state-map "sn" 'avy-goto-word-1-below)
+  (setq avy-indent-line-overlay t)
+  (setq avy-timeout-seconds 0.3)
+  (setq avy-enter-times-out nil)
+  (setq avy-background t)
+  (setq avy-highlight-first t)
+  (define-key evil-normal-state-map "sn" 'avy-goto-char-timer)
   (define-key evil-normal-state-map "sI" 'avy-goto-char-2))
 
 (use-package ace-link

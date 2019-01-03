@@ -24,3 +24,23 @@
   :mode (("\\Jenkinsfile\\'" . groovy-mode))
   :init
   (setq groovy-indent-offset 2))
+
+(use-package nginx-mode
+  :straight t
+  :mode (("/nginx/sites-\\(?:available\\|enabled\\)/" . nginx-mode)
+         ("nginx.conf" . nginx-mode)))
+
+(use-package company-nginx
+  :straight t
+  :after nginx-mode
+  :hook (nginx-mode . company-nginx-keywords))
+
+(use-package dotenv-mode
+  :straight t
+  :mode (("\\.env\\..*\\'" . dotenv-mode)))
+
+(use-package conf-mode
+  :straight t
+  :mode (("\\.conf\\'"    . conf-space-mode)
+         ("\\.setup.*\\'" . conf-space-mode)
+         ("/\\(Cargo.lock\\|\\.cargo/config\\)\\'" . conf-toml-mode)))

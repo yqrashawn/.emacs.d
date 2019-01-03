@@ -211,6 +211,8 @@ If the universal prefix argument is used then kill also the window."
         (kill-buffer-and-window)
       (kill-buffer))))
 
+(global-set-key (kbd "s-k") 'yq/kill-this-buffer)
+
 (defun yq/delete-window (&optional arg)
   "Delete the current window.
 If the universal prefix argument is used then kill the buffer too."
@@ -303,8 +305,12 @@ If the universal prefix argument is used then kill the buffer too."
   (setq recentf-save-file (concat user-emacs-directory "recentf")
         recentf-max-saved-items 100
         recentf-auto-cleanup 'never
-        recentf-auto-save-timer (run-with-idle-timer 300 t
-                                                     'recentf-save-list))
+        recentf-auto-save-timer
+        ;; https://emacs.stackexchange.com/questions/45697/prevent-emacs-from-messaging-when-it-writes-recentf
+        (run-with-idle-timer 300 t
+                             (lambda ()
+                               (let ((save-silently t))
+                                 (recentf-save-list)))))
 
   (add-hook 'delete-terminal-functions 'recentf-save-list)
   (recentf-mode 1)
@@ -757,6 +763,7 @@ otherwise it is scaled down."
   :straight t
   :commands (info)
   :config
+  (spacemacs/set-leader-keys "?" #'info-display-manual)
   (define-key Info-mode-map "s" nil)
   (define-key Info-mode-map "ss" 'Info-search)
   (define-key Info-mode-map "sj" 'counsel-recentf)
@@ -805,8 +812,6 @@ otherwise it is scaled down."
 ;;fast switching between three buffers
 (define-key evil-normal-state-map (kbd "<C-tab>") 'switch-to-second-most-recent-buffer)
 (define-key evil-normal-state-map (kbd "<C-s-tab>") 'switch-to-third-most-recent-buffer)
-
-;; (add-hook 'edebug-mode-hook 'yq/toggle-show-paren-off)
 
 ;; generate image of marked region
 ;; (use-package carbon-now-sh

@@ -217,9 +217,9 @@ Available PROPS:
   (evil-define-key 'insert company-active-map (kbd "C-r") 'company-show-doc-buffer)
   (add-hook 'after-init-hook 'global-company-mode))
 
-(use-package company-statistics
-  :straight t
-  :hook (company-mode . company-statistics-mode))
+;; (use-package company-statistics
+;;   :straight t
+;;   :hook (company-mode . company-statistics-mode))
 
 (use-package company-flx
   :straight t
@@ -560,23 +560,3 @@ _j_  js2      _T_     text   _f_  fundamental
   :diminish (flycheck-posframe-mode)
   :hook (flycheck-mode . flycheck-posframe-mode)
   :config (set-face-attribute 'flycheck-posframe-error-face nil :inherit 'error))
-
-(use-package nginx-mode
-  :straight t
-  :mode (("/nginx/sites-\\(?:available\\|enabled\\)/" . nginx-mode)
-         ("nginx.conf" . nginx-mode)))
-
-(use-package company-nginx
-  :straight t
-  :after nginx-mode
-  :hook (nginx-mode . company-nginx-keywords))
-
-(use-package dotenv-mode
-  :straight t
-  :mode (("\\.env\\..*\\'" . dotenv-mode)))
-
-(use-package conf-mode
-  :straight t
-  :mode (("\\.conf\\'"    . conf-space-mode)
-         ("\\.setup.*\\'" . conf-space-mode)
-         ("/\\(Cargo.lock\\|\\.cargo/config\\)\\'" . conf-toml-mode)))

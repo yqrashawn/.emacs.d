@@ -107,7 +107,7 @@ The body of the advice is in BODY."
      (let ((transient-mark-mode nil)
            (save-undo buffer-undo-list))
        (spacemacs/yank-advised-indent-function (region-beginning)
-                                        (region-end))))
+                                               (region-end))))
  (evil-end-undo-step))
 
 
