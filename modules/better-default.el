@@ -311,8 +311,12 @@ If the universal prefix argument is used then kill the buffer too."
   (setq recentf-save-file (concat user-emacs-directory "recentf")
         recentf-max-saved-items 100
         recentf-auto-cleanup 'never
-        recentf-auto-save-timer (run-with-idle-timer 300 t
-                                                     'recentf-save-list))
+        recentf-auto-save-timer
+        ;; https://emacs.stackexchange.com/questions/45697/prevent-emacs-from-messaging-when-it-writes-recentf
+        (run-with-idle-timer 300 t
+                             (lambda ()
+                               (let ((save-silently t))
+                                 (recentf-save-list)))))
 
   (add-hook 'delete-terminal-functions 'recentf-save-list)
   (recentf-mode 1)
