@@ -815,8 +815,6 @@ otherwise it is scaled down."
 (define-key evil-normal-state-map (kbd "<C-tab>") 'switch-to-second-most-recent-buffer)
 (define-key evil-normal-state-map (kbd "<C-s-tab>") 'switch-to-third-most-recent-buffer)
 
-;; (add-hook 'edebug-mode-hook 'yq/toggle-show-paren-off)
-
 ;; generate image of marked region
 ;; (use-package carbon-now-sh
 ;;   :commands (carbon-now-sh)

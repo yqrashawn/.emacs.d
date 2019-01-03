@@ -96,8 +96,8 @@ Needed to bypass keymaps set as text properties."
     (setq-local evilified-state--normal-state-map
                 (copy-keymap evil-normal-state-map)))
   (setq-local evil-normal-state-map
-              (copy-keymap evilified-state--normal-state-map))
-  (define-key evil-normal-state-map [escape] 'evil-evilified-state))
+              (copy-keymap evilified-state--normal-state-map)))
+  ;; (define-key evil-normal-state-map [escape] 'evil-evilified-state))
 
 (defun evilified-state--restore-normal-state-keymap ()
   "Restore the normal state keymap."

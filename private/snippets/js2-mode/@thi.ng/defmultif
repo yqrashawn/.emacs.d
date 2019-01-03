@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: F: @thi.ng/defmulti
+# key: defmultif
+# --
+import { defmulti, DEFAULT } from "@thi.ng/defmulti";

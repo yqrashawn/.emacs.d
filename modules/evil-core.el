@@ -66,7 +66,6 @@
   (define-key evil-normal-state-map "L" 'evil-forward-section-begin)
   (define-key evil-normal-state-map ">" 'evil-shift-right-line)
   (define-key evil-normal-state-map "<" 'evil-shift-left-line)
-  (add-hook 'edebug-mode-hook 'evil-insert-state)
   (mapc #'evil-declare-change-repeat
         '(company-complete-common
           company-complete-selection

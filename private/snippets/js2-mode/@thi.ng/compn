@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: N: @thi.ng/compn
+# key: compn
+# --
+const {
+  comp,
+  compL,
+  juxt,
+  partial,
+  threadFirst: tf,
+  threadLast: tl,
+} = require("@thi.ng/compose");
