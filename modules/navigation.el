@@ -625,7 +625,7 @@ When ARG is non-nil search in junk files."
   (ace-link-setup-default))
 
 (use-package awesome-tab
-  :straight (:host github :repo "manateelazycat/awesome-tab")
+  :straight (:host github :repo "yqrashawn/awesome-tab")
   :after projectile
   :init
   (defface awesome-tab-default
