@@ -16,6 +16,7 @@
 (customize-set-variable 'inhibit-startup-echo-area-message t)
 (setq confirm-nonexistent-file-or-buffer nil)
 (setq kmacro-ring-max 30)
+(setq save-silently t)
 
 ;; https://emacs.stackexchange.com/questions/3673/how-to-make-vc-and-magit-treat-a-symbolic-link-to-a-real-file-in-git-repo-just
 (setq find-file-visit-truename t)
@@ -312,12 +313,8 @@ If the universal prefix argument is used then kill the buffer too."
         recentf-max-saved-items 100
         recentf-auto-cleanup 'never
         recentf-auto-save-timer
-        ;; https://emacs.stackexchange.com/questions/45697/prevent-emacs-from-messaging-when-it-writes-recentf
-        (run-with-idle-timer 300 t
-                             (lambda ()
-                               (let ((save-silently t))
-                                 (recentf-save-list)))))
-
+        recentf-auto-save-timer (run-with-idle-timer 300 t
+                                                     'recentf-save-list))
   (add-hook 'delete-terminal-functions 'recentf-save-list)
   (recentf-mode 1)
   :config
