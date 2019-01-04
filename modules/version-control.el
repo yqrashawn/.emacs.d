@@ -21,9 +21,9 @@
   (setq magit-repository-directories '(("~/.emacs.d" . 0)
                                        ;; ("~/.emacs.d/straight/repos/" . 1)
                                        ("~/workspace/HOME/" . 1)
-                                       ("~/workspace/OFFICE/" . 1)
-                                       ("~/workspace/THIRD/" . 1)
-                                       ("~/.zprezto" . 0)))
+                                       ("~/workspace/OFFICE/" . 1)))
+                                       ;; ("~/workspace/THIRD/" . 1)
+                                       ;; ("~/.zprezto" . 0)))
   (setq magit-blame-echo-style 'margin)
   (setq magit-diff-refine-hunk 'all)
   :config
