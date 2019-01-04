@@ -312,7 +312,6 @@ If the universal prefix argument is used then kill the buffer too."
   (setq recentf-save-file (concat user-emacs-directory "recentf")
         recentf-max-saved-items 100
         recentf-auto-cleanup 'never
-        recentf-auto-save-timer
         recentf-auto-save-timer (run-with-idle-timer 300 t
                                                      'recentf-save-list))
   (add-hook 'delete-terminal-functions 'recentf-save-list)
