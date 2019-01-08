@@ -642,11 +642,13 @@ When ARG is non-nil search in junk files."
     (interactive)
     (if (minibufferp) (ivy-next-line)
       (awesome-tab-build-ivy-source)))
+
   (defun +awesome-tab-switch-group-prevouse-line ()
     (interactive)
     (if (minibufferp) (ivy-previous-line)
       (awesome-tab-build-ivy-source)
       (awesome-tab-switch-group)))
+
   (defun +awesome-tab-forward-tab-or-ivy-done ()
     (interactive)
     (if (minibufferp) (ivy-done)
@@ -679,6 +681,7 @@ When ARG is non-nil search in junk files."
   (global-set-key (kbd "C-M-S-s-p") '+awesome-tab-backward-group)
   (global-set-key (kbd "C-M-S-s-n") '+awesome-tab-switch-group-next-line)
   (global-set-key (kbd "C-M-S-s-p") '+awesome-tab-switch-group-prevouse-line)
+
   (defun awesome-tab-hide-tab-function (x)
     (let ((name (format "%s" x)))
       (and
@@ -687,6 +690,9 @@ When ARG is non-nil search in junk files."
        (not (string-prefix-p "*Compile-Log*" name))
        (not (string-prefix-p "*straight" name))
        (not (string-prefix-p "*lsp" name))
+       (not (string-prefix-p "*flycheck-postframe" name))
+       (not (string-prefix-p "*flycheck-tide-server" name))
+       (not (string-prefix-p "*magit-log" name))
        (not (and (string-prefix-p "magit" name)
                  (not (file-name-extension name))))))))
 
