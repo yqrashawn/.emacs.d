@@ -243,7 +243,54 @@ If the universal prefix argument is used then kill the buffer too."
   :bind(("C-x 7 w h" . 'windmove-left)
         ("C-x 7 w l" . 'windmove-right)
         ("C-x 7 w j" . 'windmove-down)
-        ("C-x 7 w k" . 'windmove-up)))
+        ("C-x 7 w k" . 'windmove-up))
+  :config
+  (defun hydra-move-splitter-left (arg)
+    "Move window splitter left."
+    (interactive "p")
+    (if (let ((windmove-wrap-around))
+          (windmove-find-other-window 'right))
+        (shrink-window-horizontally arg)
+      (enlarge-window-horizontally arg)))
+
+  (defun hydra-move-splitter-right (arg)
+    "Move window splitter right."
+    (interactive "p")
+    (if (let ((windmove-wrap-around))
+          (windmove-find-other-window 'right))
+        (enlarge-window-horizontally arg)
+      (shrink-window-horizontally arg)))
+
+  (defun hydra-move-splitter-up (arg)
+    "Move window splitter up."
+    (interactive "p")
+    (if (let ((windmove-wrap-around))
+          (windmove-find-other-window 'up))
+        (enlarge-window arg)
+      (shrink-window arg)))
+
+  (defun hydra-move-splitter-down (arg)
+    "Move window splitter down."
+    (interactive "p")
+    (if (let ((windmove-wrap-around))
+          (windmove-find-other-window 'up))
+        (shrink-window arg)
+      (enlarge-window arg)))
+
+  (global-set-key (kbd "C-x 8 w h")  'hydra-move-splitter-left)
+  (global-set-key (kbd "C-x 8 w l")  'hydra-move-splitter-right)
+  (global-set-key (kbd "C-x 8 w j")  'hydra-move-splitter-down)
+  (global-set-key (kbd "C-x 8 w k")  'hydra-move-splitter-up)
+  (global-set-key (kbd "C-x 3") (lambda () (interactive) (split-window-right) (windmove-right)))
+  (global-set-key (kbd "C-x 2") (lambda () (interactive) (split-window-below) (windmove-down))))
+
+(use-package buffer-move
+  :straight t
+  :commands (buf-move-right buf-move-left buf-move-down buf-move-up)
+  :bind (("C-x 9 w h" . 'buf-move-left)
+         ("C-x 9 w l" . 'move-rbuf-ight)
+         ("C-x 9 w j" . 'move-dbuf-own)
+         ("C-x 9 w k" . 'move-ubuf-p)))
 
 (use-package winner
   :bind(("C-x 7 w u". 'winner-undo)
