@@ -757,9 +757,9 @@ When ARG is non-nil search in junk files."
       (color-rg-apply-changed)
       (evil-evilified-state))))
 
-(use-package emacs-chunkwm
-  :straight (:host github :repo "yqrashawn/emacs-chunkwm")
-  :bind (("C-x 7 w h" . 'emacs-chunkwm-windmove-left)
-         ("C-x 7 w l" . 'emacs-chunkwm-windmove-right)
-         ("C-x 7 w j" . 'emacs-chunkwm-windmove-down)
-         ("C-x 7 w k" . 'emacs-chunkwm-windmove-up)))
+;; (use-package emacs-chunkwm
+;;   :straight (:host github :repo "yqrashawn/emacs-chunkwm")
+;;   :bind (("C-x 7 w h" . 'emacs-chunkwm-windmove-left)
+;;          ("C-x 7 w l" . 'emacs-chunkwm-windmove-right)
+;;          ("C-x 7 w j" . 'emacs-chunkwm-windmove-down)
+;;          ("C-x 7 w k" . 'emacs-chunkwm-windmove-up)))

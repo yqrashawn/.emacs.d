@@ -229,12 +229,47 @@ Available PROPS:
 
 (use-package company-tabnine
   :straight t
+  :after company
   :init
   ;; Number the candidates (use M-1, M-2 etc to select completions).
 
   ;; Use the tab-and-go frontend.
   ;; Allows TAB to select and complete at the same time.
-  (company-tng-configure-default))
+  (company-tng-configure-default)
+  :config
+  (setq yq-company-tabnine-on t)
+  (defun yq-toggle-company-tabnine ()
+    (interactive)
+    (if yq-company-tabnine-on
+        (progn
+          (setq yq-company-tabnine-on nil)
+          (message "toggle off company-tabnine"))
+      (message "toggle on company-tabnine"))
+    (company-tabnine-restart-server))
+  (spacemacs/set-leader-keys "tt" 'yq-toggle-company-tabnine)
+  (defun company-tabnine-query ()
+    "Query TabNine server for auto-complete."
+    (if yq-company-tabnine-on
+        (let* ((buffer-min 1)
+               (buffer-max (1+ (buffer-size)))
+               (before-point
+                (max (point-min) (- (point) company-tabnine-context-radius)))
+               (after-point
+                (min (point-max) (+ (point) company-tabnine-context-radius))))
+
+          (company-tabnine-send-request
+           (list
+            :version company-tabnine--protocol-version :request
+            (list :Autocomplete
+                  (list
+                   :before (buffer-substring-no-properties before-point (point))
+                   :after (buffer-substring-no-properties (point) after-point)
+                   :filename (or (buffer-file-name) nil)
+                   :region_includes_beginning (if (= before-point buffer-min)
+                                                  t json-false)
+                   :region_includes_end (if (= after-point buffer-max)
+                                            t json-false)
+                   :max_num_results company-tabnine-max-num-results))))))))
 
 (use-package company-try-hard
   :straight t
