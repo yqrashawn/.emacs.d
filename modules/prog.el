@@ -244,7 +244,9 @@ Available PROPS:
         (progn
           (setq yq-company-tabnine-on nil)
           (message "toggle off company-tabnine"))
-      (message "toggle on company-tabnine"))
+      (progn
+        (setq yq-company-tabnine-on t)
+        (message "toggle on company-tabnine")))
     (company-tabnine-restart-server))
   (spacemacs/set-leader-keys "tt" 'yq-toggle-company-tabnine)
   (defun company-tabnine-query ()
