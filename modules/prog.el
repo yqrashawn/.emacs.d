@@ -175,7 +175,7 @@ Available PROPS:
   :init
   (setq company-idle-delay 0
         company-selection-wrap-around t
-        company-show-numbers nil
+        company-show-numbers t
         company-minimum-prefix-length 1
         company-require-match nil
         company-dabbrev-ignore-case t
@@ -237,41 +237,17 @@ Available PROPS:
   ;; Allows TAB to select and complete at the same time.
   (company-tng-configure-default)
   :config
-  (setq yq-company-tabnine-on t)
   (defun yq-toggle-company-tabnine ()
     (interactive)
+    (company-tabnine-restart-server)
     (if yq-company-tabnine-on
         (progn
-          (setq yq-company-tabnine-on nil)
-          (message "toggle off company-tabnine"))
+          (setq company-tabnine--disabled nil)
+          (message "Turn off company-tabnine"))
       (progn
-        (setq yq-company-tabnine-on t)
-        (message "toggle on company-tabnine")))
-    (company-tabnine-restart-server))
-  (spacemacs/set-leader-keys "tt" 'yq-toggle-company-tabnine)
-  (defun company-tabnine-query ()
-    "Query TabNine server for auto-complete."
-    (if yq-company-tabnine-on
-        (let* ((buffer-min 1)
-               (buffer-max (1+ (buffer-size)))
-               (before-point
-                (max (point-min) (- (point) company-tabnine-context-radius)))
-               (after-point
-                (min (point-max) (+ (point) company-tabnine-context-radius))))
-
-          (company-tabnine-send-request
-           (list
-            :version company-tabnine--protocol-version :request
-            (list :Autocomplete
-                  (list
-                   :before (buffer-substring-no-properties before-point (point))
-                   :after (buffer-substring-no-properties (point) after-point)
-                   :filename (or (buffer-file-name) nil)
-                   :region_includes_beginning (if (= before-point buffer-min)
-                                                  t json-false)
-                   :region_includes_end (if (= after-point buffer-max)
-                                            t json-false)
-                   :max_num_results company-tabnine-max-num-results))))))))
+        (setq company-tabnine--disabled t)
+        (message "Turn on company-tabnine"))))
+  (spacemacs/set-leader-keys "tt" 'yq-toggle-company-tabnine))
 
 (use-package company-try-hard
   :straight t
