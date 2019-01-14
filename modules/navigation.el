@@ -35,8 +35,6 @@
   (define-key ivy-minibuffer-map (kbd "<escape>") 'minibuffer-keyboard-quit)
   (global-set-key (kbd "C-x C-f") 'counsel-find-file)
   (spacemacs/set-leader-keys "<SPC>" 'counsel-M-x)
-  (global-set-key (kbd "s-j") 'counsel-M-x)
-  (global-set-key (kbd "s-f") 'counsel-M-x)
   (spacemacs/set-leader-keys "f" nil)
   (spacemacs/set-leader-keys "fe" nil)
   (spacemacs/set-leader-keys "fed" 'yq/edit-dotfile)
@@ -122,10 +120,6 @@
     (if (minibufferp) (ivy-previous-line)
       (ivy-switch-buffer)))
 
-  (global-set-key (kbd "C-x C-9 j") '+ivy-switch-buffer-next-line)
-  (global-set-key (kbd "C-x C-9 k") '+ivy-switch-buffer-prev-line)
-  (global-set-key (kbd "C-M-S-s-j") '+ivy-switch-buffer-next-line)
-  (global-set-key (kbd "C-M-S-s-k") '+ivy-switch-buffer-prev-line)
   ;; (global-set-key (kbd "C-x C-8 l") 'ivy-alt-done)
   ;; (global-set-key (kbd "C-x C-8 j") '+ivy-switch-buffer-next-line)
   ;; (global-set-key (kbd "C-x C-8 k") '+ivy-switch-buffer-prev-line)
@@ -625,9 +619,10 @@ When ARG is non-nil search in junk files."
   (ace-link-setup-default))
 
 (use-package awesome-tab
-  :straight (:host github :repo "manateelazycat/awesome-tab")
+  :straight (:host github :repo "yqrashawn/awesome-tab")
   :after projectile
   :init
+  (setq ivy-source-awesome-tab-group t)
   (defface awesome-tab-default
     '((t :inherit default :height 1 :box (:line-width 1 :color "dark cyan" :style released-button)))
     "Default face used in the tab bar." :group 'awesome-tab)
@@ -643,41 +638,24 @@ When ARG is non-nil search in junk files."
   (setq awesome-tab-cycle-scope 'tabs)
   (add-hook 'spacemacs-post-theme-change-hook (lambda () (awesome-tab-mode 1)))
   :config
-  (defun awesome-tab-switch-group (&optional groupname)
-    "Switch tab groups using ido."
-    (interactive)
-    (let* ((tab-buffer-list (mapcar
-                             #'(lambda (b)
-                                 (with-current-buffer b
-                                   (list (current-buffer)
-                                         (buffer-name)
-                                         (funcall awesome-tab-buffer-groups-function))))
-                             (funcall awesome-tab-buffer-list-function)))
-           (groups (awesome-tab-get-groups))
-           (group-name (or groupname (ivy-read "Groups: " groups))))
-      (catch 'done
-        (mapc
-         #'(lambda (group)
-             (when (equal group-name (car (car (cdr (cdr group)))))
-               (throw 'done (switch-to-buffer (car (cdr group))))))
-         tab-buffer-list))))
   (defun +awesome-tab-switch-group-next-line ()
     (interactive)
-    (if (minibufferp) ( ivy-next-line)
-      (awesome-tab-switch-group)))
+    (if (minibufferp) (ivy-next-line)
+      (awesome-tab-build-ivy-source)))
+
   (defun +awesome-tab-switch-group-prevouse-line ()
     (interactive)
     (if (minibufferp) (ivy-previous-line)
+      (awesome-tab-build-ivy-source)
       (awesome-tab-switch-group)))
+
   (defun +awesome-tab-forward-tab-or-ivy-done ()
     (interactive)
     (if (minibufferp) (ivy-done)
       (awesome-tab-forward-tab)))
-  ;; disabled, using ivy-switch-buffer
-  ;; (global-set-key (kbd "C-x C-9 i") #'awesome-tab-select-beg-tab)
-  ;; (global-set-key (kbd "C-x C-9 o") #'awesome-tab-select-end-tab)
-  ;; (global-set-key (kbd "C-x C-9 j") '+awesome-tab-switch-group-next-line)
-  ;; (global-set-key (kbd "C-x C-9 k") '+awesome-tab-switch-group-prevouse-line)
+  (global-set-key (kbd "s-j") #'awesome-tab-jump)
+  (define-key evil-normal-state-map "su" #'awesome-tab-jump)
+
   ;; trackpad
   (global-set-key (kbd "s-{") #'awesome-tab-backward-tab)
   (global-set-key (kbd "s-}") '+awesome-tab-forward-tab-or-ivy-done)
@@ -693,8 +671,30 @@ When ARG is non-nil search in junk files."
   ;; gui with repeat
   (global-set-key (kbd "C-M-S-s-h") #'awesome-tab-backward-tab)
   (global-set-key (kbd "C-M-S-s-l") '+awesome-tab-forward-tab-or-ivy-done)
+
+  (global-set-key (kbd "C-x C-9 j") #'awesome-tab-forward-group)
+  (global-set-key (kbd "C-x C-9 k") #'awesome-tab-backward-group)
+  (global-set-key (kbd "C-M-S-s-j") #'awesome-tab-forward-group)
+  (global-set-key (kbd "C-M-S-s-k") #'awesome-tab-backward-group)
+
+  (global-set-key (kbd "C-M-S-s-n") '+awesome-tab-forward-group)
+  (global-set-key (kbd "C-M-S-s-p") '+awesome-tab-backward-group)
   (global-set-key (kbd "C-M-S-s-n") '+awesome-tab-switch-group-next-line)
-  (global-set-key (kbd "C-M-S-s-p") '+awesome-tab-switch-group-prevouse-line))
+  (global-set-key (kbd "C-M-S-s-p") '+awesome-tab-switch-group-prevouse-line)
+
+  (defun awesome-tab-hide-tab-function (x)
+    (let ((name (format "%s" x)))
+      (and
+       (not (string-prefix-p "*epc" name))
+       (not (string-prefix-p "*helm" name))
+       (not (string-prefix-p "*Compile-Log*" name))
+       (not (string-prefix-p "*straight" name))
+       (not (string-prefix-p "*lsp" name))
+       (not (string-prefix-p "*flycheck-postframe" name))
+       (not (string-prefix-p "*flycheck-tide-server" name))
+       (not (string-prefix-p "*magit-log" name))
+       (not (and (string-prefix-p "magit" name)
+                 (not (file-name-extension name))))))))
 
 (use-package loccur
   :straight t

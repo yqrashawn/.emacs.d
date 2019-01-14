@@ -133,6 +133,7 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
   :straight t
   :hook ((emacs-lisp-mode ielm-mode) . elisp-def-mode)
   :after elisp-mode
+  :diminish elisp-def-mode
   :init
   (dolist (mode '(emacs-lisp-mode lisp-interaction-mode ielm-mode))
     (let ((jumpl (intern (format "spacemacs-jump-handlers-%S" mode))))
@@ -150,7 +151,6 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
   (spacemacs/set-leader-keys "," 'yq/toggle-lispy)
   :config
   (advice-add #'special-lispy-eval :before (lambda () (or (fboundp 'cider--make-overlay) (require 'cider))))
-  ;; (evil-define-key 'insert lispy-mode-map-special "o" 'evil-execute-in-normal-state)
   (evil-define-key 'insert lispy-mode-map (kbd "C-k") 'lispy-kill)
   (evil-define-key 'insert lispy-mode-map (kbd "C-d") 'lispy-delete)
   (evil-define-key 'insert lispy-mode-map (kbd "C-r") 'undo-tree-redo)
