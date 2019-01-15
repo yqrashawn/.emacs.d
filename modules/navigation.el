@@ -655,6 +655,17 @@ When ARG is non-nil search in junk files."
       (awesome-tab-forward-tab)))
   (global-set-key (kbd "s-j") #'awesome-tab-jump)
   (define-key evil-normal-state-map "su" #'awesome-tab-jump)
+  (define-key awesome-tab-mode-map (kbd "C-x C-6 1") (lambda () (interactive) (awesome-tab-jump ?a)))
+  (define-key awesome-tab-mode-map (kbd "C-x C-6 2") (lambda () (interactive) (awesome-tab-jump ?s)))
+  (define-key awesome-tab-mode-map (kbd "C-x C-6 3") (lambda () (interactive) (awesome-tab-jump ?d)))
+  (define-key awesome-tab-mode-map (kbd "C-x C-6 4") (lambda () (interactive) (awesome-tab-jump ?f)))
+  (define-key awesome-tab-mode-map (kbd "C-x C-6 5") (lambda () (interactive) (awesome-tab-jump ?g)))
+  (define-key awesome-tab-mode-map (kbd "C-x C-6 6") (lambda () (interactive) (awesome-tab-jump ?h)))
+  (define-key awesome-tab-mode-map (kbd "C-x C-6 7") (lambda () (interactive) (awesome-tab-jump ?j)))
+  (define-key awesome-tab-mode-map (kbd "C-x C-6 8") (lambda () (interactive) (awesome-tab-jump ?k)))
+  (define-key awesome-tab-mode-map (kbd "C-x C-6 9") (lambda () (interactive) (awesome-tab-jump ?l)))
+  (define-key awesome-tab-mode-map (kbd "C-x C-6 0") (lambda () (interactive) (awesome-tab-jump 59)))
+
 
   ;; trackpad
   (global-set-key (kbd "s-{") #'awesome-tab-backward-tab)

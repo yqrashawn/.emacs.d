@@ -194,7 +194,23 @@ Available PROPS:
                                                company-keywords)
                                               company-files
                                               company-dabbrev))
+  (defvar yq//company-numbers '(59 ?a ?s ?d ?f ?g ?h ?j ?k ?l))
+  (defun yq//company-format-numbers (numbered)
+    (format " %s" (char-to-string (nth (mod numbered 10) yq//company-numbers))))
   :config
+  (define-key company-active-map (kbd "C-x C-6 1") (kbd "M-1"))
+  (define-key company-active-map (kbd "C-x C-6 2") (kbd "M-2"))
+  (define-key company-active-map (kbd "C-x C-6 3") (kbd "M-3"))
+  (define-key company-active-map (kbd "C-x C-6 4") (kbd "M-4"))
+  (define-key company-active-map (kbd "C-x C-6 5") (kbd "M-5"))
+  (define-key company-active-map (kbd "C-x C-6 6") (kbd "M-6"))
+  (define-key company-active-map (kbd "C-x C-6 7") (kbd "M-7"))
+  (define-key company-active-map (kbd "C-x C-6 8") (kbd "M-8"))
+  (define-key company-active-map (kbd "C-x C-6 9") (kbd "M-9"))
+  (define-key company-active-map (kbd "C-x C-6 0") (kbd "M-0"))
+
+  (setq company-show-numbers-function 'yq//company-format-numbers)
+
   (defun spacemacs//company-transformer-cancel (candidates)
     "Cancel completion if prefix is in the list `company-mode-completion-cancel-keywords'"
     (unless (member company-prefix company-mode-completion-cancel-keywords)
