@@ -311,7 +311,7 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
 (use-package dired
   :init
   (setq insert-directory-program "/usr/local/bin/gls")
-  (setq dired-listing-switches "-laGh1v")
+  (setq dired-listing-switches "-laGh1vt")
   (setq dired-recursive-deletes 'always)
   ;; https://www.emacswiki.org/emacs/EmacsSession which is easier to setup than "desktop.el"
   ;; See `session-globals-regexp' in "session.el".

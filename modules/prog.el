@@ -256,13 +256,13 @@ Available PROPS:
   (defun yq-toggle-company-tabnine ()
     (interactive)
     (company-tabnine-restart-server)
-    (if yq-company-tabnine-on
+    (if company-tabnine--disabled
         (progn
           (setq company-tabnine--disabled nil)
-          (message "Turn off company-tabnine"))
+          (message "Turn on company-tabnine"))
       (progn
         (setq company-tabnine--disabled t)
-        (message "Turn on company-tabnine"))))
+        (message "Turn off company-tabnine"))))
   (spacemacs/set-leader-keys "tt" 'yq-toggle-company-tabnine))
 
 (use-package company-try-hard
