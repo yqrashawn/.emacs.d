@@ -52,19 +52,8 @@
   (define-key evil-normal-state-map "sl" 'spacemacs/counsel-jump-in-buffer)
   (define-key evil-normal-state-map "sj" 'counsel-recentf)
   (define-key evil-normal-state-map (kbd "s SPC") 'counsel-M-x)
-  (define-key evil-normal-state-map (kbd "M-y" ) 'counsel-yank-pop)
-  (defun counsel-recent-dir ()
-    "Goto recent directories."
-    (interactive)
-    (unless recentf-mode (recentf-mode 1))
-    (let* ((cands (delete-dups
-                   (append my-dired-directory-history
-                           (mapcar 'file-name-directory recentf-list)
-                           ;; fasd history
-                           (if (executable-find "fasd")
-                               (split-string (shell-command-to-string "fasd -ld") "\n" t))))))
-      (ivy-read "directories:" cands :action 'dired)))
-  (define-key evil-normal-state-map "sy" 'counsel-recent-dir))
+  (define-key evil-normal-state-map (kbd "M-y" ) 'counsel-yank-pop))
+
 
 (use-package counsel-tramp
   :straight t
@@ -111,6 +100,33 @@
   ;; :init
   ;; (add-to-list 'ivy-re-builders-alist '(t . spacemacs/ivy--regex-plus))
   :config
+
+  ;; http://pragmaticemacs.com/emacs/open-a-recent-directory-in-dired-revisited/
+  (defun bjm/ivy-dired-recent-dirs ()
+    "Present a list of recently used directories and open the selected one in dired"
+    (interactive)
+    (let ((recent-dirs (delete-dups
+                        (mapcar
+                         (lambda (file)
+                           (if (not (string-match
+                                     "/\\(rsh\\|ssh\\|telnet\\|su\\|sudo\\|sshx\\|krlogin\\|ksu\\|rcp\\|scp\\|rsync\\|scpx\\|fcp\\|nc\\|ftp\\|smb\\|adb\\):"
+                                     file))
+                               (if (file-directory-p file)
+                                   file
+                                 (file-name-directory file))
+                             (if (file-name-directory file)
+                                 (file-name-directory file))))
+                         recentf-list))))
+      (let ((dir (ivy-read
+                  "Directory: "
+                  recent-dirs
+                  :re-builder #'ivy--regex
+                  :sort nil
+                  :initial-input nil)))
+        (dired dir))))
+
+  (define-key evil-normal-state-map "sy" 'bjm/ivy-dired-recent-dirs)
+
   (defun +ivy-switch-buffer-next-line ()
     (interactive)
     (if (minibufferp) (ivy-next-line)
