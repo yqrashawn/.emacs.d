@@ -86,9 +86,8 @@
   (setq magithub-clone-default-directory "~/workspace/THIRD/"
         magithub-dir spacemacs-cache-directory))
 
-(straight-use-package 'closql)
 (use-package forge
-  :straight t
+  :straight (:host github :repo "magit/forge")
   :after magit
   :bind ((:map forge-issue-section-map
                ("C-c C-v" . forge-browse-topic))
