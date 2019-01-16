@@ -288,9 +288,9 @@ If the universal prefix argument is used then kill the buffer too."
   :straight t
   :commands (buf-move-right buf-move-left buf-move-down buf-move-up)
   :bind (("C-x 9 w h" . 'buf-move-left)
-         ("C-x 9 w l" . 'move-rbuf-ight)
-         ("C-x 9 w j" . 'move-dbuf-own)
-         ("C-x 9 w k" . 'move-ubuf-p)))
+         ("C-x 9 w l" . 'buf-move-right)
+         ("C-x 9 w j" . 'buf-move-down)
+         ("C-x 9 w k" . 'buf-move-up)))
 
 (use-package winner
   :bind(("C-x 7 w u". 'winner-undo)

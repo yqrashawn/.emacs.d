@@ -109,10 +109,18 @@
   ;; (add-to-list 'ivy-re-builders-alist '(t . spacemacs/ivy--regex-plus))
   :config
   ;; docs: https://oremacs.com/swiper/#completion-styles
+  ;; (setq ivy-re-builders-alist
+  ;;       '((ivy-switch-buffer . ivy--regex-plus)
+  ;;         (counsel-find-file . ivy--regex-plus)
+  ;;         (counsel-recentf . ivy--regex-plus)
+  ;;         (counsel-rg . ivy--regex-plus)
+  ;;         (counsel-describe-function . ivy--regex-plus)
+  ;;         (counsel-describe-variable . ivy--regex-plus)
+  ;;         (describe-keymap . ivy--regex-plus)
+  ;;         (swiper . ivy--regex-plus)
+  ;;         (t . ivy--regex-fuzzy)))
   (setq ivy-re-builders-alist
-        '((ivy-switch-buffer . ivy--regex-plus)
-          (swiper . ivy--regex-plus)
-          (t . ivy--regex-fuzzy)))
+        '((t . ivy--regex-plus)))
 
   ;; http://pragmaticemacs.com/emacs/open-a-recent-directory-in-dired-revisited/
   (defun bjm/ivy-dired-recent-dirs ()
