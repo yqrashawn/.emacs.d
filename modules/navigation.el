@@ -54,7 +54,6 @@
   (define-key evil-normal-state-map (kbd "s SPC") 'counsel-M-x)
   (define-key evil-normal-state-map (kbd "M-y" ) 'counsel-yank-pop))
 
-
 (use-package counsel-tramp
   :straight t
   :commands (counsel-tramp)
@@ -63,6 +62,15 @@
   ;; https://www.emacswiki.org/emacs/TrampMode#toc7
   ;; (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash"))
   (spacemacs/set-leader-keys "fT" 'counsel-tramp))
+
+(use-package imenu
+  :defer t
+  :config
+  (defun imenu-use-package ()
+    (add-to-list 'imenu-generic-expression
+                 '("Package" "^\\s-*(use-pakcage\\s-+\\(\\(\\sw\\|\\s_\\)+\\)[[:space:]
+]+[^)]" 1)))
+  (add-hook 'emacs-lisp-mode-hook #'imenu-use-package))
 
 (use-package imenu-anywhere
   :straight t
@@ -100,6 +108,11 @@
   ;; :init
   ;; (add-to-list 'ivy-re-builders-alist '(t . spacemacs/ivy--regex-plus))
   :config
+  ;; docs: https://oremacs.com/swiper/#completion-styles
+  (setq ivy-re-builders-alist
+        '((ivy-switch-buffer . ivy--regex-plus)
+          (swiper . ivy--regex-plus)
+          (t . ivy--regex-fuzzy)))
 
   ;; http://pragmaticemacs.com/emacs/open-a-recent-directory-in-dired-revisited/
   (defun bjm/ivy-dired-recent-dirs ()
@@ -120,7 +133,7 @@
       (let ((dir (ivy-read
                   "Directory: "
                   recent-dirs
-                  :re-builder #'ivy--regex
+                  ;; :re-builder #'ivy--regex
                   :sort nil
                   :initial-input nil)))
         (dired dir))))
@@ -709,17 +722,52 @@ When ARG is non-nil search in junk files."
   (global-set-key (kbd "C-M-S-s-n") '+awesome-tab-switch-group-next-line)
   (global-set-key (kbd "C-M-S-s-p") '+awesome-tab-switch-group-prevouse-line)
 
+  (defun awesome-tab-buffer-groups ()
+    "`awesome-tab-buffer-groups' control buffers' group rules.
+
+Group awesome-tab with mode if buffer is derived from `eshell-mode' `emacs-lisp-mode' `dired-mode' `org-mode' `magit-mode'.
+All buffer name start with * will group to \"Emacs\".
+Other buffer group by `awesome-tab-in-project-p' with project name."
+    (list
+     (cond
+      (
+       (string-equal "*" (substring (buffer-name) 0 1))
+       ;; (or (string-equal "*" (substring (buffer-name) 0 1))
+       ;;     (memq major-mode '(magit-process-mode
+       ;;                        magit-status-mode
+       ;;                        magit-diff-mode
+       ;;                        magit-log-mode
+       ;;                        magit-file-mode
+       ;;                        magit-blob-mode
+       ;;                        magit-blame-mode)))
+
+       "Emacs")
+      ((derived-mode-p 'eshell-mode)
+       "EShell")
+      ((derived-mode-p 'emacs-lisp-mode)
+       "Elisp")
+      ;; ((derived-mode-p 'dired-mode)
+      ;;  "Dired")
+      ((memq major-mode '(org-mode org-agenda-mode diary-mode))
+       "OrgMode")
+      (t
+       (if (awesome-tab-in-project-p)
+           (awesome-tab-get-group-name (current-buffer))
+         "Common")))))
+
   (defun awesome-tab-hide-tab-function (x)
     (let ((name (format "%s" x)))
       (and
+       (not (string-prefix-p "*tide-server" name))
+       (not (string-prefix-p "*Compile-Log*" name))
+       (not (string-prefix-p "*vc" name))
+       (not (string-prefix-p "*flycheck-" name))
        (not (string-prefix-p "*epc" name))
        (not (string-prefix-p "*helm" name))
-       (not (string-prefix-p "*Compile-Log*" name))
        (not (string-prefix-p "*straight" name))
        (not (string-prefix-p "*lsp" name))
-       (not (string-prefix-p "*flycheck-postframe" name))
-       (not (string-prefix-p "*flycheck-tide-server" name))
        (not (string-prefix-p "*magit-log" name))
+       (not (string-prefix-p "magit-" name))
        (not (and (string-prefix-p "magit" name)
                  (not (file-name-extension name))))))))
 
