@@ -440,7 +440,6 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
     "sj" #'counsel-recentf
     "sJ" #'projectile-recentf
     "sB" #'projectile-switch-to-buffer
-    "sm" #'find-file-in-project
     "sb" #'ivy-switch-buffer
     (kbd "s SPC") 'counsel-M-x
     "sf" #'counsel-rg
@@ -543,6 +542,7 @@ FD-PROMPT, if non-nil, is passed as `ivy-read' prompt argument."
             :caller 'counsel-fd))
 
 (define-key evil-normal-state-map "sm" 'counsel-fd)
+(evil-define-key 'normal dired-mode-map "sm" 'counsel-fd)
 (defun yq/find-org|gtd () (interactive) (find-file "~/Dropbox/ORG/gtd.org"))
 (defun yq/find-org|project () (interactive) (find-file "~/Dropbox/ORG/project.org"))
 ;; (spacemacs/set-leader-keys "3" 'yq/find-org|gtd)
@@ -796,6 +796,7 @@ Other buffer group by `awesome-tab-in-project-p' with project name."
        (not (string-prefix-p "*lsp" name))
        (not (string-prefix-p "*magit-log" name))
        (not (string-prefix-p "magit-" name))
+       (not (string-prefix-p "magit:" name))
        (not (and (string-prefix-p "magit" name)
                  (not (file-name-extension name))))))))
 
