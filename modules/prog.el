@@ -184,6 +184,7 @@ Available PROPS:
         company-dabbrev-downcase nil
         company-dabbrev-minimum-length 2
         company-dabbrev-time-limit 1
+        company-echo-delay 0.2
         company-dabbrev-code-everywhere t
         company-dabbrev-code-other-buffers 'all
         company-dabbrev-code-time-limit 1)
