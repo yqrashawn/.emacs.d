@@ -295,8 +295,21 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   :straight t
   :diminish projectile-mode
   :init
+  (setq projectile-project-search-path '("~/workspace/" "~/.emacs.d/straight/repos/"))
   (setq projectile-completion-system 'ivy)
   :config
+  (when (executable-find "fd")
+    (setq projectile-git-command "fd . -t f -0"
+          projectile-generic-command projectile-git-command))
+  (add-to-list 'projectile-globally-ignored-directories "node_modules")
+  (add-to-list 'projectile-project-root-files "package.json")
+  (add-to-list 'projectile-project-root-files ".tabnine_root")
+  (setq projectile-sort-order 'recently-active)
+  (setq projectile-globally-ignored-file-suffixes '(".elc" ".min.js" ".min.css" ".unmin.js" ".unmin.css"))
+  (setq projectile-verbose nil)
+  (setq projectile-enable-idle-timer t)
+  (setq projectile-idle-timer-seconds 300)
+  (setq projectile-idle-timer-hook '(projectile-discover-projects-in-search-path))
   (define-key evil-normal-state-map "sJ" 'projectile-recentf))
 
 (use-package counsel-projectile
@@ -450,6 +463,7 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   (setq diredp-hide-details-initially-flag nil)
   (evil-leader/set-key "fj" 'diredp-dired-recent-dirs)
   (evil-leader/set-key "fJ" 'diredp-dired-recent-dirs-other-window)
+  (evil-define-key 'normal dired-mode-map "q" 'yq/kill-this-buffer)
   (evil-define-key 'normal dired-mode-map "h" 'diredp-up-directory-reuse-dir-buffer)
   (evil-define-key 'normal dired-mode-map "j" 'diredp-next-line)
   (evil-define-key 'normal dired-mode-map "k" 'diredp-previous-line)
@@ -505,7 +519,9 @@ FD-PROMPT, if non-nil, is passed as `ivy-read' prompt argument."
                                  " in directory: ")))))
   (counsel-require-program (car (split-string counsel-fd-base-command)))
   (ivy-set-prompt 'counsel-fd #'counsel-prompt-function-default)
-  (setq counsel-fd-current-dir (or initial-directory default-directory))
+  (setq counsel-fd-current-dir (or initial-directory
+                                   (locate-dominating-file default-directory ".git")
+                                   default-directory))
   (ivy-read (or fd-prompt (car (split-string counsel-fd-base-command)))
             (lambda (string)
               (counsel-fd-function string (concat counsel-fd-base-command " " (or fd-args " "))))
@@ -526,11 +542,12 @@ FD-PROMPT, if non-nil, is passed as `ivy-read' prompt argument."
                       (swiper--cleanup))
             :caller 'counsel-fd))
 
+(define-key evil-normal-state-map "sm" 'counsel-fd)
 (defun yq/find-org|gtd () (interactive) (find-file "~/Dropbox/ORG/gtd.org"))
 (defun yq/find-org|project () (interactive) (find-file "~/Dropbox/ORG/project.org"))
 ;; (spacemacs/set-leader-keys "3" 'yq/find-org|gtd)
 ;; (spacemacs/set-leader-keys "4" 'yq/find-org|project)
-;; (spacemacs/set-leader-keys "sm" 'counsel-fd)
+(spacemacs/set-leader-keys "sm" (lambda () (interactive) (let ((current-prefix-arg '(1))) (call-interactively 'counsel-fd))))
 
 (defun yq/org ()
   (interactive)
@@ -574,18 +591,21 @@ FD-PROMPT, if non-nil, is passed as `ivy-read' prompt argument."
 (define-key evil-normal-state-map (kbd "s.") 'yq/open-with-alfred)
 (spacemacs/set-leader-keys "bb" 'yq/open-with-alfred)
 
-(use-package find-file-in-project
-  :straight t
-  :commands (find-file-in-project)
-  :init
-  (setq ffip-use-rust-fd t)
-  (spacemacs/set-leader-keys "pf" 'find-file-in-project)
-  (spacemacs/set-leader-keys "pF" 'find-relative-path)
-  (spacemacs/set-leader-keys "sm" 'find-file-in-project)
-  (spacemacs/set-leader-keys "sM" 'find-relative-path)
-  (evil-define-key 'normal dired-mode-map "sm" 'find-file-in-project)
-  (define-key evil-normal-state-map "sm" 'find-file-in-project)
-  (define-key evil-normal-state-map "sM" 'find-relative-path))
+;; disable ffip for now, I can just use counsel-fd
+;; (use-package find-file-in-project
+;;   :straight t
+;;   :commands (find-file-in-project)
+;;   :init
+;;   (when (executable-find "fd")
+;;     (setq ffip-use-rust-fd t))
+;;   (setq ffip-project-file '(".git" "package.json" ".tabnine_root"))
+;;   (spacemacs/set-leader-keys "pf" 'find-file-in-project)
+;;   (spacemacs/set-leader-keys "pF" 'find-relative-path)
+;;   (spacemacs/set-leader-keys "sm" 'find-file-in-project)
+;;   (spacemacs/set-leader-keys "sM" 'find-relative-path)
+;;   (evil-define-key 'normal dired-mode-map "sm" 'find-file-in-project)
+;;   (define-key evil-normal-state-map "sm" 'find-file-in-project)
+;;   (define-key evil-normal-state-map "sM" 'find-relative-path))
 
 (use-package open-junk-file
   :straight t
