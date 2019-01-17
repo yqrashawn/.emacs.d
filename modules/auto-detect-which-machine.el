@@ -14,8 +14,8 @@
   "Load macbook theme and font size."
   (interactive)
   (if (yq/day-p)
-      (load-theme 'doom-nord-light)
-    ;; (load-theme 'zenburn)
+      ;; (load-theme 'doom-nord-light)
+      (load-theme 'zenburn)
     (load-theme 'zenburn))
   (spacemacs/set-default-font yq/font15))
 
