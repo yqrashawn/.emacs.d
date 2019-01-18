@@ -52,6 +52,7 @@
   (customize-set-variable 'evil-esc-delay 0)
   (customize-set-variable 'evil-shift-width 2)
   (customize-set-variable 'evil-show-paren-range 1)
+  (customize-set-variable 'evil-ex-substitute-global t)
   (setq evil-insert-state-cursor '(box "green"))
   (defun yq/update-evil-emacs-state-modes (mode-to-remove)
     "remove MODE-TO-REMOVE from evil-emacs-state-modes"
@@ -61,17 +62,18 @@
              (eq index mode-to-remove))
            evil-emacs-state-modes)))
   :config
+  (define-key evil-ex-completion-map (kbd "C-a") #'move-beginning-of-line)
+  (define-key evil-ex-completion-map (kbd "C-b") #'backward-char)
   (define-key evil-normal-state-map (kbd "C-b") 'evil-execute-in-emacs-state)
-  (define-key evil-normal-state-map "H" 'evil-backward-section-begin)
-  (define-key evil-normal-state-map "L" 'evil-forward-section-begin)
-  (define-key evil-normal-state-map ">" 'evil-shift-right-line)
-  (define-key evil-normal-state-map "<" 'evil-shift-left-line)
+  (define-key evil-normal-state-map "H" #'evil-backward-section-begin)
+  (define-key evil-normal-state-map "L" #'evil-forward-section-begin)
+  (define-key evil-normal-state-map ">" #'evil-shift-right-line)
+  (define-key evil-normal-state-map "<" #'evil-shift-left-line)
   (mapc #'evil-declare-change-repeat
         '(company-complete-common
           company-complete-selection
           company-complete-number
           hippie-expand))
-  (define-key evil-normal-state-map (kbd "C-i") 'evil-jump-forward)
   ;; (define-key evil-normal-state-map (kbd "<tab>") 'spacemacs/alternate-buffer)
   ;;   (defmacro evil-map (state key seq)
   ;;     "Map for a given STATE a KEY to a sequence SEQ of keys.

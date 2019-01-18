@@ -22,8 +22,6 @@
                                        ;; ("~/.emacs.d/straight/repos/" . 1)
                                        ("~/workspace/HOME/" . 1)
                                        ("~/workspace/OFFICE/" . 1)))
-                                       ;; ("~/workspace/THIRD/" . 1)
-                                       ;; ("~/.zprezto" . 0)))
   (setq magit-blame-echo-style 'margin)
   (setq magit-diff-refine-hunk 'all)
   :config
@@ -93,9 +91,14 @@
                ("C-c C-v" . forge-browse-topic))
          (:map forge-pullreq-section-map
                ("C-c C-v" . forge-browse-topic)))
-  :init
-  (define-key magit-mode-map "L" #'forge-dispatch)
   :config
+  (evil-magit-define-key evil-magit-state 'magit-mode-map "F" 'magit-pull-popup)
+  (evil-magit-define-key evil-magit-state 'magit-mode-map "p" 'magit-push-popup)
+  (evil-magit-define-key evil-magit-state 'magit-mode-map "L" 'forge-dispatch)
+  ;; (magit-change-popup-key 'magit-dispatch-popup :actions ?p ?P)
+  ;; (magit-remove-popup-key 'magit-dispatch-popup :actions ?F)
+  ;; (magit-define-popup-action 'magit-dispatch-popup ?p "Pulling" 'magit-pull-popup ?P t)
+  (magit-define-popup-action 'magit-dispatch-popup ?L "Forge" 'forge-dispatch ?f)
   (add-to-list 'forge-alist '("917.bimsop.com" "917.bimsop.com/api/v1" "917.bimsop.com" forge-gogs-repository)))
 
 ;; (use-package magit-todos
