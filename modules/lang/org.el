@@ -288,7 +288,7 @@ Inserted by installing org-mode or when a release is made."
 
   ;; https://github.com/novoid/dot-emacs/blob/28c146f785c1d87dc821514e8448e3dfe82e56ce/config.org
   (setq org-id-method 'org)
-  (setq org-id-include-domain t)
+  (setq org-id-include-domain nil)
   (setq org-log-into-drawer t)
   (setq org-log-redeadline 'note) ;; record when the deadline date of a tasks is modified
   (setq org-log-reschedule 'time)
@@ -823,3 +823,19 @@ Clock   In/out^     ^Edit^   ^Summary     (_?_)
 ;; (define-key org-agenda-mode-map (kbd ".") 'hydra-org-agenda/body)
 (spacemacs/set-leader-keys "2" (lambda () (interactive) (org-agenda nil "r")))
 ;; (add-hook 'org-agenda-mode-hook 'hydra-org-agenda/body)
+
+(use-package org-brain
+  :straight t
+  :after org
+  :init
+  (setq org-brain-path "~/Dropbox/ORG/BRAIN/")
+  ;; For Evil users
+  (evil-set-initial-state 'org-brain-visualize-mode 'emacs)
+  (add-to-list 'org-structure-template-alist '("d" . "description"))
+  :config
+  (setq org-id-track-globally t)
+  (push '("b" "Brain" plain (function org-brain-goto-end)
+          "* %i%?" :empty-lines 1)
+        org-capture-templates)
+  (setq org-brain-visualize-default-choices 'all)
+  (setq org-brain-title-max-length 12))
