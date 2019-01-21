@@ -142,6 +142,7 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
 (use-package lispy
   :straight t
   :diminish lispy " ʪ"
+  ;; :hook ((lisp-mode emacs-lisp-mode ielm-mode clojure-mode clojurescript-mode) . lispy-mode)
   :init
   (customize-set-variable 'lispy-eval-display-style 'overlay)
   (customize-set-variable 'lispy-visit-method 'projectile)
@@ -151,6 +152,8 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
   (spacemacs/set-leader-keys "," 'yq/toggle-lispy)
   :config
   (advice-add #'special-lispy-eval :before (lambda () (or (fboundp 'cider--make-overlay) (require 'cider))))
+  (define-key lispy-mode-map (kbd "C-x C-6 q") #'lispy-describe-inline)
+  (define-key lispy-mode-map (kbd "C-x C-6 w") #'lispy-arglist-inline)
   (evil-define-key 'insert lispy-mode-map (kbd "C-k") 'lispy-kill)
   (evil-define-key 'insert lispy-mode-map (kbd "C-d") 'lispy-delete)
   (evil-define-key 'insert lispy-mode-map (kbd "C-r") 'undo-tree-redo)
@@ -182,6 +185,17 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
            smart-tab      ; C-b & C-f jump positions and smart shift with tab & S-tab.
            smart-yank))
   :config
+  (define-key parinfer-mode-map (kbd "C-x C-6 q") #'lispy-describe-inline)
+  (define-key parinfer-mode-map (kbd "C-x C-6 w") #'lispy-arglist-inline)
+  (define-key parinfer-mode-map (kbd "C-k") #'lispy-kill)
+  (define-key parinfer-mode-map (kbd "C-d") #'lispy-delete)
+  (define-key parinfer-mode-map (kbd "C-d") #'lispy-delete)
+  (define-key parinfer-mode-map (kbd "C-a") #'lispy-move-beginning-of-line)
+  (define-key parinfer-mode-map (kbd "C-e") #'lispy-move-end-of-line)
+  ;; (evil-define-key 'normal parinfer-mode-map (kbd "C-a") #'lispy-move-beginning-of-line)
+  (evil-define-key 'normal parinfer-mode-map (kbd "C-e") #'lispy-move-end-of-line)
+  ;; (evil-define-key 'insert parinfer-mode-map (kbd "C-a") #'lispy-move-beginning-of-line)
+  (evil-define-key 'insert parinfer-mode-map (kbd "C-e") #'lispy-move-end-of-line)
   (evil-define-key 'normal parinfer-mode-map "si" #'lispy-mark-symbol))
 
 (use-package eval-sexp-fu

@@ -48,6 +48,7 @@
   :straight t
   :after cider
   :init
+  (customize-set-variable 'cider-default-repl-command 'lein)
   (spacemacs|add-company-backends
     :backends company-capf
     :modes

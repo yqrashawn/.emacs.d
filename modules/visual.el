@@ -1,6 +1,11 @@
 (yq/get-modules "visual-funcs.el")
 (spacemacs/set-leader-keys "tf" 'yq/toggle-default-font)
 
+(use-package ivy-rich
+  :straight t
+  :after ivy
+  :init (ivy-rich-mode 1))
+
 (use-package golden-ratio-scroll-screen
   :straight t
   :config

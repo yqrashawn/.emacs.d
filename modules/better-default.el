@@ -463,6 +463,7 @@ If the universal prefix argument is used then kill the buffer too."
      ;; ("^magit-process:\ .*"      :regexp t  :dedicated nil :position bottom :stick t    :noselect nil :height 0.4)
      ;; ("\*helpful\ .*\*"          :regexp t  :dedicated nil :position bottom :stick t    :noselect t   :height 0.4)
      ("*Help*"                              :dedicated nil :position bottom :stick t    :noselect t   :height 0.4)
+     ("*cider-doc*"                         :dedicated nil :position bottom :stick t    :noselect t   :height 0.4)
      ("*Backtrace*"                         :dedicated nil :position bottom :stick t    :noselect t   :height 0.4)
      ("*Warnings*"                          :dedicated t   :position bottom :stick t    :noselect t   :height 0.4)
      ("*HTTP Response*"                     :dedicated nil :position bottom :stick t    :noselect t   :height 0.4)

@@ -15,7 +15,6 @@
                    :files ("counsel.el")
                    :upstream (:host github :repo "abo-abo/swiper"))
   :diminish counsel-mode
-  :init
   :config
   (and (fboundp 'counsel--elisp-to-pcre) (defalias 'counsel-unquote-regex-parens 'counsel--elisp-to-pcre))
   (defun counsel-imenu-comments ()
@@ -43,10 +42,11 @@
   (spacemacs/set-leader-keys "fF" 'find-file-other-window)
   (spacemacs/set-leader-keys "h" nil)
   (spacemacs/set-leader-keys "hd" nil)
-  (spacemacs/set-leader-keys "hdf" 'counsel-describe-function)
-  (spacemacs/set-leader-keys "hdv" 'counsel-describe-variable)
-  (spacemacs/set-leader-keys "hdk" 'describe-key)
-  (spacemacs/set-leader-keys "hdl" 'view-lossage)
+  (spacemacs/set-leader-keys "hk" #'counsel-descbinds)
+  (spacemacs/set-leader-keys "hdf" #'counsel-describe-function)
+  (spacemacs/set-leader-keys "hdv" #'counsel-describe-variable)
+  (spacemacs/set-leader-keys "hdk" #'describe-key)
+  (spacemacs/set-leader-keys "hdl" #'view-lossage)
   (spacemacs/set-leader-keys "fJ" 'spacemacs/open-junk-file)
   (define-key evil-normal-state-map "sf" 'counsel-rg)
   (define-key evil-normal-state-map "sl" 'spacemacs/counsel-jump-in-buffer)
