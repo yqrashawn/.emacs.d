@@ -173,7 +173,7 @@ Available PROPS:
   :straight t
   :diminish company-mode
   :init
-  (setq company-idle-delay 0
+  (setq company-idle-delay 0.2
         company-selection-wrap-around t
         company-show-numbers t
         company-minimum-prefix-length 1
@@ -253,6 +253,7 @@ Available PROPS:
   ;; Use the tab-and-go frontend.
   ;; Allows TAB to select and complete at the same time.
   (company-tng-configure-default)
+  (setq company-tabnine-no-continue t)
   :config
   (defun yq-toggle-company-tabnine ()
     (interactive)
@@ -307,7 +308,8 @@ If the error list is visible, hide it.  Otherwise, show it."
   (yq/add-toggle syntax-checking
     :mode flycheck-mode)
   (spacemacs/set-leader-keys "ts" 'yq/toggle-syntax-checking)
-  (global-flycheck-mode 1)
+  ;; disable flycheck by default
+  ;; (global-flycheck-mode 1)
   (setq flycheck-json-python-json-executable "/usr/local/bin/python3")
 
   ;; Custom fringe indicator
