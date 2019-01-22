@@ -61,6 +61,8 @@
 
 (use-package exec-path-from-shell
   :straight t
+  :init
+  (setq exec-path-from-shell-arguments '("-l"))
   :config
   (when (memq window-system '(mac ns x))
     (exec-path-from-shell-initialize)))

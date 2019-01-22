@@ -910,7 +910,7 @@ otherwise it is scaled down."
 ;;       (when (and (f-exists? dir) (not (f-writable? dir)))
 ;;         (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))))
 
-(setq imenu-max-item-length 256)
+(setq imenu-max-item-length 1024)
 
 (use-package string-edit
   :straight t

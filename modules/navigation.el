@@ -63,14 +63,14 @@
   ;; (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash"))
   (spacemacs/set-leader-keys "fT" 'counsel-tramp))
 
-(use-package imenu
-  :defer t
-  :config
-  (defun imenu-use-package ()
-    (add-to-list 'imenu-generic-expression
-                 '("Package" "^\\s-*(use-pakcage\\s-+\\(\\(\\sw\\|\\s_\\)+\\)[[:space:]
-]+[^)]" 1)))
-  (add-hook 'emacs-lisp-mode-hook #'imenu-use-package))
+;; (use-package imenu
+;;   :defer t
+;;   :config
+;;   (defun imenu-use-package ()
+;;     (add-to-list 'imenu-generic-expression
+;;                  '("Package" "^\\s-*(use-pakcage\\s-+\\(\\(\\sw\\|\\s_\\)+\\)[[:space:]
+;; ]+[^)]" 1)))
+;;   (add-hook 'emacs-lisp-mode-hook #'imenu-use-package))
 
 (use-package imenu-anywhere
   :straight t
