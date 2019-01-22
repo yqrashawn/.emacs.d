@@ -332,8 +332,8 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
 ;;   (with-eval-after-load 'edebug
 ;;     (bind-key "?" #'hydra-edebug/body edebug-mode-map)))
 
-(use-package elisp-demos
-  :straight (:host github :repo "xuchunyang/elisp-demos")
-  :commands (elisp-demos-advice-helpful-update)
-  :init (advice-add 'describe-function-1 :after #'elisp-demos-advice-describe-function-1)
-        (advice-add 'helpful-update :after #'elisp-demos-advice-helpful-update))
+;; (use-package elisp-demos
+;;   :straight t
+;;   :init
+;;   (advice-add 'describe-function-1 :after #'elisp-demos-advice-describe-function-1)
+;;   (advice-add 'helpful-update :after #'elisp-demos-advice-helpful-update))
