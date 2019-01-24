@@ -1394,3 +1394,12 @@ Info-mode:
      (t '("x-terminal-emulator")))))
 
 ;; echo window shadow <cgwindowid> 0 | nc 127.0.0.1 5050
+
+;; https://emacs.stackexchange.com/questions/47341/fine-grained-undo/47349#47349
+(when (timerp undo-auto-current-boundary-timer)
+  (cancel-timer undo-auto-current-boundary-timer))
+
+(fset 'undo-auto--undoable-change
+      (lambda () (add-to-list 'undo-auto--undoably-changed-buffers (current-buffer))))
+
+(fset 'undo-auto-amalgamate 'ignore)
