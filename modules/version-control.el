@@ -25,6 +25,10 @@
   (setq magit-blame-echo-style 'margin)
   (setq magit-diff-refine-hunk 'all)
   :config
+  (defun +magit-submodule-pull-all ()
+    (interactive)
+    (async-shell-command "git submodule foreach git fetch --all && git submodule foreach git merge origin/master"))
+  (magit-define-popup-action 'magit-submodule-popup ?U "pull all submodules" '+magit-submodule-pull-all)
   (add-to-list 'magit-diff-arguments "--minimal")
   (add-to-list 'magit-diff-section-arguments "--minimal")
   (evil-define-key 'normal magit-mode-map (kbd "<tab>") 'magit-section-toggle)
@@ -78,6 +82,7 @@
 (use-package forge
   :straight (:host github :repo "magit/forge")
   :after evil-magit
+  :commands (forge-dispatch)
   :bind ((:map forge-issue-section-map
                ("C-c C-v" . forge-browse-topic))
          (:map forge-pullreq-section-map
@@ -88,6 +93,7 @@
   (evil-magit-define-key evil-magit-state 'magit-mode-map "F" 'forge-dispatch)
   (magit-change-popup-key 'magit-dispatch-popup :actions ?p ?P)
   (magit-remove-popup-key 'magit-dispatch-popup :actions ?F)
+  (magit-define-popup-action 'magit-push-popup ?P 'magit--push-current-to-pushremote-desc 'magit-push-current-to-pushremote)
   (magit-define-popup-action 'magit-dispatch-popup ?p "Pulling" 'magit-pull-popup ?P t)
   (magit-define-popup-action 'magit-dispatch-popup ?F "Forge" 'forge-dispatch ?f)
   :config
