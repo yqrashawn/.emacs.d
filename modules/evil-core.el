@@ -61,6 +61,9 @@
            (lambda (index)
              (eq index mode-to-remove))
            evil-emacs-state-modes)))
+  (defun +evil-jump-enable (command)
+    "Function to enable evil jump on other functions"
+    (evil-set-command-property command :jump t))
   :config
   (define-key evil-ex-completion-map (kbd "C-a") #'move-beginning-of-line)
   (define-key evil-ex-completion-map (kbd "C-b") #'backward-char)
@@ -105,7 +108,7 @@
         (call-interactively
          'evil-shift-left)
         (execute-kbd-macro "gv"))))
-  (define-key evil-visual-state-map "J" (concat ":m '>+1" (kbd "RET") "gv=gv"))
+  (define-key evil-visual-state-map "j" (concat ":m '>+1" (kbd "RET") "gv=gv"))
   (define-key evil-visual-state-map "K" (concat ":m '<-2" (kbd "RET") "gv=gv"))
   (define-key evil-insert-state-map (kbd "C-r") 'evil-shift-left-line)
   (spacemacs|define-text-object "$" "dollar" "$" "$")
@@ -347,12 +350,14 @@
 (use-package anzu
   :straight t
   :diminish anzu-mode
+  :after evil
   :init
   (global-anzu-mode t)
   (setq anzu-cons-mode-line-p nil
         anzu-minimum-input-length 1
         anzu-search-threshold 250)
   :config
+  (+evil-jump-enable 'evilmi-jump-items)
   ;; Avoid anzu conflicts across buffers
   (mapc #'make-variable-buffer-local
         '(anzu--total-matched
