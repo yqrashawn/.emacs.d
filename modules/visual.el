@@ -10,8 +10,8 @@
   :straight t
   :after evil
   :config
-  (+evil-jump-enable 'golden-ratio-scroll-screen-up)
-  (+evil-jump-enable 'golden-ratio-scroll-screen-down)
+  (evil-set-command-property 'golden-ratio-scroll-screen-up :jump t)
+  (evil-set-command-property 'golden-ratio-scroll-screen-down :jump t)
   (setq golden-ratio-scroll-highlight-delay (quote (0.07 . 0.03)))
   (setq golden-ratio-scroll-highlight-flag (quote (quote nil)))
   (define-key evil-normal-state-map (kbd "C-d") 'golden-ratio-scroll-screen-up)

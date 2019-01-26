@@ -61,9 +61,6 @@
            (lambda (index)
              (eq index mode-to-remove))
            evil-emacs-state-modes)))
-  (defun +evil-jump-enable (command)
-    "Function to enable evil jump on other functions"
-    (evil-set-command-property command :jump t))
   :config
   (define-key evil-ex-completion-map (kbd "C-a") #'move-beginning-of-line)
   (define-key evil-ex-completion-map (kbd "C-b") #'backward-char)
@@ -357,7 +354,7 @@
         anzu-minimum-input-length 1
         anzu-search-threshold 250)
   :config
-  (+evil-jump-enable 'evilmi-jump-items)
+  (evil-set-command-property 'evilmi-jump-items :jump t)
   ;; Avoid anzu conflicts across buffers
   (mapc #'make-variable-buffer-local
         '(anzu--total-matched

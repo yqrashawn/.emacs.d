@@ -71,6 +71,7 @@ sets `spacemacs-jump-handlers' in buffers of that mode."
 ;; See discussion on https://github.com/syl20bnr/spacemacs/pull/6771
 
 (with-eval-after-load 'evil
-  (+evil-jump-enable 'spacemacs/jump-to-definition))
+  (evil-set-command-property 'spacemacs/jump-to-definition :jump t))
+
 
 (provide 'core-jump)
