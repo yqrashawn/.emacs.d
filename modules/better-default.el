@@ -563,6 +563,7 @@ If the universal prefix argument is used then will the windows too."
 (spacemacs/set-leader-keys "tL" 'yq/toggle-hl-line)
 (spacemacs/set-leader-keys "Ts" 'load-theme)
 
+(setq comment-auto-fill-only-comments t)
 (yq/add-toggle auto-fill :mode auto-fill-mode)
 (spacemacs/set-leader-keys "tF" 'yq/toggle-auto-fill)
 
