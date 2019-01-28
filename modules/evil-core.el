@@ -105,7 +105,7 @@
         (call-interactively
          'evil-shift-left)
         (execute-kbd-macro "gv"))))
-  (define-key evil-visual-state-map "j" (concat ":m '>+1" (kbd "RET") "gv=gv"))
+  (define-key evil-visual-state-map "J" (concat ":m '>+1" (kbd "RET") "gv=gv"))
   (define-key evil-visual-state-map "K" (concat ":m '<-2" (kbd "RET") "gv=gv"))
   (define-key evil-insert-state-map (kbd "C-r") 'evil-shift-left-line)
   (spacemacs|define-text-object "$" "dollar" "$" "$")
