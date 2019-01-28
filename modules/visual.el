@@ -136,21 +136,21 @@ has been changed to THEME."
               doom-modeline-lsp t)
   :config
   (doom-modeline-def-modeline 'main
-    '(bar workspace-number window-number evil-state matches " " buffer-info remote-host " " selection-info)
-    '(misc-info persp-name lsp debug minor-modes buffer-encoding major-mode process vcs))
+    '(bar workspace-number window-number evil-state matches buffer-info remote-host selection-info)
+    '(misc-info persp-name lsp github debug minor-modes buffer-encoding major-mode process vcs checker))
 
   (doom-modeline-def-modeline 'minimal
     '(bar matches " " buffer-info)
     '(media-info major-mode))
 
   (doom-modeline-def-modeline 'special
-    '(bar window-number evil-state matches " " buffer-info-simple " " selection-info)
-    '(misc-info lsp debug minor-modes buffer-encoding major-mode process))
+    '(bar window-number evil-state matches buffer-info-simple selection-info)
+    '(misc-info lsp debug minor-modes buffer-encoding major-mode process checker))
 
   (doom-modeline-def-modeline 'project
-    '(bar window-number buffer-default-directory)
-    '(misc-info major-mode))
+    '(bar " " buffer-default-directory)
+    '(misc-info github debug " " major-mode " "))
 
   (doom-modeline-def-modeline 'media
-    '(bar window-number " %b  ")
-    '(misc-info media-info major-mode)))
+    '(bar window-number buffer-size buffer-info)
+    '(misc-info media-info major-mode vcs " ")))
