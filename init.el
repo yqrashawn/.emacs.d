@@ -6,7 +6,7 @@
 ;;                               (time-subtract after-init-time before-init-time)))
 ;;                      gcs-done)))
 ;; Always load newest byte code
-(setq load-prefer-newer t)
+;; (setq load-prefer-newer t)
 
 (when (fboundp 'tool-bar-mode)
   (tool-bar-mode -1))
