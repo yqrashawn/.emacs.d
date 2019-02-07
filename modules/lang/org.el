@@ -683,8 +683,8 @@ _vr_ reset      ^^                       ^^                 _._ toggle hydra
 ^^              ^^                       ^^                 ^^
 "
   ;; Entry
-  ("j" org-agenda-next-line)
-  ("k" org-agenda-previous-line)
+  ("j" org-agenda-next-item)
+  ("k" org-agenda-previous-item)
   ("hA" org-agenda-archive-default)
   ("hk" org-agenda-kill)
   ("hp" org-agenda-priority)
