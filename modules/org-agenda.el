@@ -1,6 +1,3 @@
-(setq org-agenda-files '("~/Dropbox/ORG/gtd.org"
-                         "~/Dropbox/ORG/project.org"))
-
 (setq org-agenda-skip-unavailable-files t)
 
 (defun +org/has-child-p ()
@@ -72,21 +69,21 @@
             ;;            ""))
             ;;         (org-agenda-files
             ;;          '("~/Dropbox/ORG/gtd.org"))))
-            (tags-todo "+OFFICE-PRIORITY=\"C\""
-                       ((org-agenda-overriding-header "Office High Priority Tasks")
-                        (org-agenda-skip-function
-                         '(org-agenda-skip-entry-if 'todo 'done))))
-            (tags-todo "HOME-PRIORITY=\"C\""
-                       ((org-agenda-overriding-header "Home High Priority Tasks")
-                        (org-agenda-skip-function
-                         '(org-agenda-skip-entry-if 'todo 'done))))
+            ;; (tags-todo "+OFFICE-PRIORITY=\"C\""
+            ;;            ((org-agenda-overriding-header "Office High Priority Tasks")
+            ;;             (org-agenda-skip-function
+            ;;              '(org-agenda-skip-entry-if 'todo 'done))))
+            ;; (tags-todo "HOME-PRIORITY=\"C\""
+            ;;            ((org-agenda-overriding-header "Home High Priority Tasks")
+            ;;             (org-agenda-skip-function
+            ;;              '(org-agenda-skip-entry-if 'todo 'done))))
             (tags-todo "+CREATED>=\"<-1w>\"|+UPDATED>=\"<-1w>\""
                        ((org-agenda-overriding-header "Tasks Created This Week")
                         (org-agenda-skip-function
-                         '(org-agenda-skip-entry-if 'todo 'done))))
-            (tags "*"
-                  ((org-agenda-overriding-header "Recent Activity")
-                   (org-agenda-skip-function '(+org/has-child-and-last-update-before 7)))))
+                         '(org-agenda-skip-entry-if 'todo 'done)))))
+           ;; (tags "*"
+           ;;       ((org-agenda-overriding-header "Recent Activity")
+           ;;        (org-agenda-skip-function '(+org/has-child-and-last-update-before 7)))))
            nil nil)
           ("B" "Todo"
            ((tags "OFFICE/TODO" nil)
