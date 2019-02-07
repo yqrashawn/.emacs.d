@@ -76,7 +76,7 @@ Inserted by installing org-mode or when a release is made."
 
         ;; make refile prompt fancy, separate heading with /
         org-outline-path-complete-in-steps nil
-        org-refile-use-cache t
+        org-refile-use-cache nil
         org-tag-alist '(("OFFICE" . ?w) ("HOME" . ?h))
         org-startup-with-inline-images t
         org-src-fontify-natively t
@@ -85,8 +85,8 @@ Inserted by installing org-mode or when a release is made."
         org-clock-persist-file (concat spacemacs-cache-directory "org-clock-save.el")
         org-id-locations-file (concat spacemacs-cache-directory ".org-id-locations")
         org-publish-timestamp-directory (concat spacemacs-cache-directory ".org-timestamps/")
-        org-directory "~/Dropbox/ORG" ;; needs to be defined for `org-default-notes-file'
-        org-default-notes-file (expand-file-name "notes.org" org-directory)
+        org-directory (expand-file-name "~/Dropbox/ORG/") ;; needs to be defined for `org-default-notes-file'
+        org-default-inbox-file (expand-file-name "inbox.org" org-directory)
         org-log-done 'time
         org-image-actual-width nil
 
@@ -102,6 +102,7 @@ Inserted by installing org-mode or when a release is made."
   (run-with-idle-timer 400 t (lambda ()
                                (org-refile-cache-clear)
                                (org-refile-get-targets)))
+  (setq org-refile-targets '((org-agenda-files :maxlevel . 1)))
 
   ;; (require 'org-agenda)
   (setq org-log-note-headings '((done . "CLOSING NOTE T: %t")
@@ -446,12 +447,8 @@ Inserted by installing org-mode or when a release is made."
   :commands (org-capture)
   :init
   (setq org-capture-templates
-        '(("n" "Notes Entry" entry
-           (file org-default-notes-file)
-           "* %? %^G\n:PROPERTIES:\n:CREATED: %U\n:END:\n\n%i"
-           :empty-lines 1)
-          ("c" "Inbox Entry" entry
-           (file org-default-inbox-file)
+        '(("c" "Inbox Entry" entry
+           (file+olp org-default-inbox-file "inbox")
            "* %? %^G\n:PROPERTIES:\n:CREATED: %U\n:END:\n\n%i"
            :empty-lines 1)))
   :config
@@ -483,7 +480,7 @@ Inserted by installing org-mode or when a release is made."
     (add-to-list
      'org-capture-templates
      '("l" "Capture a link from clipboard" entry
-       (file org-default-inbox-file)
+       (file+olp org-default-inbox-file "inbox")
        #'mkm-org-capture/link))))
 
 (use-package evil-org
@@ -742,9 +739,10 @@ _vr_ reset      ^^                       ^^                 _._ toggle hydra
   ("." nil :exit t)
   ("gr" org-agenda-redo))
 
-(define-key org-agenda-mode-map (kbd ".") 'hydra-org-agenda/body)
+(with-eval-after-load 'org-agenda
+  (define-key org-agenda-mode-map (kbd ".") 'hydra-org-agenda/body)
+  (add-hook 'org-agenda-mode-hook 'hydra-org-agenda/body))
 (spacemacs/set-leader-keys "2" (lambda () (interactive) (org-agenda nil "r")))
-(add-hook 'org-agenda-mode-hook 'hydra-org-agenda/body)
 
 (use-package org-brain
   :straight t
