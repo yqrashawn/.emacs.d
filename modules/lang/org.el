@@ -72,12 +72,12 @@ Inserted by installing org-mode or when a release is made."
         org-archive-location "~/Dropbox/ORG/Archive/%s_archive::"
 
         ;; make refile able to use top level heading as target
-        org-refile-use-outline-path 'file
+        org-refile-use-outline-path t
 
         ;; make refile prompt fancy, separate heading with /
         org-outline-path-complete-in-steps nil
         org-refile-use-cache nil
-        org-tag-alist '(("OFFICE" . ?w) ("HOME" . ?h))
+        ;; org-tag-alist '(("OFFICE" . ?w) ("HOME" . ?h))
         org-startup-with-inline-images t
         org-src-fontify-natively t
         org-imenu-depth 8
@@ -105,15 +105,15 @@ Inserted by installing org-mode or when a release is made."
   (setq org-refile-targets '((org-agenda-files :maxlevel . 1)))
 
   ;; (require 'org-agenda)
-  (setq org-log-note-headings '((done . "CLOSING NOTE T: %t")
-                                (state . "State %-12s from %-12S T: %t")
-                                (note . "Note taken on T: %t")
-                                (reschedule . "Rescheduled from %S on T: %t")
-                                (delschedule . "Not scheduled, was %S on T: %t")
-                                (redeadline . "New deadline from %S on T: %t")
-                                (deldeadline . "Removed deadline, was %S on T: %t")
-                                (refile . "Refiled on T: %t")
-                                (clock-out . "Clocked out on T: %t")))
+  ;; (setq org-log-note-headings '((done . "CLOSING NOTE T: %t")
+  ;;                               (state . "State %-12s from %-12S T: %t")
+  ;;                               (note . "Note taken on T: %t")
+  ;;                               (reschedule . "Rescheduled from %S on T: %t")
+  ;;                               (delschedule . "Not scheduled, was %S on T: %t")
+  ;;                               (redeadline . "New deadline from %S on T: %t")
+  ;;                               (deldeadline . "Removed deadline, was %S on T: %t")
+  ;;                               (refile . "Refiled on T: %t")
+  ;;                               (clock-out . "Clocked out on T: %t")))
 
   ;; Add global evil-leader mappings. Used to access org-agenda
   ;; functionalities – and a few others commands – from any other mode.
@@ -448,9 +448,9 @@ Inserted by installing org-mode or when a release is made."
   :init
   (setq org-capture-templates
         '(("c" "Inbox Entry" entry
-           (file+olp org-default-inbox-file "inbox")
-           "* %? %^G\n:PROPERTIES:\n:CREATED: %U\n:END:\n\n%i"
-           :empty-lines 1)))
+           (file+olp org-default-inbox-file "Inbox")
+           "* %? %^G\n:PROPERTIES:\n:CREATED: %U\n:END:\n\n%i")))
+
   :config
   (setq org-capture--clipboards t)
   (evil-define-key 'normal 'org-capture-mode
@@ -480,7 +480,7 @@ Inserted by installing org-mode or when a release is made."
     (add-to-list
      'org-capture-templates
      '("l" "Capture a link from clipboard" entry
-       (file+olp org-default-inbox-file "inbox")
+       (file+olp org-default-inbox-file "Inbox")
        #'mkm-org-capture/link))))
 
 (use-package evil-org
@@ -522,8 +522,10 @@ Inserted by installing org-mode or when a release is made."
   (evilified-state-evilify-map org-agenda-mode-map
     :mode org-agenda-mode
     :bindings
-    "j" 'org-agenda-next-line
-    "k" 'org-agenda-previous-line
+    "j" 'org-agenda-next-item
+    "k" 'org-agenda-previous-item
+    (kbd "C-n") 'org-agenda-next-line
+    (kbd "C-p") 'org-agenda-previous-line
     (kbd "M-j") 'org-agenda-next-item
     (kbd "M-k") 'org-agenda-previous-item
     (kbd "M-h") 'org-agenda-earlier
@@ -746,6 +748,7 @@ _vr_ reset      ^^                       ^^                 _._ toggle hydra
 
 (use-package org-brain
   :straight t
+  :disabled
   :after org
   :init
   (setq org-brain-path "~/Dropbox/ORG/BRAIN/")
@@ -755,7 +758,7 @@ _vr_ reset      ^^                       ^^                 _._ toggle hydra
   :config
   (setq org-id-track-globally t)
   (push '("b" "Brain" plain (function org-brain-goto-end)
-          "* %i%?" :empty-lines 1)
+          "* %i%?" )
         org-capture-templates)
   (setq org-brain-visualize-default-choices 'all)
   (setq org-brain-title-max-length 12))
