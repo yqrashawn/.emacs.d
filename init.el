@@ -7,6 +7,8 @@
 ;;                      gcs-done)))
 ;; Always load newest byte code
 ;; (setq load-prefer-newer t)
+(setq debug-on-error t)
+(setq debug-on-quit t)
 
 (when (fboundp 'tool-bar-mode)
   (tool-bar-mode -1))
@@ -114,3 +116,6 @@
 ;; (use-package zpresent)
 
 (global-set-key (kbd "M-0") 'delete-frame)
+
+(setq debug-on-error nil)
+(setq debug-on-quit nil)
