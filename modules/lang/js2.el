@@ -69,7 +69,7 @@
   :after js2-mode
   :init
   (spacemacs|add-company-backends
-    :backends company-tern
+    :backends (company-tabnine company-tern)
     :modes js2-mode
     :after-hook t))
 

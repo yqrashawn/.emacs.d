@@ -87,15 +87,6 @@
                ("C-c C-v" . forge-browse-topic))
          (:map forge-pullreq-section-map
                ("C-c C-v" . forge-browse-topic)))
-  :init
-  (evil-magit-define-key evil-magit-state 'magit-mode-map "p" 'magit-pull-popup)
-  (evil-magit-define-key evil-magit-state 'magit-mode-map "P" 'magit-push-popup)
-  (evil-magit-define-key evil-magit-state 'magit-mode-map "F" 'forge-dispatch)
-  (magit-change-popup-key 'magit-dispatch-popup :actions ?p ?P)
-  (magit-remove-popup-key 'magit-dispatch-popup :actions ?F)
-  (magit-define-popup-action 'magit-push-popup ?P 'magit--push-current-to-pushremote-desc 'magit-push-current-to-pushremote)
-  (magit-define-popup-action 'magit-dispatch-popup ?p "Pulling" 'magit-pull-popup ?P t)
-  (magit-define-popup-action 'magit-dispatch-popup ?F "Forge" 'forge-dispatch ?f)
   :config
   (add-to-list 'forge-alist '("917.bimsop.com" "917.bimsop.com/api/v1" "917.bimsop.com" forge-gogs-repository)))
 

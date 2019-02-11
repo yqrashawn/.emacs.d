@@ -50,7 +50,7 @@
   :init
   (customize-set-variable 'cider-default-repl-command 'lein)
   (spacemacs|add-company-backends
-    :backends company-capf
+    :backends (company-capf company-tabnine)
     :modes
     cider-mode
     cider-repl-mode
