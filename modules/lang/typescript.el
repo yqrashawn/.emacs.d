@@ -58,7 +58,7 @@ and 'typescript-formatter .")
   (flycheck-add-mode 'typescript-tslint 'typescript-mode)
   (spacemacs/enable-flycheck 'typescript-mode)
   (spacemacs|add-company-backends
-    :backends company-tide
+    :backends (company-tabnine company-tide)
     :modes typescript-mode web-mode js2-mode
     :after-hook t)
   :config

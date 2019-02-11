@@ -44,7 +44,7 @@
   :init
   (add-hook 'lua-mode-hook
             (lambda () (spacemacs|add-company-backends
-                         :backends company-lua
+                         :backends (company-lua company-tabnine)
                          :modes lua-mode
                          :after-hook t))))
 

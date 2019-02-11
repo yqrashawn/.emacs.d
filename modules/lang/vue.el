@@ -21,7 +21,7 @@
   :after lsp-mode
   :config
   (spacemacs|add-company-backends
-    :backends company-lsp
+    :backends (company-tabnine company-lsp)
     :modes web-mode
     :after-hook t))
 

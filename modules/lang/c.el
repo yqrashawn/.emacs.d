@@ -49,9 +49,9 @@
     (evil-define-key 'normal mode
       ",ga" 'projectile-find-other-file
       ",gA" 'projectile-find-other-file-other-window))
-  (spacemacs|add-company-backends :backends company-cmake :modes cmake-mode :after-hook t)
+  (spacemacs|add-company-backends :backends (company-tabnine company-cmake) :modes cmake-mode :after-hook t)
   (when c-c++-enable-clang-support
-    (spacemacs|add-company-backends :backends company-clang
+    (spacemacs|add-company-backends :backends (company-tabnine company-clang)
                                     :modes c-mode-common
                                     :after-hook t)
     (when c-c++-enable-c++11
@@ -69,7 +69,7 @@
   :straight t
   :defer t
   :init (spacemacs|add-company-backends
-          :backends company-c-headers
+          :backends (company-tabnine company-c-headers)
           :modes c-mode-common
           :after-hook t))
 

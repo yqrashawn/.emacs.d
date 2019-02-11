@@ -1,10 +1,3 @@
-
-;; set company backends after spacemacs's mode specific company-backends
-(defun yq/after-spacemacs-setting-company-backends ()
-  (let* ((backends (remove #'company-tabnine company-backends))
-         (backends (add-to-list 'backends #'company-tabnine)))
-    (setq-local company-backends backends)))
-
 (defvar company-mode-completion-cancel-keywords
   '("do" "then" "begin" "case")
   "Keywords on which to cancel completion so that you can use RET
@@ -163,9 +156,7 @@ Available PROPS:
           (when hooks
             (push `(add-hook ',mode-hook-name ',vars-func-name t) result)))
         (when hooks
-          (push `(add-hook ',mode-hook-name 'company-mode t) result))
-        (when after-hook
-          (push `(add-hook ',mode-hook-name 'yq/after-spacemacs-setting-company-backends t) result))))
+          (push `(add-hook ',mode-hook-name 'company-mode t) result))))
     ;; return the expanded macro in correct order
     (reverse result)))
 
