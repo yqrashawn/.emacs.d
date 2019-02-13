@@ -55,6 +55,7 @@ Inserted by installing org-mode or when a release is made."
 
 (use-package org
   :straight org-plus-contrib
+  ;; :commands (org-dynamic-block-define)
   :init
   (setq org-insert-mode-line-in-empty-file t
 
@@ -159,11 +160,30 @@ Inserted by installing org-mode or when a release is made."
   (+org-refile projects '(("~/Dropbox/ORG/projects.org" :level . 2)))
   (+org-refile someday '(("~/Dropbox/ORG/someday.org" :level . 1)))
   (+org-refile media '(("~/Dropbox/ORG/media.org" :level . 1)))
+
+  (defun +org-read-datetree-date (d)
+    "Parse a time string D and return a date to pass to the datetree functions."
+    (let ((dtmp (nthcdr 3 (parse-time-string d))))
+      (list (cadr dtmp) (car dtmp) (caddr dtmp))))
+
+  (defun +org-refile-to-archive-datetree (&optional bfn)
+    "Refile an entry to a datetree under an archive."
+    (interactive)
+    (require 'org-datetree)
+    (let* ((bfn (or bfn (find-file-noselect (expand-file-name "~/Dropbox/ORG/diary.org"))))
+           (datetree-date (+org-read-datetree-date (org-read-date t nil))))
+      (org-refile nil nil (list nil (buffer-file-name bfn) nil
+                                (with-current-buffer bfn
+                                  (save-excursion
+                                    (org-datetree-find-date-create datetree-date)
+                                    (point))))))
+    (setq this-command '+org-refile-to-journal))
+
   (defhydra +org-workflow-hydra (:color blue :hint nil)
     "
- visit            refile
+ visit            refile          actions
 ------------------------------------------
- _i_nbox.org     _M_edia.org
+ _i_nbox.org     _M_edia.org    _A_rchive
  _t_ask.org      _T_ask.org
  _p_rojects.org  _P_rojects.org
  _s_omday.org    _S_omday.org
@@ -176,12 +196,17 @@ Inserted by installing org-mode or when a release is made."
     ("T" +org-refile-task)
     ("P" +org-refile-project)
     ("S" +org-refile-someday)
-    ("M" +org-refile-media))
+    ("M" +org-refile-media)
+    ("A" +org-refile-to-archive-datetree)
+    ("j" org-next-visible-heading :exit nil)
+    ("k" org-previous-visible-heading :exit nil)
+    ("TAB" org-cycle :exit nil)
+    ("<tab>" org-cycle :exit nil)
+    ("." nil :exit t))
 
-  (define-key org-mode-map (kbd "C-c r") #'+org-workflow-hydra/body)
+  (evil-define-key 'normal org-mode-map "." #'+org-workflow-hydra/body)
 
-  (defun +org/save-all-buffers (&optional arg) (interactive) (org-save-all-org-buffers))
-  (defun +org/save-all-buffers2 (&optional arg arg2) (interactive) (org-save-all-org-buffers))
+  (defun +org/save-all-buffers (&rest _) (interactive) (org-save-all-org-buffers))
   (add-hook 'org-capture-mode-hook #'evil-insert-state)
   (advice-add 'org-todo :after '+org/save-all-buffers)
   (advice-add 'org-store-log-note :after '+org/save-all-buffers)
@@ -454,7 +479,6 @@ Inserted by installing org-mode or when a release is made."
 
 (use-package org-clock
   :after org
-  :commands (org-clock-persistence-insinuate)
   :init (org-clock-persistence-insinuate)
   :config
   (defun bh/remove-empty-drawer-on-clock-out ()
