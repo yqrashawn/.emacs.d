@@ -146,6 +146,40 @@ Inserted by installing org-mode or when a release is made."
     (if (y-or-n-p "Create a unique ID for this section?")
         (org-id-get-create)))
   :config
+  (defmacro +org-refile (fn-suffix refile-targets)
+    "Generate a command to call `org-refile' with modified targets."
+    `(defun ,(intern (concat "+org-refile-" (symbol-name fn-suffix))) ()
+       ,(format "`org-refile' to %S" refile-targets)
+       (interactive)
+       (org-refile-cache-clear)
+       (let ((org-refile-target-verify-function nil)
+             (org-refile-targets ,refile-targets))
+         (call-interactively 'org-refile))))
+  (+org-refile task '(("~/Dropbox/ORG/tasks.org" :level . 1)))
+  (+org-refile projects '(("~/Dropbox/ORG/projects.org" :level . 2)))
+  (+org-refile someday '(("~/Dropbox/ORG/someday.org" :level . 1)))
+  (+org-refile media '(("~/Dropbox/ORG/media.org" :level . 1)))
+  (defhydra +org-workflow-hydra (:color blue :hint nil)
+    "
+ visit            refile
+------------------------------------------
+ _i_nbox.org     _M_edia.org
+ _t_ask.org      _T_ask.org
+ _p_rojects.org  _P_rojects.org
+ _s_omday.org    _S_omday.org
+"
+    ("i" (lambda () (interactive) (find-file "~/Dropbox/ORG/inbox.org")))
+    ("t" (lambda () (interactive) (find-file "~/Dropbox/ORG/tasks.org")))
+    ("p" (lambda () (interactive) (find-file "~/Dropbox/ORG/projects.org")))
+    ("s" (lambda () (interactive) (find-file "~/Dropbox/ORG/someday.org")))
+    ("m" (lambda () (interactive) (find-file "~/Dropbox/ORG/media.org")))
+    ("T" +org-refile-task)
+    ("P" +org-refile-project)
+    ("S" +org-refile-someday)
+    ("M" +org-refile-media))
+
+  (define-key org-mode-map (kbd "C-c r") #'+org-workflow-hydra/body)
+
   (defun +org/save-all-buffers (&optional arg) (interactive) (org-save-all-org-buffers))
   (defun +org/save-all-buffers2 (&optional arg arg2) (interactive) (org-save-all-org-buffers))
   (add-hook 'org-capture-mode-hook #'evil-insert-state)
