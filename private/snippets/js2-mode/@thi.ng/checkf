@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: F: @thi.ng/check
-# key: checkf
-# --
-import * as checks from "@thi.ng/checks";

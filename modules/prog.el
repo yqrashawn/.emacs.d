@@ -444,7 +444,7 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   (define-key evil-insert-state-map "." '+yas-expand-when-inserting-dot)
 
   (setq yas-snippet-dirs '())
-  (setq yas--default-user-snippets-dir (concat user-home-directory ".emacs.d/private/snippets/"))
+  (setq yas--default-user-snippets-dir (concat user-home-directory ".emacs.d/snippets/"))
   (push 'yas--default-user-snippets-dir yas-snippet-dirs)
   (push 'yas-hippie-try-expand hippie-expand-try-functions-list)
   ;; (add-hook 'snippet-mode 'yq/toggle-aggressive-indent-off)
@@ -453,9 +453,9 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   (add-to-list 'warning-suppress-types '(yasnippet backquote-change))
   (yas-reload-all))
 
-(use-package yasnippet-snippets
-  :straight t
-  :after yasnippet)
+;; (use-package yasnippet-snippets
+;;   :straight t
+;;   :after yasnippet)
 
 (use-package smartparens
   :straight t

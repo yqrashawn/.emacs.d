@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: N: @thi.ng/check
-# key: checkn
-# --
-const { isFunction } = require("@thi.ng/checks");

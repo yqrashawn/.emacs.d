@@ -2,7 +2,7 @@
 # name: getLocalIp
 # key: getLocalIp
 # --
-function getLocalIp() {
+const getLocalIp = () => {
   const os = require("os");
 
   for (let addresses of Object.values(os.networkInterfaces())) {

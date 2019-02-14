@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: N: @thi.ng/defmulti
-# key: defmultin
-# --
-const { defmulti, DEFAULT } = require("@thi.ng/defmulti");

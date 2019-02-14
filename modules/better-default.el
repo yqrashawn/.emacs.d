@@ -1411,5 +1411,17 @@ Info-mode:
   (global-set-key (kbd "M-h") #'aya-create)
   (global-set-key (kbd "M-l") #'aya-expand))
 
+(use-package so-long
+  :straight (:repo "https://git.savannah.nongnu.org/git/so-long.git")
+  :init
+  (so-long-enable)
+  (add-hook 'find-file-hook
+            (defun my-find-file-care-about-long-lines ()
+              (save-excursion
+                (goto-char (point-min))
+                (when (and (not (eq major-mode 'image-mode))
+                           (search-forward-regexp ".\\{2000\\}" 50000 t)
+                           (y-or-n-p "Very long lines detected - enable so-long-mode? "))
+                  (so-long-mode))))))
 
 

@@ -1,7 +1,7 @@
 # -*- mode: snippet -*-
-# name: cfunc
-# key: cfunc
+# name: define-arrow-function
+# key: df
 # --
 const $1 = ($2) => {
   $3
-};
+}

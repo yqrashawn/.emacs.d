@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: async-it
+# key: ita
+# --
+it("${1:should}", async function() {
+  ${2:func}
+});
