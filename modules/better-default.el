@@ -498,6 +498,7 @@ if prefix argument ARG is given, switch to it in an other, possibly new window."
 
 (evil-leader/set-key "bs" 'spacemacs/switch-to-scratch-buffer)
 
+;; http://endlessparentheses.com/emacs-narrow-or-widen-dwim.html
 (defun narrow-or-widen-dwim (p)
   "Widen if buffer is narrowed, narrow-dwim otherwise.
 Dwim means: region, org-src-block, org-subtree, or
@@ -1396,3 +1397,10 @@ Info-mode:
       (lambda () (add-to-list 'undo-auto--undoably-changed-buffers (current-buffer))))
 
 (fset 'undo-auto-amalgamate 'ignore)
+
+(use-package beacon
+  :straight t
+  :init
+  (setq beacon-blink-when-focused t)
+  (setq beacon-blink-when-buffer-changes t)
+  (beacon-mode 1))
