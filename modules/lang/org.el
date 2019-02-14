@@ -55,7 +55,7 @@ Inserted by installing org-mode or when a release is made."
 
 (use-package org
   :straight org-plus-contrib
-  ;; :commands (org-dynamic-block-define)
+  :commands (org-dynamic-block-define)
   :init
   (setq org-insert-mode-line-in-empty-file t
 
@@ -479,8 +479,8 @@ Inserted by installing org-mode or when a release is made."
 
 (use-package org-clock
   :after org
-  :init (org-clock-persistence-insinuate)
   :config
+  (org-clock-persistence-insinuate)
   (defun bh/remove-empty-drawer-on-clock-out ()
     (interactive)
     (save-excursion
@@ -658,6 +658,7 @@ SCHEDULED: %^T
 
 (use-package counsel-org-clock
   :straight t
+  :after org
   :init
   ;; (spacemacs/set-leader-keys "4" 'counsel-org-clock-history)
   (spacemacs/set-leader-keys "4" 'counsel-org-clock-context))
@@ -666,6 +667,7 @@ SCHEDULED: %^T
 
 (use-package org-mru-clock
   :straight t
+  :after org
   :init
   (add-hook 'org-clock-in-hook (lambda () (call-process "/usr/bin/osascript" nil 0 nil "-e" (concat "tell application \"org-clock-statusbar\" to clock in \"" (replace-regexp-in-string "\"" "\\\\\"" org-clock-current-task) "\""))))
   (add-hook 'org-clock-out-hook (lambda () (call-process "/usr/bin/osascript" nil 0 nil "-e" "tell application \"org-clock-statusbar\" to clock out")))

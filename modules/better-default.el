@@ -532,7 +532,11 @@ if prefix argument ARG is given, switch to it in an other, possibly new window."
           (t (fancy-narrow-to-defun))))
 
   ;; replace downcase region
-  (global-set-key "\C-x\C-l" 'fancy-narrow-or-widen-dwim))
+  (global-set-key "\C-x\C-l" 'fancy-narrow-or-widen-dwim)
+  :config
+  (fancy-narrow--advise-function 'swiper)
+  (fancy-narrow--advise-function 'isearch-forward)
+  (fancy-narrow--advise-function 'isearch-backward))
 
 (defun spacemacs/kill-other-buffers (&optional arg)
   "Kill all other buffers.
