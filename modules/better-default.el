@@ -498,45 +498,33 @@ if prefix argument ARG is given, switch to it in an other, possibly new window."
 
 (evil-leader/set-key "bs" 'spacemacs/switch-to-scratch-buffer)
 
-(use-package fancy-narrow
-  :straight t
-  :commands (fancy-narrow-mode
-             fancy-narrow-to-region
-             fancy-narrow-to-page
-             fancy-narrow-to-defunfancy-widen)
-  :init
-  ;; http://endlessparentheses.com/emacs-narrow-or-widen-dwim.html
-  (defun fancy-narrow-or-widen-dwim (p)
-    "Widen if buffer is narrowed, narrow-dwim otherwise.
-          Dwim means: region, org-src-block, org-subtree, or defun,
-          whichever applies first. Narrowing to org-src-block actually
-          calls `org-edit-src-code'.
+(defun narrow-or-widen-dwim (p)
+  "Widen if buffer is narrowed, narrow-dwim otherwise.
+Dwim means: region, org-src-block, org-subtree, or
+defun, whichever applies first. Narrowing to
+org-src-block actually calls `org-edit-src-code'.
 
-        With prefix P, don't widen, just narrow even if buffer is
-        already narrowed."
-    (interactive "P")
-    (declare (interactive-only))
-    (cond ((and (fancy-narrow-active-p) (not p)) (fancy-widen))
-          ((region-active-p)
-           (fancy-narrow-to-region (region-beginning) (region-end)))
-          ((derived-mode-p 'org-mode)
-           ;; `org-edit-src-code' is not a real narrowing
-           ;; command. Remove this first conditional if you
-           ;; don't want it.
-           (cond ((ignore-errors (org-edit-src-code)
-                                 (delete-other-windows)))
-                 ((ignore-errors (org-narrow-to-block) t))
-                 (t (org-narrow-to-subtree))))
-          ((derived-mode-p 'latex-mode)
-           (LaTeX-narrow-to-environment))
-          (t (fancy-narrow-to-defun))))
-
-  ;; replace downcase region
-  (global-set-key "\C-x\C-l" 'fancy-narrow-or-widen-dwim)
-  :config
-  (fancy-narrow--advise-function 'swiper)
-  (fancy-narrow--advise-function 'isearch-forward)
-  (fancy-narrow--advise-function 'isearch-backward))
+With prefix P, don't widen, just narrow even if buffer
+is already narrowed."
+  (interactive "P")
+  (declare (interactive-only))
+  (cond ((and (buffer-narrowed-p) (not p)) (widen))
+        ((region-active-p)
+         (narrow-to-region (region-beginning)
+                           (region-end)))
+        ((derived-mode-p 'org-mode)
+         ;; `org-edit-src-code' is not a real narrowing
+         ;; command. Remove this first conditional if
+         ;; you don't want it.
+         (cond ((ignore-errors (org-edit-src-code) t)
+                (delete-other-windows))
+               ((ignore-errors (org-narrow-to-block) t))
+               (t (org-narrow-to-subtree))))
+        ((derived-mode-p 'latex-mode)
+         (LaTeX-narrow-to-environment))
+        (t (narrow-to-defun))))
+(global-set-key "\C-xn" 'narrow-or-widen-dwim)
+(global-set-key "\C-x\C-n" 'narrow-or-widen-dwim)
 
 (defun spacemacs/kill-other-buffers (&optional arg)
   "Kill all other buffers.
