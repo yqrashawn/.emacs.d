@@ -1404,3 +1404,12 @@ Info-mode:
   (setq beacon-blink-when-focused t)
   (setq beacon-blink-when-buffer-changes t)
   (beacon-mode 1))
+
+(use-package auto-yasnippet
+  :straight t
+  :init
+  (global-set-key (kbd "M-h") #'aya-create)
+  (global-set-key (kbd "M-l") #'aya-expand))
+
+
+

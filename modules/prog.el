@@ -429,6 +429,20 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   ;;   (add-hook 'yas-after-exit-snippet-hook
   ;;             #'spacemacs//smartparens-restore-after-exit-snippet))
   :config
+  (defun +yas-expand-when-inserting-dot ()
+    (interactive)
+    (if (and
+         (eolp)
+         (eq (preceding-char) ?.))
+        (if (and (not (delete-char -1 nil)) (yas-expand))
+            t
+          (progn
+            (self-insert-command 1 ?.)
+            (self-insert-command 1 ?.)))
+      (self-insert-command 1 ?.)))
+
+  (define-key evil-insert-state-map "." '+yas-expand-when-inserting-dot)
+
   (setq yas-snippet-dirs '())
   (setq yas--default-user-snippets-dir (concat user-home-directory ".emacs.d/private/snippets/"))
   (push 'yas--default-user-snippets-dir yas-snippet-dirs)
