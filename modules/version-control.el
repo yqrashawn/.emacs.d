@@ -68,7 +68,7 @@
   (spacemacs/set-leader-keys "gg" 'magit-list-repositories)
   (spacemacs/set-leader-keys "gs" 'magit-status))
 
-(use-package evil-magit :straight t)
+(use-package evil-magit :straight t :after magit)
 
 (use-package with-editor
   :straight t

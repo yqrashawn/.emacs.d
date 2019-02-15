@@ -16,6 +16,10 @@
                    :upstream (:host github :repo "abo-abo/swiper"))
   :diminish counsel-mode
   :config
+  (define-key evil-normal-state-map "sm" 'counsel-fzf)
+  (evil-define-key 'normal dired-mode-map "sm" 'counsel-fzf)
+  (spacemacs/set-leader-keys "sm" (lambda () (interactive) (let ((current-prefix-arg '(1))) (call-interactively 'counsel-fzf))))
+
   (and (fboundp 'counsel--elisp-to-pcre) (defalias 'counsel-unquote-regex-parens 'counsel--elisp-to-pcre))
   (defun counsel-imenu-comments ()
     "Imenu display comments."
@@ -63,14 +67,14 @@
   ;; (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash"))
   (spacemacs/set-leader-keys "fT" 'counsel-tramp))
 
-;; (use-package imenu
-;;   :defer t
-;;   :config
-;;   (defun imenu-use-package ()
-;;     (add-to-list 'imenu-generic-expression
-;;                  '("Package" "^\\s-*(use-pakcage\\s-+\\(\\(\\sw\\|\\s_\\)+\\)[[:space:]
-;; ]+[^)]" 1)))
-;;   (add-hook 'emacs-lisp-mode-hook #'imenu-use-package))
+(use-package imenu
+  :defer t
+  :config
+  (defun imenu-use-package ()
+    (add-to-list
+     'imenu-generic-expression
+     '("Packages" "^\\s-*(\\(use-package\\)\\s-+\\(\\(\\sw\\|\\s_\\)+\\)" 2)))
+  (add-hook 'emacs-lisp-mode-hook #'imenu-use-package))
 
 (use-package imenu-anywhere
   :straight t
@@ -101,7 +105,7 @@
 (use-package ivy
   :straight (:host github :repo "abo-abo/swiper" :branch "master"
                    :files (:defaults
-                           (:exclude "swiper.el" "counsel.el" "ivy-hydra.el")
+                           (:exclude "swiper.el" "counsel.el" "ivy-hydra.el" "ivy-pkg.el")
                            "doc/ivy-help.org")
                    :upstream (:host github :repo "abo-abo/swiper"))
   :diminish ivy-mode
@@ -120,7 +124,9 @@
   ;;         (swiper . ivy--regex-plus)
   ;;         (t . ivy--regex-fuzzy)))
   (setq ivy-re-builders-alist
-        '((t . ivy--regex-plus)))
+        '((spacemacs/counsel-search . spacemacs/ivy--regex-plus)
+          (spacemacs/search-auto . spacemacs/ivy--regex-plus)
+          (t . ivy--regex-plus)))
 
   ;; http://pragmaticemacs.com/emacs/open-a-recent-directory-in-dired-revisited/
   (defun bjm/ivy-dired-recent-dirs ()
@@ -337,10 +343,10 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   ;; (global-set-key (kbd "C-M-S-s-k") '+counsel-projectile-switch-buffer-prev-line)
   (defun yq/.emacs.d ()
     (interactive)
-    (counsel-fd "" "~/.emacs.d/" nil "-t f --no-ignore-vcs -E 'straight/build/*'"))
+    (counsel-fzf "" "~/.emacs.d/" nil "-t f --no-ignore-vcs -E 'straight/build/*'"))
   (defun yq/.emacs.d.el ()
     (interactive)
-    (counsel-fd "" "~/.emacs.d/" nil "-t f -e el --no-ignore-vcs -E 'straight/build/*'"))
+    (counsel-fzf "" "~/.emacs.d/" nil "-t f -e el --no-ignore-vcs -E 'straight/build/*'"))
   (spacemacs/set-leader-keys "fef" 'yq/.emacs.d.el)
   (spacemacs/set-leader-keys "feF" 'yq/.emacs.d)
   (spacemacs/set-leader-keys "fel" 'counsel-find-library))
@@ -479,91 +485,23 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   (setq dired-omit-files
         (concat dired-omit-files "\\|^\\.DS_Store$\\|^__MACOSX$\\|^\\.localized$")))
 
-(defcustom counsel-fd-base-command "fd -L -I --hidden -a --color never "
-  "Alternative to `counsel-fd-base-command' using ripgrep."
-  :type 'string
-  :group 'ivy)
-;; (setq counsel-fd-base-command "fd -L -I --hidden -p --color never ")
-
-(defun counsel-fd-function (string base-cmd)
-  "Grep in the current directory for STRING using BASE-CMD.
-If non-nil, append EXTRA-fd-ARGS to BASE-CMD."
-
-  (or (counsel-more-chars)
-      (let ((default-directory counsel-fd-current-dir)
-            (regex (counsel-unquote-regex-parens
-                    (setq ivy--old-re
-                          (ivy--regex-plus string)))))
-        (let* ((fd-cmd (concat (format base-cmd) (concat " " (s-wrap regex "'")))))
-          (counsel--async-command fd-cmd)
-          nil))))
-
-(defun my-insert-fd-full-path (path)
-  (insert (concat counsel-fd-current-dir path)))
-
-(defun my-insert-tsfile-path (path)
-  (insert (concat (concat "[[tsfile:" (f-filename path)) "][]]")))
-
-(defun counsel-fd (&optional initial-input initial-directory fd-prompt fd-args)
-  "Grep for a string in the current directory using fd.
-INITIAL-INPUT can be given as the initial minibuffer input.
-INITIAL-DIRECTORY, if non-nil, is used as the root directory for search.
-EXTRA-FD-ARGS string, if non-nil, is appended to `counsel-fd-base-command'.
-FD-PROMPT, if non-nil, is passed as `ivy-read' prompt argument."
-  (interactive
-   (list nil
-         (when current-prefix-arg
-           (read-directory-name (concat
-                                 (car (split-string counsel-fd-base-command))
-                                 " in directory: ")))))
-  (counsel-require-program (car (split-string counsel-fd-base-command)))
-  (ivy-set-prompt 'counsel-fd #'counsel-prompt-function-default)
-  (setq counsel-fd-current-dir (or initial-directory
-                                   (locate-dominating-file default-directory ".git")
-                                   default-directory))
-  (ivy-read (or fd-prompt (car (split-string counsel-fd-base-command)))
-            (lambda (string)
-              (counsel-fd-function string (concat counsel-fd-base-command " " (or fd-args " "))))
-            :initial-input initial-input
-            :dynamic-collection t
-            ;; :keymap counsel-ag-map
-            :history 'counsel-git-grep-history
-            :action '(1 ("z" (lambda (file)
-                               (with-ivy-window
-                                 (when file
-                                   (find-file  file)))))
-                        ("o" (lambda (path)
-                               (my-insert-tsfile-path path)
-                               (backward-char)
-                               (backward-char)) "insert tsfile path"))
-            :unwind (lambda ()
-                      (counsel-delete-process)
-                      (swiper--cleanup))
-            :caller 'counsel-fd))
-
-(define-key evil-normal-state-map "sm" 'counsel-fd)
-(evil-define-key 'normal dired-mode-map "sm" 'counsel-fd)
 (defun yq/find-org|gtd () (interactive) (find-file "~/Dropbox/ORG/gtd.org"))
 (defun yq/find-org|project () (interactive) (find-file "~/Dropbox/ORG/project.org"))
 ;; (spacemacs/set-leader-keys "3" 'yq/find-org|gtd)
 ;; (spacemacs/set-leader-keys "4" 'yq/find-org|project)
-(spacemacs/set-leader-keys "sm" (lambda () (interactive) (let ((current-prefix-arg '(1))) (call-interactively 'counsel-fd))))
 
 (defun yq/org ()
   (interactive)
-  (counsel-fd "" "~/Dropbox/" nil "-t f -e org"))
-
+  (counsel-fzf "" "~/Dropbox/" nil "-t f -e org"))
 (defun yq/books ()
   (interactive)
-  (counsel-fd "" "~/Dropbox/Books/" nil "-t f"))
-
+  (counsel-fzf "" "~/Dropbox/Books/" nil "-t f"))
 (defun yq/dropbox ()
   (interactive)
-  (counsel-fd "" "~/Dropbox/"))
-
+  (counsel-fzf "" "~/Dropbox/"))
 (defun yq/workspace ()
   (interactive)
-  (counsel-fd "" "~/workspace/"))
+  (counsel-fzf "" "~/workspace/"))
 
 (spacemacs/set-leader-keys "fo" 'yq/org)
 (spacemacs/set-leader-keys "fb" 'yq/books)
@@ -591,7 +529,7 @@ FD-PROMPT, if non-nil, is passed as `ivy-read' prompt argument."
 (define-key evil-normal-state-map (kbd "s.") 'yq/open-with-alfred)
 (spacemacs/set-leader-keys "bb" 'yq/open-with-alfred)
 
-;; disable ffip for now, I can just use counsel-fd
+;; disable ffip for now, I can just use counsel-fzf
 ;; (use-package find-file-in-project
 ;;   :straight t
 ;;   :commands (find-file-in-project)
