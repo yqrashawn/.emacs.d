@@ -322,8 +322,8 @@
 (use-package flycheck-clojure
   :straight t
   :after (flycheck cider)
-  :init
-  (add-hook 'clojure-mode-hook #'flycheck-clojure-setup))
+  :config
+  (flycheck-clojure-setup))
 
 (use-package clojure-mode-extra-font-locking
   :straight t

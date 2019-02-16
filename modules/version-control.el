@@ -64,7 +64,7 @@
   (add-hook 'magit-mode-hook 'turn-off-evil-snipe-override-mode)
   (add-hook 'git-rebase-mode-hook 'turn-off-evil-snipe-override-mode)
   (spacemacs/set-leader-keys "g" nil)
-  (spacemacs/set-leader-keys "gf" 'magit-file-popup)
+  (spacemacs/set-leader-keys "gf" 'magit-file-dispatch)
   (spacemacs/set-leader-keys "gg" 'magit-list-repositories)
   (spacemacs/set-leader-keys "gs" 'magit-status))
 

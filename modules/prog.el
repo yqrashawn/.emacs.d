@@ -256,6 +256,7 @@ Available PROPS:
       (progn
         (setq company-tabnine--disabled t)
         (message "Turn off company-tabnine"))))
+  (setq company-tabnine--disabled t)
   (spacemacs/set-leader-keys "tt" 'yq-toggle-company-tabnine))
 
 (use-package company-try-hard

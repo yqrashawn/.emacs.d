@@ -1,107 +1,3 @@
-(use-package swiper
-  :straight (:host github :repo "abo-abo/swiper" :branch "master"
-                   :files ("swiper.el")
-                   :upstream (:host github :repo "abo-abo/swiper"))
-  :config
-  ;; (global-set-key (kbd "C-SPC") 'counsel-grep-or-swiper)
-  ;; (global-set-key (kbd "^@") 'counsel-grep-or-swiper)
-  ;; (define-key evil-normal-state-map (kbd "sn") 'spacemacs/swiper-all-region-or-symbol)
-  (global-set-key (kbd "C-SPC") 'swiper)
-  (global-set-key (kbd "^@") 'swiper)
-  (global-set-key (kbd "C-S-SPC") 'spacemacs/swiper-region-or-symbol))
-
-(use-package counsel
-  :straight (:host github :repo "abo-abo/swiper" :branch "master"
-                   :files ("counsel.el")
-                   :upstream (:host github :repo "abo-abo/swiper"))
-  :diminish counsel-mode
-  :config
-  (define-key evil-normal-state-map "sm" 'counsel-fzf)
-  (evil-define-key 'normal dired-mode-map "sm" 'counsel-fzf)
-  (spacemacs/set-leader-keys "sm" (lambda () (interactive) (let ((current-prefix-arg '(1))) (call-interactively 'counsel-fzf))))
-
-  (and (fboundp 'counsel--elisp-to-pcre) (defalias 'counsel-unquote-regex-parens 'counsel--elisp-to-pcre))
-  (defun counsel-imenu-comments ()
-    "Imenu display comments."
-    (interactive)
-    (let* ((imenu-create-index-function 'evilnc-imenu-create-index-function))
-      (counsel-imenu)))
-  (counsel-mode 1)
-  (setq counsel-find-file-occur-cmd "ls | grep -i -E '%s' | gxargs -d '\n' ls")
-  (define-key ivy-minibuffer-map (kbd "C-c C-e") 'spacemacs//counsel-edit)
-  (define-key ivy-minibuffer-map (kbd "C-n") 'ivy-next-history-element)
-  (define-key ivy-minibuffer-map (kbd "C-p") 'ivy-previous-history-element)
-  (define-key ivy-minibuffer-map (kbd "C-l") 'ivy-alt-done)
-  (define-key ivy-minibuffer-map (kbd "C-j") 'ivy-next-line)
-  (define-key ivy-minibuffer-map (kbd "C-k") 'ivy-previous-line)
-  (define-key ivy-minibuffer-map (kbd "C-w") 'backward-kill-word)
-  (define-key ivy-minibuffer-map (kbd "<escape>") 'minibuffer-keyboard-quit)
-  (global-set-key (kbd "C-x C-f") 'counsel-find-file)
-  (spacemacs/set-leader-keys "<SPC>" 'counsel-M-x)
-  (spacemacs/set-leader-keys "f" nil)
-  (spacemacs/set-leader-keys "fe" nil)
-  (spacemacs/set-leader-keys "fed" 'yq/edit-dotfile)
-  (spacemacs/set-leader-keys "fek" (lambda () (interactive) (find-file-existing "~/.config/karabiner.edn")))
-  (spacemacs/set-leader-keys "ff" 'counsel-find-file)
-  (spacemacs/set-leader-keys "fF" 'find-file-other-window)
-  (spacemacs/set-leader-keys "h" nil)
-  (spacemacs/set-leader-keys "hd" nil)
-  (spacemacs/set-leader-keys "hk" #'counsel-descbinds)
-  (spacemacs/set-leader-keys "hdf" #'counsel-describe-function)
-  (spacemacs/set-leader-keys "hdv" #'counsel-describe-variable)
-  (spacemacs/set-leader-keys "hdk" #'describe-key)
-  (spacemacs/set-leader-keys "hdl" #'view-lossage)
-  (spacemacs/set-leader-keys "fJ" 'spacemacs/open-junk-file)
-  (define-key evil-normal-state-map "sf" 'counsel-rg)
-  (define-key evil-normal-state-map "sl" 'spacemacs/counsel-jump-in-buffer)
-  (define-key evil-normal-state-map "sj" 'counsel-recentf)
-  (define-key evil-normal-state-map (kbd "s SPC") 'counsel-M-x)
-  (define-key evil-normal-state-map (kbd "M-y" ) 'counsel-yank-pop))
-
-(use-package counsel-tramp
-  :straight t
-  :commands (counsel-tramp)
-  :init
-  ;; if zsh still failed
-  ;; https://www.emacswiki.org/emacs/TrampMode#toc7
-  ;; (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash"))
-  (spacemacs/set-leader-keys "fT" 'counsel-tramp))
-
-(use-package imenu
-  :defer t
-  :config
-  (defun imenu-use-package ()
-    (add-to-list
-     'imenu-generic-expression
-     '("Packages" "^\\s-*(\\(use-package\\)\\s-+\\(\\(\\sw\\|\\s_\\)+\\)" 2)))
-  (add-hook 'emacs-lisp-mode-hook #'imenu-use-package))
-
-(use-package imenu-anywhere
-  :straight t
-  :commands (imenu-anywhere)
-  :init (define-key evil-normal-state-map "sL" 'imenu-anywhere))
-
-(use-package helpful
-  :straight t
-  :after counsel
-  :commands (helpful-variable helpful-key helpful-function)
-  :init
-  (spacemacs/set-leader-keys "hdV" 'helpful-variable)
-  (spacemacs/set-leader-keys "hdv" 'describe-variable)
-  (spacemacs/set-leader-keys "hdk" 'helpful-key)
-  (spacemacs/set-leader-keys "hdF" 'helpful-function)
-  (spacemacs/set-leader-keys "hdf" 'describe-function)
-  (evil-define-key 'normal helpful-mode-map "Q"
-    (lambda ()
-      (interactive)
-      (quit-window)
-      (yq/delete-window)))
-  (defun yq/kill-buffer-and-window ()
-    (interactive)
-    (kill-current-buffer)
-    (yq/delete-window))
-  (evil-define-key 'normal helpful-mode-map "q" 'quit-window))
-
 (use-package ivy
   :straight (:host github :repo "abo-abo/swiper" :branch "master"
                    :files
@@ -163,8 +59,10 @@
       (ivy-switch-buffer)))
 
   ;; (global-set-key (kbd "C-x C-8 l") 'ivy-alt-done)
-  ;; (global-set-key (kbd "C-x C-8 j") '+ivy-switch-buffer-next-line)
-  ;; (global-set-key (kbd "C-x C-8 k") '+ivy-switch-buffer-prev-line)
+  (global-set-key (kbd "C-x C-9 j") '+ivy-switch-buffer-next-line)
+  (global-set-key (kbd "C-x C-9 k") '+ivy-switch-buffer-prev-line)
+  (global-set-key (kbd "C-M-S-s-j") '+ivy-switch-buffer-next-line)
+  (global-set-key (kbd "C-M-S-s-k") '+ivy-switch-buffer-prev-line)
   ;; (global-set-key (kbd "C-x C-8 a" ) 'ivy-beginning-of-buffer)
   ;; (global-set-key (kbd "C-x C-8 e" ) 'ivy-end-of-buffer)
   ;; (global-set-key (kbd "C-x C-8 u" ) 'ivy-scroll-down-command)
@@ -283,6 +181,110 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
     ("D" (ivy-exit-with-action
           (lambda (_) (find-function 'hydra-ivy/body)))
      :exit t)))
+
+(use-package swiper
+  :straight (:host github :repo "abo-abo/swiper" :branch "master"
+                   :files ("swiper.el")
+                   :upstream (:host github :repo "abo-abo/swiper"))
+  :config
+  ;; (global-set-key (kbd "C-SPC") 'counsel-grep-or-swiper)
+  ;; (global-set-key (kbd "^@") 'counsel-grep-or-swiper)
+  ;; (define-key evil-normal-state-map (kbd "sn") 'spacemacs/swiper-all-region-or-symbol)
+  (global-set-key (kbd "C-SPC") 'swiper)
+  (global-set-key (kbd "^@") 'swiper)
+  (global-set-key (kbd "C-S-SPC") 'spacemacs/swiper-region-or-symbol))
+
+(use-package counsel
+  :straight (:host github :repo "abo-abo/swiper" :branch "master"
+                   :files ("counsel.el")
+                   :upstream (:host github :repo "abo-abo/swiper"))
+  :diminish counsel-mode
+  :config
+  (define-key evil-normal-state-map "sm" 'counsel-fzf)
+  (evil-define-key 'normal dired-mode-map "sm" 'counsel-fzf)
+  (spacemacs/set-leader-keys "sm" (lambda () (interactive) (let ((current-prefix-arg '(1))) (call-interactively 'counsel-fzf))))
+
+  (and (fboundp 'counsel--elisp-to-pcre) (defalias 'counsel-unquote-regex-parens 'counsel--elisp-to-pcre))
+  (defun counsel-imenu-comments ()
+    "Imenu display comments."
+    (interactive)
+    (let* ((imenu-create-index-function 'evilnc-imenu-create-index-function))
+      (counsel-imenu)))
+  (counsel-mode 1)
+  (setq counsel-find-file-occur-cmd "ls | grep -i -E '%s' | gxargs -d '\n' ls")
+  (define-key ivy-minibuffer-map (kbd "C-c C-e") 'spacemacs//counsel-edit)
+  (define-key ivy-minibuffer-map (kbd "C-n") 'ivy-next-history-element)
+  (define-key ivy-minibuffer-map (kbd "C-p") 'ivy-previous-history-element)
+  (define-key ivy-minibuffer-map (kbd "C-l") 'ivy-alt-done)
+  (define-key ivy-minibuffer-map (kbd "C-j") 'ivy-next-line)
+  (define-key ivy-minibuffer-map (kbd "C-k") 'ivy-previous-line)
+  (define-key ivy-minibuffer-map (kbd "C-w") 'backward-kill-word)
+  (define-key ivy-minibuffer-map (kbd "<escape>") 'minibuffer-keyboard-quit)
+  (global-set-key (kbd "C-x C-f") 'counsel-find-file)
+  (spacemacs/set-leader-keys "<SPC>" 'counsel-M-x)
+  (spacemacs/set-leader-keys "f" nil)
+  (spacemacs/set-leader-keys "fe" nil)
+  (spacemacs/set-leader-keys "fed" 'yq/edit-dotfile)
+  (spacemacs/set-leader-keys "fek" (lambda () (interactive) (find-file-existing "~/.config/karabiner.edn")))
+  (spacemacs/set-leader-keys "ff" 'counsel-find-file)
+  (spacemacs/set-leader-keys "fF" 'find-file-other-window)
+  (spacemacs/set-leader-keys "h" nil)
+  (spacemacs/set-leader-keys "hd" nil)
+  (spacemacs/set-leader-keys "hk" #'counsel-descbinds)
+  (spacemacs/set-leader-keys "hdf" #'counsel-describe-function)
+  (spacemacs/set-leader-keys "hdv" #'counsel-describe-variable)
+  (spacemacs/set-leader-keys "hdk" #'describe-key)
+  (spacemacs/set-leader-keys "hdl" #'view-lossage)
+  (spacemacs/set-leader-keys "fJ" 'spacemacs/open-junk-file)
+  (define-key evil-normal-state-map "sf" 'counsel-rg)
+  (define-key evil-normal-state-map "sl" 'spacemacs/counsel-jump-in-buffer)
+  (define-key evil-normal-state-map "sj" 'counsel-recentf)
+  (define-key evil-normal-state-map (kbd "s SPC") 'counsel-M-x)
+  (define-key evil-normal-state-map (kbd "M-y" ) 'counsel-yank-pop))
+
+(use-package counsel-tramp
+  :straight t
+  :commands (counsel-tramp)
+  :init
+  ;; if zsh still failed
+  ;; https://www.emacswiki.org/emacs/TrampMode#toc7
+  ;; (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash"))
+  (spacemacs/set-leader-keys "fT" 'counsel-tramp))
+
+(use-package imenu
+  :defer t
+  :config
+  (defun imenu-use-package ()
+    (add-to-list
+     'imenu-generic-expression
+     '("Packages" "^\\s-*(\\(use-package\\)\\s-+\\(\\(\\sw\\|\\s_\\)+\\)" 2)))
+  (add-hook 'emacs-lisp-mode-hook #'imenu-use-package))
+
+(use-package imenu-anywhere
+  :straight t
+  :commands (imenu-anywhere)
+  :init (define-key evil-normal-state-map "sL" 'imenu-anywhere))
+
+(use-package helpful
+  :straight t
+  :after counsel
+  :commands (helpful-variable helpful-key helpful-function)
+  :init
+  (spacemacs/set-leader-keys "hdV" 'helpful-variable)
+  (spacemacs/set-leader-keys "hdv" 'describe-variable)
+  (spacemacs/set-leader-keys "hdk" 'helpful-key)
+  (spacemacs/set-leader-keys "hdF" 'helpful-function)
+  (spacemacs/set-leader-keys "hdf" 'describe-function)
+  (evil-define-key 'normal helpful-mode-map "Q"
+    (lambda ()
+      (interactive)
+      (quit-window)
+      (yq/delete-window)))
+  (defun yq/kill-buffer-and-window ()
+    (interactive)
+    (kill-current-buffer)
+    (yq/delete-window))
+  (evil-define-key 'normal helpful-mode-map "q" 'quit-window))
 
 (use-package wgrep
   :straight t
@@ -672,15 +674,15 @@ When ARG is non-nil search in junk files."
   (global-set-key (kbd "C-x C-9 p") '+awesome-tab-switch-group-prevouse-line)
   (global-set-key (kbd "C-x C-9 [") #'awesome-tab-move-current-tab-to-left)
   (global-set-key (kbd "C-x C-9 ]") #'awesome-tab-move-current-tab-to-right)
+  ;; (global-set-key (kbd "C-x C-9 j") #'awesome-tab-forward-group)
+  ;; (global-set-key (kbd "C-x C-9 k") #'awesome-tab-backward-group)
 
   ;; gui with repeat
-  (global-set-key (kbd "C-M-S-s-h") #'awesome-tab-backward-tab)
+  (global-set-key (kbd "C-M-S-s-h") 'awesome-tab-backward-tab)
   (global-set-key (kbd "C-M-S-s-l") '+awesome-tab-forward-tab-or-ivy-done)
 
-  (global-set-key (kbd "C-x C-9 j") #'awesome-tab-forward-group)
-  (global-set-key (kbd "C-x C-9 k") #'awesome-tab-backward-group)
-  (global-set-key (kbd "C-M-S-s-j") #'awesome-tab-forward-group)
-  (global-set-key (kbd "C-M-S-s-k") #'awesome-tab-backward-group)
+  ;; (global-set-key (kbd "C-M-S-s-j") #'awesome-tab-forward-group)
+  ;; (global-set-key (kbd "C-M-S-s-k") #'awesome-tab-backward-group)
 
   (global-set-key (kbd "C-M-S-s-n") '+awesome-tab-forward-group)
   (global-set-key (kbd "C-M-S-s-p") '+awesome-tab-backward-group)
