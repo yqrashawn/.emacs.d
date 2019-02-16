@@ -104,9 +104,8 @@
 
 (use-package ivy
   :straight (:host github :repo "abo-abo/swiper" :branch "master"
-                   :files (:defaults
-                           (:exclude "swiper.el" "counsel.el" "ivy-hydra.el" "ivy-pkg.el")
-                           "doc/ivy-help.org")
+                   :files
+                   (:defaults (:exclude "swiper.el" "counsel.el" "ivy-hydra.el") "doc/ivy-help.org")
                    :upstream (:host github :repo "abo-abo/swiper"))
   :diminish ivy-mode
   ;; :init
