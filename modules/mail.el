@@ -1,6 +1,6 @@
 (setq
- ;; user-mail-address "namy.19@gmail.com"
- user-mail-address "hi@yqrashawn.com"
+ user-mail-address "namy.19@gmail.com"
+ ;; user-mail-address "hi@yqrashawn.com"
  ;; smtpmail-starttls-credentials '(("smtp.gmail.com" "587" nil nil))
  smtpmail-starttls-credentials '(("smtp.zoho.com" "587" nil nil))
  smtpmail-auth-credentials (expand-file-name "~/.authinfo.gpg")
@@ -17,7 +17,8 @@
  starttls-use-gnutls t)
 
 (use-package mu4e
-  :straight t
+  :straight (:host github :repo "emacsmirror/mu4e" :branch "master"
+                   :files ("mu4e/*" ("mu4e/mu4e-meta.el.in" . "mu4e-meta.el")))
   :custom
   (mu4e-attachment-dir "~/Downloads")
   (mu4e-compose-signature-auto-include nil)
@@ -60,25 +61,13 @@
   (global-set-key (kbd "C-x m") 'mu4e-compose-new)
   (spacemacs/set-leader-keys "1" 'mu4e)
   ;; (spacemacs/set-leader-keys "2" (lambda () (interactive) ( mu4e~headers-jump-to-maildir "/gmail/INBOX")))
-;;   (defun yq/mu4e~proc-remove (docid msgid)
-;;     "Remove message identified by docid.
-;; The results are reporter through either (:update ... ) or (:error)
-;; sexp, which are handled my `mu4e-error-func', respectively."
-;;     (mu4e~proc-send-command "cmd:remove docid:%d" docid)
-;;     (mu4e~proc-send-command "cmd:remove msgid:%s" msgid))
+  ;;   (defun yq/mu4e~proc-remove (docid msgid)
+  ;;     "Remove message identified by docid.
+  ;; The results are reporter through either (:update ... ) or (:error)
+  ;; sexp, which are handled my `mu4e-error-func', respectively."
+  ;;     (mu4e~proc-send-command "cmd:remove docid:%d" docid)
+  ;;     (mu4e~proc-send-command "cmd:remove msgid:%s" msgid))
   :config
-  ;; (add-to-list 'mu4e-marks
-  ;;              '(real-delete
-  ;;                :char "ʍ"
-  ;;                :prompt "RDelete"
-  ;;                :show-target (lambda (target) "delete")
-  ;;                :action (lambda (docid msg target)
-  ;;                          (print (mu4e-msg-field msg :message-id))
-  ;;                          (yq/mu4e~proc-remove (mu4e-msg-field msg :docid)
-  ;;                                               (mu4e-msg-field msg :message-id)))))
-  (mu4e~headers-defun-mark-for real-delete)
-  ;; (evil-define-key 'normal mu4e-headers-mode-map "d" 'mu4e-headers-mark-for-real-delete)
-
   (add-to-list 'mu4e-bookmarks
                (make-mu4e-bookmark
                 :name  "Unread filtered"
@@ -149,3 +138,9 @@
   (mu4e-alert-enable-notifications)
   (mu4e-alert-enable-mode-line-display)
   (mu4e-alert-set-default-style 'notifier))
+
+;; (use-package mu4e-conversation
+;;   :straight t
+;;   :after mu4e
+;;   :config
+;;   (global-mu4e-conversation-mode))
