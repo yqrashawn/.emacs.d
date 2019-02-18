@@ -1,6 +1,6 @@
 (setq
- user-mail-address "namy.19@gmail.com"
- ;; user-mail-address "hi@yqrashawn.com"
+ ;; user-mail-address "namy.19@gmail.com"
+ user-mail-address "hi@yqrashawn.com"
  ;; smtpmail-starttls-credentials '(("smtp.gmail.com" "587" nil nil))
  smtpmail-starttls-credentials '(("smtp.zoho.com" "587" nil nil))
  smtpmail-auth-credentials (expand-file-name "~/.authinfo.gpg")
@@ -121,7 +121,9 @@
 (use-package evil-mu4e
   :straight t
   :after mu4e
-  :init
+  :config
   (evil-define-key 'normal mu4e-view-mode-map (kbd "<RET>") 'mu4e~view-browse-url-from-binding)
+  (evil-define-key 'normal mu4e-main-mode-map "U" 'mu4e-update-index)
+  (evil-define-key 'normal mu4e-main-mode-map "j" 'mu4e~headers-jump-to-maildir)
   (evil-define-key 'normal mu4e-view-mode-map "o" 'ace-link-mu4e)
   (evil-define-key 'normal mu4e-view-mode-map "go" 'mu4e-view-open-attachment))
