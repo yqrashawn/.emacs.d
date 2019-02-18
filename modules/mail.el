@@ -87,49 +87,22 @@
   (setq mu4e-headers-show-threads nil) ; Use "P" to toggle threading
   ;; (setq mu4e-compose-signature (get-string-from-file "~/signature.txt"))
 
-  (add-hook 'mu4e-compose-mode-hook 'flyspell-mode)
-  (evil-define-key 'normal mu4e-headers-mode-map "f" 'mu4e-headers-search)
-  (evil-define-key 'normal mu4e-headers-mode-map "d" 'mu4e-headers-mark-for-trash)
-  (evil-define-key 'normal mu4e-headers-mode-map "D" 'mu4e-headers-mark-for-delete)
-  (evil-define-key 'normal mu4e-headers-mode-map "r" 'mu4e-headers-mark-for-refile)
-  (evil-define-key 'normal mu4e-headers-mode-map "R" 'mu4e-headers-mark-for-move)
-  (evil-define-key 'normal mu4e-headers-mode-map "u" 'mu4e-headers-mark-for-unmark)
-  (evil-define-key 'normal mu4e-headers-mode-map "q" 'mu4e~headers-quit-buffer)
-  ;; (evil-define-key 'normal mu4e-headers-mode-map "q" 'yq/kill-this-buffer)
-  (evil-define-key 'normal mu4e-headers-mode-map "x" 'mu4e-mark-execute-all)
-  (evil-define-key 'normal mu4e-headers-mode-map "m" 'mu4e-headers-mark-for-read)
-  (evil-define-key 'normal mu4e-headers-mode-map "M" 'mu4e-headers-mark-for-unread)
+  (add-hook 'mu4e-compose-mode-hook 'flyspell-mode))
+  ;; (evil-define-key 'normal mu4e-headers-mode-map "q" 'mu4e~headers-quit-buffer)
+  ;; ;; (evil-define-key 'normal mu4e-headers-mode-map "q" 'yq/kill-this-buffer)
+  ;; (evil-define-key 'normal mu4e-headers-mode-map "gr" 'mu4e-headers-rerun-search)
 
-  (evil-define-key 'normal mu4e-view-mode-map "f" 'mu4e-headers-search)
-  (evil-define-key 'normal mu4e-view-mode-map "o" 'ace-link-mu4e)
-  (evil-define-key 'normal mu4e-view-mode-map "a" 'mu4e-view-action)
-  (evil-define-key 'normal mu4e-view-mode-map "D" 'mu4e-view-mark-for-trash)
-  (evil-define-key 'normal mu4e-view-mode-map "d" 'mu4e-view-mark-for-delete)
-  (evil-define-key 'normal mu4e-view-mode-map "r" 'mu4e-view-mark-for-refile)
-  (evil-define-key 'normal mu4e-view-mode-map "R" 'mu4e-view-mark-for-move)
-  (evil-define-key 'normal mu4e-view-mode-map "u" 'mu4e-view-mark-for-unmark)
-  (evil-define-key 'normal mu4e-view-mode-map (kbd "<RET>") 'mu4e~view-browse-url-from-binding)
-  (evil-define-key 'normal mu4e-headers-mode-map (kbd "<RET>") 'mu4e-headers-view-message)
-  (evil-define-key 'normal mu4e-headers-mode-map (kbd "l") 'mu4e-headers-view-message)
-  (evil-define-key 'normal mu4e-main-mode-map "u" 'mu4e-update-index)
-  (evil-define-key 'normal mu4e-main-mode-map "f" 'mu4e-headers-search)
-  (evil-define-key 'normal mu4e-main-mode-map "j" 'mu4e~headers-jump-to-maildir)
-  (evil-define-key 'normal mu4e-main-mode-map (kbd "C-j") 'next-line)
-  (evil-define-key 'normal mu4e-main-mode-map (kbd "C-k") 'previous-line)
-  (evil-define-key 'normal mu4e-main-mode-map "q" 'quit-window)
-  (evil-define-key 'normal mu4e-main-mode-map "b" 'mu4e-headers-search-bookmark)
-  (evil-define-key 'normal mu4e-headers-mode-map (kbd "C-j") 'next-line)
-  (evil-define-key 'normal mu4e-headers-mode-map (kbd "C-k") 'previous-line)
-  (evil-define-key 'normal mu4e-headers-mode-map (kbd "J") (lambda ()
-                                                             (interactive)
-                                                             (mu4e-headers-mark-thread nil '(read))))
-  (evil-define-key 'normal mu4e-view-mode-map (kbd "C-j") 'mu4e-view-headers-next)
-  (evil-define-key 'normal mu4e-view-mode-map (kbd "C-k") 'mu4e-view-headers-prev)
-  (evil-define-key 'normal mu4e-view-mode-map (kbd "q") 'next-line)
-  (evil-define-key 'normal mu4e-view-mode-map (kbd "q") 'mu4e~view-quit-buffer)
-  (evil-define-key 'normal mu4e-view-mode-map (kbd "J") (lambda ()
-                                                          (interactive)
-                                                          (mu4e-headers-mark-thread nil '(read)))))
+  ;;
+  ;; (evil-define-key 'normal mu4e-headers-mode-map (kbd "<RET>") 'mu4e-headers-view-message)
+  ;; (evil-define-key 'normal mu4e-headers-mode-map (kbd "l") 'mu4e-headers-view-message)
+  ;; (evil-define-key 'normal mu4e-main-mode-map "u" 'mu4e-update-index)
+  ;; (evil-define-key 'normal mu4e-main-mode-map "f" 'mu4e-headers-search)
+  ;; (evil-define-key 'normal mu4e-main-mode-map "j" 'mu4e~headers-jump-to-maildir)
+  ;; (evil-define-key 'normal mu4e-main-mode-map (kbd "C-j") 'next-line)
+  ;; (evil-define-key 'normal mu4e-main-mode-map (kbd "C-k") 'previous-line)
+  ;; (evil-define-key 'normal mu4e-main-mode-map "q" 'quit-window)
+  ;; (evil-define-key 'normal mu4e-main-mode-map "b" 'mu4e-headers-search-bookmark)
+  ;; (evil-define-key 'normal mu4e-view-mode-map (kbd "q") 'mu4e~view-quit-buffer)
 
 (use-package mu4e-alert
   :straight t
@@ -144,3 +117,11 @@
 ;;   :after mu4e
 ;;   :config
 ;;   (global-mu4e-conversation-mode))
+
+(use-package evil-mu4e
+  :straight t
+  :after mu4e
+  :init
+  (evil-define-key 'normal mu4e-view-mode-map (kbd "<RET>") 'mu4e~view-browse-url-from-binding)
+  (evil-define-key 'normal mu4e-view-mode-map "o" 'ace-link-mu4e)
+  (evil-define-key 'normal mu4e-view-mode-map "go" 'mu4e-view-open-attachment))

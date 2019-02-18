@@ -160,6 +160,7 @@ Inserted by installing org-mode or when a release is made."
   (+org-refile projects '(("~/Dropbox/ORG/projects.org" :level . 2)))
   (+org-refile someday '(("~/Dropbox/ORG/someday.org" :level . 1)))
   (+org-refile media '(("~/Dropbox/ORG/media.org" :level . 1)))
+  (+org-refile inbox '(("~/Dropbox/ORG/inbox.org" :level . 1)))
 
   (defun +org-read-datetree-date (d)
     "Parse a time string D and return a date to pass to the datetree functions."
@@ -187,6 +188,7 @@ Inserted by installing org-mode or when a release is made."
  _t_ask.org      _T_ask.org
  _p_rojects.org  _P_rojects.org
  _s_omday.org    _S_omday.org
+                 _I_nbox.org
 "
     ("i" (lambda () (interactive) (find-file "~/Dropbox/ORG/inbox.org")))
     ("t" (lambda () (interactive) (find-file "~/Dropbox/ORG/tasks.org")))
@@ -197,6 +199,7 @@ Inserted by installing org-mode or when a release is made."
     ("P" +org-refile-project)
     ("S" +org-refile-someday)
     ("M" +org-refile-media)
+    ("I" +org-refile-inbox)
     ("A" +org-refile-to-archive-datetree)
     ("j" org-next-visible-heading :exit nil)
     ("k" org-previous-visible-heading :exit nil)
@@ -304,7 +307,7 @@ Inserted by installing org-mode or when a release is made."
   (setq org-deadline-warning-days 3)
   (setq org-enforce-todo-dependencies t)
   (setq org-startup-indented t)
-  (setq org-adapt-indentation nil) ;; do not indent drawers/body according to heading level
+  (setq org-adapt-indentation t) ;; do not indent drawers/body according to heading level
   (setq org-insert-heading-respect-content t)
   (setq org-special-ctrl-a/e t)
   (setq org-special-ctrl-k t)
@@ -808,19 +811,29 @@ _vr_ reset      ^^                       ^^                 _._ toggle hydra
   (add-hook 'org-agenda-mode-hook 'hydra-org-agenda/body))
 (spacemacs/set-leader-keys "2" (lambda () (interactive) (org-agenda nil "r")))
 
-(use-package org-brain
-  :straight t
-  :disabled
-  :after org
-  :init
-  (setq org-brain-path "~/Dropbox/ORG/BRAIN/")
-  ;; For Evil users
-  (evil-set-initial-state 'org-brain-visualize-mode 'emacs)
-  (add-to-list 'org-structure-template-alist '("d" . "description"))
-  :config
-  (setq org-id-track-globally t)
-  (push '("b" "Brain" plain (function org-brain-goto-end)
-          "* %i%?" )
-        org-capture-templates)
-  (setq org-brain-visualize-default-choices 'all)
-  (setq org-brain-title-max-length 12))
+;; (use-package org-brain
+;;   :straight t
+;;   :disabled
+;;   :after org
+;;   :init
+;;   (setq org-brain-path "~/Dropbox/ORG/BRAIN/")
+;;   ;; For Evil users
+;;   (evil-set-initial-state 'org-brain-visualize-mode 'emacs)
+;;   (add-to-list 'org-structure-template-alist '("d" . "description"))
+;;   :config
+;;   (setq org-id-track-globally t)
+;;   (push '("b" "Brain" plain (function org-brain-goto-end)
+;;           "* %i%?" )
+;;         org-capture-templates)
+;;   (setq org-brain-visualize-default-choices 'all)
+;;   (setq org-brain-title-max-length 12))
+
+;; (use-package org-alert
+;;   :straight t
+;;   :after org org-agenda
+;;   :init
+;;   (setq org-alert-notification-title "Org Agenda Alert")
+;;   (setq alert-default-style 'notifier)
+;;   (setq org-alert-interval 600)
+;;   :config
+;;   (org-alert-enable))
