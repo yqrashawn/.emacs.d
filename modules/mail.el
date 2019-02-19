@@ -72,11 +72,19 @@
   ;;     (mu4e~proc-send-command "cmd:remove docid:%d" docid)
   ;;     (mu4e~proc-send-command "cmd:remove msgid:%s" msgid))
   :config
-  (add-to-list 'mu4e-bookmarks
-               (make-mu4e-bookmark
-                :name  "Unread filtered"
-                :query "flag:unread and not maildir:/INBOX.gitlab and not maildir:/INBOX.github and not maildir:/INBOX.mailinglist.something-user and not maildir:/INBOX.mailinglist.other-user"
-                :key ?n))
+  (setq mu4e-bookmarks
+        (list (make-mu4e-bookmark
+               :name "Unread messages"
+               :query "flag:unread and NOT (flag:trashed or maildir:/gmail/[Gmail]/Trash or maildir:/gmail/[Gmail]/Spam)"
+               :key ?u)
+              (make-mu4e-bookmark
+               :name "Today's messages"
+               :query "date:today..now and NOT (flag:trashed or maildir:/gmail/[Gmail]/Trash or maildir:/gmail/[Gmail]/Spam)"
+               :key ?t)
+              (make-mu4e-bookmark
+               :name "Last 7 days"
+               :query "date:today..now and NOT (flag:trashed or maildir:/gmail/[Gmail]/Trash or maildir:/gmail/[Gmail]/Spam)"
+               :key ?w)))
 
   (defun jcs-view-in-eww (msg)
     (eww-browse-url (concat "file://" (mu4e~write-body-to-html msg))))
@@ -92,21 +100,21 @@
   ;; (setq mu4e-compose-signature (get-string-from-file "~/signature.txt"))
 
   (add-hook 'mu4e-compose-mode-hook 'flyspell-mode))
-  ;; (evil-define-key 'normal mu4e-headers-mode-map "q" 'mu4e~headers-quit-buffer)
-  ;; ;; (evil-define-key 'normal mu4e-headers-mode-map "q" 'yq/kill-this-buffer)
-  ;; (evil-define-key 'normal mu4e-headers-mode-map "gr" 'mu4e-headers-rerun-search)
+;; (evil-define-key 'normal mu4e-headers-mode-map "q" 'mu4e~headers-quit-buffer)
+;; ;; (evil-define-key 'normal mu4e-headers-mode-map "q" 'yq/kill-this-buffer)
+;; (evil-define-key 'normal mu4e-headers-mode-map "gr" 'mu4e-headers-rerun-search)
 
-  ;;
-  ;; (evil-define-key 'normal mu4e-headers-mode-map (kbd "<RET>") 'mu4e-headers-view-message)
-  ;; (evil-define-key 'normal mu4e-headers-mode-map (kbd "l") 'mu4e-headers-view-message)
-  ;; (evil-define-key 'normal mu4e-main-mode-map "u" 'mu4e-update-index)
-  ;; (evil-define-key 'normal mu4e-main-mode-map "f" 'mu4e-headers-search)
-  ;; (evil-define-key 'normal mu4e-main-mode-map "j" 'mu4e~headers-jump-to-maildir)
-  ;; (evil-define-key 'normal mu4e-main-mode-map (kbd "C-j") 'next-line)
-  ;; (evil-define-key 'normal mu4e-main-mode-map (kbd "C-k") 'previous-line)
-  ;; (evil-define-key 'normal mu4e-main-mode-map "q" 'quit-window)
-  ;; (evil-define-key 'normal mu4e-main-mode-map "b" 'mu4e-headers-search-bookmark)
-  ;; (evil-define-key 'normal mu4e-view-mode-map (kbd "q") 'mu4e~view-quit-buffer)
+;;
+;; (evil-define-key 'normal mu4e-headers-mode-map (kbd "<RET>") 'mu4e-headers-view-message)
+;; (evil-define-key 'normal mu4e-headers-mode-map (kbd "l") 'mu4e-headers-view-message)
+;; (evil-define-key 'normal mu4e-main-mode-map "u" 'mu4e-update-index)
+;; (evil-define-key 'normal mu4e-main-mode-map "f" 'mu4e-headers-search)
+;; (evil-define-key 'normal mu4e-main-mode-map "j" 'mu4e~headers-jump-to-maildir)
+;; (evil-define-key 'normal mu4e-main-mode-map (kbd "C-j") 'next-line)
+;; (evil-define-key 'normal mu4e-main-mode-map (kbd "C-k") 'previous-line)
+;; (evil-define-key 'normal mu4e-main-mode-map "q" 'quit-window)
+;; (evil-define-key 'normal mu4e-main-mode-map "b" 'mu4e-headers-search-bookmark)
+;; (evil-define-key 'normal mu4e-view-mode-map (kbd "q") 'mu4e~view-quit-buffer)
 
 (use-package org-mu4e
   :after mu4e
