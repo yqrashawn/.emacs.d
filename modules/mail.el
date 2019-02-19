@@ -53,7 +53,11 @@
   (setq mu4e-html2text-command 'mu4e-shr2text
         shr-color-visible-luminance-min 60
         shr-color-visible-distance-min 5)
-  ;; (setq mu4e-html2text-command "iconv -c -t utf-8 | pandoc -f html -t plain")
+  ;; (setq mu4e-html2text-command "~/Downloads/readability-demo/index.js")
+  ;; (setq mu4e-html2text-command "iconv -c -t utf-8 | ~/Downloads/readability-demo/index.js")
+  ;; (setq mu4e-html2text-command "~/Downloads/readability-demo/index.js | pandoc -f html -t org")
+  ;; (setq mu4e-html2text-command "iconv -c -t utf-8 | ~/Downloads/readability-demo/index.js | pandoc -f html -t org")
+  ;; (setq mu4e-html2text-command "iconv -c -t utf-8 | ~/Downloads/readability-demo/index.js | pandoc -f html -t plain")
   ;; (setq mu4e-html2text-command "iconv -c -t utf-8 | pandoc -f html -t org")
   (yq/update-evil-emacs-state-modes 'mu4e-headers-mode)
   (yq/update-evil-emacs-state-modes 'mu4e-view-mode)
@@ -103,6 +107,11 @@
   ;; (evil-define-key 'normal mu4e-main-mode-map "q" 'quit-window)
   ;; (evil-define-key 'normal mu4e-main-mode-map "b" 'mu4e-headers-search-bookmark)
   ;; (evil-define-key 'normal mu4e-view-mode-map (kbd "q") 'mu4e~view-quit-buffer)
+
+(use-package org-mu4e
+  :after mu4e
+  :custom
+  (org-mu4e-convert-to-html t))
 
 (use-package mu4e-alert
   :straight t
