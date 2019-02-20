@@ -17,9 +17,9 @@
  starttls-use-gnutls t)
 
 (use-package mu4e
-  :straight t
-  ;; :straight (:host github :repo "emacsmirror/mu4e" :branch "master"
-  ;;                  :files ("mu4e/*" ("mu4e/mu4e-meta.el.in" . "mu4e-meta.el")))
+  ;; :straight t
+  :straight (:host github :repo "emacsmirror/mu4e" :branch "master"
+                   :files ("mu4e/*" ("mu4e/mu4e-meta.el.in" . "mu4e-meta.el")))
   :custom
   (mu4e-attachment-dir "~/Downloads")
   (mu4e-compose-signature-auto-include nil)
