@@ -1,6 +1,6 @@
 (setq org-agenda-skip-unavailable-files t)
 (setq org-agenda-files (expand-file-name ".agenda-file" org-directory))
-(org-agenda-prepare-buffers (org-agenda-files))
+;; (org-agenda-prepare-buffers (org-agenda-files))
 
 (defun +org/has-child-p ()
   (save-excursion (org-goto-first-child)))

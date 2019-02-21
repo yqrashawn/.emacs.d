@@ -746,41 +746,52 @@ Other buffer group by `awesome-tab-in-project-p' with project name."
        (not (and (string-prefix-p "magit" name)
                  (not (file-name-extension name))))))))
 
+;; (use-package tabbar :straight t :init (tabbar-mode 1))
 (use-package tabbar
   :straight t
   :init
   (setq tabbar-cycle-scope 'tabs
-        tabbar-use-images nil)
+        tabbar-use-images nil
+        tabbar-separator (cons 1 nil))
   (tabbar-mode 1)
-  (set-face-attribute
-   'tabbar-default
-   nil
-   :inherit 'header-line
-   :foreground ,(face-attribute
-                 'font-lock-comment-face
-                 :foreground))
-  (set-face-attribute
-   'tabbar-unselected
-   nil
-   :inherit 'header-line
-   :foreground ,(face-attribute
-                 'font-lock-comment-face
-                 :foreground))
-  (set-face-attribute
-   'tabbar-selected
-   nil
-   :inherit 'header-line-highlight
-   :foreground ,(face-attribute
-                 'font-lock-keyword-face
-                 :foreground)))
-
-
-;; (global-set-key (kbd "C-x C-9 h") #'previous-buffer)
-;; (global-set-key (kbd "C-x C-9 l") #'next-buffer)
-
-;; ;; gui with repeat
-;; (global-set-key (kbd "C-M-S-s-h") #'previous-buffer)
-;; (global-set-key (kbd "C-M-S-s-l") #'next-buffer)
+  (defun +tabbar-update-face-depends-on-theme ()
+    (set-face-attribute
+     'tabbar-default nil
+     :background (face-attribute 'default :background)
+     :foreground (face-attribute 'font-lock-comment-face :foreground))
+    (set-face-attribute
+     'tabbar-unselected nil
+     :background (face-attribute 'default :background)
+     :foreground (face-attribute 'font-lock-comment-face :foreground)
+     :box '(:line-width -1 :style pressed-button))
+    (set-face-attribute
+     'tabbar-selected nil
+     :background (face-attribute 'default :background)
+     :foreground (face-attribute 'font-lock-keyword-face :foreground)
+     :box nil)
+    (set-face-attribute
+     'tabbar-modified nil
+     :background (face-attribute 'default :background)
+     :foreground (face-attribute 'font-lock-builtin-face :foreground))
+    (set-face-attribute
+     'tabbar-selected-modified nil
+     :background (face-attribute 'default :background)
+     :foreground (face-attribute 'font-lock-builtin-face :foreground))
+    (set-face-attribute
+     'tabbar-separator nil
+     :inherit 'tabbar-default
+     :foreground (face-attribute 'default :background)
+     :background (face-attribute 'default :background)
+     :box '(:line-width -1 :style pressed-button)))
+  (+tabbar-update-face-depends-on-theme)
+  (add-hook 'spacemacs-post-theme-change-hook '+tabbar-update-face-depends-on-theme)
+  ;; hide button
+  (customize-set-variable 'tabbar-scroll-right-button '(("") ""))
+  (customize-set-variable 'tabbar-scroll-left-button '(("") ""))
+  (customize-set-variable 'tabbar-buffer-home-button '(("") ""))
+  :config
+  (global-set-key (kbd "C-M-S-s-h") #'tabbar-backward-tab)
+  (global-set-key (kbd "C-M-S-s-l") #'tabbar-forward-tab))
 
 (use-package loccur
   :straight t

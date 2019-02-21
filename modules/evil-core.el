@@ -300,9 +300,9 @@
   (define-key evil-multiedit-insert-state-map (kbd "C-n") 'evil-multiedit-match-and-next)
   (define-key evil-multiedit-insert-state-map (kbd "C-p") 'evil-multiedit-match-and-prev)
   (define-key evil-motion-state-map (kbd "RET") 'evil-multiedit-toggle-or-restrict-region)
-  (define-key evil-multiedit-state-map (kbd "C-k") 'evil-multiedit-toggle-or-restrict-region)
-  (define-key evil-visual-state-map (kbd "C-k") 'evil-multiedit-toggle-or-restrict-region)
-  (define-key evil-insert-state-map (kbd "C-k") 'evil-multiedit-toggle-marker-here)
+  ;; (define-key evil-multiedit-state-map (kbd "C-k") 'evil-multiedit-toggle-or-restrict-region)
+  ;; (define-key evil-visual-state-map (kbd "C-k") 'evil-multiedit-toggle-or-restrict-region)
+  ;; (define-key evil-insert-state-map (kbd "C-k") 'evil-multiedit-toggle-marker-here)
   (evil-ex-define-cmd "ie[dit]" 'evil-multiedit-ex-match))
 
 (use-package evil-args

@@ -151,7 +151,9 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
   (yq/add-toggle lispy :mode lispy-mode)
   (spacemacs/set-leader-keys "," 'yq/toggle-lispy)
   :config
-  (advice-add #'special-lispy-eval :before (lambda () (or (fboundp 'cider--make-overlay) (require 'cider))))
+  (advice-add #'special-lispy-eval :before (lambda ()
+                                             (or (fboundp 'cider--make-overlay)
+                                                 (require 'cider))))
   (define-key lispy-mode-map (kbd "C-x C-6 q") #'lispy-describe-inline)
   (define-key lispy-mode-map (kbd "C-x C-6 w") #'lispy-arglist-inline)
   (evil-define-key 'insert lispy-mode-map (kbd "C-k") 'lispy-kill)
