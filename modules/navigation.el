@@ -231,7 +231,8 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   (spacemacs/set-leader-keys "h" nil)
   (spacemacs/set-leader-keys "hd" nil)
   (spacemacs/set-leader-keys "hk" #'counsel-descbinds)
-  (spacemacs/set-leader-keys "hdf" #'counsel-describe-function)
+  (spacemacs/set-leader-keys "hf" #'counsel-describe-function)
+  (spacemacs/set-leader-keys "hdf" #'counsel-describe-face)
   (spacemacs/set-leader-keys "hdv" #'counsel-describe-variable)
   (spacemacs/set-leader-keys "hdk" #'describe-key)
   (spacemacs/set-leader-keys "hdl" #'view-lossage)
@@ -273,8 +274,7 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   (spacemacs/set-leader-keys "hdV" 'helpful-variable)
   (spacemacs/set-leader-keys "hdv" 'describe-variable)
   (spacemacs/set-leader-keys "hdk" 'helpful-key)
-  (spacemacs/set-leader-keys "hdF" 'helpful-function)
-  (spacemacs/set-leader-keys "hdf" 'describe-function)
+  (spacemacs/set-leader-keys "hF" 'helpful-function)
   (evil-define-key 'normal helpful-mode-map "Q"
     (lambda ()
       (interactive)
@@ -615,13 +615,20 @@ When ARG is non-nil search in junk files."
   (ace-link-setup-default))
 
 (use-package awesome-tab
+  :disabled
   :straight (:host github :repo "yqrashawn/awesome-tab")
   :after projectile
   :init
   (setq ivy-source-awesome-tab-group t)
   (defface awesome-tab-default
-    '((t :inherit default :height 1 :box (:line-width 1 :color "dark cyan" :style released-button)))
-    "Default face used in the tab bar." :group 'awesome-tab)
+    '((t
+       :inherit default
+       :height 1
+       :box (:line-width 1
+                         :color "dark cyan"
+                         :style released-button)))
+    "Default face used in the tab bar."
+    :group 'awesome-tab)
   (defface awesome-tab-unselected
     '((t (:inherit awesome-tab-default)))
     "Face used for unselected tabs." :group 'awesome-tab)
@@ -738,6 +745,35 @@ Other buffer group by `awesome-tab-in-project-p' with project name."
        (not (string-prefix-p "magit:" name))
        (not (and (string-prefix-p "magit" name)
                  (not (file-name-extension name))))))))
+
+(use-package tabbar
+  :straight t
+  :init
+  (setq tabbar-cycle-scope 'tabs
+        tabbar-use-images nil)
+  (tabbar-mode 1)
+  (set-face-attribute
+   'tabbar-default
+   nil
+   :inherit 'header-line
+   :foreground ,(face-attribute
+                 'font-lock-comment-face
+                 :foreground))
+  (set-face-attribute
+   'tabbar-unselected
+   nil
+   :inherit 'header-line
+   :foreground ,(face-attribute
+                 'font-lock-comment-face
+                 :foreground))
+  (set-face-attribute
+   'tabbar-selected
+   nil
+   :inherit 'header-line-highlight
+   :foreground ,(face-attribute
+                 'font-lock-keyword-face
+                 :foreground)))
+
 
 ;; (global-set-key (kbd "C-x C-9 h") #'previous-buffer)
 ;; (global-set-key (kbd "C-x C-9 l") #'next-buffer)
