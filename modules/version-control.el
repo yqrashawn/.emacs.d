@@ -11,7 +11,7 @@
   :straight t
   :init
   (magit-auto-revert-mode 1)
-  (setq magit-bury-buffer-function #'magit-restore-window-configuration)
+  (setq magit-bury-buffer-function (lambda (&optional kill-buffer) (magit-restore-window-configuration t)))
   ;; (setq magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1)
   (setq magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
   (setq magit-save-repository-buffers 'dontask)

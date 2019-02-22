@@ -92,6 +92,7 @@
   (add-to-list 'mu4e-view-actions '("eww view" . jcs-view-in-eww) t)
   (add-to-list 'mu4e-view-actions '("view in browser" . mu4e-action-view-in-browser))
   (setq mu4e-sent-messages-behavior 'delete)
+  (add-hook 'mu4e-main-mode-hook #'mu4e-update-index)
   (add-hook 'mu4e-view-mode-hook #'visual-line-mode)
   (setq mail-user-agent 'mu4e-user-agent)
   (defvaralias 'mu4e-compose-signature 'message-signature)

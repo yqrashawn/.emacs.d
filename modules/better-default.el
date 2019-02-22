@@ -75,6 +75,7 @@ file stored in the cache directory and `nil' to disable auto-saving.")
 (setq global-auto-revert-non-file-buffers t
       auto-revert-verbose nil)
 (add-to-list 'global-auto-revert-ignore-modes 'Buffer-menu-mode)
+(add-to-list 'completion-styles 'flex t)
 (xterm-mouse-mode 1)
 (setq initial-major-mode 'text-mode)
 (setq delete-by-moving-to-trash t)

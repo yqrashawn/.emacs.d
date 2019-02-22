@@ -59,10 +59,10 @@
       (ivy-switch-buffer)))
 
   ;; (global-set-key (kbd "C-x C-8 l") 'ivy-alt-done)
-  (global-set-key (kbd "C-x C-9 j") '+ivy-switch-buffer-next-line)
-  (global-set-key (kbd "C-x C-9 k") '+ivy-switch-buffer-prev-line)
-  (global-set-key (kbd "C-M-S-s-j") '+ivy-switch-buffer-next-line)
-  (global-set-key (kbd "C-M-S-s-k") '+ivy-switch-buffer-prev-line)
+  ;; (global-set-key (kbd "C-x C-9 j") '+ivy-switch-buffer-next-line)
+  ;; (global-set-key (kbd "C-x C-9 k") '+ivy-switch-buffer-prev-line)
+  ;; (global-set-key (kbd "C-M-S-s-j") '+ivy-switch-buffer-next-line)
+  ;; (global-set-key (kbd "C-M-S-s-k") '+ivy-switch-buffer-prev-line)
   ;; (global-set-key (kbd "C-x C-8 a" ) 'ivy-beginning-of-buffer)
   ;; (global-set-key (kbd "C-x C-8 e" ) 'ivy-end-of-buffer)
   ;; (global-set-key (kbd "C-x C-8 u" ) 'ivy-scroll-down-command)
@@ -762,12 +762,14 @@ Other buffer group by `awesome-tab-in-project-p' with project name."
     (set-face-attribute
      'tabbar-unselected nil
      :background (face-attribute 'default :background)
-     :foreground (face-attribute 'font-lock-comment-face :foreground)
+     ;; :foreground (face-attribute 'font-lock-comment-face :foreground)
+     :foreground (face-attribute 'font-lock-doc-face :foreground)
      :box '(:line-width -1 :style pressed-button))
     (set-face-attribute
      'tabbar-selected nil
      :background (face-attribute 'default :background)
      :foreground (face-attribute 'font-lock-keyword-face :foreground)
+     :weight 'bold
      :box nil)
     (set-face-attribute
      'tabbar-modified nil
@@ -790,8 +792,111 @@ Other buffer group by `awesome-tab-in-project-p' with project name."
   (customize-set-variable 'tabbar-scroll-left-button '(("") ""))
   (customize-set-variable 'tabbar-buffer-home-button '(("") ""))
   :config
+  (defun +tabbar-buffer-groups ()
+    "Return the list of group names the current buffer belongs to.
+Return a list of one element based on major mode."
+    (list
+     (cond
+      ;; Configs
+      ((memq major-mode '(emacs-lisp-mode inferior-emacs-lisp-mode)) "Configs")
+      ((and buffer-file-name (string-match-p "\/\.config\/" buffer-file-name)) "Configs")
+      ((and buffer-file-name (string-match-p "\.zprezto" buffer-file-name)) "Configs")
+      ((and buffer-file-name (string-match-p "mbsync" buffer-file-name)) "Configs")
+      ((and buffer-file-name (string-match-p "bitbar" buffer-file-name)) "Configs")
+      ((and buffer-file-name (string-match-p "\.emacs\.d\/" buffer-file-name)) "Configs")
+
+      ;; Plan
+      ((and buffer-file-name (string-match-p "\/Dropbox\/ORG\/" buffer-file-name)) "Plan")
+      ((eq major-mode 'org-agenda-mode) "Plan")
+
+      ;; Clojure
+      ((memq major-mode '(clojure-mode)) "Clojure")
+
+      ;; other prog mode
+      ((or (derived-mode-p 'prog-mode) (memq major-mode '(org-mode dired-mode))) "Working")
+
+      ((memq major-mode '(help-mode apropos-mode Info-mode Man-mode)) "Help")
+      ((eq major-mode 'dired-mode) "Dired")
+      ((memq major-mode
+             '(rmail-mode
+               rmail-edit-mode vm-summary-mode vm-mode mail-mode
+               mu4e-view-mode mu4e-headers-mode mu4e-main-mode mu4e-org-mode
+               mh-letter-mode mh-show-mode mh-folder-mode
+               gnus-summary-mode message-mode gnus-group-mode
+               gnus-article-mode score-mode gnus-browse-killed-mode))
+       "Mail")
+      ((or  (char-equal ?\* (aref (buffer-name) 0))
+            (char-equal ?\  (aref (buffer-name) 0))) "Common")
+
+      (t
+       ;; Return `mode-name' if not blank, `major-mode' otherwise.
+       (if (and (stringp mode-name)
+                ;; Take care of preserving the match-data because this
+                ;; function is called when updating the header line.
+                (save-match-data (string-match "[^ ]" mode-name)))
+           mode-name
+         (symbol-name major-mode))))))
+  (setq tabbar-buffer-groups-function '+tabbar-buffer-groups)
+  (global-set-key (kbd "C-x C-9 j") #'tabbar-backward-group)
+  (global-set-key (kbd "C-x C-9 k") #'tabbar-forward-group)
+  (global-set-key (kbd "C-M-S-s-j") #'tabbar-backward-group)
+  (global-set-key (kbd "C-M-S-s-k") #'tabbar-forward-group)
   (global-set-key (kbd "C-M-S-s-h") #'tabbar-backward-tab)
-  (global-set-key (kbd "C-M-S-s-l") #'tabbar-forward-tab))
+  (global-set-key (kbd "C-M-S-s-l") #'tabbar-forward-tab)
+  (defun tabbar-move-current-tab-one-place-left ()
+    "Move current tab one place left, unless it's already the leftmost."
+    (interactive)
+    (let* ((bufset (tabbar-current-tabset t))
+           (old-bufs (tabbar-tabs bufset))
+           (first-buf (car old-bufs))
+           (new-bufs (list)))
+      (if (string= (buffer-name) (format "%s" (car first-buf)))
+          old-bufs ; the current tab is the leftmost
+        (setq not-yet-this-buf first-buf)
+        (setq old-bufs (cdr old-bufs))
+        (while (and
+                old-bufs
+                (not (string= (buffer-name) (format "%s" (car (car old-bufs))))))
+          (push not-yet-this-buf new-bufs)
+          (setq not-yet-this-buf (car old-bufs))
+          (setq old-bufs (cdr old-bufs)))
+        (if old-bufs ; if this is false, then the current tab's buffer name is mysteriously missing
+            (progn
+              (push (car old-bufs) new-bufs) ; this is the tab that was to be moved
+              (push not-yet-this-buf new-bufs)
+              (setq new-bufs (reverse new-bufs))
+              (setq new-bufs (append new-bufs (cdr old-bufs))))
+          (error "Error: current buffer's name was not found in Tabbar's buffer list."))
+        (set bufset new-bufs)
+        (tabbar-set-template bufset nil)
+        (tabbar-display-update))))
+  (defun tabbar-move-current-tab-one-place-right ()
+    "Move current tab one place right, unless it's already the rightmost."
+    (interactive)
+    (let* ((bufset (tabbar-current-tabset t))
+           (old-bufs (tabbar-tabs bufset))
+           (first-buf (car old-bufs))
+           (new-bufs (list)))
+      (while (and
+              old-bufs
+              (not (string= (buffer-name) (format "%s" (car (car old-bufs))))))
+        (push (car old-bufs) new-bufs)
+        (setq old-bufs (cdr old-bufs)))
+      (if old-bufs ; if this is false, then the current tab's buffer name is mysteriously missing
+          (progn
+            (setq the-buffer (car old-bufs))
+            (setq old-bufs (cdr old-bufs))
+            (if old-bufs ; if this is false, then the current tab is the rightmost
+                (push (car old-bufs) new-bufs))
+            (push the-buffer new-bufs)) ; this is the tab that was to be moved
+        (error "Error: current buffer's name was not found in Tabbar's buffer list."))
+      (setq new-bufs (reverse new-bufs))
+      (setq new-bufs (append new-bufs (cdr old-bufs)))
+      (set bufset new-bufs)
+      (tabbar-set-template bufset nil)
+      (tabbar-display-update)))
+  (global-set-key (kbd "C-x C-9 [") 'tabbar-move-current-tab-one-place-left)
+  (global-set-key (kbd "C-x C-9 ]") 'tabbar-move-current-tab-one-place-right))
 
 (use-package loccur
   :straight t
