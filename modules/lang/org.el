@@ -511,7 +511,6 @@ Inserted by installing org-mode or when a release is made."
         '(("c" "Inbox Entry" entry
            (file+olp org-default-inbox-file "Inbox")
            "* %? %^G\n:PROPERTIES:\n:CREATED: %U\n:END:\n\n%i")))
-
   :config
   (setq org-capture--clipboards t)
   (evil-define-key 'normal 'org-capture-mode

@@ -897,14 +897,6 @@ otherwise it is scaled down."
 
 (setq history-delete-duplicates t)
 
-;; (defadvice counsel-find-file (after find-file-sudo activate)
-;;   "Find file as root if necessary."
-;;   (let ((dir (f-dirname (buffer-file-name)))
-;;         (file (buffer-file-name)))
-;;     (unless (and file (f-writable? file))
-;;       (when (and (f-exists? dir) (not (f-writable? dir)))
-;;         (find-alternate-file (concat "/sudo:root@localhost:" buffer-file-name))))))
-
 (setq imenu-max-item-length 1024)
 
 (use-package string-edit
@@ -1066,15 +1058,16 @@ otherwise it is scaled down."
     (kbd "f") 'ivy-switch-buffer
     (kbd "n") 'ibuffer-forward-filter-group
     (kbd "p") 'ibuffer-backward-filter-group)
-  (defadvice ibuffer (around ibuffer-point-to-most-recent) ()
-             "Open ibuffer with cursor pointed to most recent (non-minibuffer) buffer name"
-             (let ((recent-buffer-name
-                    (if (minibufferp (buffer-name))
-                        (buffer-name
-                         (window-buffer (minibuffer-selected-window)))
-                      (buffer-name (other-buffer)))))
-               ad-do-it
-               (ibuffer-jump-to-buffer recent-buffer-name)))
+  (defadvice
+      ibuffer (around ibuffer-point-to-most-recent) ()
+      "Open ibuffer with cursor pointed to most recent (non-minibuffer) buffer name"
+      (let ((recent-buffer-name
+             (if (minibufferp (buffer-name))
+                 (buffer-name
+                  (window-buffer (minibuffer-selected-window)))
+               (buffer-name (other-buffer)))))
+        ad-do-it
+        (ibuffer-jump-to-buffer recent-buffer-name)))
   (ad-activate 'ibuffer))
 
 (use-package hydra
@@ -1311,7 +1304,8 @@ Info-mode:
       ;; file is create from temp directory
       (setq rlt t))
      ((and (string-match "\.html$" f)
-           (file-exists-p (setq org (replace-regexp-in-string "\.html$" ".org" f))))
+           (file-exists-p
+            (setq org (replace-regexp-in-string "\.html$" ".org" f))))
       ;; file is a html file exported from org-mode
       (setq rlt t))
      (force-buffer-file-temp-p
@@ -1395,7 +1389,8 @@ Info-mode:
   (cancel-timer undo-auto-current-boundary-timer))
 
 (fset 'undo-auto--undoable-change
-      (lambda () (add-to-list 'undo-auto--undoably-changed-buffers (current-buffer))))
+      (lambda ()
+        (add-to-list 'undo-auto--undoably-changed-buffers (current-buffer))))
 
 (fset 'undo-auto-amalgamate 'ignore)
 
@@ -1422,7 +1417,26 @@ Info-mode:
                 (goto-char (point-min))
                 (when (and (not (eq major-mode 'image-mode))
                            (search-forward-regexp ".\\{2000\\}" 50000 t)
-                           (y-or-n-p "Very long lines detected - enable so-long-mode? "))
+                           (y-or-n-p
+                            "Very long lines detected - enable so-long-mode? "))
                   (so-long-mode))))))
 
+(use-package highlight-indent-guides
+  :straight t
+  :disabled
+  :hook (prog-mode . highlight-indent-guides-mode)
+  :custom
+  (highlight-indent-guides-method 'character)
+  (highlight-indent-guides-character ?\|)
+  (highlight-indent-guides-responsive 'top)
+  (highlight-indent-guides-delay 1))
 
+(use-package fill-column-indicator
+  :straight t
+  :init (fci-mode))
+
+(use-package pcre2el
+  :straight t
+  :bind
+  ("C-c / p /" . rxt-explain-pcre)
+  ("C-c / /" . rxt-explain))

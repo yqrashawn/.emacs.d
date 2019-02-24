@@ -286,24 +286,21 @@
 (use-package evil-multiedit
   :straight t
   :config
-  (define-key evil-visual-state-map "v" 'evil-multiedit-match-all)
-  (define-key evil-insert-state-map (kbd "M-n") 'evil-multiedit-match-and-next)
-  (define-key evil-insert-state-map (kbd "M-p") 'evil-multiedit-match-and-prev)
-  (define-key evil-normal-state-map (kbd "C-n") 'evil-multiedit-match-and-next)
-  (define-key evil-normal-state-map (kbd "C-p") 'evil-multiedit-match-and-prev)
-  (define-key evil-visual-state-map (kbd "C-n") 'evil-multiedit-match-and-next)
-  (define-key evil-visual-state-map (kbd "C-p") 'evil-multiedit-match-and-prev)
-  (define-key evil-multiedit-state-map (kbd "C-n") 'evil-multiedit-match-and-next)
-  (define-key evil-multiedit-state-map (kbd "C-p") 'evil-multiedit-match-and-prev)
-  (define-key evil-multiedit-state-map (kbd "n") 'evil-multiedit-next)
-  (define-key evil-multiedit-state-map (kbd "N") 'evil-multiedit-prev)
-  (define-key evil-multiedit-insert-state-map (kbd "C-n") 'evil-multiedit-match-and-next)
-  (define-key evil-multiedit-insert-state-map (kbd "C-p") 'evil-multiedit-match-and-prev)
-  (define-key evil-motion-state-map (kbd "RET") 'evil-multiedit-toggle-or-restrict-region)
-  ;; (define-key evil-multiedit-state-map (kbd "C-k") 'evil-multiedit-toggle-or-restrict-region)
-  ;; (define-key evil-visual-state-map (kbd "C-k") 'evil-multiedit-toggle-or-restrict-region)
-  ;; (define-key evil-insert-state-map (kbd "C-k") 'evil-multiedit-toggle-marker-here)
-  (evil-ex-define-cmd "ie[dit]" 'evil-multiedit-ex-match))
+  (define-key evil-visual-state-map "v" #'evil-multiedit-match-all)
+  (define-key evil-insert-state-map (kbd "M-n") #'evil-multiedit-match-and-next)
+  (define-key evil-insert-state-map (kbd "M-p") #'evil-multiedit-match-and-prev)
+  (define-key evil-normal-state-map (kbd "C-n") #'evil-multiedit-match-and-next)
+  (define-key evil-normal-state-map (kbd "C-p") #'evil-multiedit-match-and-prev)
+  (define-key evil-visual-state-map (kbd "C-n") #'evil-multiedit-match-and-next)
+  (define-key evil-visual-state-map (kbd "C-p") #'evil-multiedit-match-and-prev)
+  (define-key evil-multiedit-state-map (kbd "C-n") #'evil-multiedit-match-and-next)
+  (define-key evil-multiedit-state-map (kbd "C-p") #'evil-multiedit-match-and-prev)
+  (define-key evil-multiedit-state-map (kbd "n") #'evil-multiedit-next)
+  (define-key evil-multiedit-state-map (kbd "N") #'evil-multiedit-prev)
+  (define-key evil-multiedit-insert-state-map (kbd "C-n") #'evil-multiedit-match-and-next)
+  (define-key evil-multiedit-insert-state-map (kbd "C-p") #'evil-multiedit-match-and-prev)
+  (define-key evil-motion-state-map (kbd "RET") #'evil-multiedit-toggle-or-restrict-region)
+  (evil-ex-define-cmd "ie[dit]" #'evil-multiedit-ex-match))
 
 (use-package evil-args
   :straight t
@@ -331,9 +328,10 @@
   (define-key evil-inner-text-objects-map "f" 'evil-textobj-anyblock-inner-block)
   (define-key evil-outer-text-objects-map "f" 'evil-textobj-anyblock-a-block))
 
-(use-package evil-indent-textobject
+(use-package evil-indent-plus
   :straight t
-  :after evil)
+  :after evil
+  :init (evil-indent-plus-default-bindings))
 
 (use-package evil-matchit
   :straight t

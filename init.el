@@ -61,6 +61,14 @@
 (straight-use-package 'diminish)
 (straight-use-package 'use-package)
 
+(use-package auto-compile
+  :straight t
+  :custom
+  (auto-compile-display-buffer nil)
+  :init
+  (auto-compile-on-load-mode)
+  (auto-compile-on-save-mode))
+
 (use-package exec-path-from-shell
   :straight t
   :init

@@ -432,7 +432,7 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   :config
   (defun +yas-expand-when-inserting-dot ()
     (interactive)
-    (if (and (eolp) (eq (preceding-char) ?.))
+    (if (eq (preceding-char) ?.)
         (if (and (not (delete-char -1 nil)) (yas-expand))
             t
           (progn

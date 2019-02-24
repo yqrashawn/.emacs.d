@@ -800,7 +800,7 @@ Return a list of one element based on major mode."
       ;; Configs
       ((memq major-mode '(emacs-lisp-mode inferior-emacs-lisp-mode)) "Configs")
       ((and buffer-file-name (string-match-p "\/\.config\/" buffer-file-name)) "Configs")
-      ((and buffer-file-name (string-match-p "\.zprezto" buffer-file-name)) "Configs")
+      ((and buffer-file-name (string-match-p "prezto" buffer-file-name)) "Configs")
       ((and buffer-file-name (string-match-p "mbsync" buffer-file-name)) "Configs")
       ((and buffer-file-name (string-match-p "bitbar" buffer-file-name)) "Configs")
       ((and buffer-file-name (string-match-p "\.emacs\.d\/" buffer-file-name)) "Configs")
@@ -813,10 +813,10 @@ Return a list of one element based on major mode."
       ((memq major-mode '(clojure-mode)) "Clojure")
 
       ;; other prog mode
-      ((or (derived-mode-p 'prog-mode) (memq major-mode '(org-mode dired-mode))) "Working")
+      ((or (derived-mode-p 'prog-mode) (memq major-mode '(org-mode))) "Working")
 
-      ((memq major-mode '(help-mode apropos-mode Info-mode Man-mode)) "Help")
       ((eq major-mode 'dired-mode) "Dired")
+      ((memq major-mode '(helpful-mode help-mode apropos-mode Info-mode Man-mode)) "Help")
       ((memq major-mode
              '(rmail-mode
                rmail-edit-mode vm-summary-mode vm-mode mail-mode
