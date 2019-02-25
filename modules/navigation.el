@@ -187,12 +187,11 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
                    :files ("swiper.el")
                    :upstream (:host github :repo "abo-abo/swiper"))
   :config
-  ;; (global-set-key (kbd "C-SPC") 'counsel-grep-or-swiper)
-  ;; (global-set-key (kbd "^@") 'counsel-grep-or-swiper)
   ;; (define-key evil-normal-state-map (kbd "sn") 'spacemacs/swiper-all-region-or-symbol)
   (global-set-key (kbd "C-SPC") 'swiper)
   (global-set-key (kbd "^@") 'swiper)
-  (global-set-key (kbd "C-S-SPC") 'spacemacs/swiper-region-or-symbol))
+  (global-set-key (kbd "C-S-SPC") 'spacemacs/swiper-region-or-symbol)
+  (spacemacs/set-leader-keys "fes" (lambda () (interactive) (find-file-existing "~/.ssh/config") (swiper))))
 
 (use-package counsel
   :straight (:host github :repo "abo-abo/swiper" :branch "master"
