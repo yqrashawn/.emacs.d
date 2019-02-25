@@ -224,8 +224,6 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   (spacemacs/set-leader-keys "<SPC>" 'counsel-M-x)
   (spacemacs/set-leader-keys "f" nil)
   (spacemacs/set-leader-keys "fe" nil)
-  (spacemacs/set-leader-keys "fed" 'yq/edit-dotfile)
-  (spacemacs/set-leader-keys "fek" (lambda () (interactive) (find-file-existing "~/.config/karabiner.edn")))
   (spacemacs/set-leader-keys "ff" 'counsel-find-file)
   (spacemacs/set-leader-keys "fF" 'find-file-other-window)
   (spacemacs/set-leader-keys "h" nil)
@@ -746,23 +744,21 @@ Other buffer group by `awesome-tab-in-project-p' with project name."
        (not (and (string-prefix-p "magit" name)
                  (not (file-name-extension name))))))))
 
-;; (use-package tabbar :straight t :init (tabbar-mode 1))
 (use-package tabbar
   :straight t
   :init
   (setq tabbar-cycle-scope 'tabs
         tabbar-use-images nil
-        tabbar-separator (cons 1 nil))
-  (tabbar-mode 1)
+        tabbar-separator (cons 1.2 nil))
   (defun +tabbar-update-face-depends-on-theme ()
     (set-face-attribute
      'tabbar-default nil
      :background (face-attribute 'default :background)
-     :foreground (face-attribute 'font-lock-comment-face :foreground))
+     :foreground (face-attribute 'font-lock-comment-face :foreground)
+     :box '(:line-width -1 :style pressed-button))
     (set-face-attribute
      'tabbar-unselected nil
      :background (face-attribute 'default :background)
-     ;; :foreground (face-attribute 'font-lock-comment-face :foreground)
      :foreground (face-attribute 'font-lock-doc-face :foreground)
      :box '(:line-width -1 :style pressed-button))
     (set-face-attribute
@@ -774,11 +770,14 @@ Other buffer group by `awesome-tab-in-project-p' with project name."
     (set-face-attribute
      'tabbar-modified nil
      :background (face-attribute 'default :background)
-     :foreground (face-attribute 'font-lock-builtin-face :foreground))
+     :foreground (face-attribute 'font-lock-builtin-face :foreground)
+     :box '(:line-width -1 :style pressed-button))
     (set-face-attribute
      'tabbar-selected-modified nil
      :background (face-attribute 'default :background)
-     :foreground (face-attribute 'font-lock-builtin-face :foreground))
+     :foreground (face-attribute 'font-lock-builtin-face :foreground)
+     :box nil
+     :weight 'bold)
     (set-face-attribute
      'tabbar-separator nil
      :inherit 'tabbar-default
@@ -787,6 +786,8 @@ Other buffer group by `awesome-tab-in-project-p' with project name."
      :box '(:line-width -1 :style pressed-button)))
   (+tabbar-update-face-depends-on-theme)
   (add-hook 'spacemacs-post-theme-change-hook '+tabbar-update-face-depends-on-theme)
+  (tabbar-mode 1)
+
   ;; hide button
   (customize-set-variable 'tabbar-scroll-right-button '(("") ""))
   (customize-set-variable 'tabbar-scroll-left-button '(("") ""))
@@ -896,7 +897,48 @@ Return a list of one element based on major mode."
       (tabbar-set-template bufset nil)
       (tabbar-display-update)))
   (global-set-key (kbd "C-x C-9 [") 'tabbar-move-current-tab-one-place-left)
-  (global-set-key (kbd "C-x C-9 ]") 'tabbar-move-current-tab-one-place-right))
+  (global-set-key (kbd "C-x C-9 ]") 'tabbar-move-current-tab-one-place-right)
+  (setq +tabbar-tab-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l ?\; ?q ?w ?e ?r
+                              ?t ?y ?u ?i ?o ?p ?z ?x ?c ?v ?b ?n ?m
+                              ?A ?S ?D ?F ?G ?H ?J ?K ?L ?Q ?W ?E ?R
+                              ?T ?Y ?U ?I ?O ?P ?Z ?X ?C ?V ?B ?N ?M))
+  (defun +tabbar-jump (&optional key)
+    (interactive)
+    (let* ((key (or key (read-char "key: " t))))
+      (tabbar-buffer-select-tab
+       t (nth (seq-position +tabbar-tab-keys key)
+              (tabbar-view tabbar-current-tabset)))))
+  (defun tabbar-buffer-tab-label (tab)
+    "Return a label for TAB.
+That is, a string used to represent it on the tab bar."
+    (let* ((tabset (tabbar-tab-tabset tab))
+           (index (seq-position
+                   (tabbar-view tabset) tab))
+           (prefix (if (> index -1)
+                       (char-to-string (nth index +tabbar-tab-keys))
+                     ""))
+           (label (if tabbar--buffer-show-groups
+                      (format "[%s]" (tabbar-tab-tabset tab))
+                    (format "%s %s" prefix (tabbar-tab-value tab)))))
+      ;; Unless the tab bar auto scrolls to keep the selected tab
+      ;; visible, shorten the tab label to keep as many tabs as possible
+      ;; in the visible area of the tab bar.
+      (if tabbar-auto-scroll-flag
+          label
+        (tabbar-shorten
+         label (max 1 (/ (window-width)
+                         (length (tabbar-view
+                                  (tabbar-current-tabset)))))))))
+  (define-key tabbar-mode-map (kbd "C-x C-6 1") (lambda () (interactive) (+tabbar-jump ?a)))
+  (define-key tabbar-mode-map (kbd "C-x C-6 2") (lambda () (interactive) (+tabbar-jump ?s)))
+  (define-key tabbar-mode-map (kbd "C-x C-6 3") (lambda () (interactive) (+tabbar-jump ?d)))
+  (define-key tabbar-mode-map (kbd "C-x C-6 4") (lambda () (interactive) (+tabbar-jump ?f)))
+  (define-key tabbar-mode-map (kbd "C-x C-6 5") (lambda () (interactive) (+tabbar-jump ?g)))
+  (define-key tabbar-mode-map (kbd "C-x C-6 6") (lambda () (interactive) (+tabbar-jump ?h)))
+  (define-key tabbar-mode-map (kbd "C-x C-6 7") (lambda () (interactive) (+tabbar-jump ?j)))
+  (define-key tabbar-mode-map (kbd "C-x C-6 8") (lambda () (interactive) (+tabbar-jump ?k)))
+  (define-key tabbar-mode-map (kbd "C-x C-6 9") (lambda () (interactive) (+tabbar-jump ?l)))
+  (define-key tabbar-mode-map (kbd "C-x C-6 0") (lambda () (interactive) (+tabbar-jump 59))))
 
 (use-package loccur
   :straight t
