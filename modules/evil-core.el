@@ -32,11 +32,10 @@
   :straight t
   :init
   (setq evil-leader/in-all-states t)
-  :config
+  (global-evil-leader-mode)
   (defalias 'spacemacs/set-leader-keys 'evil-leader/set-key)
   (defalias 'spacemacs/set-leader-keys-for-major-mode 'evil-leader/set-key-for-mode)
-  (evil-leader/set-leader "<SPC>" "M-")
-  (global-evil-leader-mode))
+  (evil-leader/set-leader "<SPC>" "M-"))
 
 (use-package evil
   :straight t
@@ -74,22 +73,6 @@
           company-complete-selection
           company-complete-number
           hippie-expand))
-  ;; (define-key evil-normal-state-map (kbd "<tab>") 'spacemacs/alternate-buffer)
-  ;;   (defmacro evil-map (state key seq)
-  ;;     "Map for a given STATE a KEY to a sequence SEQ of keys.
-  ;; Can handle recursive definition only if KEY is the first key of SEQ.
-  ;; Example: (evil-map visual \"<\" \"<gv\")"
-  ;;     (let ((map (intern (format "evil-%S-state-map" state))))
-  ;;       `(define-key ,map ,key
-  ;;          (lambda ()
-  ;;            (interactive)
-  ;;            ,(if (string-equal key (substring seq 0 1))
-  ;;                 `(progn
-  ;;                    (call-interactively ',(lookup-key evil-normal-state-map key))
-  ;;                    (execute-kbd-macro ,(substring seq 1)))
-  ;;               (execute-kbd-macro ,seq))))))
-  ;;   (evil-map visual "<" "<gv")
-  ;;   (evil-map visual ">" ">gv")
   (define-key evil-visual-state-map ">"
     (lambda nil
       (interactive)
@@ -177,6 +160,10 @@
   (spacemacs/set-leader-keys "b" nil)
   (spacemacs/set-leader-keys "r" nil)
   (spacemacs/set-leader-keys "i" nil)
+  (spacemacs/set-leader-keys "f" nil)
+  (spacemacs/set-leader-keys "fe" nil)
+  (spacemacs/set-leader-keys "h" nil)
+  (spacemacs/set-leader-keys "hd" nil)
   (spacemacs/set-leader-keys "tv" 'yq/toggle-visual-line)
   (spacemacs/set-leader-keys "wh" 'evil-window-left)
   (spacemacs/set-leader-keys "wj" 'evil-window-down)
@@ -192,6 +179,10 @@
   (spacemacs/set-leader-keys "j=" 'yq/indent-region-or-buffer)
   (evil-define-minor-mode-key 'motion 'visual-line-mode "j" 'evil-next-visual-line)
   (evil-define-minor-mode-key 'motion 'visual-line-mode "k" 'evil-previous-visual-line)
+  (spacemacs/set-leader-keys "fed" (lambda () (interactive) (find-file-existing yq-emacs-dotfile-dir)))
+  (spacemacs/set-leader-keys "fek" (lambda () (interactive) (find-file-existing "~/.config/karabiner.edn")))
+  (load-file "~/.emacs.d/straight/repos/straight.el/straight-x.el")
+  (spacemacs/set-leader-keys "feU" #'straight-x-fetch-all)
   (evil-mode 1))
 
 (use-package evil-nerd-commenter

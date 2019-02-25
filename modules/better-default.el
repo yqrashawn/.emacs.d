@@ -159,14 +159,6 @@ file stored in the cache directory and `nil' to disable auto-saving.")
 (add-hook 'prog-mode-hook #'hs-minor-mode)
 (add-hook 'org-mode-hook #'hs-minor-mode)
 
-(defun yq/edit-dotfile ()
-  (interactive)
-  (find-file-existing yq-emacs-dotfile-dir))
-
-(spacemacs/set-leader-keys "fed" 'yq/edit-dotfile)
-(spacemacs/set-leader-keys "fek" (lambda () (interactive) (find-file-existing "~/.config/karabiner.edn")))
-(load-file "~/.emacs.d/straight/repos/straight.el/straight-x.el")
-(spacemacs/set-leader-keys "feU" #'straight-x-fetch-all)
 
 ;; C-h key as BS
 (keyboard-translate ?\C-h ?\C-?)

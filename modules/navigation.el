@@ -200,10 +200,6 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
                    :upstream (:host github :repo "abo-abo/swiper"))
   :diminish counsel-mode
   :config
-  (define-key evil-normal-state-map "sm" 'counsel-fzf)
-  (evil-define-key 'normal dired-mode-map "sm" 'counsel-fzf)
-  (spacemacs/set-leader-keys "sm" (lambda () (interactive) (let ((current-prefix-arg '(1))) (call-interactively 'counsel-fzf))))
-
   (and (fboundp 'counsel--elisp-to-pcre) (defalias 'counsel-unquote-regex-parens 'counsel--elisp-to-pcre))
   (defun counsel-imenu-comments ()
     "Imenu display comments."
@@ -222,12 +218,8 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   (define-key ivy-minibuffer-map (kbd "<escape>") 'minibuffer-keyboard-quit)
   (global-set-key (kbd "C-x C-f") 'counsel-find-file)
   (spacemacs/set-leader-keys "<SPC>" 'counsel-M-x)
-  (spacemacs/set-leader-keys "f" nil)
-  (spacemacs/set-leader-keys "fe" nil)
   (spacemacs/set-leader-keys "ff" 'counsel-find-file)
   (spacemacs/set-leader-keys "fF" 'find-file-other-window)
-  (spacemacs/set-leader-keys "h" nil)
-  (spacemacs/set-leader-keys "hd" nil)
   (spacemacs/set-leader-keys "hk" #'counsel-descbinds)
   (spacemacs/set-leader-keys "hf" #'counsel-describe-function)
   (spacemacs/set-leader-keys "hdf" #'counsel-describe-face)
@@ -235,9 +227,11 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   (spacemacs/set-leader-keys "hdk" #'describe-key)
   (spacemacs/set-leader-keys "hdl" #'view-lossage)
   (spacemacs/set-leader-keys "fJ" 'spacemacs/open-junk-file)
-  (define-key evil-normal-state-map "sf" 'counsel-rg)
+  (define-key evil-normal-state-map "sf" #'counsel-rg)
   (define-key evil-normal-state-map "sl" 'spacemacs/counsel-jump-in-buffer)
-  (define-key evil-normal-state-map "sj" 'counsel-recentf)
+  (define-key evil-normal-state-map "sj" #'counsel-recentf)
+  (define-key evil-normal-state-map "sm" #'counsel-fzf)
+  (spacemacs/set-leader-keys "sm" (lambda () (interactive) (let ((current-prefix-arg '(1))) (call-interactively 'counsel-fzf))))
   (define-key evil-normal-state-map (kbd "s SPC") 'counsel-M-x)
   (define-key evil-normal-state-map (kbd "M-y" ) 'counsel-yank-pop))
 
@@ -442,6 +436,7 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
     "l" 'dired-find-file
     "s" 'nil
     "sk" 'yq/kill-this-buffer
+    "sm" #'counsel-fzf
     "sj" #'counsel-recentf
     "sJ" #'projectile-recentf
     "sB" #'projectile-switch-to-buffer
@@ -750,6 +745,7 @@ Other buffer group by `awesome-tab-in-project-p' with project name."
   (setq tabbar-cycle-scope 'tabs
         tabbar-use-images nil
         tabbar-separator (cons 1.2 nil))
+  (tabbar-mode 1)
   (defun +tabbar-update-face-depends-on-theme ()
     (set-face-attribute
      'tabbar-default nil
@@ -786,7 +782,6 @@ Other buffer group by `awesome-tab-in-project-p' with project name."
      :box '(:line-width -1 :style pressed-button)))
   (+tabbar-update-face-depends-on-theme)
   (add-hook 'spacemacs-post-theme-change-hook '+tabbar-update-face-depends-on-theme)
-  (tabbar-mode 1)
 
   ;; hide button
   (customize-set-variable 'tabbar-scroll-right-button '(("") ""))
