@@ -164,7 +164,7 @@ Available PROPS:
   :straight t
   :diminish company-mode
   :init
-  (setq company-idle-delay 0.2
+  (setq company-idle-delay 0.5
         company-selection-wrap-around t
         company-show-numbers t
         company-minimum-prefix-length 1
