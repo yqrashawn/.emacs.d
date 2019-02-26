@@ -19,7 +19,8 @@
   ;;         (swiper . ivy--regex-plus)
   ;;         (t . ivy--regex-fuzzy)))
   (setq ivy-re-builders-alist
-        '((spacemacs/counsel-search . spacemacs/ivy--regex-plus)
+        '((counsel-recentf . ivy--regex-fuzzy)
+          (spacemacs/counsel-search . spacemacs/ivy--regex-plus)
           (spacemacs/search-auto . spacemacs/ivy--regex-plus)
           (t . ivy--regex-plus)))
 
@@ -787,6 +788,20 @@ Other buffer group by `awesome-tab-in-project-p' with project name."
   (customize-set-variable 'tabbar-scroll-left-button '(("") ""))
   (customize-set-variable 'tabbar-buffer-home-button '(("") ""))
   :config
+  (defun tabbar-buffer-list ()
+    "Return the list of buffers to show in tabs.
+Exclude buffers whose name starts with a space, when they are not
+visiting a file.  The current buffer is always included."
+    (delq nil
+          (mapcar #'(lambda (b)
+                      (cond
+                       ;; Always include the current buffer.
+                       ((eq (current-buffer) b) b)
+                       ((buffer-file-name b) b)
+                       ((char-equal ?\  (aref (buffer-name b) 0)) nil)
+                       ((char-equal ?*  (aref (buffer-name b) 0)) nil)
+                       ((buffer-live-p b) b)))
+                  (buffer-list))))
   (defun +tabbar-buffer-groups ()
     "Return the list of group names the current buffer belongs to.
 Return a list of one element based on major mode."
@@ -799,6 +814,7 @@ Return a list of one element based on major mode."
       ((and buffer-file-name (string-match-p "mbsync" buffer-file-name)) "Configs")
       ((and buffer-file-name (string-match-p "bitbar" buffer-file-name)) "Configs")
       ((and buffer-file-name (string-match-p "\.emacs\.d\/" buffer-file-name)) "Configs")
+      ((and buffer-file-name (string-match-p "Dropbox/sync/" buffer-file-name)) "Configs")
 
       ;; Plan
       ((and buffer-file-name (string-match-p "\/Dropbox\/ORG\/" buffer-file-name)) "Plan")
@@ -823,6 +839,7 @@ Return a list of one element based on major mode."
       ((or  (char-equal ?\* (aref (buffer-name) 0))
             (char-equal ?\  (aref (buffer-name) 0))) "Common")
 
+      (t "Misc")
       (t
        ;; Return `mode-name' if not blank, `major-mode' otherwise.
        (if (and (stringp mode-name)
@@ -831,13 +848,59 @@ Return a list of one element based on major mode."
                 (save-match-data (string-match "[^ ]" mode-name)))
            mode-name
          (symbol-name major-mode))))))
+
+  (defun +tabbar-get-groups ()
+    (set tabbar-tabsets-tabset (tabbar-map-tabsets 'tabbar-selected-tab))
+    (mapcar #'(lambda (group) (format "%s" (cdr group)))
+            (tabbar-tabs tabbar-tabsets-tabset)))
+
+  (defun +tabbar-switch-group (&optional groupname)
+    "Switch tab groups using ido."
+    (interactive)
+    (let* ((tab-buffer-list (mapcar
+                             #'(lambda (b)
+                                 (with-current-buffer b
+                                   (list (current-buffer)
+                                         (buffer-name)
+                                         (funcall tabbar-buffer-groups-function))))
+                             (funcall tabbar-buffer-list-function)))
+           (groups (+tabbar-get-groups))
+           (group-name (or groupname (ido-completing-read "Groups: " groups))))
+      (catch 'done
+        (mapc
+         #'(lambda (group)
+             (when (equal group-name (car (car (cdr (cdr group)))))
+               (throw 'done (switch-to-buffer (car (cdr group))))))
+         tab-buffer-list))))
   (setq tabbar-buffer-groups-function '+tabbar-buffer-groups)
-  (global-set-key (kbd "C-x C-9 j") #'tabbar-backward-group)
-  (global-set-key (kbd "C-x C-9 k") #'tabbar-forward-group)
-  (global-set-key (kbd "C-M-S-s-j") #'tabbar-backward-group)
-  (global-set-key (kbd "C-M-S-s-k") #'tabbar-forward-group)
+
+  (defun counsel-tabbar-groups ()
+    (interactive)
+    (ivy-read
+     "Tabbar Groups:"
+     (+tabbar-get-groups)
+     :action #'+tabbar-switch-group))
+
+  (defun +tabbar-switch-group-next-line ()
+    (interactive)
+    (if (minibufferp) (ivy-next-line)
+      (counsel-tabbar-groups)))
+
+  (defun +tabbar-switch-group-prevouse-line ()
+    (interactive)
+    (if (minibufferp) (ivy-previous-line)
+      (counsel-tabbar-groups)))
+
+  (defun +tabbar-forward-tab-or-ivy-done ()
+    (interactive)
+    (if (minibufferp) (ivy-done)
+      (tabbar-forward-tab)))
+  (global-set-key (kbd "C-x C-9 j") #'+tabbar-switch-group-next-line)
+  (global-set-key (kbd "C-x C-9 k") #'+tabbar-switch-group-prevouse-line)
+  (global-set-key (kbd "C-M-S-s-j") #'+tabbar-switch-group-next-line)
+  (global-set-key (kbd "C-M-S-s-k") #'+tabbar-switch-group-prevouse-line)
   (global-set-key (kbd "C-M-S-s-h") #'tabbar-backward-tab)
-  (global-set-key (kbd "C-M-S-s-l") #'tabbar-forward-tab)
+  (global-set-key (kbd "C-M-S-s-l") #'+tabbar-forward-tab-or-ivy-done)
   (defun tabbar-move-current-tab-one-place-left ()
     "Move current tab one place left, unless it's already the leftmost."
     (interactive)
@@ -923,6 +986,18 @@ That is, a string used to represent it on the tab bar."
          label (max 1 (/ (window-width)
                          (length (tabbar-view
                                   (tabbar-current-tabset)))))))))
+
+  (defun +tabbar-kill-other-buffers-in-current-group ()
+    (interactive)
+    (mapc
+     (lambda (buffer-or-nil)
+       (when buffer-or-nil
+         (kill-buffer buffer-or-nil)))
+     (mapcar
+      (lambda (tab)
+        (when (not (eq (car tab) (current-buffer))) (car tab)))
+      (tabbar-tabs tabbar-current-tabset))))
+  (spacemacs/set-leader-keys "bd" '+tabbar-kill-other-buffers-in-current-group)
   (define-key tabbar-mode-map (kbd "C-x C-6 1") (lambda () (interactive) (+tabbar-jump ?a)))
   (define-key tabbar-mode-map (kbd "C-x C-6 2") (lambda () (interactive) (+tabbar-jump ?s)))
   (define-key tabbar-mode-map (kbd "C-x C-6 3") (lambda () (interactive) (+tabbar-jump ?d)))
