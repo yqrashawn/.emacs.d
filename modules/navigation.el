@@ -651,6 +651,7 @@ visiting a file.  The current buffer is always included."
                        ;; Always include the current buffer.
                        ((eq (current-buffer) b) b)
                        ((buffer-file-name b) b)
+                       ((string-match-p "^magit.*:\ " (buffer-name b)) nil)
                        ((char-equal ?\  (aref (buffer-name b) 0)) nil)
                        ((char-equal ?*  (aref (buffer-name b) 0)) nil)
                        ((buffer-live-p b) b)))
@@ -662,6 +663,7 @@ Return a list of one element based on major mode."
      (cond
       ;; Configs
       ((memq major-mode '(emacs-lisp-mode inferior-emacs-lisp-mode)) "Configs")
+      ((and buffer-file-name (string-match-p "\.conf$" buffer-file-name)) "Configs")
       ((and buffer-file-name (string-match-p "\/\.config\/" buffer-file-name)) "Configs")
       ((and buffer-file-name (string-match-p "prezto" buffer-file-name)) "Configs")
       ((and buffer-file-name (string-match-p "mbsync" buffer-file-name)) "Configs")
