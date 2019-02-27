@@ -27,6 +27,15 @@
   :defer t
   :hook (prog-mode . highlight-parentheses-mode))
 
+(use-package leuven-theme
+  :straight t
+  :disabled
+  :defer t)
+
+(use-package apropospriate-theme
+  :straight (:host github :repo "waymondo/apropospriate-theme")
+  :defer t)
+
 (use-package zenburn-theme
   :straight t
   :defer t

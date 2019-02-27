@@ -225,6 +225,7 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   (spacemacs/set-leader-keys "hdf" #'counsel-describe-face)
   (spacemacs/set-leader-keys "hdv" #'counsel-describe-variable)
   (spacemacs/set-leader-keys "hdk" #'describe-key)
+  (spacemacs/set-leader-keys "hdK" 'describe-keymap)
   (spacemacs/set-leader-keys "hdl" #'view-lossage)
   (spacemacs/set-leader-keys "fJ" 'spacemacs/open-junk-file)
   (define-key evil-normal-state-map "sf" #'counsel-rg)
@@ -937,3 +938,5 @@ That is, a string used to represent it on the tab bar."
 ;;          ("C-x 7 w l" . 'emacs-chunkwm-windmove-right)
 ;;          ("C-x 7 w j" . 'emacs-chunkwm-windmove-down)
 ;;          ("C-x 7 w k" . 'emacs-chunkwm-windmove-up)))
+(use-package projector
+  :straight (:host github :repo "waymondo/projector.el"))

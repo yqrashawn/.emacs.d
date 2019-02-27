@@ -5,24 +5,24 @@
   "Load macbook theme and font size."
   (interactive)
   (if (yq/day-p)
-      (load-theme yq/light-theme)
-    (load-theme yq/dark-theme))
+      (load-theme yq/light-theme 'no-confirm)
+    (load-theme yq/dark-theme 'no-confirm))
   (spacemacs/set-default-font yq/font13))
 
 (defun yq/imac ()
   "Load macbook theme and font size."
   (interactive)
   (if (yq/day-p)
-      (load-theme yq/light-theme)
-    (load-theme yq/dark-theme))
+      (load-theme yq/light-theme 'no-confirm)
+    (load-theme yq/dark-theme 'no-confirm))
   (spacemacs/set-default-font yq/font15))
 
 (defun yq/home-imac ()
   "Load macbook theme and font size."
   (interactive)
   (if (yq/day-p)
-      (load-theme yq/light-theme)
-    (load-theme yq/dark-theme))
+      (load-theme yq/light-theme 'no-confirm)
+    (load-theme yq/dark-theme 'no-confirm))
   (spacemacs/set-default-font yq/font18))
 
 
@@ -36,8 +36,8 @@
   "Toggle between light dark theme"
   (interactive)
   (if (eq spacemacs--cur-theme yq/light-theme)
-      (load-theme yq/dark-theme)
-    (load-theme yq/light-theme)))
+      (load-theme yq/dark-theme 'no-confirm)
+    (load-theme yq/light-theme 'no-confirm)))
 (spacemacs/set-leader-keys "tm" 'yq/toggle-theme)
 
 (cond ((file-exists-p "~/yq.machine.macbook") (yq/macbook))

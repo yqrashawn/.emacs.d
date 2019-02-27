@@ -127,6 +127,7 @@
   :straight t
   :after mu4e
   :init
+  (setq mu4e-alert-interesting-mail-query "date:today..now and NOT (flag:trashed or maildir:/gmail/[Gmail]/Trash or maildir:/gmail/[Gmail]/Spam)")
   (mu4e-alert-enable-notifications)
   (mu4e-alert-enable-mode-line-display)
   (mu4e-alert-set-default-style 'notifier))

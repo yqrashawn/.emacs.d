@@ -2,6 +2,7 @@
   :straight t
   :defer t
   :init
+  (setq css-indent-offset 2)
   ;; Mark `css-indent-offset' as safe-local variable
   (put 'css-indent-offset 'safe-local-variable #'integerp)
 

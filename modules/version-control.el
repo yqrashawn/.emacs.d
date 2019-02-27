@@ -73,11 +73,11 @@
 (use-package with-editor
   :straight t
   :commands (with-editor-mode shell-command-with-editor-mode)
-  :hook (git-commit-mode-hook . with-editor-hook)
+  :hook ((git-commit-mode . with-editor-export-git-editor)
+         (shell-mode . with-editor-export-editor))
   :init
   (shell-command-with-editor-mode)
-  (add-hook 'with-editor-mode-hook 'evil-insert-state)
-  (spacemacs/set-leader-keys "hdK" 'describe-keymap))
+  (add-hook 'with-editor-mode-hook 'evil-insert-state))
 
 (use-package forge
   :straight (:host github :repo "magit/forge")

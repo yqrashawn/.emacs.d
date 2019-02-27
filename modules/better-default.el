@@ -14,9 +14,11 @@
 (customize-set-variable 'inhibit-startup-screen t)
 (customize-set-variable 'inhibit-startup-message t)
 (customize-set-variable 'inhibit-startup-echo-area-message t)
-(setq confirm-nonexistent-file-or-buffer nil)
 (setq kmacro-ring-max 30)
 (setq save-silently t)
+
+;; enter pgp password in emacs
+(setq epa-pinentry-mode 'loopback)
 
 ;; https://emacs.stackexchange.com/questions/3673/how-to-make-vc-and-magit-treat-a-symbolic-link-to-a-real-file-in-git-repo-just
 (setq find-file-visit-truename t)
@@ -91,7 +93,6 @@ file stored in the cache directory and `nil' to disable auto-saving.")
   (if (file-exists-p abbrev-file-name)
       (quietly-read-abbrev-file)))
 (setq save-interprogram-paste-before-kill t)
-(setq confirm-kill-processes nil)
 (setq-default sentence-end-double-space nil)
 (with-eval-after-load 'comint
   (define-key comint-mode-map (kbd "C-d") nil))
@@ -110,34 +111,73 @@ file stored in the cache directory and `nil' to disable auto-saving.")
 
 
 (setq-default indent-tabs-mode nil
-              tab-width 2)
+              tab-width 2
+              standard-indent 2)
 (fset 'yes-or-no-p 'y-or-n-p)
 
 (setq make-backup-files nil)
 
-;; Auto-save file
-(setq auto-save-default (not (null dotspacemacs-auto-save-file-location)))
-(setq auto-save-list-file-prefix (concat spacemacs-auto-save-directory))
+(use-package files
+  :custom
+  (confirm-kill-processes nil)
+  (confirm-kill-emacs nil)
+  (enable-local-variables :safe)
+  (confirm-nonexistent-file-or-buffer nil)
+  :init
+  ;; Auto-save file
+  (setq auto-save-default (not (null dotspacemacs-auto-save-file-location)))
+  (setq auto-save-list-file-prefix (concat spacemacs-auto-save-directory))
 
-;; always save TRAMP URLs to cache directory no matter what is the value
-;; of `dotspacemacs-auto-save-file-location'
-(let ((autosave-dir (concat spacemacs-auto-save-directory "dist/")))
-  (setq auto-save-file-name-transforms
-        `(("\\`/[^/]*:\\([^/]*/\\)*\\([^/]*\\)\\'" ,autosave-dir  t)))
-  (unless (or (file-exists-p autosave-dir)
-              (null dotspacemacs-auto-save-file-location))
-    (make-directory autosave-dir t)))
+  ;; always save TRAMP URLs to cache directory no matter what is the value
+  ;; of `dotspacemacs-auto-save-file-location'
+  (let ((autosave-dir (concat spacemacs-auto-save-directory "dist/")))
+    (setq auto-save-file-name-transforms
+          `(("\\`/[^/]*:\\([^/]*/\\)*\\([^/]*\\)\\'" ,autosave-dir  t)))
+    (unless (or (file-exists-p autosave-dir)
+                (null dotspacemacs-auto-save-file-location))
+      (make-directory autosave-dir t)))
 
-;; Choose auto-save location
-(cl-case dotspacemacs-auto-save-file-location
-  (cache (let ((autosave-dir (concat spacemacs-auto-save-directory "site/")))
-           (add-to-list 'auto-save-file-name-transforms
-                        `(".*" ,autosave-dir t) 'append)
-           (unless (file-exists-p autosave-dir)
-             (make-directory autosave-dir t))))
-  (original (setq auto-save-visited-file-name t))
-  (_ (setq auto-save-default nil
-           auto-save-list-file-prefix nil)))
+  ;; Choose auto-save location
+  (cl-case dotspacemacs-auto-save-file-location
+    (cache (let ((autosave-dir (concat spacemacs-auto-save-directory "site/")))
+             (add-to-list 'auto-save-file-name-transforms
+                          `(".*" ,autosave-dir t) 'append)
+             (unless (file-exists-p autosave-dir)
+               (make-directory autosave-dir t))))
+    (original (setq auto-save-visited-file-name t))
+    (_ (setq auto-save-default nil
+             auto-save-list-file-prefix nil)))
+  :config
+  (defun find-file-maybe-make-directories ())
+  (let ((dir (file-name-directory buffer-file-name)))
+    (unless (file-exists-p dir)
+      (make-directory dir t)))
+  (push #'find-file-maybe-make-directories find-file-not-found-functions))
+
+(use-package simple
+  :custom
+  (save-interprogram-paste-before-kill t)
+  (next-error-recenter t)
+  (async-shell-command-buffer 'new-buffer)
+  :bind
+  ("C-`" . list-processes)
+  ([remap goto-line] . goto-line-with-linum-mode)
+  (:map minibuffer-local-map
+        ("<escape>"  . abort-recursive-edit))
+  :hook
+  ((org-mode markdown-mode git-commit-mode) . auto-fill-mode)
+  :config
+  (defun goto-line-with-linum-mode ()
+    (interactive)
+    (let ((linum-not-enabled (eq nil linum-mode)))
+      (linum-mode 1)
+      (unwind-protect
+          (call-interactively #'goto-line)
+        (when linum-not-enabled
+          (linum-mode -1)))))
+  (defun pop-to-process-list-buffer ()
+    (pop-to-buffer "*Process List*"))
+  (advice-add 'list-processes :after #'pop-to-process-list-buffer))
 
 ;; remove annoying ellipsis when printing sexp in message buffer
 (setq eval-expression-print-length nil
@@ -476,7 +516,6 @@ If the universal prefix argument is used then kill the buffer too."
      ("*nosetests*"                         :dedicated t   :position bottom :stick t    :noselect nil)
      ("^\*WoMan.+\*$"           :regexp t   :dedicated t   :position bottom             :noselect t))))
 
-(setq standard-indent 2)
 
 (defvar dotspacemacs-scratch-mode 'text-mode
   "Default major mode of the scratch buffer.")
@@ -817,7 +856,6 @@ otherwise it is scaled down."
     "sj" 'counsel-recentf
     (kbd "s SPC") 'counsel-M-x))
 
-(setq confirm-kill-emacs nil)
 (spacemacs/set-leader-keys "xdw" 'delete-trailing-whitespace)
 (setq dired-recursive-deletes 'always)
 (setq dired-recursive-copies 'always)
@@ -1449,3 +1487,17 @@ Info-mode:
   :after dired
   :init
   (define-key dired-mode-map "(" 'dired-git-info-mode))
+
+(use-package shell
+  :defer t
+  :config
+  (defun make-shell-command-behave-interactively (orig-fun &rest args)
+    (let ((shell-command-switch "-ic"))
+      (apply orig-fun args)))
+  (advice-add 'shell-command :around #'make-shell-command-behave-interactively)
+  (advice-add 'start-process-shell-command :around #'make-shell-command-behave-interactively)
+  (defun turn-on-comint-history (history-file)
+    (setq comint-input-ring-file-name history-file)
+    (comint-read-input-ring 'silent))
+  (add-hook 'shell-mode-hook
+            (lambda () (turn-on-comint-history "~/.emacs.d/.cache/HIST"))))
