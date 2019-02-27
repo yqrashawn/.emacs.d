@@ -154,15 +154,14 @@ has been changed to THEME."
          (lambda (group)
            (+propertize-tabbar-group-for-modeline group (eq group tb-cur-group))) tb-groups))))
   (defun +propertize-tabbar-group-for-modeline (group &optional cur-group-p)
-    (let ((face (if cur-group-p 'doom-modeline-highlight 'doom-modeline-unread-number))
-          (str (if cur-group-p (concat "[" group "]") group))
+    (let ((face (if cur-group-p 'doom-modeline-evil-emacs-state 'mode-line-emphasis))
           (active (doom-modeline--active)))
       (concat
        " "
-       (propertize str
+       (propertize group
                    'face face
                    'help-echo "Tabbar Group")
        " ")))
   (doom-modeline-def-modeline 'main
-    '(bar workspace-number window-number evil-state matches buffer-info remote-host buffer-position parrot selection-info)
-    '(tabbar-group misc-info persp-name lsp irc mu4e github debug buffer-encoding major-mode process vcs checker)))
+    '(bar workspace-number window-number evil-state matches tabbar-group buffer-info  remote-host buffer-position parrot selection-info)
+    '(misc-info persp-name lsp irc mu4e github debug buffer-encoding major-mode process vcs checker)))

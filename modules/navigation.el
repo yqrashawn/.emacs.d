@@ -391,6 +391,7 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
        (kill-this-buffer)
        (save-buffers-kill-terminal 't))))
   :config
+  (add-hook 'dired-mode-hook #'hl-line-mode)
   (evil-define-key 'normal dired-mode-map (kbd ";") 'avy-goto-subword-1)
   ;; search file name only when focus is over file
   (setq dired-isearch-filenames 'dwim)
