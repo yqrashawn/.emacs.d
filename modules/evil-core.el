@@ -5,7 +5,7 @@
 (global-set-key (kbd "C-x 1") 'spacemacs/toggle-maximize-buffer)
 
 (use-package undo-tree
-  :straight (:host github :repo "emacsmirror/undo-tree")
+  :straight t
   :diminish undo-tree-mode
   :defer t
   :config
