@@ -5,27 +5,24 @@
   "Load macbook theme and font size."
   (interactive)
   (if (yq/day-p)
-      ;; (load-theme 'doom-nord-light)
-      (load-theme 'zenburn)
-    (load-theme 'zenburn))
+      (load-theme yq/light-theme)
+    (load-theme yq/dark-theme))
   (spacemacs/set-default-font yq/font13))
 
 (defun yq/imac ()
   "Load macbook theme and font size."
   (interactive)
   (if (yq/day-p)
-      ;; (load-theme 'doom-nord-light)
-      (load-theme 'zenburn)
-    (load-theme 'zenburn))
+      (load-theme yq/light-theme)
+    (load-theme yq/dark-theme))
   (spacemacs/set-default-font yq/font15))
 
 (defun yq/home-imac ()
   "Load macbook theme and font size."
   (interactive)
   (if (yq/day-p)
-      ;; (load-theme 'doom-nord-light)
-      (load-theme 'zenburn)
-    (load-theme 'zenburn))
+      (load-theme yq/light-theme)
+    (load-theme yq/dark-theme))
   (spacemacs/set-default-font yq/font18))
 
 
@@ -34,6 +31,14 @@
   (interactive)
   (let ((current-hour (nth 2 (decode-time))))
     (and (> current-hour 8) (< current-hour 18))))
+
+(defun yq/toggle-theme ()
+  "Toggle between light dark theme"
+  (interactive)
+  (if (eq spacemacs--cur-theme yq/light-theme)
+      (load-theme yq/dark-theme)
+    (load-theme yq/light-theme)))
+(spacemacs/set-leader-keys "tm" 'yq/toggle-theme)
 
 (cond ((file-exists-p "~/yq.machine.macbook") (yq/macbook))
       ((file-exists-p "~/yq.machine.home-imac") (yq/home-imac))

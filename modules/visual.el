@@ -29,11 +29,13 @@
 
 (use-package zenburn-theme
   :straight t
-  :defer t)
+  :defer t
+  :init (setq yq/dark-theme 'zenburn))
 
 (use-package doom-themes
   :straight t
-  :defer t)
+  :defer t
+  :init (setq yq/light-theme 'doom-nord-light))
 
 ;; (load-theme 'yq-default-emacs-theme)
 ;; (load-theme 'default-white)
@@ -129,31 +131,38 @@ has been changed to THEME."
 ;;   :straight t)
 ;; (straight-use-package 'all-the-icons)
 
+(use-package minions
+  :straight t
+  :disabled
+  :init (minions-mode))
+
 (use-package doom-modeline
   :straight t
   :hook (after-init . doom-modeline-init)
   :init (setq doom-modeline-height 15
               doom-modeline-icon nil
-              doom-modeline-buffer-file-name-style 'truncate-upto-project
+              doom-modeline-buffer-file-name-style 'file-name
               doom-modeline-minor-modes t
-              doom-modeline-lsp t))
-  ;; :config
-  ;; (doom-modeline-def-modeline 'main
-  ;;   '(bar workspace-number window-number evil-state matches buffer-info remote-host buffer-position selection-info))
-  ;; '(misc-info persp-name lsp irc mu4e github debug minor-modes input-method buffer-encoding major-mode process vcs checker)
-
-  ;; (doom-modeline-def-modeline 'minimal
-  ;;   '(bar matches " " buffer-info)
-  ;;   '(media-info major-mode))
-
-  ;; (doom-modeline-def-modeline 'special
-  ;;   '(bar window-number evil-state matches buffer-info-simple selection-info)
-  ;;   '(misc-info lsp debug minor-modes buffer-encoding major-mode process checker))
-
-  ;; (doom-modeline-def-modeline 'project
-  ;;   '(bar " " buffer-default-directory)
-  ;;   '(misc-info github debug " " major-mode " "))
-
-  ;; (doom-modeline-def-modeline 'media
-  ;;   '(bar window-number buffer-size buffer-info)
-  ;;   '(misc-info media-info major-mode vcs " ")))
+              doom-modeline-env-version t
+              doom-modeline-lsp nil)
+  :config
+  (doom-modeline-def-segment tabbar-group
+    (when (and tabbar-mode (doom-modeline--active))
+      (let ((tb-groups (+tabbar-get-groups))
+            (tb-cur-group (first (+tabbar-buffer-groups))))
+        (mapcar
+         (lambda (group)
+           (+propertize-tabbar-group-for-modeline group (eq group tb-cur-group))) tb-groups))))
+  (defun +propertize-tabbar-group-for-modeline (group &optional cur-group-p)
+    (let ((face (if cur-group-p 'doom-modeline-highlight 'doom-modeline-unread-number))
+          (str (if cur-group-p (concat "[" group "]") group))
+          (active (doom-modeline--active)))
+      (concat
+       " "
+       (propertize str
+                   'face face
+                   'help-echo "Tabbar Group")
+       " ")))
+  (doom-modeline-def-modeline 'main
+    '(bar workspace-number window-number evil-state matches buffer-info remote-host buffer-position parrot selection-info)
+    '(tabbar-group misc-info persp-name lsp irc mu4e github debug buffer-encoding major-mode process vcs checker)))

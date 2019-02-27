@@ -1448,5 +1448,4 @@ Info-mode:
   :commands (dired-git-info-mode)
   :after dired
   :init
-  (add-hook 'dired-mode-hook 'dired-git-info-mode)
   (define-key dired-mode-map "(" 'dired-git-info-mode))

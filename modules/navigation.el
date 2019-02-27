@@ -524,22 +524,6 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
 (define-key evil-normal-state-map (kbd "s.") 'yq/open-with-alfred)
 (spacemacs/set-leader-keys "bb" 'yq/open-with-alfred)
 
-;; disable ffip for now, I can just use counsel-fzf
-;; (use-package find-file-in-project
-;;   :straight t
-;;   :commands (find-file-in-project)
-;;   :init
-;;   (when (executable-find "fd")
-;;     (setq ffip-use-rust-fd t))
-;;   (setq ffip-project-file '(".git" "package.json" ".tabnine_root"))
-;;   (spacemacs/set-leader-keys "pf" 'find-file-in-project)
-;;   (spacemacs/set-leader-keys "pF" 'find-relative-path)
-;;   (spacemacs/set-leader-keys "sm" 'find-file-in-project)
-;;   (spacemacs/set-leader-keys "sM" 'find-relative-path)
-;;   (evil-define-key 'normal dired-mode-map "sm" 'find-file-in-project)
-;;   (define-key evil-normal-state-map "sm" 'find-file-in-project)
-;;   (define-key evil-normal-state-map "sM" 'find-relative-path))
-
 (use-package open-junk-file
   :straight t
   :defer t
@@ -607,138 +591,6 @@ When ARG is non-nil search in junk files."
   (define-key evil-normal-state-map "go" #'ace-link)
   (evil-define-key 'normal helpful-mode-map "o" #'ace-link-help)
   (ace-link-setup-default))
-
-(use-package awesome-tab
-  :disabled
-  :straight (:host github :repo "yqrashawn/awesome-tab")
-  :after projectile
-  :init
-  (setq ivy-source-awesome-tab-group t)
-  (defface awesome-tab-default
-    '((t
-       :inherit default
-       :height 1
-       :box (:line-width 1
-                         :color "dark cyan"
-                         :style released-button)))
-    "Default face used in the tab bar."
-    :group 'awesome-tab)
-  (defface awesome-tab-unselected
-    '((t (:inherit awesome-tab-default)))
-    "Face used for unselected tabs." :group 'awesome-tab)
-  (defface awesome-tab-selected
-    '((t (:inherit font-lock-keyword-face :weight ultra-bold :box (:line-width 1 :color "dark cyan" :style released-button))))
-    "Face used for the selected tab." :group 'awesome-tab)
-  (defface awesome-tab-button
-    '((t :inherit awesome-tab-default :foreground "dark red"))
-    "Face used for tab bar buttons." :group 'awesome-tab)
-  (setq awesome-tab-cycle-scope 'tabs)
-  (add-hook 'spacemacs-post-theme-change-hook (lambda () (awesome-tab-mode 1)))
-  :config
-  (defun +awesome-tab-switch-group-next-line ()
-    (interactive)
-    (if (minibufferp) (ivy-next-line)
-      (awesome-tab-build-ivy-source)))
-
-  (defun +awesome-tab-switch-group-prevouse-line ()
-    (interactive)
-    (if (minibufferp) (ivy-previous-line)
-      (awesome-tab-build-ivy-source)
-      (awesome-tab-switch-group)))
-
-  (defun +awesome-tab-forward-tab-or-ivy-done ()
-    (interactive)
-    (if (minibufferp) (ivy-done)
-      (awesome-tab-forward-tab)))
-  (global-set-key (kbd "s-j") #'awesome-tab-jump)
-  (define-key evil-normal-state-map "su" #'awesome-tab-jump)
-  (define-key awesome-tab-mode-map (kbd "C-x C-6 1") (lambda () (interactive) (awesome-tab-jump ?a)))
-  (define-key awesome-tab-mode-map (kbd "C-x C-6 2") (lambda () (interactive) (awesome-tab-jump ?s)))
-  (define-key awesome-tab-mode-map (kbd "C-x C-6 3") (lambda () (interactive) (awesome-tab-jump ?d)))
-  (define-key awesome-tab-mode-map (kbd "C-x C-6 4") (lambda () (interactive) (awesome-tab-jump ?f)))
-  (define-key awesome-tab-mode-map (kbd "C-x C-6 5") (lambda () (interactive) (awesome-tab-jump ?g)))
-  (define-key awesome-tab-mode-map (kbd "C-x C-6 6") (lambda () (interactive) (awesome-tab-jump ?h)))
-  (define-key awesome-tab-mode-map (kbd "C-x C-6 7") (lambda () (interactive) (awesome-tab-jump ?j)))
-  (define-key awesome-tab-mode-map (kbd "C-x C-6 8") (lambda () (interactive) (awesome-tab-jump ?k)))
-  (define-key awesome-tab-mode-map (kbd "C-x C-6 9") (lambda () (interactive) (awesome-tab-jump ?l)))
-  (define-key awesome-tab-mode-map (kbd "C-x C-6 0") (lambda () (interactive) (awesome-tab-jump 59)))
-
-
-  ;; trackpad
-  (global-set-key (kbd "s-{") #'awesome-tab-backward-tab)
-  (global-set-key (kbd "s-}") '+awesome-tab-forward-tab-or-ivy-done)
-
-  ;; terminal without repeat
-  (global-set-key (kbd "C-x C-9 h") #'awesome-tab-backward-tab)
-  (global-set-key (kbd "C-x C-9 l") '+awesome-tab-forward-tab-or-ivy-done)
-  (global-set-key (kbd "C-x C-9 n") '+awesome-tab-switch-group-next-line)
-  (global-set-key (kbd "C-x C-9 p") '+awesome-tab-switch-group-prevouse-line)
-  (global-set-key (kbd "C-x C-9 [") #'awesome-tab-move-current-tab-to-left)
-  (global-set-key (kbd "C-x C-9 ]") #'awesome-tab-move-current-tab-to-right)
-  ;; (global-set-key (kbd "C-x C-9 j") #'awesome-tab-forward-group)
-  ;; (global-set-key (kbd "C-x C-9 k") #'awesome-tab-backward-group)
-
-  ;; gui with repeat
-  (global-set-key (kbd "C-M-S-s-h") 'awesome-tab-backward-tab)
-  (global-set-key (kbd "C-M-S-s-l") '+awesome-tab-forward-tab-or-ivy-done)
-
-  ;; (global-set-key (kbd "C-M-S-s-j") #'awesome-tab-forward-group)
-  ;; (global-set-key (kbd "C-M-S-s-k") #'awesome-tab-backward-group)
-
-  (global-set-key (kbd "C-M-S-s-n") '+awesome-tab-forward-group)
-  (global-set-key (kbd "C-M-S-s-p") '+awesome-tab-backward-group)
-  (global-set-key (kbd "C-M-S-s-n") '+awesome-tab-switch-group-next-line)
-  (global-set-key (kbd "C-M-S-s-p") '+awesome-tab-switch-group-prevouse-line)
-
-  (defun awesome-tab-buffer-groups ()
-    "`awesome-tab-buffer-groups' control buffers' group rules.
-
-Group awesome-tab with mode if buffer is derived from `eshell-mode' `emacs-lisp-mode' `dired-mode' `org-mode' `magit-mode'.
-All buffer name start with * will group to \"Emacs\".
-Other buffer group by `awesome-tab-in-project-p' with project name."
-    (list
-     (cond
-      (
-       (string-equal "*" (substring (buffer-name) 0 1))
-       ;; (or (string-equal "*" (substring (buffer-name) 0 1))
-       ;;     (memq major-mode '(magit-process-mode
-       ;;                        magit-status-mode
-       ;;                        magit-diff-mode
-       ;;                        magit-log-mode
-       ;;                        magit-file-mode
-       ;;                        magit-blob-mode
-       ;;                        magit-blame-mode)))
-
-       "Emacs")
-      ((derived-mode-p 'eshell-mode)
-       "EShell")
-      ((derived-mode-p 'emacs-lisp-mode)
-       "Elisp")
-      ;; ((derived-mode-p 'dired-mode)
-      ;;  "Dired")
-      ((memq major-mode '(org-mode org-agenda-mode diary-mode))
-       "OrgMode")
-      (t
-       (if (awesome-tab-in-project-p)
-           (awesome-tab-get-group-name (current-buffer))
-         "Common")))))
-
-  (defun awesome-tab-hide-tab-function (x)
-    (let ((name (format "%s" x)))
-      (and
-       (not (string-prefix-p "*tide-server" name))
-       (not (string-prefix-p "*Compile-Log*" name))
-       (not (string-prefix-p "*vc" name))
-       (not (string-prefix-p "*flycheck-" name))
-       (not (string-prefix-p "*epc" name))
-       (not (string-prefix-p "*helm" name))
-       (not (string-prefix-p "*straight" name))
-       (not (string-prefix-p "*lsp" name))
-       (not (string-prefix-p "*magit-log" name))
-       (not (string-prefix-p "magit-" name))
-       (not (string-prefix-p "magit:" name))
-       (not (and (string-prefix-p "magit" name)
-                 (not (file-name-extension name))))))))
 
 (use-package tabbar
   :straight t
@@ -896,10 +748,14 @@ Return a list of one element based on major mode."
     (interactive)
     (if (minibufferp) (ivy-done)
       (tabbar-forward-tab)))
-  (global-set-key (kbd "C-x C-9 j") #'+tabbar-switch-group-next-line)
-  (global-set-key (kbd "C-x C-9 k") #'+tabbar-switch-group-prevouse-line)
-  (global-set-key (kbd "C-M-S-s-j") #'+tabbar-switch-group-next-line)
-  (global-set-key (kbd "C-M-S-s-k") #'+tabbar-switch-group-prevouse-line)
+  ;; (global-set-key (kbd "C-x C-9 j") #'+tabbar-switch-group-next-line)
+  ;; (global-set-key (kbd "C-x C-9 k") #'+tabbar-switch-group-prevouse-line)
+  ;; (global-set-key (kbd "C-M-S-s-j") #'+tabbar-switch-group-next-line)
+  ;; (global-set-key (kbd "C-M-S-s-k") #'+tabbar-switch-group-prevouse-line)
+  (global-set-key (kbd "C-x C-9 j") #'tabbar-backward-group)
+  (global-set-key (kbd "C-x C-9 k") #'tabbar-forward-group)
+  (global-set-key (kbd "C-M-S-s-j") #'tabbar-backward-group)
+  (global-set-key (kbd "C-M-S-s-k") #'tabbar-forward-group)
   (global-set-key (kbd "C-M-S-s-h") #'tabbar-backward-tab)
   (global-set-key (kbd "C-M-S-s-l") #'+tabbar-forward-tab-or-ivy-done)
   (defun tabbar-move-current-tab-one-place-left ()
@@ -1012,12 +868,13 @@ That is, a string used to represent it on the tab bar."
 
 (use-package loccur
   :straight t
+  :commands (loccur-current)
   :init
-  (loccur-mode 1)
   (define-key evil-normal-state-map "ss" #'loccur-current))
 
 (use-package color-rg
   :straight (:host github :repo "manateelazycat/color-rg")
+  :disabled
   :commands (color-rg-search-input
              color-rg-search-symbol
              color-rg-search-project)
@@ -1077,13 +934,3 @@ That is, a string used to represent it on the tab bar."
 ;;          ("C-x 7 w l" . 'emacs-chunkwm-windmove-right)
 ;;          ("C-x 7 w j" . 'emacs-chunkwm-windmove-down)
 ;;          ("C-x 7 w k" . 'emacs-chunkwm-windmove-up)))
-
-;; (use-package nswbuff
-;;   :straight t
-;;   :init
-;;   (setq nswbuff-clear-delay 3)
-;;   (setq nswbuff-recent-buffers-first nil)
-;;   (global-set-key (kbd "C-x C-9 h") #'nswbuff-switch-to-previous-buffer)
-;;   (global-set-key (kbd "C-x C-9 l") #'nswbuff-switch-to-next-buffer)
-;;   (global-set-key (kbd "C-M-S-s-h") #'nswbuff-switch-to-previous-buffer)
-;;   (global-set-key (kbd "C-M-S-s-l") #'nswbuff-switch-to-next-buffer))
