@@ -594,3 +594,18 @@ _j_  js2      _T_     text   _f_  fundamental
   :diminish (flycheck-posframe-mode)
   :hook (flycheck-mode . flycheck-posframe-mode)
   :config (set-face-attribute 'flycheck-posframe-error-face nil :inherit 'error))
+
+
+(use-package repl-toggle
+  :straight t
+  :custom
+  (rtog/mode-repl-alist
+   '((emacs-lisp-mode . ielm)
+     (ruby-mode . inf-ruby)
+     (enh-ruby-mode . inf-ruby)
+     (js2-mode . switch-to-js)
+     (rjsx-mode . switch-to-js)
+     (typescript-mode . run-ts))
+   rtog/fallback-repl-fun . projector-switch-to-or-create-project-shell)
+  :config
+  (repl-toggle-mode))

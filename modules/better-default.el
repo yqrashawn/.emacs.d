@@ -635,8 +635,8 @@ If the universal prefix argument is used then kill the buffer too."
      ("*ert*"                               :dedicated t   :position bottom :stick t    :noselect t)
      ("*grep*"                              :dedicated t   :position bottom :stick t    :noselect nil)
      ("*nosetests*"                         :dedicated t   :position bottom :stick t    :noselect nil)
-     ("^\*WoMan.+\*$"           :regexp t   :dedicated t   :position bottom             :noselect t)
-     ("^\*projector:\ .*\*$"    :regexp t   :dedicated t   :position right  :stick t    :noselect t))))
+     ("^\*WoMan.+\*$"           :regexp t   :dedicated t   :position bottom             :noselect t))))
+     ;; ("^\*projector:\ .*\*$"    :regexp t   :dedicated t   :position right  :stick t    :noselect t))))
 
 
 (defvar dotspacemacs-scratch-mode 'text-mode
@@ -1553,7 +1553,8 @@ Info-mode:
   :init
   (setq beacon-blink-when-focused t)
   (setq beacon-blink-when-buffer-changes t)
-  (beacon-mode 1))
+  (beacon-mode 1)
+  (push 'comint-mode beacon-dont-blink-major-modes))
 
 (use-package auto-yasnippet
   :straight t

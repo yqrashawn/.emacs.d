@@ -45,12 +45,6 @@ the current buffer."
                                                                             company-files
                                                                             company-dabbrev))))
   (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
-  (defun bozhidar-visit-ielm ()
-    "Switch to default `ielm' buffer.
-Start `ielm' if it's not already running."
-    (interactive)
-    (crux-start-or-switch-to 'ielm "*ielm*"))
-
   ;; Idea from http://www.reddit.com/r/emacs/comments/312ge1/i_created_this_function_because_i_was_tired_of/
   (defun spacemacs/eval-current-form ()
     "Find and evaluate the current def* or set* command.
@@ -102,7 +96,7 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
         (sp-forward-symbol)
         (call-interactively 'eval-last-sexp))))
 
-  (define-key emacs-lisp-mode-map (kbd "C-c C-z") #'bozhidar-visit-ielm)
+  (define-key emacs-lisp-mode-map (kbd "C-c C-z") #'rtog/toggle-repl)
   (define-key emacs-lisp-mode-map (kbd "C-c C-c") #'eval-defun)
   (define-key emacs-lisp-mode-map (kbd "C-c C-b") #'eval-buffer)
   (evil-define-key 'normal emacs-lisp-mode-map "," nil)

@@ -180,21 +180,38 @@
   :after js2-mode
   :hook (js2-mode . #'add-node-modules-path))
 
-;; (use-package js-comint
-;;   :: straight t)
-;;   ;; :after js2-mode
-;;   :commands (run-js)
-;;   :init
-;;   (setq inferior-js-program-command "node")
-;;   (setq inferior-js-program-arguments '("--interactive"))
-;;   ;; (add-hook 'js2-mode-hook
-;;   ;;           (lambda ()
-;;   ;;             (local-set-key (kbd "C-x C-e") 'js-send-last-sexp)
-;;   ;;             (local-set-key (kbd "C-M-x") 'js-send-last-sexp-and-go)
-;;   ;;             (local-set-key (kbd "C-c b") 'js-send-buffer)
-;;   ;;             (local-set-key (kbd "C-c C-b") 'js-send-buffer-and-go)
-;;   ;;             (local-set-key (kbd "C-c l") 'js-load-file-and-go)))
-;;   :config
-;;   (defun inferior-js-mode-hook-setup ()
-;;     (add-hook 'comint-output-filter-functions 'js-comint-process-output))
-;;   (add-hook 'inferior-js-mode-hook 'inferior-js-mode-hook-setup t))
+(use-package js-comint
+  :straight t
+  :after js2-mode
+  :commands (run-js)
+  :init
+  (setq js-program-command "node"
+        js-program-arguments '("--interactive")
+        js-comint-prompt "node > ")
+  (evil-define-key 'normal  js2-mode-map  ",eb" #'js-send-buffer)
+  (evil-define-key 'normal  js2-mode-map  ",ee" #'js-send-last-sexp)
+  (evil-define-key 'normal  js2-mode-map  ",er" #'js-send-region)
+  (evil-define-key 'normal  js2-mode-map  ",em" #'js-comint-add-module-path)
+  (define-key js2-mode-map (kbd "C-x C-e") #'js-send-last-sexp)
+  (define-key js2-mode-map (kbd "C-c b") #'js-send-buffer)
+  (define-key js2-mode-map (kbd "C-c C-b") #'js-send-buffer-and-go)
+  (define-key js2-mode-map (kbd "C-c C-z") #'rtog/toggle-repl)
+  (define-key js2-mode-map (kbd "C-c C-l") #'js-comint-clear)
+  (define-key js-comint-mode-map (kbd "C-c C-z") #'rtog/toggle-repl)
+  (define-key js-comint-mode-map (kbd "C-c C-l") #'js-comint-clear)
+  :config
+  (defun js-comint-start-or-switch-to-repl ()
+    "Start a new repl or switch to existing repl."
+    (interactive)
+    (setenv "NODE_NO_READLINE" "1")
+    (js-comint-setup-module-paths)
+    (let* ((repl-mode (or (getenv "NODE_REPL_MODE") "magic"))
+           (js-comint-code (format js-comint-code-format
+                                   (window-width) js-comint-prompt repl-mode)))
+      (switch-to-buffer
+       (apply 'make-comint js-comint-buffer js-comint-program-command nil
+              `(,@js-comint-program-arguments "-e" ,js-comint-code)))
+      (js-comint-mode)))
+  (defun inferior-js-mode-hook-setup ()
+    (add-hook 'comint-output-filter-functions 'js-comint-process-output))
+  (add-hook 'inferior-js-mode-hook 'inferior-js-mode-hook-setup t))

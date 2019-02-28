@@ -65,7 +65,6 @@
   :defer t
   :init (setq rake-cache-file (concat spacemacs-cache-directory "rake.cache")))
 
-
 (use-package ruby-mode
   :defer t
   :mode (("Appraisals\\'" . ruby-mode)
@@ -96,6 +95,7 @@
         popwin:special-display-config)
   (push '("*rake-compilation*" :dedicated t :position bottom :stick t :noselect t :height 0.4)
         popwin:special-display-config))
+
 
 (use-package enh-ruby-mode
   :straight t
@@ -155,3 +155,16 @@
                       ",sr" 'ruby-send-region
                       ",sR" 'ruby-send-region-and-go
                       ",ss" 'ruby-switch-to-inf)))
+
+(use-package inf-ruby
+  :after (ruby-mode enh-ruby-mode)
+  :init
+  (define-key ruby-mode-map (kbd "C-c C-z") #'rtog/toggle-repl)
+  (define-key enh-ruby-mode-map (kbd "C-c C-z") #'rtog/toggle-repl)
+  (define-key inf-ruby-minor-mode-map (kbd "C-c C-z") #'rtog/toggle-repl)
+  (define-key inf-ruby-mode-map (kbd "C-c C-z") #'rtog/toggle-repl)
+  :config
+  (add-hook 'compilation-filter-hook #'inf-ruby-auto-enter t)
+  (add-hook 'after-init-hook #'inf-ruby-switch-setup)
+  (add-hook 'inf-ruby-mode-hook
+            (defl (turn-on-comint-history ".pry_history"))))
