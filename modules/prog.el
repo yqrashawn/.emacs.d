@@ -164,7 +164,7 @@ Available PROPS:
   :straight t
   :diminish company-mode
   :init
-  (setq company-idle-delay 0.5
+  (setq company-idle-delay 0
         company-selection-wrap-around t
         company-show-numbers t
         company-minimum-prefix-length 1
@@ -244,7 +244,7 @@ Available PROPS:
   ;; Use the tab-and-go frontend.
   ;; Allows TAB to select and complete at the same time.
   (company-tng-configure-default)
-  (setq company-tabnine-no-continue t)
+  (setq company-tabnine-no-continue nil)
   :config
   (defun yq-toggle-company-tabnine ()
     (interactive)
