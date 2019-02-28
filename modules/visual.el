@@ -161,7 +161,7 @@ has been changed to THEME."
             (tb-cur-group (first (+tabbar-buffer-groups))))
         (mapcar
          (lambda (group)
-           (+propertize-tabbar-group-for-modeline group (eq group tb-cur-group))) tb-groups))))
+           (+propertize-tabbar-group-for-modeline group (string= group tb-cur-group))) tb-groups))))
 
   (defun +propertize-tabbar-group-for-modeline (group &optional cur-group-p)
     (let ((face (if cur-group-p 'doom-modeline-evil-emacs-state 'mode-line-emphasis))

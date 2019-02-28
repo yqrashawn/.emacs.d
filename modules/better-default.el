@@ -171,6 +171,8 @@ file stored in the cache directory and `nil' to disable auto-saving.")
 (use-feature shell
   :defer t
   :config
+  (add-to-list 'evil-insert-state-modes 'shell-mode)
+  (define-key shell-mode-map (kbd "s-i") #'spacemacs/alternate-buffer)
   (defun make-shell-command-behave-interactively (orig-fun &rest args)
     (let ((shell-command-switch "-ic"))
       (apply orig-fun args)))
@@ -371,6 +373,7 @@ If the universal prefix argument is used then kill also the window."
       (kill-buffer))))
 
 (global-set-key (kbd "s-k") 'yq/kill-this-buffer)
+(global-set-key (kbd "C-x k") 'yq/kill-this-buffer)
 
 (defun yq/delete-window (&optional arg)
   "Delete the current window.
@@ -617,23 +620,23 @@ If the universal prefix argument is used then kill the buffer too."
      ("\*rg-scan-async\*.*"      :regexp t  :dedicated t   :position bottom :stick nil  :noselect t   :height 0.1)
      ("*Contents*"                          :dedicated t   :position bottom :stick t    :noselect t   :height 0.4)
      ;; ("*Occur*"                             :dedicated nil :position bottom :stick t    :noselect nil :height 0.4)
-     ;; ("^magit-process:\ .*"      :regexp t  :dedicated nil :position bottom :stick t    :noselect nil :height 0.4)
-     ;; ("\*helpful\ .*\*"          :regexp t  :dedicated nil :position bottom :stick t    :noselect t   :height 0.4)
-     ("*Help*"                              :dedicated nil :position bottom :stick t    :noselect t   :height 0.4)
-     ("*cider-doc*"                         :dedicated nil :position bottom :stick t    :noselect t   :height 0.4)
-     ("*Backtrace*"                         :dedicated nil :position bottom :stick t    :noselect t   :height 0.4)
+     ("\*helpful\ .*\*"          :regexp t  :dedicated t   :position right  :stick t    :noselect nil :width 0.5)
+     ("*Help*"                              :dedicated t   :position bottom :stick t    :noselect t   :height 0.4)
+     ("*cider-doc*"                         :dedicated t   :position bottom :stick t    :noselect t   :height 0.4)
+     ("*Backtrace*"                         :dedicated t   :position bottom :stick t    :noselect t   :height 0.4)
      ("*Warnings*"                          :dedicated t   :position bottom :stick t    :noselect t   :height 0.4)
-     ("*HTTP Response*"                     :dedicated nil :position bottom :stick t    :noselect t   :height 0.4)
-     ("*compilation*"                       :dedicated nil :position bottom :stick t    :noselect t   :height 0.4)
-     ("*Shell Command Output*"              :dedicated nil :position bottom :stick t    :noselect t   :height 0.4)
-     ("*prettier errors*"                   :dedicated nil :position bottom :stick nil  :noselect t   :height 0.4)
-     ("*Async Shell Command*"               :dedicated nil :position bottom :stick t    :noselect t)
+     ("*HTTP Response*"                     :dedicated t   :position bottom :stick t    :noselect t   :height 0.4)
+     ("*compilation*"                       :dedicated t   :position bottom :stick t    :noselect t   :height 0.4)
+     ("*Shell Command Output*"              :dedicated t   :position bottom :stick t    :noselect t   :height 0.4)
+     ("*prettier errors*"                   :dedicated t   :position bottom :stick nil  :noselect t   :height 0.4)
+     ("*Async Shell Command*"               :dedicated t   :position bottom :stick t    :noselect t)
      ("*undo-tree*"                         :dedicated t   :position right  :stick t    :noselect nil :width   60)
      ("*undo-tree Diff*"                    :dedicated t   :position bottom :stick t    :noselect nil :height 0.3)
      ("*ert*"                               :dedicated t   :position bottom :stick t    :noselect t)
      ("*grep*"                              :dedicated t   :position bottom :stick t    :noselect nil)
      ("*nosetests*"                         :dedicated t   :position bottom :stick t    :noselect nil)
-     ("^\*WoMan.+\*$"           :regexp t   :dedicated t   :position bottom             :noselect t))))
+     ("^\*WoMan.+\*$"           :regexp t   :dedicated t   :position bottom             :noselect t)
+     ("^\*projector:\ .*\*$"    :regexp t   :dedicated t   :position right  :stick t    :noselect t))))
 
 
 (defvar dotspacemacs-scratch-mode 'text-mode
