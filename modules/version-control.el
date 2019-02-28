@@ -73,8 +73,7 @@
 (use-package with-editor
   :straight t
   :commands (with-editor-mode shell-command-with-editor-mode)
-  :hook ((git-commit-mode . with-editor-export-git-editor)
-         (shell-mode . with-editor-export-editor))
+  :hook ((git-commit-mode . with-editor-hook))
   :init
   (shell-command-with-editor-mode)
   (add-hook 'with-editor-mode-hook 'evil-insert-state))

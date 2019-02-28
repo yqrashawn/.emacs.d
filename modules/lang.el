@@ -1,3 +1,14 @@
+(use-feature sh-script
+  :mode
+  ("\\.*zshrc" . sh-mode)
+  ("\\.*zshenv" . sh-mode)
+  ("\\.*zprofile" . sh-mode)
+  ("\\.*bashrc" . sh-mode)
+  ("\\.*bash_profile" . sh-mode)
+  :config
+  (setq-default sh-indentation 2
+                sh-basic-offset 2))
+
 (yq/get-modules "lang/elisp.el")
 (yq/get-modules "lang/js2.el")
 (yq/get-modules "lang/typescript.el")

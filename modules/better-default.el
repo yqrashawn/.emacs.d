@@ -45,6 +45,158 @@ file stored in the cache directory and `nil' to disable auto-saving.")
 (setq source-directory (concat user-home-directory "emacs"))
 (size-indication-mode t)
 
+(use-feature emacs
+  :init
+  (setq-default
+   ;; cursor always center
+   maximum-scroll-margin 0.5
+   scroll-margin 50
+   scroll-conservatively 101
+   scroll-preserve-screen-position 'always)
+  (setq-default
+   ;; don't auto scroll too much but more often
+   maximum-scroll-margin 0.2
+   scroll-margin 50
+   scroll-conservatively 50
+   scroll-preserve-screen-position 'always
+   echo-keystrokes 1e-6 ;; echo keystrokes quicker
+   ns-use-native-fullscreen nil
+   delete-by-moving-to-trash t
+   create-lockfiles nil ;; no .# file
+   disabled-command-function nil
+   ad-redefinition-action 'accept
+   custom-safe-themes t ;; treat all theme safe
+   initial-scratch-message nil
+   enable-recursive-minibuffers t  ;; Allow commands in minibuffers
+   kill-buffer-query-functions nil ;; kill process buffer quicker
+   ns-pop-up-frames nil)
+  :config
+  (setq-default indent-tabs-mode nil
+                tab-width 2
+                standard-indent 2
+                c-basic-offset 2
+                bidi-display-reordering nil)
+  (defalias 'yes-or-no-p #'y-or-n-p))
+
+(use-package dash
+  :straight t
+  :defer t
+  :config (dash-enable-font-lock))
+
+(use-package s
+  :bind
+  ("s-;" . transform-symbol-at-point)
+  :config
+  (defun transform-symbol-at-point ()
+    (interactive)
+    (put 'quit 'error-message "")
+    (let* ((choices '((?c . s-lower-camel-case)
+                      (?C . s-upper-camel-case)
+                      (?_ . s-snake-case)
+                      (?- . s-dashed-words)
+                      (?d . s-downcase)
+                      (?u . s-upcase)))
+           (chars (mapcar #'car choices))
+           (prompt (concat "Transform symbol at point [" chars "]: "))
+           (escape-chars '(?\s ?\d ?\t ?\b ?\e ?\r))
+           (ch (read-char-choice prompt (append chars escape-chars)))
+           (fn (assoc-default ch choices))
+           (symbol (thing-at-point 'symbol t))
+           (bounds (bounds-of-thing-at-point 'symbol)))
+      (when fn
+        (delete-region (car bounds) (cdr bounds))
+        (insert (funcall fn symbol))
+        (when (looking-at " ") (forward-char)))
+      (keyboard-quit)
+      (run-at-time nil nil (lambda () (put 'quit 'error-message "Quit"))))))
+
+(use-package alert
+  :straight t
+  :custom
+  (alert-default-style 'osx-notifier)
+  :config
+  (defun alert-after-finish-in-background (buf str)
+    (unless (get-buffer-window buf 'visible)
+      (alert str :buffer buf))))
+
+(use-feature profiler
+  :bind
+  ("C-x p r"  . profiler-report)
+  ("C-x p 1"  . profiler-start)
+  ("C-x p 0"  . profiler-stop))
+
+(use-feature warnings
+  :custom
+  (warning-suppress-types '((undo discard-info))))
+
+(use-feature comint
+  :bind
+  (:map comint-mode-map
+        ("RET"       . comint-return-dwim)
+        ("C-r"       . comint-history-isearch-backward-regexp)
+        ("C-u"       . comint-clear-buffer)
+        ("C-p"     . comint-previous-matching-input-from-input)
+        ("C-n" . comint-next-matching-input-from-input))
+  :custom
+  (comint-prompt-read-only t)
+  :hook
+  (comint-mode . text-smaller-no-truncation)
+  :config
+  (setq-default comint-input-ignoredups t
+                comint-scroll-show-maximum-output nil
+                comint-output-filter-functions
+                '(ansi-color-process-output
+                  comint-truncate-buffer
+                  comint-watch-for-password-prompt))
+  (defun text-smaller-no-truncation ()
+    (set (make-local-variable 'scroll-margin) 0)
+    (text-scale-set -0.25))
+  (defun turn-on-comint-history (history-file)
+    (setq comint-input-ring-file-name history-file)
+    (comint-read-input-ring 'silent))
+  (defun comint-return-dwim ()
+    (interactive)
+    (cond
+     ((comint-after-pmark-p)
+      (comint-send-input))
+     ((ffap-url-at-point)
+      (browse-url (ffap-url-at-point)))
+     ((ffap-file-at-point)
+      (find-file (ffap-file-at-point)))
+     (t
+      (comint-next-prompt 1))))
+  (add-hook 'kill-buffer-hook #'comint-write-input-ring)
+  (add-lam 'kill-emacs-hook
+    (dolist (buffer (buffer-list))
+      (with-current-buffer buffer (comint-write-input-ring)))))
+
+(use-feature compile
+  :custom
+  (compilation-always-kill t)
+  (compilation-ask-about-save nil)
+  :hook
+  (compilation-mode . text-smaller-no-truncation)
+  :init
+  (add-hook 'compilation-finish-functions #'alert-after-finish-in-background))
+
+(use-feature shell
+  :defer t
+  :config
+  (defun make-shell-command-behave-interactively (orig-fun &rest args)
+    (let ((shell-command-switch "-ic"))
+      (apply orig-fun args)))
+  (advice-add 'shell-command :around #'make-shell-command-behave-interactively)
+  (advice-add 'start-process-shell-command :around #'make-shell-command-behave-interactively)
+  (defun turn-on-comint-history (history-file)
+    (setq comint-input-ring-file-name history-file)
+    (comint-read-input-ring 'silent))
+  (add-lam 'shell-mode-hook
+    (turn-on-comint-history "~/.emacs.d/.cache/HISTFILE")))
+
+(use-feature executable
+  :hook
+  (after-save . executable-make-buffer-file-executable-if-script-p))
+
 ;; more useful frame title, that show either a file or a
 ;; buffer name (if the buffer isn't visiting a file)
 (setq-default frame-title-format
@@ -80,7 +232,6 @@ file stored in the cache directory and `nil' to disable auto-saving.")
 (add-to-list 'completion-styles 'flex t)
 (xterm-mouse-mode 1)
 (setq initial-major-mode 'text-mode)
-(setq delete-by-moving-to-trash t)
 (setq-default fill-column 80)
 (use-package abbrev
   :defer t
@@ -107,12 +258,7 @@ file stored in the cache directory and `nil' to disable auto-saving.")
  'minibuffer-prompt-properties
  '(read-only t cursor-intangible t face minibuffer-prompt))
 
-(setq initial-scratch-message nil)
 
-
-(setq-default indent-tabs-mode nil
-              tab-width 2
-              standard-indent 2)
 (fset 'yes-or-no-p 'y-or-n-p)
 
 (setq make-backup-files nil)
@@ -148,10 +294,10 @@ file stored in the cache directory and `nil' to disable auto-saving.")
     (_ (setq auto-save-default nil
              auto-save-list-file-prefix nil)))
   :config
-  (defun find-file-maybe-make-directories ())
-  (let ((dir (file-name-directory buffer-file-name)))
-    (unless (file-exists-p dir)
-      (make-directory dir t)))
+  (defun find-file-maybe-make-directories ()
+    (let ((dir (file-name-directory buffer-file-name)))
+      (unless (file-exists-p dir)
+        (make-directory dir t))))
   (push #'find-file-maybe-make-directories find-file-not-found-functions))
 
 (use-package simple
@@ -204,27 +350,12 @@ file stored in the cache directory and `nil' to disable auto-saving.")
 (keyboard-translate ?\C-h ?\C-?)
 (global-set-key [(control ?h)] 'delete-backward-char)
 
-(defvar yq-indent-sensitive-modes
-  '(asm-mode
-    coffee-mode
-    elm-mode
-    haml-mode
-    haskell-mode
-    slim-mode
-    makefile-mode
-    makefile-bsdmake-mode
-    makefile-gmake-mode
-    makefile-imake-mode
-    python-mode
-    yaml-mode)
-  "Modes for which auto-indenting is suppressed.")
-
 (defun yq/indent-region-or-buffer ()
   "Indent a region if selected, otherwise the whole buffer."
   (interactive)
   (unless (member
            major-mode
-           yq-indent-sensitive-modes)
+           spacemacs-indent-sensitive-modes)
     (save-excursion
       (if (region-active-p)
           (progn
@@ -380,8 +511,7 @@ If the universal prefix argument is used then kill the buffer too."
   :init
   ;; Minibuffer history
   (setq savehist-file (concat spacemacs-cache-directory "savehist")
-        enable-recursive-minibuffers t ; Allow commands in minibuffers
-        history-length 1000
+        history-length 1024
         savehist-additional-variables '(mark-ring
                                         global-mark-ring
                                         search-ring
@@ -603,7 +733,6 @@ If the universal prefix argument is used then will the windows too."
 ;; (use-package atomic-chrome
 ;;   :straight t
 ;;   :config (atomic-chrome-start-server))
-(setq-default bidi-display-reordering nil)
 
 ;; https://emacs.stackexchange.com/questions/28736/emacs-pointcursor-movement-lag/28746
 (setq auto-window-vscroll nil)
@@ -1487,17 +1616,3 @@ Info-mode:
   :after dired
   :init
   (define-key dired-mode-map "(" 'dired-git-info-mode))
-
-(use-package shell
-  :defer t
-  :config
-  (defun make-shell-command-behave-interactively (orig-fun &rest args)
-    (let ((shell-command-switch "-ic"))
-      (apply orig-fun args)))
-  (advice-add 'shell-command :around #'make-shell-command-behave-interactively)
-  (advice-add 'start-process-shell-command :around #'make-shell-command-behave-interactively)
-  (defun turn-on-comint-history (history-file)
-    (setq comint-input-ring-file-name history-file)
-    (comint-read-input-ring 'silent))
-  (add-hook 'shell-mode-hook
-            (lambda () (turn-on-comint-history "~/.emacs.d/.cache/HIST"))))

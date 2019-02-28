@@ -19,8 +19,7 @@
   ;;         (swiper . ivy--regex-plus)
   ;;         (t . ivy--regex-fuzzy)))
   (setq ivy-re-builders-alist
-        '((counsel-recentf . ivy--regex-fuzzy)
-          (spacemacs/counsel-search . spacemacs/ivy--regex-plus)
+        '((spacemacs/counsel-search . spacemacs/ivy--regex-plus)
           (spacemacs/search-auto . spacemacs/ivy--regex-plus)
           (t . ivy--regex-plus)))
 
@@ -246,14 +245,14 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   ;; (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash"))
   (spacemacs/set-leader-keys "fT" 'counsel-tramp))
 
-(use-package imenu
+(use-feature imenu
   :defer t
   :config
-  (defun imenu-use-package ()
+  (defun imenu-use-feature ()
     (add-to-list
      'imenu-generic-expression
-     '("Packages" "^\\s-*(\\(use-package\\)\\s-+\\(\\(\\sw\\|\\s_\\)+\\)" 2)))
-  (add-hook 'emacs-lisp-mode-hook #'imenu-use-package))
+     '("Features" "^\\s-*(\\(use-feature\\)\\s-+\\(\\(\\sw\\|\\s_\\)+\\)" 2)))
+  (add-hook 'emacs-lisp-mode-hook #'imenu-use-feature))
 
 (use-package imenu-anywhere
   :straight t
@@ -289,7 +288,7 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
 (use-package smex
   :straight t
   :init
-  (setq-default smex-history-length 100)
+  (setq-default smex-history-length 128)
   (setq-default smex-save-file (concat yq-emacs-cache-dir ".smex-items")))
 
 (use-package projectile

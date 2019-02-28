@@ -10,10 +10,10 @@
 (setq debug-on-error t)
 (setq debug-on-quit t)
 
-(when (fboundp 'tool-bar-mode)
-  (tool-bar-mode -1))
+(when (fboundp 'tool-bar-mode) (tool-bar-mode -1))
 (toggle-scroll-bar -1)
 (menu-bar-mode -1)
+(setq straight-check-for-modifications 'live-with-find)
 ;; (package-initialize)
 (setq scroll-bar-background nil)
 (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
@@ -59,15 +59,31 @@
   (load bootstrap-file nil 'nomessage))
 
 (straight-use-package 'diminish)
+(setq use-package-enable-imenu-support t)
 (straight-use-package 'use-package)
 
-;; (use-package auto-compile
-;;   :straight t
-;;   :custom
-;;   (auto-compile-display-buffer nil)
-;;   :init
-;;   (auto-compile-on-load-mode)
-;;   (auto-compile-on-save-mode))
+(defmacro defip (name &rest body)
+  (declare (indent 1) (debug t))
+  `(defun ,name (&optional _arg)
+     ,(if (stringp (car body)) (car body))
+     (interactive "p")
+     ,@(if (stringp (car body)) (cdr `,body) body)))
+
+(defmacro def (&rest body)
+  (declare (indent 1) (debug t))
+  `(lambda ()
+     (interactive)
+     ,@body))
+
+(defmacro add-lam (hook &rest body)
+  (declare (indent 1) (debug t))
+  `(add-hook ,hook (lambda () ,@body)))
+
+(defmacro use-feature (name &rest args)
+  (declare (indent 1))
+  `(use-package ,name
+     :straight nil
+     ,@args))
 
 (use-package exec-path-from-shell
   :straight t

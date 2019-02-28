@@ -447,8 +447,6 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   (push 'yas--default-user-snippets-dir yas-snippet-dirs)
   (push 'yas-hippie-try-expand hippie-expand-try-functions-list)
   ;; (add-hook 'snippet-mode 'yq/toggle-aggressive-indent-off)
-  (unless (featurep 'warnings)
-    (require 'warnings))
   (add-to-list 'warning-suppress-types '(yasnippet backquote-change))
   (yas-reload-all))
 
