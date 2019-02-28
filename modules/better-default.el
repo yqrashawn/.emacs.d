@@ -48,17 +48,6 @@ file stored in the cache directory and `nil' to disable auto-saving.")
 (use-feature emacs
   :init
   (setq-default
-   ;; cursor always center
-   maximum-scroll-margin 0.5
-   scroll-margin 50
-   scroll-conservatively 101
-   scroll-preserve-screen-position 'always)
-  (setq-default
-   ;; don't auto scroll too much but more often
-   maximum-scroll-margin 0.2
-   scroll-margin 50
-   scroll-conservatively 50
-   scroll-preserve-screen-position 'always
    echo-keystrokes 1e-6 ;; echo keystrokes quicker
    ns-use-native-fullscreen nil
    delete-by-moving-to-trash t
@@ -108,7 +97,7 @@ file stored in the cache directory and `nil' to disable auto-saving.")
         (insert (funcall fn symbol))
         (when (looking-at " ") (forward-char)))
       (keyboard-quit)
-      (run-at-time nil nil (lambda () (put 'quit 'error-message "Quit"))))))
+      (run-at-time nil nil (add-lam (put 'quit 'error-message "Quit"))))))
 
 (use-package alert
   :straight t

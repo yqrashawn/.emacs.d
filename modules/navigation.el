@@ -664,13 +664,13 @@ Return a list of one element based on major mode."
      (cond
       ;; Configs
       ((memq major-mode '(emacs-lisp-mode inferior-emacs-lisp-mode)) "Configs")
-      ((and buffer-file-name (string-match-p "\.conf$" buffer-file-name)) "Configs")
-      ((and buffer-file-name (string-match-p "\/\.config\/" buffer-file-name)) "Configs")
-      ((and buffer-file-name (string-match-p "prezto" buffer-file-name)) "Configs")
-      ((and buffer-file-name (string-match-p "mbsync" buffer-file-name)) "Configs")
-      ((and buffer-file-name (string-match-p "bitbar" buffer-file-name)) "Configs")
-      ((and buffer-file-name (string-match-p "\.emacs\.d\/" buffer-file-name)) "Configs")
-      ((and buffer-file-name (string-match-p "Dropbox/sync/" buffer-file-name)) "Configs")
+      ((and buffer-file-name (or (string-match-p "\.conf$" buffer-file-name)
+                                 (string-match-p "\/\.config\/" buffer-file-name)
+                                 (string-match-p "prezto" buffer-file-name)
+                                 (string-match-p "mbsync" buffer-file-name)
+                                 (string-match-p "bitbar" buffer-file-name)
+                                 (string-match-p "\.emacs\.d\/" buffer-file-name)
+                                 (string-match-p "Dropbox/sync/" buffer-file-name))) "Configs")
 
       ;; Plan
       ((and buffer-file-name (string-match-p "\/Dropbox\/ORG\/" buffer-file-name)) "Plan")
@@ -678,6 +678,9 @@ Return a list of one element based on major mode."
 
       ;; Clojure
       ((memq major-mode '(clojure-mode)) "Clojure")
+
+      ;; Projects
+      ((and buffer-file-name (string-match-p "\/workspace\/" buffer-file-name) (projectile-project-name)) (projectile-project-name))
 
       ;; other prog mode
       ((or (derived-mode-p 'prog-mode) (memq major-mode '(org-mode))) "Working")
@@ -867,7 +870,16 @@ That is, a string used to represent it on the tab bar."
   (define-key tabbar-mode-map (kbd "C-x C-6 7") (lambda () (interactive) (+tabbar-jump ?j)))
   (define-key tabbar-mode-map (kbd "C-x C-6 8") (lambda () (interactive) (+tabbar-jump ?k)))
   (define-key tabbar-mode-map (kbd "C-x C-6 9") (lambda () (interactive) (+tabbar-jump ?l)))
-  (define-key tabbar-mode-map (kbd "C-x C-6 0") (lambda () (interactive) (+tabbar-jump 59))))
+  (define-key tabbar-mode-map (kbd "C-x C-6 0") (lambda () (interactive) (+tabbar-jump 59)))
+
+  ;; disable tabbar track killed buffer
+  (defun tabbar-buffer-track-killed ()
+    "Hook run just before actually killing a buffer.
+In Tabbar mode, try to switch to a buffer in the current tab bar,
+after the current buffer has been killed.  Try first the buffer in tab
+after the current one, then the buffer in tab before.  On success, put
+the sibling buffer in front of the buffer list, so it will be selected
+first."))
 
 (use-package loccur
   :straight t
@@ -877,13 +889,13 @@ That is, a string used to represent it on the tab bar."
 
 (use-package color-rg
   :straight (:host github :repo "manateelazycat/color-rg")
-  :disabled
   :commands (color-rg-search-input
              color-rg-search-symbol
              color-rg-search-project)
   :init
-  (spacemacs/set-leader-keys "rg" #'color-rg-search-project)
-  (spacemacs/set-leader-keys "rG" #'color-rg-search-input)
+  (spacemacs/set-leader-keys "rg" (defl (if current-prefix-arg
+                                            (color-rg-search-project-with-type)
+                                          (color-rg-search-project))))
   (define-key evil-normal-state-map "se" #'color-rg-search-project)
   :config
   (evilified-state-evilify color-rg-mode color-rg-mode-map

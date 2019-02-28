@@ -62,14 +62,14 @@
 (setq use-package-enable-imenu-support t)
 (straight-use-package 'use-package)
 
-(defmacro defip (name &rest body)
+(defmacro def (name &rest body)
   (declare (indent 1) (debug t))
   `(defun ,name (&optional _arg)
      ,(if (stringp (car body)) (car body))
      (interactive "p")
      ,@(if (stringp (car body)) (cdr `,body) body)))
 
-(defmacro def (&rest body)
+(defmacro defl (&rest body)
   (declare (indent 1) (debug t))
   `(lambda ()
      (interactive)

@@ -162,8 +162,10 @@ has been changed to THEME."
         (mapcar
          (lambda (group)
            (+propertize-tabbar-group-for-modeline group (eq group tb-cur-group))) tb-groups))))
+
   (defun +propertize-tabbar-group-for-modeline (group &optional cur-group-p)
     (let ((face (if cur-group-p 'doom-modeline-evil-emacs-state 'mode-line-emphasis))
+          (group (if cur-group-p (concat "[" group "]") group))
           (active (doom-modeline--active)))
       (concat
        " "
@@ -172,5 +174,5 @@ has been changed to THEME."
                    'help-echo "Tabbar Group")
        " ")))
   (doom-modeline-def-modeline 'main
-    '(bar workspace-number window-number evil-state matches tabbar-group buffer-info  remote-host buffer-position parrot selection-info)
+    '(bar workspace-number window-number evil-state matches tabbar-group buffer-info  remote-host parrot selection-info)
     '(misc-info persp-name lsp irc mu4e github debug buffer-encoding major-mode process vcs checker)))
