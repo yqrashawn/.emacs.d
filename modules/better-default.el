@@ -975,8 +975,6 @@ otherwise it is scaled down."
     (kbd "s SPC") 'counsel-M-x))
 
 (spacemacs/set-leader-keys "xdw" 'delete-trailing-whitespace)
-(setq dired-recursive-deletes 'always)
-(setq dired-recursive-copies 'always)
 
 (defun switch-to-nth-buffer (n)
   "Switches to nth most recent buffer. Ignores a bunch of stuff."

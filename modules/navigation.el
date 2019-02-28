@@ -358,11 +358,13 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
 ;; (define-key evil-normal-state-map "sf" 'spacemacs/search-rg-direct)
 (define-key evil-normal-state-map "sF" 'spacemacs/search-project-rg-region-or-symbol)
 
-(use-package dired
+(use-feature dired
   :init
-  (setq insert-directory-program "/usr/local/bin/gls")
-  (setq dired-listing-switches "-laGh1vt")
-  (setq dired-recursive-deletes 'always)
+  (setq insert-directory-program "/usr/local/bin/gls"
+        dired-listing-switches "-laGh1vt"
+        dired-recursive-deletes 'always
+        dired-recursive-copies 'always
+        dired-auto-revert-buffer t)
   ;; https://www.emacswiki.org/emacs/EmacsSession which is easier to setup than "desktop.el"
   ;; See `session-globals-regexp' in "session.el".
   ;; If the variable is named like "*-history", it will be automaticlaly saved.

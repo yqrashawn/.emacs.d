@@ -664,8 +664,8 @@ SCHEDULED: %^T
   :init
   ;; (spacemacs/set-leader-keys "4" 'counsel-org-clock-history)
   (spacemacs/set-leader-keys "4" 'counsel-org-clock-context))
-(spacemacs/set-leader-keys (kbd "\`") (lambda () (interactive) (find-file "~/Dropbox/ORG/daily-review.org")))
-(spacemacs/set-leader-keys (kbd "DEL") (lambda () (interactive) (find-file "~/Dropbox/ORG/weekly-review.org")))
+(spacemacs/set-leader-keys (kbd "\`") (defl (if current-prefix-arg (find-file "~/Dropbox/ORG/weekly-review.org") (find-file "~/Dropbox/ORG/daily-review.org"))))
+(spacemacs/set-leader-keys (kbd "DEL") (defl (if current-prefix-arg (find-file "~/Dropbox/ORG/tasks.org") (find-file "~/Dropbox/ORG/inbox.org"))))
 
 (use-package org-mru-clock
   :straight t
