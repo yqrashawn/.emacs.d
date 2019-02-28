@@ -116,8 +116,9 @@
 (yq/get-modules "mail.el")
 ;; (yq/get-modules "pdf.el")
 
-(use-package server)
-(unless (server-running-p) (server-start))
+(use-package server
+  :init
+  (unless (server-running-p) (server-start)))
 
 ;; (use-package playground
 ;;   :straight (:host github :repo "akirak/emacs-playground"))
