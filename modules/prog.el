@@ -225,9 +225,9 @@ Available PROPS:
   (evil-define-key 'insert company-active-map (kbd "C-r") 'company-show-doc-buffer)
   (add-hook 'after-init-hook 'global-company-mode))
 
-;; (use-package company-statistics
-;;   :straight t
-;;   :hook (company-mode . company-statistics-mode))
+(use-package company-statistics
+  :straight t
+  :hook (company-mode . company-statistics-mode))
 
 (use-package company-flx
   :straight t

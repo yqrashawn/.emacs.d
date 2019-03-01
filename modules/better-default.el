@@ -629,7 +629,7 @@ If the universal prefix argument is used then kill the buffer too."
      ("*HTTP Response*"                     :dedicated t   :position bottom :stick t    :noselect t   :height 0.4 :kill t)
      ("*compilation*"                       :dedicated t   :position bottom :stick t    :noselect t   :height 0.4 :kill t)
      ("*Shell Command Output*"              :dedicated t   :position bottom :stick t    :noselect t   :height 0.4 :kill t)
-     ("*prettier errors*"                   :dedicated t   :position bottom :stick nil  :noselect t   :height 0.4 :kill t)
+     ("*prettier errors*"                   :dedicated t   :position bottom :stick t    :noselect t   :height 0.4 :kill t)
      ("*Async Shell Command*"               :dedicated t   :position bottom :stick t    :noselect t   :kill t)
      ("*undo-tree*"                         :dedicated t   :position right  :stick t    :noselect nil :width 60)
      ("*undo-tree Diff*"                    :dedicated t   :position bottom :stick t    :noselect nil :height 0.3 :kill t)
