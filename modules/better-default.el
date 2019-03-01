@@ -140,9 +140,6 @@ file stored in the cache directory and `nil' to disable auto-saving.")
   (defun text-smaller-no-truncation ()
     (set (make-local-variable 'scroll-margin) 0)
     (text-scale-set -0.25))
-  (defun turn-on-comint-history (history-file)
-    (setq comint-input-ring-file-name history-file)
-    (comint-read-input-ring 'silent))
   (defun comint-return-dwim ()
     (interactive)
     (cond
@@ -170,19 +167,17 @@ file stored in the cache directory and `nil' to disable auto-saving.")
 
 (use-feature shell
   :defer t
+  :init
+  ;; make emacs recognize shell command alias
+  (setq shell-command-switch "-ic")
+  (setq shell-file-name "zsh")
   :config
-  (add-to-list 'evil-insert-state-modes 'shell-mode)
-  (define-key shell-mode-map (kbd "s-i") #'spacemacs/alternate-buffer)
+  (define-key shell-mode-map (kbd "s-l") #'spacemacs/alternate-buffer)
   (defun make-shell-command-behave-interactively (orig-fun &rest args)
     (let ((shell-command-switch "-ic"))
       (apply orig-fun args)))
   (advice-add 'shell-command :around #'make-shell-command-behave-interactively)
-  (advice-add 'start-process-shell-command :around #'make-shell-command-behave-interactively)
-  (defun turn-on-comint-history (history-file)
-    (setq comint-input-ring-file-name history-file)
-    (comint-read-input-ring 'silent))
-  (add-lam 'shell-mode-hook
-    (turn-on-comint-history "~/.emacs.d/.cache/HISTFILE")))
+  (advice-add 'start-process-shell-command :around #'make-shell-command-behave-interactively))
 
 (use-feature executable
   :hook
@@ -1418,14 +1413,6 @@ Info-mode:
 (use-package auth-source
   :no-require t
   :config (setq auth-sources '("~/.authinfo.gpg" "~/.netrc")))
-
-;; make emacs recognize shell command alias
-(setq shell-file-name "zsh")
-(setq shell-command-switch "-ic")
-
-(use-package evil-ex-shell-command
-  :straight (:host github :repo "yqrashawn/evil-ex-shell-command")
-  :init (global-set-key (kbd "s-l") 'evil-ex-shell-command))
 
 ;; like golden ratio mode
 ;; (use-package zoom

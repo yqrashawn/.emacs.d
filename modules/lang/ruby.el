@@ -165,6 +165,4 @@
   (define-key inf-ruby-mode-map (kbd "C-c C-z") #'rtog/toggle-repl)
   (define-key inf-ruby-minor-mode-map (kbd "C-c C-z") #'rtog/toggle-repl)
   (add-hook 'compilation-filter-hook #'inf-ruby-auto-enter t)
-  (add-hook 'after-init-hook #'inf-ruby-switch-setup)
-  (add-hook 'inf-ruby-mode-hook
-            (defl (turn-on-comint-history ".pry_history"))))
+  (add-hook 'after-init-hook #'inf-ruby-switch-setup))
