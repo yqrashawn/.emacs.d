@@ -607,7 +607,7 @@ If the universal prefix argument is used then kill the buffer too."
         bookmark-save-flag 1))
 
 (use-package popwin
-  :straight t
+  :straight (:host github :repo "yqrashawn/popwin-el")
   :init
   (setq popwin:reuse-window 'visible)
   :config
@@ -620,24 +620,24 @@ If the universal prefix argument is used then kill the buffer too."
      ("\*rg-scan-async\*.*"      :regexp t  :dedicated t   :position bottom :stick nil  :noselect t   :height 0.1)
      ("*Contents*"                          :dedicated t   :position bottom :stick t    :noselect t   :height 0.4)
      ;; ("*Occur*"                             :dedicated nil :position bottom :stick t    :noselect nil :height 0.4)
-     ("\*helpful\ .*\*"          :regexp t  :dedicated t   :position right  :stick t    :noselect nil :width 0.5)
-     ("*Help*"                              :dedicated t   :position bottom :stick t    :noselect t   :height 0.4)
+     ("\*helpful\ .*\*"          :regexp t  :dedicated t   :position right  :stick t    :noselect nil :width 0.5 :kill t)
+     ("*Help*"                              :dedicated t   :position bottom :stick t    :noselect t   :height 0.5 :kill t)
      ("*cider-doc*"                         :dedicated t   :position bottom :stick t    :noselect t   :height 0.4)
-     ("*Backtrace*"                         :dedicated t   :position bottom :stick t    :noselect t   :height 0.4)
-     ("*Warnings*"                          :dedicated t   :position bottom :stick t    :noselect t   :height 0.4)
+     ("*Backtrace*"                         :dedicated t   :position bottom :stick t    :noselect t   :height 0.4 :kill t)
+     ("*Warnings*"                          :dedicated t   :position bottom :stick t    :noselect t   :height 0.4 :kill t)
      ("*Messages*"                          :dedicated t   :position left   :stick t    :noselect t   :width  0.5)
-     ("*HTTP Response*"                     :dedicated t   :position bottom :stick t    :noselect t   :height 0.4)
-     ("*compilation*"                       :dedicated t   :position bottom :stick t    :noselect t   :height 0.4)
-     ("*Shell Command Output*"              :dedicated t   :position bottom :stick t    :noselect t   :height 0.4)
-     ("*prettier errors*"                   :dedicated t   :position bottom :stick nil  :noselect t   :height 0.4)
-     ("*Async Shell Command*"               :dedicated t   :position bottom :stick t    :noselect t)
-     ("*undo-tree*"                         :dedicated t   :position right  :stick t    :noselect nil :width   60)
-     ("*undo-tree Diff*"                    :dedicated t   :position bottom :stick t    :noselect nil :height 0.3)
-     ("*ert*"                               :dedicated t   :position bottom :stick t    :noselect t)
-     ("*grep*"                              :dedicated t   :position bottom :stick t    :noselect nil)
-     ("*nosetests*"                         :dedicated t   :position bottom :stick t    :noselect nil)
+     ("*HTTP Response*"                     :dedicated t   :position bottom :stick t    :noselect t   :height 0.4 :kill t)
+     ("*compilation*"                       :dedicated t   :position bottom :stick t    :noselect t   :height 0.4 :kill t)
+     ("*Shell Command Output*"              :dedicated t   :position bottom :stick t    :noselect t   :height 0.4 :kill t)
+     ("*prettier errors*"                   :dedicated t   :position bottom :stick nil  :noselect t   :height 0.4 :kill t)
+     ("*Async Shell Command*"               :dedicated t   :position bottom :stick t    :noselect t   :kill t)
+     ("*undo-tree*"                         :dedicated t   :position right  :stick t    :noselect nil :width 60)
+     ("*undo-tree Diff*"                    :dedicated t   :position bottom :stick t    :noselect nil :height 0.3 :kill t)
+     ("*ert*"                               :dedicated t   :position bottom :stick t    :noselect t :kill t)
+     ("*grep*"                              :dedicated t   :position bottom :stick t    :noselect nil :kill t)
+     ("*nosetests*"                         :dedicated t   :position bottom :stick t    :noselect nil :kill t)
      ("^\*WoMan.+\*$"           :regexp t   :dedicated t   :position bottom             :noselect t)
-     ("^\*projector:\ .*\*$"    :regexp t   :dedicated t   :position right  :stick t    :noselect t))))
+     ("^\*projector:\ .*\*$"    :regexp t   :dedicated t   :position right  :stick t    :noselect t :width .4 :kill t))))
 
 
 (defvar dotspacemacs-scratch-mode 'text-mode

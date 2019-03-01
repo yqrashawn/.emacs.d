@@ -667,21 +667,21 @@ Return a list of one element based on major mode."
     (list
      (cond
       ;; Configs
-      ((memq major-mode '(emacs-lisp-mode inferior-emacs-lisp-mode)) "Configs")
+      ((memq major-mode '(emacs-lisp-mode inferior-emacs-lisp-mode)) "Conf")
       ((and buffer-file-name (or (string-match-p "\.conf$" buffer-file-name)
                                  (string-match-p "\/\.config\/" buffer-file-name)
                                  (string-match-p "prezto" buffer-file-name)
                                  (string-match-p "mbsync" buffer-file-name)
                                  (string-match-p "bitbar" buffer-file-name)
                                  (string-match-p "\.emacs\.d\/" buffer-file-name)
-                                 (string-match-p "Dropbox/sync/" buffer-file-name))) "Configs")
+                                 (string-match-p "Dropbox/sync/" buffer-file-name))) "Conf")
 
       ;; Plan
       ((and buffer-file-name (string-match-p "\/Dropbox\/ORG\/" buffer-file-name)) "Plan")
       ((eq major-mode 'org-agenda-mode) "Plan")
 
       ;; Clojure
-      ((memq major-mode '(clojure-mode)) "Clojure")
+      ((memq major-mode '(clojure-mode)) "CLJ")
 
       ;; Projects
       ((and buffer-file-name (string-match-p "\/workspace\/" buffer-file-name) (projectile-project-name)) (projectile-project-name))
@@ -689,7 +689,7 @@ Return a list of one element based on major mode."
       ;; other prog mode
       ((or (derived-mode-p 'prog-mode) (memq major-mode '(org-mode))) "Working")
 
-      ((eq major-mode 'dired-mode) "Dired")
+      ((eq major-mode 'dired-mode) "Dir")
       ((memq major-mode '(helpful-mode help-mode apropos-mode Info-mode Man-mode)) "Help")
       ((memq major-mode
              '(rmail-mode
