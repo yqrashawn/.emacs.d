@@ -183,7 +183,7 @@
 (use-package js-comint
   :straight t
   :after js2-mode
-  :commands (run-js)
+  :commands (run-js switch-to-js)
   :init
   (setq js-program-command "node"
         js-program-arguments '("--interactive")
@@ -197,21 +197,9 @@
   (define-key js2-mode-map (kbd "C-c C-b") #'js-send-buffer-and-go)
   (define-key js2-mode-map (kbd "C-c C-z") #'rtog/toggle-repl)
   (define-key js2-mode-map (kbd "C-c C-l") #'js-comint-clear)
+  :config
   (define-key js-comint-mode-map (kbd "C-c C-z") #'rtog/toggle-repl)
   (define-key js-comint-mode-map (kbd "C-c C-l") #'js-comint-clear)
-  :config
-  (defun js-comint-start-or-switch-to-repl ()
-    "Start a new repl or switch to existing repl."
-    (interactive)
-    (setenv "NODE_NO_READLINE" "1")
-    (js-comint-setup-module-paths)
-    (let* ((repl-mode (or (getenv "NODE_REPL_MODE") "magic"))
-           (js-comint-code (format js-comint-code-format
-                                   (window-width) js-comint-prompt repl-mode)))
-      (switch-to-buffer
-       (apply 'make-comint js-comint-buffer js-comint-program-command nil
-              `(,@js-comint-program-arguments "-e" ,js-comint-code)))
-      (js-comint-mode)))
   (defun inferior-js-mode-hook-setup ()
     (add-hook 'comint-output-filter-functions 'js-comint-process-output))
   (add-hook 'inferior-js-mode-hook 'inferior-js-mode-hook-setup t))
