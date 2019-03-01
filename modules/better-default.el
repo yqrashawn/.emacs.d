@@ -625,6 +625,7 @@ If the universal prefix argument is used then kill the buffer too."
      ("*cider-doc*"                         :dedicated t   :position bottom :stick t    :noselect t   :height 0.4)
      ("*Backtrace*"                         :dedicated t   :position bottom :stick t    :noselect t   :height 0.4)
      ("*Warnings*"                          :dedicated t   :position bottom :stick t    :noselect t   :height 0.4)
+     ("*Messages*"                          :dedicated t   :position left   :stick t    :noselect t   :width  0.5)
      ("*HTTP Response*"                     :dedicated t   :position bottom :stick t    :noselect t   :height 0.4)
      ("*compilation*"                       :dedicated t   :position bottom :stick t    :noselect t   :height 0.4)
      ("*Shell Command Output*"              :dedicated t   :position bottom :stick t    :noselect t   :height 0.4)
@@ -635,8 +636,8 @@ If the universal prefix argument is used then kill the buffer too."
      ("*ert*"                               :dedicated t   :position bottom :stick t    :noselect t)
      ("*grep*"                              :dedicated t   :position bottom :stick t    :noselect nil)
      ("*nosetests*"                         :dedicated t   :position bottom :stick t    :noselect nil)
-     ("^\*WoMan.+\*$"           :regexp t   :dedicated t   :position bottom             :noselect t))))
-     ;; ("^\*projector:\ .*\*$"    :regexp t   :dedicated t   :position right  :stick t    :noselect t))))
+     ("^\*WoMan.+\*$"           :regexp t   :dedicated t   :position bottom             :noselect t)
+     ("^\*projector:\ .*\*$"    :regexp t   :dedicated t   :position right  :stick t    :noselect t))))
 
 
 (defvar dotspacemacs-scratch-mode 'text-mode

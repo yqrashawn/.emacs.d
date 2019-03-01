@@ -953,23 +953,4 @@ first."))
 ;;          ("C-x 7 w l" . 'emacs-chunkwm-windmove-right)
 ;;          ("C-x 7 w j" . 'emacs-chunkwm-windmove-down)
 ;;          ("C-x 7 w k" . 'emacs-chunkwm-windmove-up)))
-(use-package projector
-  :straight (:host github :repo "waymondo/projector.el")
-  :custom (projector-completion-system 'ivy)
-  :init
-  (def +projector-project-shell-command ()
-       (if current-prefix-arg
-           (projector-run-shell-command-project-root)
-         (projector-run-shell-command-project-root-background)))
-  (spacemacs/set-leader-keys "xp" '+projector-project-shell-command)
-  (define-key evil-normal-state-map "s9" '+projector-project-shell-command)
-  (def +projector-dir-shell-command ()
-       (if current-prefix-arg
-           (projector-run-shell-command-current-directory)
-         (projector-run-shell-command-current-directory-background)))
-  (spacemacs/set-leader-keys "xP" '+projector-dir-shell-command)
-  (global-set-key
-   (kbd "s-i")
-   (defl (if current-prefix-arg
-             (projector-switch-to-or-create-project-shell)
-           (projector-switch-to-or-create-project-shell)))))
+
