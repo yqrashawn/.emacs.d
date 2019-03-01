@@ -1414,6 +1414,15 @@ Info-mode:
   :no-require t
   :config (setq auth-sources '("~/.authinfo.gpg" "~/.netrc")))
 
+(use-feature ansi-color
+  :config
+  (add-to-list
+   'eshell-output-filter-functions
+   (defl
+       (ansi-color-apply-on-region
+        eshell-last-output-start
+        eshell-last-output-end))))
+
 ;; like golden ratio mode
 ;; (use-package zoom
 ;;   :straight t

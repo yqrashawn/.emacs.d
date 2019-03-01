@@ -176,3 +176,8 @@ has been changed to THEME."
   (doom-modeline-def-modeline 'main
     '(bar workspace-number window-number evil-state matches tabbar-group buffer-info  remote-host parrot selection-info)
     '(misc-info persp-name lsp irc mu4e github debug buffer-encoding major-mode process vcs checker)))
+
+(use-package vim-empty-lines-mode
+  :straight (:host github :repo "jmickelin/vim-empty-lines-mode")
+  :init
+  (global-vim-empty-lines-mode))
