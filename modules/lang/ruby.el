@@ -81,6 +81,7 @@
    'spacemacs/ruby-maybe-highlight-debugger-keywords
    '(ruby-mode-local-vars-hook enh-ruby-mode-local-vars-hook))
   :config
+  (define-key ruby-mode-map (kbd "C-c C-z") #'rtog/toggle-repl)
   (evil-define-key 'normal 'ruby-mode
     ",'" 'ruby-toggle-string-quotes
     ",{" 'ruby-toggle-block)
@@ -108,6 +109,7 @@
   (setq enh-ruby-deep-indent-paren nil
         enh-ruby-hanging-paren-deep-indent-level 2)
   :config
+  (define-key enh-ruby-mode-map (kbd "C-c C-z") #'rtog/toggle-repl)
   (dolist (map (list enh-ruby-mode-map))
     (evil-define-key* 'normal map
                       ",kk"    'rake
@@ -158,12 +160,10 @@
 
 (use-package inf-ruby
   :after (ruby-mode enh-ruby-mode)
-  :init
-  (define-key ruby-mode-map (kbd "C-c C-z") #'rtog/toggle-repl)
-  (define-key enh-ruby-mode-map (kbd "C-c C-z") #'rtog/toggle-repl)
-  (define-key inf-ruby-minor-mode-map (kbd "C-c C-z") #'rtog/toggle-repl)
-  (define-key inf-ruby-mode-map (kbd "C-c C-z") #'rtog/toggle-repl)
+  :defer t
   :config
+  (define-key inf-ruby-mode-map (kbd "C-c C-z") #'rtog/toggle-repl)
+  (define-key inf-ruby-minor-mode-map (kbd "C-c C-z") #'rtog/toggle-repl)
   (add-hook 'compilation-filter-hook #'inf-ruby-auto-enter t)
   (add-hook 'after-init-hook #'inf-ruby-switch-setup)
   (add-hook 'inf-ruby-mode-hook

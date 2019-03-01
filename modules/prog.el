@@ -634,6 +634,7 @@ _j_  js2      _T_     text   _f_  fundamental
   (defun projector-output-message-kill-buffer-sentinel (process msg)
     (let ((cmd (process-name process)))
       (with-current-buffer (process-buffer process)
+        (ansi-color-apply-on-region (point-min) (point-max))
         (when (memq (process-status process) '(exit signal))
           (rename-buffer (projector-shell-command-buffer-name cmd) t)
           (pop-to-buffer (process-buffer process)))))))
