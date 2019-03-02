@@ -474,14 +474,16 @@ is not visible. Otherwise delegates to regular Emacs next-error."
 
 (use-package dumb-jump
   :straight t
+  :custom
+  (dumb-jump-prefer-searcher 'rg)
+  (dumb-jump-force-searcher 'rg)
+  (dumb-jump-selector 'ivy)
   :config
+  (add-to-list 'dumb-jump-project-denoters ".tabnine_root")
   (spacemacs/set-leader-keys "jq" #'dumb-jump-quick-look)
   (define-key evil-normal-state-map "gp" #'dumb-jump-quick-look)
   (define-key evil-normal-state-map "gl" #'dumb-jump-go)
   (define-key evil-normal-state-map "gL" #'dumb-jump-go-other-window)
-  (setq dumb-jump-prefer-searcher 'rg)
-  (setq dumb-jump-force-searcher 'rg)
-  (setq dumb-jump-selector 'ivy)
   ;; Since it's dumb, we add it to the end of the default jump handlers. At
   ;; the time of writing it is the only default jump handler. (gtags remains
   ;; mode-local)
