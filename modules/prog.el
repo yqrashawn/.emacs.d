@@ -450,10 +450,6 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   (add-to-list 'warning-suppress-types '(yasnippet backquote-change))
   (yas-reload-all))
 
-;; (use-package yasnippet-snippets
-;;   :straight t
-;;   :after yasnippet)
-
 (use-package smartparens
   :straight t
   :diminish smartparens-mode
@@ -527,7 +523,7 @@ is not visible. Otherwise delegates to regular Emacs next-error."
                '("917\\.bimsop\\.com" git-link-commit-gogs))
   (setq git-link-open-in-browser t))
 
-;; {{ shell and conf
+;; shell and conf
 (add-to-list 'auto-mode-alist '("\\.[^b][^a][a-zA-Z]*rc$" . conf-mode))
 (add-to-list 'auto-mode-alist '("\\.aspell\\.en\\.pws\\'" . conf-mode))
 (add-to-list 'auto-mode-alist '("\\mimeapps\\.list$" . conf-mode))
@@ -535,14 +531,8 @@ is not visible. Otherwise delegates to regular Emacs next-error."
 (add-to-list 'auto-mode-alist '("\\.meta\\'" . conf-mode))
 (add-to-list 'auto-mode-alist '("\\.?muttrc\\'" . conf-mode))
 (add-to-list 'auto-mode-alist '("\\.mailcap\\'" . conf-mode))
-;; }}
 
 (define-key isearch-mode-map (kbd "C-o") 'isearch-occur)
-
-;; (use-package mixed-pitch
-;;   :straight t
-;;   :hook
-;;   (org-mode . mixed-pitch-mode))
 
 (use-package hl-todo
   :straight t
@@ -555,12 +545,6 @@ is not visible. Otherwise delegates to regular Emacs next-error."
 (use-package rainbow-delimiters
   :straight t
   :defer t)
-
-;; (use-package zop-to-char
-;;   :straight t
-;;   :init
-;;   (evil-define-key '(normal insert) 'global (kbd "s-m") 'zop-up-to-char)
-;;   (evil-define-key '(normal insert) 'global (kbd "s-M") 'zop-to-char))
 
 (with-eval-after-load 'hydra
   (defhydra hydra-change-mode (:hint nil :color pink)
@@ -595,7 +579,6 @@ _j_  js2      _T_     text   _f_  fundamental
   :hook (flycheck-mode . flycheck-posframe-mode)
   :config (set-face-attribute 'flycheck-posframe-error-face nil :inherit 'error))
 
-
 (use-package repl-toggle
   :straight t
   :custom
@@ -609,32 +592,3 @@ _j_  js2      _T_     text   _f_  fundamental
    rtog/fallback-repl-fun . projector-switch-to-or-create-project-shell)
   :config
   (repl-toggle-mode))
-
-(use-package projector
-  :straight (:host github :repo "waymondo/projector.el")
-  :custom (projector-completion-system 'ivy)
-  :init
-  (def +projector-project-shell-command ()
-       (if current-prefix-arg
-           (projector-run-shell-command-project-root)
-         (projector-run-shell-command-project-root-background)))
-  (spacemacs/set-leader-keys "xp" '+projector-project-shell-command)
-  (define-key evil-normal-state-map "s9" '+projector-project-shell-command)
-  (def +projector-dir-shell-command ()
-       (if current-prefix-arg
-           (projector-run-shell-command-current-directory)
-         (projector-run-shell-command-current-directory-background)))
-  (spacemacs/set-leader-keys "xP" '+projector-dir-shell-command)
-  (global-set-key
-   (kbd "s-i")
-   (defl (if current-prefix-arg
-             (projector-switch-to-or-create-project-shell)
-           (projector-switch-to-or-create-project-shell))))
-  :config
-  (defun projector-output-message-kill-buffer-sentinel (process msg)
-    (let ((cmd (process-name process)))
-      (with-current-buffer (process-buffer process)
-        (ansi-color-apply-on-region (point-min) (point-max))
-        (when (memq (process-status process) '(exit signal))
-          (rename-buffer (projector-shell-command-buffer-name cmd) t)
-          (pop-to-buffer (process-buffer process)))))))

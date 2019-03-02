@@ -17,7 +17,7 @@
 ;; (package-initialize)
 (setq scroll-bar-background nil)
 (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
-(add-to-list 'default-frame-alist '(ns-appearance . 'dark)) ; or 'dark, to switch to white title text
+(add-to-list 'default-frame-alist '(ns-appearance . dark))
 (defvar yq-emacs-cache-dir (concat user-emacs-directory ".cache/"))
 (defvar spacemacs-cache-directory (concat user-emacs-directory ".cache/"))
 (defvar yq-emacs-dotfile-dir (concat user-emacs-directory "init.el"))

@@ -201,6 +201,7 @@ file stored in the cache directory and `nil' to disable auto-saving.")
 (put 'narrow-to-page 'disabled nil)
 (add-hook 'prog-mode-hook 'goto-address-prog-mode)
 
+;; https://github.com/emacs-mirror/emacs/blob/master/lisp/progmodes/bug-reference.el
 ;; not using this right now, maybe add bug url format for jira
 ;; (add-hook 'prog-mode-hook 'bug-reference-prog-mode)
 
@@ -633,7 +634,6 @@ If the universal prefix argument is used then kill the buffer too."
      ("*nosetests*"                         :dedicated t   :position bottom :stick t    :noselect nil :kill t)
      ("^\*WoMan.+\*$"           :regexp t   :dedicated t   :position bottom             :noselect t)
      ("^\*projector:\ .*\*$"    :regexp t   :dedicated t   :position right  :stick t    :noselect t :width .4 :kill t))))
-
 
 (defvar dotspacemacs-scratch-mode 'text-mode
   "Default major mode of the scratch buffer.")
@@ -1494,20 +1494,6 @@ Info-mode:
 (with-eval-after-load 'proced
   (evilified-state-evilify proced-mode proced-mode-map
     "K" #'proced-send-signal))
-
-;; check this out when it's finished
-;; (use-package so-lang
-;;   :straight (:repo "https://git.savannah.nongnu.org/git/so-long.git"))
-
-;; (use-package outline-minor-faces
-;;   :straight t
-;;   :after outline
-;;   :config (add-hook 'outline-minor-mode-hook
-;;                     'outline-minor-faces-add-font-lock-keywords))
-;; (use-package backline
-;;   :straight t
-;;   :after outline
-;;   :config (advice-add 'outline-flag-region :after 'backline-update))
 
 (use-package terminal-here
   :straight t
