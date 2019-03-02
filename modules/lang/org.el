@@ -650,6 +650,11 @@ SCHEDULED: %^T
   :straight t
   :after ob)
 
+;; https://github.com/krisajenkins/ob-mongo/tree/371bf19c7c10eab2f86424f8db8ab685997eb5aa
+(use-package ob-mongo
+  :straight t
+  :after ob)
+
 (use-package org-fancy-priorities
   :straight t
   :hook (org-mode . org-fancy-priorities-mode)
