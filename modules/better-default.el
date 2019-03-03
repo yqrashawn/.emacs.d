@@ -622,6 +622,7 @@ If the universal prefix argument is used then kill the buffer too."
      ("*Backtrace*"                         :dedicated t   :position bottom :stick t    :noselect t   :height 0.4 :kill t)
      ("*Warnings*"                          :dedicated t   :position bottom :stick t    :noselect t   :height 0.4 :kill t)
      ("*Messages*"                          :dedicated t   :position left   :stick t    :noselect t   :width  0.5)
+     ("*mu4e-update*"                      :dedicated t   :position bottom :stick nil  :noselect t)
      ("*HTTP Response*"                     :dedicated t   :position bottom :stick t    :noselect t   :height 0.4 :kill t)
      ("*compilation*"                       :dedicated t   :position bottom :stick t    :noselect t   :height 0.4 :kill t)
      ("*Shell Command Output*"              :dedicated t   :position bottom :stick t    :noselect t   :height 0.4 :kill t)
