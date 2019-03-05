@@ -1591,3 +1591,16 @@ Info-mode:
   :after dired
   :init
   (define-key dired-mode-map "(" 'dired-git-info-mode))
+
+(use-package ix
+  :straight t
+  :disabled
+  :commands (ix))
+
+(use-package webpaste
+  :straight t
+  :bind (("C-c C-p C-b" . webpaste-paste-buffer)
+         ("C-c C-p C-r" . webpaste-paste-region))
+  :config
+  (progn
+    (setq webpaste-provider-priority '("ptpb.pw" "dpaste.de" "ix.io"))))

@@ -56,6 +56,10 @@
          ("\\.setup.*\\'" . conf-space-mode)
          ("/\\(Cargo.lock\\|\\.cargo/config\\)\\'" . conf-toml-mode)))
 
+(use-package crontab-mode
+  :straight (:host github :repo "emacs-pe/crontab-mode")
+  :defer t)
+
 (use-package lsp-mode
   :straight t
   :hook ((shell-script-mode web-mode css-mode typescript-mode js2-mode) . lsp-mode)
