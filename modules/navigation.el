@@ -238,7 +238,7 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   (define-key evil-normal-state-map "sl" 'spacemacs/counsel-jump-in-buffer)
   (define-key evil-normal-state-map "sj" #'counsel-recentf)
   (global-set-key (kbd "C-x C-r") #'counsel-recentf)
-  (define-key evil-normal-state-map "sm" #'counsel-fzf)
+  ;; (define-key evil-normal-state-map "sm" #'counsel-fzf)
   (spacemacs/set-leader-keys "sm" (lambda () (interactive) (let ((current-prefix-arg '(1))) (call-interactively 'counsel-fzf))))
   (define-key evil-normal-state-map (kbd "s SPC") 'counsel-M-x)
   (define-key evil-normal-state-map (kbd "M-y" ) 'counsel-yank-pop))
@@ -305,6 +305,7 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   (setq projectile-project-search-path '("~/workspace/" "~/.emacs.d/straight/repos/"))
   (setq projectile-completion-system 'ivy)
   :config
+  (define-key evil-normal-state-map "sm" #'projectile-find-file-dwim)
   (when (executable-find "fd")
     (setq projectile-git-command "fd . -t f -0"
           projectile-generic-command projectile-git-command))
@@ -447,10 +448,10 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
     "l" 'dired-find-file
     "s" 'nil
     "sk" 'yq/kill-this-buffer
-    "sm" #'counsel-fzf
+    ;; "sm" #'counsel-fzf
+    "sm" #'projectile-find-file-dwim
     "sj" #'counsel-recentf
     "sJ" #'projectile-recentf
-    "s9" #'+projector-project-shell-command
     "sB" #'projectile-switch-to-buffer
     "sb" #'ivy-switch-buffer
     (kbd "s SPC") 'counsel-M-x
