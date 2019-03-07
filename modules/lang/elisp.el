@@ -143,7 +143,6 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
   (customize-set-variable 'lispy-safe-copy t)
   (customize-set-variable 'lispy-safe-delete t)
   (yq/add-toggle lispy :mode lispy-mode)
-  (spacemacs/set-leader-keys "," 'yq/toggle-lispy)
   :config
   (advice-add #'special-lispy-eval :before (lambda ()
                                              (or (fboundp 'cider--make-overlay)
@@ -333,3 +332,25 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
 ;;   :init
 ;;   (advice-add 'describe-function-1 :after #'elisp-demos-advice-describe-function-1)
 ;;   (advice-add 'helpful-update :after #'elisp-demos-advice-helpful-update))
+
+(use-package lispyville
+  :straight (:host github :repo "noctuid/lispyville")
+  :after parinfer
+  :commands (lispyville-mode)
+  :hook (parinfer-mode . lispyville-mode)
+  :custom
+  (lispyville-key-theme
+   ' (operators
+      c-w
+      (escape insert)
+      prettify
+      (additional-movement normal visual motion)
+      (atom-movement normal visual motion)
+      text-objects
+      commentary
+      slurp/barf-lispy
+      wrap
+      additional
+      additional-insert
+      (additional-wrap normal visual insert)
+      mark)))

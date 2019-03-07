@@ -1542,6 +1542,7 @@ Info-mode:
 
 (use-package auto-yasnippet
   :straight t
+  :disabled
   :init
   (global-set-key (kbd "M-h") #'aya-create)
   (global-set-key (kbd "M-l") #'aya-expand))
