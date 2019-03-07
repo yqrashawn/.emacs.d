@@ -3,5 +3,7 @@
 # key: des
 # --
 describe("${1:name}", function() {
-  $2
+  it("${2:should}", async function() {
+    $3
+  })
 });

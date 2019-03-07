@@ -3,5 +3,5 @@
 # key: it
 # --
 it("${1:should}", function() {
-  ${2:func}
+  $2
 });

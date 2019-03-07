@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: supertest
+# key: st
+# --
+request(app)
+  .${1:getOrPost}
+  .set("authorization", $2)
+  .send($3)
+  .catch(he);
