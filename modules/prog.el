@@ -436,9 +436,9 @@ is not visible. Otherwise delegates to regular Emacs next-error."
         (if (and (not (delete-char -1 nil)) (yas-expand))
             t
           (progn
-            (self-insert-command 1 ?.)
-            (self-insert-command 1 ?.)))
-      (self-insert-command 1 ?.)))
+            (insert ?.)
+            (insert ?.)))
+      (insert ?.)))
 
   (define-key evil-insert-state-map "." '+yas-expand-when-inserting-dot)
 
