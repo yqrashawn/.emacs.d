@@ -136,12 +136,15 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
 (use-package lispy
   :straight t
   :diminish lispy " ʪ"
+  :custom
+  (lispy-eval-display-style 'overlay)
+  (lispy-visit-method 'projectile)
+  (lispy-safe-copy t)
+  (lispy-safe-delete t)
+  (lispy-safe-paste t)
+  (lispy-safe-actions-no-pull-delimiters-into-comments t)
   ;; :hook ((lisp-mode emacs-lisp-mode ielm-mode clojure-mode clojurescript-mode) . lispy-mode)
   :init
-  (customize-set-variable 'lispy-eval-display-style 'overlay)
-  (customize-set-variable 'lispy-visit-method 'projectile)
-  (customize-set-variable 'lispy-safe-copy t)
-  (customize-set-variable 'lispy-safe-delete t)
   (yq/add-toggle lispy :mode lispy-mode)
   :config
   (advice-add #'special-lispy-eval :before (lambda ()
@@ -335,22 +338,25 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
 
 (use-package lispyville
   :straight (:host github :repo "noctuid/lispyville")
-  :after parinfer
+  :after (parinfer lispy)
   :commands (lispyville-mode)
   :hook (parinfer-mode . lispyville-mode)
   :custom
+  (lispyville-motions-put-into-special t)
   (lispyville-key-theme
-   ' (operators
-      c-w
-      (escape insert)
-      prettify
-      (additional-movement normal visual motion)
-      (atom-movement normal visual motion)
-      text-objects
-      commentary
-      slurp/barf-lispy
-      wrap
-      additional
-      additional-insert
-      (additional-wrap normal visual insert)
-      mark)))
+   '(operators
+     c-w
+     (escape insert visual)
+     prettify
+     (additional-movement normal visual motion)
+     (atom-movement normal visual motion)
+     ;; commentary
+     slurp/barf-lispy
+     wrap
+     additional
+     additional-insert
+     (additional-wrap normal visual insert)
+     mark
+     mark-toggle))
+  :config
+  (lispy-define-key parinfer-mode-map "v" #'lispyville-toggle-mark-type))

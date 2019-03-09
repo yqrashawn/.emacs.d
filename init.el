@@ -107,13 +107,13 @@
 (yq/get-modules "version-control.el")
 (yq/get-modules "prog.el")
 (yq/get-modules "dev.el")
-(yq/get-modules "visual.el")
 (yq/get-modules "osx.el")
 (yq/get-modules "shell.el")
 (yq/get-modules "lang.el")
 (yq/get-modules "comm-funcs.el")
-(yq/get-modules "auto-detect-which-machine.el")
 (yq/get-modules "mail.el")
+(yq/get-modules "visual.el")
+(yq/get-modules "auto-detect-which-machine.el")
 ;; (yq/get-modules "pdf.el")
 
 (use-package server
