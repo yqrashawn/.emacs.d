@@ -54,7 +54,7 @@
                   :initial-input nil)))
         (dired dir))))
 
-  (define-key evil-normal-state-map "sy" 'bjm/ivy-dired-recent-dirs)
+  (define-key yq-s-map "y" 'bjm/ivy-dired-recent-dirs)
 
   (defun +ivy-switch-buffer-next-line ()
     (interactive)
@@ -101,7 +101,7 @@
                  'spacemacs//counsel-occur)
   (evil-set-initial-state 'ivy-occur-grep-mode 'normal)
   (evil-make-overriding-map ivy-occur-mode-map 'normal)
-  (define-key evil-normal-state-map "sb" 'ivy-switch-buffer)
+  (define-key yq-s-map "b" 'ivy-switch-buffer)
   (ido-mode -1))
 
 (use-package ivy-hydra
@@ -194,7 +194,7 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
                    :files ("swiper.el")
                    :upstream (:host github :repo "abo-abo/swiper"))
   :config
-  ;; (define-key evil-normal-state-map (kbd "sn") 'spacemacs/swiper-all-region-or-symbol)
+  ;; (define-key yq-s-map (kbd "n") 'spacemacs/swiper-all-region-or-symbol)
   (global-set-key (kbd "C-SPC") 'swiper)
   (global-set-key (kbd "^@") 'swiper)
   (global-set-key (kbd "C-S-SPC") 'spacemacs/swiper-region-or-symbol)
@@ -234,13 +234,13 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   (spacemacs/set-leader-keys "hdK" 'describe-keymap)
   (spacemacs/set-leader-keys "hdl" #'view-lossage)
   (spacemacs/set-leader-keys "fJ" 'spacemacs/open-junk-file)
-  (define-key evil-normal-state-map "sf" #'counsel-rg)
-  (define-key evil-normal-state-map "sl" 'spacemacs/counsel-jump-in-buffer)
-  (define-key evil-normal-state-map "sj" #'counsel-recentf)
+  (define-key yq-s-map "f" #'counsel-rg)
+  (define-key yq-s-map "l" 'spacemacs/counsel-jump-in-buffer)
+  (define-key yq-s-map "j" #'counsel-recentf)
   (global-set-key (kbd "C-x C-r") #'counsel-recentf)
-  ;; (define-key evil-normal-state-map "sm" #'counsel-fzf)
+  (define-key yq-s-map "m" #'counsel-fzf)
   (spacemacs/set-leader-keys "sm" (lambda () (interactive) (let ((current-prefix-arg '(1))) (call-interactively 'counsel-fzf))))
-  (define-key evil-normal-state-map (kbd "s SPC") 'counsel-M-x)
+  (define-key yq-s-map (kbd "SPC") 'counsel-M-x)
   (define-key evil-normal-state-map (kbd "M-y" ) 'counsel-yank-pop))
 
 (use-package counsel-tramp
@@ -264,7 +264,7 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
 (use-package imenu-anywhere
   :straight t
   :commands (imenu-anywhere)
-  :init (define-key evil-normal-state-map "sL" 'imenu-anywhere))
+  :init (define-key yq-s-map "L" 'imenu-anywhere))
 
 (use-package helpful
   :straight t
@@ -305,7 +305,7 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   (setq projectile-project-search-path '("~/workspace/" "~/.emacs.d/straight/repos/"))
   (setq projectile-completion-system 'ivy)
   :config
-  (define-key evil-normal-state-map "sm" #'projectile-find-file-dwim)
+  ;; (define-key yq-s-map "m" #'projectile-find-file-dwim)
   (when (executable-find "fd")
     (setq projectile-git-command "fd . -t f -0"
           projectile-generic-command projectile-git-command))
@@ -317,8 +317,7 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   (setq projectile-verbose nil)
   (setq projectile-enable-idle-timer t)
   (setq projectile-idle-timer-seconds 300)
-  (setq projectile-idle-timer-hook '(projectile-discover-projects-in-search-path))
-  (define-key evil-normal-state-map "sJ" 'projectile-recentf))
+  (setq projectile-idle-timer-hook '(projectile-discover-projects-in-search-path)))
 
 (use-package counsel-projectile
   :straight t
@@ -326,7 +325,7 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   (counsel-projectile-mode +1)
   (spacemacs/set-leader-keys "p" nil)
   (spacemacs/set-leader-keys "pb" 'counsel-projectile-switch-to-buffer)
-  (define-key evil-normal-state-map "sB" 'counsel-projectile-switch-to-buffer)
+  (define-key yq-s-map "B" 'counsel-projectile-switch-to-buffer)
   (spacemacs/set-leader-keys "pf" 'counsel-projectile-find-file)
   (spacemacs/set-leader-keys "pd" 'counsel-projectile-find-dir)
   (spacemacs/set-leader-keys "pl" 'counsel-projectile-switch-project)
@@ -358,13 +357,12 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
  'counsel-recentf
  spacemacs--ivy-file-actions)
 
-(spacemacs/set-leader-keys "s" nil)
 (spacemacs/set-leader-keys "sd" 'spacemacs/search-dir-rg)
 (spacemacs/set-leader-keys "sD" 'spacemacs/search-dir-rg-region-or-symbol)
 (spacemacs/set-leader-keys "sf" 'spacemacs/search-auto)
 (spacemacs/set-leader-keys "sF" 'spacemacs/search-rg-region-or-symbol)
-;; (define-key evil-normal-state-map "sf" 'spacemacs/search-rg-direct)
-(define-key evil-normal-state-map "sF" 'spacemacs/search-project-rg-region-or-symbol)
+;; (define-key yq-s-map "sf" 'spacemacs/search-rg-direct)
+(define-key yq-s-map "F" 'spacemacs/search-project-rg-region-or-symbol)
 
 (use-feature dired
   :init
@@ -468,7 +466,7 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   :after dired
   :init
   (evil-define-key 'normal dired-mode-map "F" 'fd-dired)
-  (define-key evil-normal-state-map "s8" 'fd-dired))
+  (define-key yq-s-map "8" 'fd-dired))
 (use-package dired+
   :straight t
   :init
@@ -533,7 +531,7 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
       (yq/open-with-call-alfred-osascript (dired-get-filename nil t))
     (and (file-exists-p buffer-file-name) (yq/open-with-call-alfred-osascript buffer-file-name))))
 
-(define-key evil-normal-state-map (kbd "s.") 'yq/open-with-alfred)
+(define-key yq-s-map (kbd ".") 'yq/open-with-alfred)
 (spacemacs/set-leader-keys "bb" 'yq/open-with-alfred)
 
 (use-package open-junk-file
@@ -593,8 +591,8 @@ When ARG is non-nil search in junk files."
   (setq avy-enter-times-out nil)
   (setq avy-background t)
   (setq avy-highlight-first t)
-  (define-key evil-normal-state-map "sn" 'avy-goto-char-timer)
-  (define-key evil-normal-state-map "sI" 'avy-goto-char-2))
+  (define-key yq-s-map "n" 'avy-goto-char-timer)
+  (define-key yq-s-map "I" 'avy-goto-char-2))
 
 (use-package ace-link
   :straight t
@@ -662,6 +660,7 @@ visiting a file.  The current buffer is always included."
                       (cond
                        ;; Always include the current buffer.
                        ((eq (current-buffer) b) b)
+                       ((string-match-p "\.elc$" (buffer-name b)) nil)
                        ((buffer-file-name b) b)
                        ((string-match-p "^magit.*:\ " (buffer-name b)) nil)
                        ((char-equal ?\  (aref (buffer-name b) 0)) nil)
@@ -898,7 +897,7 @@ first."))
   :straight t
   :commands (loccur-current)
   :init
-  (define-key evil-normal-state-map "ss" #'loccur-current))
+  (define-key yq-s-map "s" #'loccur-current))
 
 (use-package color-rg
   :straight (:host github :repo "manateelazycat/color-rg")
@@ -909,7 +908,7 @@ first."))
   (spacemacs/set-leader-keys "rg" (defl (if current-prefix-arg
                                             (color-rg-search-project-with-type)
                                           (color-rg-search-project))))
-  (define-key evil-normal-state-map "se" #'color-rg-search-project)
+  (define-key yq-s-map "e" #'color-rg-search-project)
   :config
   (evilified-state-evilify color-rg-mode color-rg-mode-map
     (kbd "C-a") 'color-rg-beginning-of-line

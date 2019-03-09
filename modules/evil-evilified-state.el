@@ -162,7 +162,7 @@ Needed to bypass keymaps set as text properties."
 (define-key evil-evilified-state-map "G" #'evil-goto-line)
 (define-key evil-evilified-state-map "sv" #'er/expand-region)
 (define-key evil-evilified-state-map "sk" 'yq/kill-this-buffer)
-(define-key evil-evilified-state-map "sk" #'counsel-recentf)
+(define-key evil-evilified-state-map "sj" #'counsel-recentf)
 (define-key evil-evilified-state-map (kbd "C-f") #'evil-ex-fasd)
 (define-key evil-evilified-state-map (kbd "C-b") #'evil-scroll-page-up)
 (define-key evil-evilified-state-map (kbd "C-e") #'mwim-end-of-code-or-line)

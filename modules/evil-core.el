@@ -40,6 +40,8 @@
 (use-package evil
   :straight t
   :init
+  :custom
+  (define-prefix-command 'yq-s-map)
   (setq local-function-key-map (delq '(kp-tab . [9]) local-function-key-map))
   (setq evil-want-find-undo t)
   (customize-set-variable 'evil-intercept-maps nil)
@@ -133,12 +135,12 @@
   (define-key evil-normal-state-map "gk" 'evil-previous-line)
   (define-key evil-normal-state-map "zl" 'hs-hide-level)
   (define-key evil-normal-state-map (kbd "C-k") 'evil-toggle-fold)
-  (define-key evil-normal-state-map "s" nil)
-  (define-key evil-normal-state-map "sk" 'yq/kill-this-buffer)
-  (define-key evil-normal-state-map "sK" 'projectile-kill-buffers)
-  (define-key evil-normal-state-map "sc" 'yq/delete-window)
-  (define-key evil-normal-state-map "sh" 'save-buffer)
-  (define-key evil-normal-state-map "so" 'dired-jump)
+  (define-key evil-normal-state-map "s" 'yq-s-map)
+  (define-key yq-s-map "k" 'yq/kill-this-buffer)
+  (define-key yq-s-map "K" 'projectile-kill-buffers)
+  (define-key yq-s-map "c" 'yq/delete-window)
+  (define-key yq-s-map "h" 'save-buffer)
+  (define-key yq-s-map "o" 'dired-jump)
   (define-key evil-normal-state-map (kbd "C-e") 'mwim-end-of-code-or-line)
   (define-key evil-normal-state-map (kbd "C-m") 'evil-jump-item)
   (define-key evil-visual-state-map (kbd "C-m") 'evil-jump-item)
@@ -158,6 +160,7 @@
   (spacemacs/set-leader-keys "T" nil)
   (spacemacs/set-leader-keys "e" nil)
   (spacemacs/set-leader-keys "b" nil)
+  (spacemacs/set-leader-keys "s" nil)
   (spacemacs/set-leader-keys "x" nil)
   (spacemacs/set-leader-keys "r" nil)
   (spacemacs/set-leader-keys "i" nil)

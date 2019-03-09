@@ -455,8 +455,8 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   :diminish smartparens-mode
   :config
   (smartparens-global-mode t)
-  (define-key evil-normal-state-map "sd" 'sp-kill-sexp)
-  (define-key evil-normal-state-map "s," 'sp-copy-sexp)
+  (define-key yq-s-map "d" 'sp-kill-sexp)
+  (define-key yq-s-map "," 'sp-copy-sexp)
   (use-package smartparens-config))
 
 (use-package ediff
@@ -561,7 +561,7 @@ _j_  js2      _T_     text   _f_  fundamental
     ("t" typescript-mode :exit t)
     ("f" fundamental-mode :exit t)
     ("q" hydra-keyboard-quit :exit t))
-  (define-key evil-normal-state-map (kbd "s <RET>") 'hydra-change-mode/body))
+  (define-key yq-s-map (kbd "<RET>") 'hydra-change-mode/body))
 
 (use-package ivy-xref
   :straight t

@@ -147,9 +147,23 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
   :init
   (yq/add-toggle lispy :mode lispy-mode)
   :config
-  (advice-add #'special-lispy-eval :before (lambda ()
-                                             (or (fboundp 'cider--make-overlay)
-                                                 (require 'cider))))
+  (advice-add
+   #'special-lispy-eval
+   :before (lambda ()
+             (or (fboundp 'cider--make-overlay)
+                 (require 'cider))))
+  (defhydra lh-knight ()
+    "knight"
+    ("j" lispy-knight-down)
+    ("k" lispy-knight-up)
+    ("r" evil-open-folds :exit t)
+    ("h" save-buffer :exit t)
+    ("l" (lambda (arg)
+           (interactive "p")
+           (backward-char)
+           (hs-hide-level arg)
+           (forward-char)) :exit t)
+    ("z" nil))
   (define-key lispy-mode-map (kbd "C-x C-6 q") #'lispy-describe-inline)
   (define-key lispy-mode-map (kbd "C-x C-6 w") #'lispy-arglist-inline)
   (evil-define-key 'insert lispy-mode-map (kbd "C-k") 'lispy-kill)
@@ -359,4 +373,5 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
      mark
      mark-toggle))
   :config
+  (lispyville--define-key 'normal "V" #'evil-visual-line)
   (lispy-define-key parinfer-mode-map "v" #'lispyville-toggle-mark-type))
