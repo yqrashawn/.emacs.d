@@ -194,6 +194,7 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
            pretty-parens  ; different paren styles for different modes.
            evil           ; If you use Evil.
            lispy          ; If you use Lispy. With this extension, you should install Lispy and do not enable lispy-mode directly.
+           lispyville
            smart-tab      ; C-b & C-f jump positions and smart shift with tab & S-tab.
            smart-yank))
   :config
@@ -373,5 +374,7 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
      mark
      mark-toggle))
   :config
+  ;; (advice-add #'lispyville-escape :after (defl (&optional arg) (parinfer--switch-to-indent-mode-1)))
   (lispyville--define-key 'normal "V" #'evil-visual-line)
+  (lispyville--define-key 'normal "\C-v" #'evil-visual-block)
   (lispy-define-key parinfer-mode-map "v" #'lispyville-toggle-mark-type))

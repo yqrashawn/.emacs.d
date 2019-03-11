@@ -1568,7 +1568,7 @@ Info-mode:
   :custom
   (highlight-indent-guides-method 'character)
   (highlight-indent-guides-character ?\|)
-  (highlight-indent-guides-responsive 'top)
+  (highlight-indent-guides-responsive nil)
   (highlight-indent-guides-delay 1))
 
 (use-package fill-column-indicator

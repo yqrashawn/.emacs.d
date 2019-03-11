@@ -651,6 +651,7 @@ When ARG is non-nil search in junk files."
   (customize-set-variable 'tabbar-scroll-left-button '(("") ""))
   (customize-set-variable 'tabbar-buffer-home-button '(("") ""))
   :config
+  (add-hook 'after-save-hook #'tabbar-display-update)
   (defun tabbar-buffer-list ()
     "Return the list of buffers to show in tabs.
 Exclude buffers whose name starts with a space, when they are not
@@ -768,10 +769,10 @@ Return a list of one element based on major mode."
   ;; (global-set-key (kbd "C-x C-9 k") #'+tabbar-switch-group-prevouse-line)
   ;; (global-set-key (kbd "C-M-S-s-j") #'+tabbar-switch-group-next-line)
   ;; (global-set-key (kbd "C-M-S-s-k") #'+tabbar-switch-group-prevouse-line)
-  (global-set-key (kbd "C-x 9 p") #'tabbar-backward-group)
-  (global-set-key (kbd "C-x 9 n") #'tabbar-forward-group)
-  (global-set-key (kbd "C-x 9 h") #'tabbar-backward-tab)
-  (global-set-key (kbd "C-x 9 l") #'+tabbar-forward-tab-or-ivy-done)
+  (global-set-key (kbd "C-x C-9 p") #'tabbar-backward-group)
+  (global-set-key (kbd "C-x C-9 n") #'tabbar-forward-group)
+  (global-set-key (kbd "C-x C-9 h") #'tabbar-backward-tab)
+  (global-set-key (kbd "C-x C-9 l") #'+tabbar-forward-tab-or-ivy-done)
   (global-set-key (kbd "C-M-S-s-p") #'tabbar-backward-group)
   (global-set-key (kbd "C-M-S-s-n") #'tabbar-forward-group)
   (global-set-key (kbd "C-M-S-s-h") #'tabbar-backward-tab)
