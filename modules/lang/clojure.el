@@ -257,6 +257,7 @@
 
   (add-hook 'cider-inspector-mode-hook 'visual-line-mode)
   (evilified-state-evilify cider-inspector-mode cider-inspector-mode-map
+    (kbd "M") 'evilmi-jump-items
     (kbd "L") 'cider-inspector-pop
     (kbd "n") 'cider-inspector-next-page
     (kbd "N") 'cider-inspector-prev-page
@@ -264,6 +265,7 @@
     (kbd "r") 'cider-inspector-refresh)
 
   (evilified-state-evilify cider-test-report-mode cider-test-report-mode-map
+    (kbd "M") 'evilmi-jump-items
     (kbd "C-j") 'cider-test-next-result
     (kbd "C-k") 'cider-test-previous-result
     (kbd "RET") 'cider-test-jump
@@ -343,6 +345,7 @@
 
 (use-package sayid
   :straight t
+  :disabled
   :commands (sayid-setup-package)
   :after (clojure-mode cider)
   :init
@@ -424,8 +427,7 @@
     (kbd "l") 'sayid-show-traced
     (kbd "h") 'sayid-traced-buf-show-help))
 
-(use-package 4clojure
-  :straight t)
+(use-package 4clojure :straight t)
 
 (defun ms/in-comment-p ()
   (nth 4 (syntax-ppss)))
