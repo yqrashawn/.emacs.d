@@ -472,28 +472,8 @@ If the universal prefix argument is used then kill the buffer too."
 (with-eval-after-load 'hi-lock
   (diminish 'hi-lock-mode))
 
-(use-package linum
-  :init
-  (progn
-    (setq linum-format "%4d")
-    (yq/add-toggle line-numbers :mode display-line-numbers-mode)
-    (spacemacs/set-leader-keys "tn" 'yq/toggle-line-numbers)
-    (defun spacemacs//linum-update-window-scale-fix (win)
-      "Fix linum for scaled text in the window WIN."
-      (when (display-multi-font-p)
-        (unless (boundp 'text-scale-mode-step)
-          (setq window-initial-margins (window-margins win)))
-        (set-window-margins win
-                            (ceiling (* (if (boundp 'text-scale-mode-step)
-                                            (expt text-scale-mode-step
-                                                  text-scale-mode-amount)
-                                          1)
-                                        (or (car (if (boundp 'window-initial-margins)
-                                                     window-initial-margins
-                                                   (window-margins win)))
-                                            1))))))
-    (advice-add #'linum-update-window
-                :after #'spacemacs//linum-update-window-scale-fix)))
+(yq/add-toggle line-numbers :mode display-line-numbers-mode)
+(spacemacs/set-leader-keys "tn" 'yq/toggle-line-numbers)
 
 (use-package savehist
   :init
@@ -520,11 +500,6 @@ If the universal prefix argument is used then kill the buffer too."
   (add-hook 'delete-terminal-functions 'recentf-save-list)
   (recentf-mode 1)
   :config
-  ;; (defun yq/straight-recentf-push (old-func filename)
-  ;;   (if (string-match "straight/build" filename)
-  ;;       (old-func (replace-match "straight/repos" nil nil t))
-  ;;     (old-func filename)))
-  ;; (advice-add #'recentf-push :around 'yq/straight-recentf-push)
   (setq recentf-max-saved-items 1000)
   (with-eval-after-load 'recentf
     (run-at-time nil (* 5 60) 'recentf-save-list)
@@ -926,8 +901,8 @@ FILENAME is deleted using `spacemacs/delete-file' function.."
     (yas-expand-snippet (buffer-string) (point-min) (point-max)))
   (define-auto-insert "\\.html?$" "template.html")
   (define-auto-insert "\\.\\(js\\|jsx\\)$" ["template.js" autoinsert-yas-expand])
-  (define-auto-insert "\\.\\(ts\\|tsx\\)$" ["template.ts" autoinsert-yas-expand]))
-  ;; (define-auto-insert "\\.el$" ["template.el" autoinsert-yas-expand]))
+  (define-auto-insert "\\.\\(ts\\|tsx\\)$" ["template.ts" autoinsert-yas-expand])
+  (define-auto-insert "\\.el$" ["template.el" autoinsert-yas-expand]))
 
 ;; font scale with command key
 (defun spacemacs/scale-up-or-down-font-size (direction)
