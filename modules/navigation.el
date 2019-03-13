@@ -8,16 +8,6 @@
   ;; (add-to-list 'ivy-re-builders-alist '(t . spacemacs/ivy--regex-plus))
   :config
   ;; docs: https://oremacs.com/swiper/#completion-styles
-  ;; (setq ivy-re-builders-alist
-  ;;       '((ivy-switch-buffer . ivy--regex-plus)
-  ;;         (counsel-find-file . ivy--regex-plus)
-  ;;         (counsel-recentf . ivy--regex-plus)
-  ;;         (counsel-rg . ivy--regex-plus)
-  ;;         (counsel-describe-function . ivy--regex-plus)
-  ;;         (counsel-describe-variable . ivy--regex-plus)
-  ;;         (describe-keymap . ivy--regex-plus)
-  ;;         (swiper . ivy--regex-plus)
-  ;;         (t . ivy--regex-fuzzy)))
   (setq ivy-re-builders-alist
         '((magit-log-other . ivy--regex-fuzzy)
           (magit-file-checkout . ivy--regex-fuzzy)
@@ -25,6 +15,8 @@
           (magit-reset-index . ivy--regex-fuzzy)
           (magit-reset-soft . ivy--regex-fuzzy)
           (magit-reset-hard . ivy--regex-fuzzy)
+          (magit-log-read-revs . ivy--regex-fuzzy)
+          (magit-log-current . ivy--regex-fuzzy)
           (projector-run-command-buffer-prompt . ivy--regex-fuzzy)
           (spacemacs/counsel-search . spacemacs/ivy--regex-plus)
           (spacemacs/search-auto . spacemacs/ivy--regex-plus)
@@ -446,8 +438,8 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
     "l" 'dired-find-file
     "s" 'nil
     "sk" 'yq/kill-this-buffer
-    ;; "sm" #'counsel-fzf
-    "sm" #'projectile-find-file-dwim
+    "sm" #'counsel-fzf
+    ;; "sm" #'projectile-find-file-dwim
     "sj" #'counsel-recentf
     "sJ" #'projectile-recentf
     "sB" #'projectile-switch-to-buffer
@@ -962,4 +954,3 @@ first."))
 ;;          ("C-x 7 w l" . 'emacs-chunkwm-windmove-right)
 ;;          ("C-x 7 w j" . 'emacs-chunkwm-windmove-down)
 ;;          ("C-x 7 w k" . 'emacs-chunkwm-windmove-up)))
-

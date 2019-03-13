@@ -3,6 +3,7 @@
 
 (use-package ivy-rich
   :straight t
+  :disabled
   :after ivy
   :init (ivy-rich-mode 1))
 

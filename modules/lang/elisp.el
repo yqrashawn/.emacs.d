@@ -357,7 +357,7 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
   :commands (lispyville-mode)
   :hook (parinfer-mode . lispyville-mode)
   :custom
-  (lispyville-motions-put-into-special t)
+  (lispyville-motions-put-into-special nil)
   (lispyville-key-theme
    '(operators
      c-w
@@ -377,4 +377,8 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
   ;; (advice-add #'lispyville-escape :after (defl (&optional arg) (parinfer--switch-to-indent-mode-1)))
   (lispyville--define-key 'normal "V" #'evil-visual-line)
   (lispyville--define-key 'normal "\C-v" #'evil-visual-block)
+  (lispyville--define-key 'normal "{" #'lispyville-previous-opening)
+  (lispyville--define-key 'normal "}" #'lispyville-next-opening)
+  (lispyville--define-key 'normal "[" #'lispyville-previous-closing)
+  (lispyville--define-key 'normal "]" #'lispyville-next-closing)
   (lispy-define-key parinfer-mode-map "v" #'lispyville-toggle-mark-type))

@@ -48,9 +48,9 @@
   :straight t
   :after cider
   :init
-  (customize-set-variable 'cider-default-repl-command 'lein)
+  ;; (customize-set-variable 'cider-default-repl-command 'lein)
   (spacemacs|add-company-backends
-    :backends (company-capf company-tabnine)
+    :backends (company-capf)
     :modes
     cider-mode
     cider-repl-mode
@@ -103,6 +103,8 @@
   (add-hook 'clojurec-mode-hook #'spacemacs//init-jump-handlers-clojurec-mode)
   (add-hook 'cider-repl-mode-hook #'spacemacs//init-jump-handlers-cider-repl-mode)
   :config
+  (add-hook 'clojure-mode-hook (defl () (setq-mode-local 'clojure-mode company-idle-delay 0.5)))
+
   ;; TODO: having this work for cider-macroexpansion-mode would be nice,
   ;;       but the problem is that it uses clojure-mode as its major-mode
   (define-key cider-repl-mode-map (kbd "s-k") 'cider-quit)
@@ -212,7 +214,7 @@
   (evil-define-key 'insert cider-repl-mode-map (kbd "C-n" ) 'cider-repl-next-input)
   (evil-define-key 'insert cider-repl-mode-map (kbd "C-p" ) 'cider-repl-previous-input)
   (evil-define-key 'insert cider-repl-mode-map (kbd "<C-return>" ) 'newline-and-indent)
-  :config
+
   ;; add support for golden-ratio
   (with-eval-after-load 'golden-ratio
     (push 'cider-popup-buffer-quit-function golden-ratio-extra-commands))
@@ -285,7 +287,11 @@
     (clojure/fancify-symbols 'cider-clojure-interaction-mode))
 
   (defadvice cider-jump-to-var (before add-evil-jump activate)
-    (evil-set-jump)))
+    (evil-set-jump))
+  (cider-register-cljs-repl-type 're-frame-template
+                                 "(do (require 'figwheel-sidecar.repl-api)
+                                              (figwheel-sidecar.repl-api/start-figwheel!)
+                                              (figwheel-sidecar.repl-api/cljs-repl))"))
 
 (use-package clj-refactor
   :straight t

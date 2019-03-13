@@ -926,9 +926,10 @@ FILENAME is deleted using `spacemacs/delete-file' function.."
     (yas-expand-snippet (buffer-string) (point-min) (point-max)))
   (define-auto-insert "\\.html?$" "template.html")
   (define-auto-insert "\\.\\(js\\|jsx\\)$" ["template.js" autoinsert-yas-expand])
-  (define-auto-insert "\\.\\(ts\\|tsx\\)$" ["template.ts" autoinsert-yas-expand])
-  (define-auto-insert "\\.el$" ["template.el" autoinsert-yas-expand]))
+  (define-auto-insert "\\.\\(ts\\|tsx\\)$" ["template.ts" autoinsert-yas-expand]))
+  ;; (define-auto-insert "\\.el$" ["template.el" autoinsert-yas-expand]))
 
+;; font scale with command key
 (defun spacemacs/scale-up-or-down-font-size (direction)
   "Scale the font. If DIRECTION is positive or zero the font is scaled up,
 otherwise it is scaled down."
@@ -939,22 +940,18 @@ otherwise it is scaled down."
       (if (< direction 0)
           (text-scale-decrease scale)
         (text-scale-increase scale)))))
-
 (defun spacemacs/scale-up-font ()
   "Scale up the font."
   (interactive)
   (spacemacs/scale-up-or-down-font-size 1))
-
 (defun spacemacs/scale-down-font ()
   "Scale up the font."
   (interactive)
   (spacemacs/scale-up-or-down-font-size -1))
-
 (defun spacemacs/reset-font-size ()
   "Reset the font size."
   (interactive)
   (spacemacs/scale-up-or-down-font-size 0))
-
 (global-set-key (kbd "s-=") 'spacemacs/scale-up-font)
 (global-set-key (kbd "s--") 'spacemacs/scale-down-font)
 
@@ -1008,11 +1005,6 @@ otherwise it is scaled down."
 ;;fast switching between three buffers
 (define-key evil-normal-state-map (kbd "<C-tab>") 'switch-to-second-most-recent-buffer)
 (define-key evil-normal-state-map (kbd "<C-s-tab>") 'switch-to-third-most-recent-buffer)
-
-;; generate image of marked region
-;; (use-package carbon-now-sh
-;;   :commands (carbon-now-sh)
-;;   :straight (:host github :repo "veelenga/carbon-now-sh.el"))
 
 ;; If you tramp is hanging, you can uncomment below line.
 ;; (setq tramp-ssh-controlmaster-options "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no")
