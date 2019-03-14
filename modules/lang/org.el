@@ -52,6 +52,8 @@ Inserted by installing org-mode or when a release is made."
                "HEAD")))))
 
 (provide 'org-version)
+(straight-use-package 'org-plus-contrib)
+(straight-use-package 'org)
 
 (use-package org
   :straight org-plus-contrib

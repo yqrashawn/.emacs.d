@@ -40,6 +40,7 @@
 (use-package evil
   :straight t
   :init
+  (setq-default evil-symbol-word-search t)
   (define-prefix-command 'yq-s-map)
   (setq local-function-key-map (delq '(kp-tab . [9]) local-function-key-map))
   (setq evil-want-find-undo t)

@@ -622,7 +622,8 @@ When ARG is non-nil search in junk files."
      'tabbar-modified nil
      :background (face-attribute 'default :background)
      :foreground (face-attribute 'error :foreground)
-     :box '(:line-width -1 :style pressed-button))
+     :box '(:line-width -1 :style pressed-button)
+     :weight 'unspecified)
     (set-face-attribute
      'tabbar-selected-modified nil
      :background (face-attribute 'default :background)

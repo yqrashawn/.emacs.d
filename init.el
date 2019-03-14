@@ -28,7 +28,7 @@
   (defvar yq-emacs-dotfile-dir (concat user-emacs-directory "init.el"))
   (setq url-configuration-directory (concat spacemacs-cache-directory "url/"))
   (setq custom-file (concat yq-emacs-cache-dir ".custom-settings"))
-  (load-file custom-file)
+  (load custom-file)
 
   (setq url-proxy-services
         '(("http" . "127.0.0.1:6152")

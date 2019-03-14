@@ -219,7 +219,7 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
 (use-package edebug
   :commands (edebug-defun)
   :init
-
+  (setq edebug-inhibit-emacs-lisp-mode-bindings t)
   (defun spacemacs/edebug-instrument-defun-on ()
     "Toggle on instrumentalisation for the function under `defun'."
     (interactive)
