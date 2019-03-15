@@ -287,7 +287,7 @@ file stored in the cache directory and `nil' to disable auto-saving.")
         (make-directory dir t))))
   (push #'find-file-maybe-make-directories find-file-not-found-functions))
 
-(use-package simple
+(use-feature simple
   :custom
   (save-interprogram-paste-before-kill t)
   (next-error-recenter t)
@@ -298,7 +298,7 @@ file stored in the cache directory and `nil' to disable auto-saving.")
   (:map minibuffer-local-map
         ("<escape>"  . abort-recursive-edit))
   :hook
-  ((org-mode markdown-mode git-commit-mode) . auto-fill-mode)
+  ((org-mode markdown-mode git-commit-mode) . turn-on-auto-fill)
   :config
   (defun goto-line-with-linum-mode ()
     (interactive)
@@ -687,7 +687,7 @@ If the universal prefix argument is used then will the windows too."
 (spacemacs/set-leader-keys "tL" 'yq/toggle-hl-line)
 (spacemacs/set-leader-keys "Ts" 'load-theme)
 
-(setq comment-auto-fill-only-comments t)
+(setq comment-auto-fill-only-comments nil)
 (yq/add-toggle auto-fill :mode auto-fill-mode)
 (spacemacs/set-leader-keys "tF" 'yq/toggle-auto-fill)
 
