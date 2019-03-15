@@ -30,6 +30,10 @@
   :straight t
   :diminish clojure-mode
   :diminish clojurescript-mode
+  :custom
+  (clojure-align-forms-automatically t)
+  (clojure-align-reader-conditionals t)
+  (clojure-defun-indents '(fn-traced))
   :init
   (add-to-list 'auto-mode-alist '("\\.boot\\'" . clojure-mode))
   ;; This regexp matches shebang expressions like `#!/usr/bin/env boot'
@@ -46,7 +50,16 @@
 (use-package cider
   ;; :straight (:host github :repo "clojure-emacs/cider")
   :straight t
-  :after cider
+  :custom
+  (cider-completion-annotations-include-ns 'always)
+  (cider-connection-message-fn 'cider-random-tip)
+  (cider-eldoc-display-context-dependent-info t)
+  ;; (cider-print-fn 'fipp)
+  (cider-print-fn 'puget)
+  (cider-special-mode-truncate-lines nil)
+  (cider-debug-display-locals t)
+  (cider-repl-wrap-history t)
+  (cider-stacktrace-default-filters '(tooling dup java))
   :init
   ;; (customize-set-variable 'cider-default-repl-command 'lein)
   (spacemacs|add-company-backends
