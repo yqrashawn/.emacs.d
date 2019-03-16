@@ -250,6 +250,7 @@
   (evil-define-key 'visual evil-surround-mode-map "s" 'evil-surround-region)
   (evil-define-key 'visual evil-surround-mode-map "S" 'evil-substitute))
 
+(straight-use-package 'embrace)
 (use-package evil-embrace
   :straight t
   :init
