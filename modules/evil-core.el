@@ -377,4 +377,4 @@
   (global-set-key (kbd "C-c -") #'evil-numbers/dec-at-pt))
 
 (use-package evil-textobj-syntax
-  :straight t)
+  :straight (:host github :repo "laishulu/evil-textobj-syntax"))
