@@ -166,7 +166,6 @@ has been changed to THEME."
            (+propertize-tabbar-group-for-modeline group (string= group tb-cur-group))) tb-groups))))
   (defun +propertize-tabbar-group-for-modeline (group &optional cur-group-p)
     (let ((face (if cur-group-p 'doom-modeline-evil-emacs-state 'mode-line-emphasis))
-          (group (if cur-group-p (concat "[" group "]") group))
           (active (doom-modeline--active)))
       (concat
        " "
