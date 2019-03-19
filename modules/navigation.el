@@ -190,6 +190,7 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   (global-set-key (kbd "C-SPC") 'swiper)
   (global-set-key (kbd "^@") 'swiper)
   (global-set-key (kbd "C-S-SPC") 'spacemacs/swiper-region-or-symbol)
+  (define-key evil-normal-state-map "gN" 'spacemacs/swiper-region-or-symbol)
   (spacemacs/set-leader-keys "fes" (lambda () (interactive) (find-file-existing "~/.ssh/config") (swiper))))
 
 (use-package counsel
@@ -681,7 +682,7 @@ Return a list of one element based on major mode."
       ((eq major-mode 'org-agenda-mode) "Plan")
 
       ;; Clojure
-      ((memq major-mode '(clojure-mode)) "CLJ")
+      ;; ((memq major-mode '(clojure-mode clojurescript-mode)) "CLJ")
 
       ;; Projects
       ((and buffer-file-name (string-match-p "\/workspace\/" buffer-file-name) (projectile-project-name)) (projectile-project-name))
