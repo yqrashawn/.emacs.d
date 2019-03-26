@@ -1562,7 +1562,6 @@ Info-mode:
 
 (use-package ix
   :straight t
-  :disabled
   :commands (ix))
 
 (use-package webpaste
