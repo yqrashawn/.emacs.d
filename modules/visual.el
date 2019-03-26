@@ -179,5 +179,6 @@ has been changed to THEME."
 
 (use-package vim-empty-lines-mode
   :straight (:host github :repo "jmickelin/vim-empty-lines-mode")
+  :disabled
   :init
   (global-vim-empty-lines-mode))

@@ -1,9 +1,15 @@
+(setq yq-quick-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l ?\; ?q ?w ?e ?r
+                         ?t ?y ?u ?i ?o ?p ?z ?x ?c ?v ?b ?n ?m
+                         ?A ?S ?D ?F ?G ?H ?J ?K ?L ?Q ?W ?E ?R
+                         ?T ?Y ?U ?I ?O ?P ?Z ?X ?C ?V ?B ?N ?M))
 (use-package ivy
   :straight (:host github :repo "abo-abo/swiper" :branch "master"
                    :files
                    (:defaults (:exclude "swiper.el" "counsel.el" "ivy-hydra.el") "doc/ivy-help.org")
                    :upstream (:host github :repo "abo-abo/swiper"))
   :diminish ivy-mode
+  :custom
+  (ivy-magic-tilde . nil)
   ;; :init
   ;; (add-to-list 'ivy-re-builders-alist '(t . spacemacs/ivy--regex-plus))
   :config
@@ -94,7 +100,18 @@
   (evil-set-initial-state 'ivy-occur-grep-mode 'normal)
   (evil-make-overriding-map ivy-occur-mode-map 'normal)
   (define-key yq-s-map "b" 'ivy-switch-buffer)
-  (ido-mode -1))
+  (ido-mode -1)
+  (defun yq-ivy-format-function (cands)
+    "Transform CANDS into a string for minibuffer."
+    ;; (--map-indexed (format "%s %s" it-index it) '("a" "b"))
+    (let ((cands (--map-indexed (format "%s %s" (char-to-string (elt yq-quick-keys it-index)) it) cands)))
+      (ivy--format-function-generic
+       (lambda (str)
+         (ivy--add-face str 'ivy-current-match))
+       #'identity
+       cands
+       "\n")))
+  (setq ivy-format-function 'yq-ivy-format-function))
 
 (use-package ivy-hydra
   :straight t
@@ -825,10 +842,7 @@ Return a list of one element based on major mode."
       (tabbar-display-update)))
   (global-set-key (kbd "C-x C-9 [") 'tabbar-move-current-tab-one-place-left)
   (global-set-key (kbd "C-x C-9 ]") 'tabbar-move-current-tab-one-place-right)
-  (setq +tabbar-tab-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l ?\; ?q ?w ?e ?r
-                              ?t ?y ?u ?i ?o ?p ?z ?x ?c ?v ?b ?n ?m
-                              ?A ?S ?D ?F ?G ?H ?J ?K ?L ?Q ?W ?E ?R
-                              ?T ?Y ?U ?I ?O ?P ?Z ?X ?C ?V ?B ?N ?M))
+  (setq +tabbar-tab-keys yq-quick-keys)
   (defun +tabbar-jump (&optional key)
     (interactive)
     (let* ((key (or key (read-char "key: " t))))
