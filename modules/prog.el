@@ -189,6 +189,8 @@ Available PROPS:
   (defvar yq//company-numbers '(59 ?a ?s ?d ?f ?g ?h ?j ?k ?l))
   (defun yq//company-format-numbers (numbered)
     (format " %s" (char-to-string (nth (mod numbered 10) yq//company-numbers))))
+
+  (global-company-mode)
   :config
   (define-key company-active-map (kbd "C-x C-6 1") (kbd "M-1"))
   (define-key company-active-map (kbd "C-x C-6 2") (kbd "M-2"))
@@ -201,6 +203,35 @@ Available PROPS:
   (define-key company-active-map (kbd "C-x C-6 9") (kbd "M-9"))
   (define-key company-active-map (kbd "C-x C-6 0") (kbd "M-0"))
 
+    (defvar-local company-fci-mode-on-p nil)
+
+  (defun company-turn-off-fci (&rest ignore)
+    (when (boundp 'fci-mode)
+      (setq company-fci-mode-on-p fci-mode)
+      (when fci-mode (fci-mode -1))))
+
+  (defun company-maybe-turn-on-fci (&rest ignore)
+    (when company-fci-mode-on-p (fci-mode 1)))
+
+  (add-hook 'company-completion-started-hook 'company-turn-off-fci)
+  (add-hook 'company-completion-finished-hook 'company-maybe-turn-on-fci)
+  (add-hook 'company-completion-cancelled-hook 'company-maybe-turn-on-fci)
+
+  (define-key company-active-map [return] 'company-complete-selection)
+  (define-key company-active-map (kbd "RET") 'company-complete-selection)
+
+  (defun spacemacs//company-complete-common-or-cycle-backward ()
+    "Complete common prefix or cycle backward."
+    (interactive)
+    (company-complete-common-or-cycle -1))
+
+  (define-key company-active-map (kbd "TAB") 'company-complete-common-or-cycle)
+  (define-key company-active-map (kbd "<tab>") 'company-complete-common-or-cycle)
+  (define-key company-active-map (kbd "<S-tab>")
+    'spacemacs//company-complete-common-or-cycle-backward)
+  (define-key company-active-map (kbd "<backtab>")
+    'spacemacs//company-complete-common-or-cycle-backward)
+
   (setq company-show-numbers-function 'yq//company-format-numbers)
 
   (defun spacemacs//company-transformer-cancel (candidates)
@@ -210,20 +241,20 @@ Available PROPS:
   ;; lag
   ;; (setq company-transformers '(spacemacs//company-transformer-cancel company-sort-by-occurrence))
   (setq company-transformers '(spacemacs//company-transformer-cancel))
-  (add-to-list 'company-frontends #'company-tng-frontend)
-  (add-to-list 'company-frontends #'company-pseudo-tooltip-frontend)
-  (add-to-list 'company-frontends #'company-echo-metadata-frontend)
+  ;; (add-to-list 'company-frontends #'company-tng-frontend)
+  ;; (add-to-list 'company-frontends #'company-pseudo-tooltip-frontend)
+  ;; (add-to-list 'company-frontends #'company-echo-metadata-frontend)
   (define-key company-active-map (kbd "C-j") 'company-select-next)
   (define-key company-active-map (kbd "C-k") 'company-select-previous)
-  (evil-define-key 'insert company-active-map (kbd "C-j") 'company-select-next)
-  (evil-define-key 'insert company-active-map (kbd "C-k") 'company-select-previous)
   (define-key company-active-map (kbd "C-l") 'company-complete-selection)
   (define-key company-active-map (kbd "C-w") 'evil-delete-backward-word)
   (define-key company-active-map (kbd "C-d") 'company-show-location)
   (define-key company-active-map (kbd "C-m") 'newline-and-indent)
   (define-key company-active-map (kbd "C-r") 'company-show-doc-buffer)
-  (evil-define-key 'insert company-active-map (kbd "C-r") 'company-show-doc-buffer)
-  (add-hook 'after-init-hook 'global-company-mode))
+
+  (evil-define-key 'insert company-active-map (kbd "C-j") 'company-select-next)
+  (evil-define-key 'insert company-active-map (kbd "C-k") 'company-select-previous)
+  (evil-define-key 'insert company-active-map (kbd "C-r") 'company-show-doc-buffer))
 
 (use-package company-statistics
   :straight t
