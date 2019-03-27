@@ -114,7 +114,6 @@
   (setq ivy-format-function 'yq-ivy-format-function)
   (defun +ivy-select-index (&optional key)
     (interactive)
-    (print key)
     (let ((key (or key (read-char "key: " t))))
       (ivy-next-line (seq-position yq-quick-keys key))
       (ivy--exhibit)
