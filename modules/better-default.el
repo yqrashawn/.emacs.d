@@ -1586,3 +1586,6 @@ Info-mode:
           (define-key map (kbd "<") 'symbol-overlay-jump-first)
           (define-key map (kbd ">") 'symbol-overlay-jump-last)
           map)))
+
+;; use f5 as f1
+(define-key key-translation-map [f5] [f1])

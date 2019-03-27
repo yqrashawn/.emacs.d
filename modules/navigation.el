@@ -111,7 +111,25 @@
        #'identity
        cands
        "\n")))
-  (setq ivy-format-function 'yq-ivy-format-function))
+  (setq ivy-format-function 'yq-ivy-format-function)
+  (defun +ivy-select-index (&optional key)
+    (interactive)
+    (print key)
+    (let ((key (or key (read-char "key: " t))))
+      (ivy-next-line (seq-position yq-quick-keys key))
+      (ivy--exhibit)
+      (ivy-alt-done)))
+  (define-key ivy-minibuffer-map (kbd "C-x C-6 1") (lambda () (interactive) (+ivy-select-index ?a)))
+  (define-key ivy-minibuffer-map (kbd "C-x C-6 2") (lambda () (interactive) (+ivy-select-index ?s)))
+  (define-key ivy-minibuffer-map (kbd "C-x C-6 3") (lambda () (interactive) (+ivy-select-index ?d)))
+  (define-key ivy-minibuffer-map (kbd "C-x C-6 4") (lambda () (interactive) (+ivy-select-index ?f)))
+  (define-key ivy-minibuffer-map (kbd "C-x C-6 5") (lambda () (interactive) (+ivy-select-index ?g)))
+  (define-key ivy-minibuffer-map (kbd "C-x C-6 6") (lambda () (interactive) (+ivy-select-index ?h)))
+  (define-key ivy-minibuffer-map (kbd "C-x C-6 7") (lambda () (interactive) (+ivy-select-index ?j)))
+  (define-key ivy-minibuffer-map (kbd "C-x C-6 8") (lambda () (interactive) (+ivy-select-index ?k)))
+  (define-key ivy-minibuffer-map (kbd "C-x C-6 9") (lambda () (interactive) (+ivy-select-index ?l)))
+  (define-key ivy-minibuffer-map (kbd "C-x C-6 0") (lambda () (interactive) (+ivy-select-index 59))))
+
 
 (use-package ivy-hydra
   :straight t
@@ -843,12 +861,14 @@ Return a list of one element based on major mode."
   (global-set-key (kbd "C-x C-9 [") 'tabbar-move-current-tab-one-place-left)
   (global-set-key (kbd "C-x C-9 ]") 'tabbar-move-current-tab-one-place-right)
   (setq +tabbar-tab-keys yq-quick-keys)
-  (defun +tabbar-jump (&optional key)
+  (defun +tabbar-or-ivy-jump (&optional key)
     (interactive)
     (let* ((key (or key (read-char "key: " t))))
-      (tabbar-buffer-select-tab
-       t (nth (seq-position +tabbar-tab-keys key)
-              (tabbar-view tabbar-current-tabset)))))
+      (if (minibufferp)
+          (+ivy-select-index key)
+        (tabbar-buffer-select-tab
+         t (nth (seq-position +tabbar-tab-keys key)
+                (tabbar-view tabbar-current-tabset))))))
   (defun tabbar-buffer-tab-label (tab)
     "Return a label for TAB.
 That is, a string used to represent it on the tab bar."
@@ -882,16 +902,16 @@ That is, a string used to represent it on the tab bar."
         (when (not (eq (car tab) (current-buffer))) (car tab)))
       (tabbar-tabs tabbar-current-tabset))))
   (spacemacs/set-leader-keys "bd" '+tabbar-kill-other-buffers-in-current-group)
-  (define-key tabbar-mode-map (kbd "C-x C-6 1") (lambda () (interactive) (+tabbar-jump ?a)))
-  (define-key tabbar-mode-map (kbd "C-x C-6 2") (lambda () (interactive) (+tabbar-jump ?s)))
-  (define-key tabbar-mode-map (kbd "C-x C-6 3") (lambda () (interactive) (+tabbar-jump ?d)))
-  (define-key tabbar-mode-map (kbd "C-x C-6 4") (lambda () (interactive) (+tabbar-jump ?f)))
-  (define-key tabbar-mode-map (kbd "C-x C-6 5") (lambda () (interactive) (+tabbar-jump ?g)))
-  (define-key tabbar-mode-map (kbd "C-x C-6 6") (lambda () (interactive) (+tabbar-jump ?h)))
-  (define-key tabbar-mode-map (kbd "C-x C-6 7") (lambda () (interactive) (+tabbar-jump ?j)))
-  (define-key tabbar-mode-map (kbd "C-x C-6 8") (lambda () (interactive) (+tabbar-jump ?k)))
-  (define-key tabbar-mode-map (kbd "C-x C-6 9") (lambda () (interactive) (+tabbar-jump ?l)))
-  (define-key tabbar-mode-map (kbd "C-x C-6 0") (lambda () (interactive) (+tabbar-jump 59)))
+  (define-key tabbar-mode-map (kbd "C-x C-6 1") (lambda () (interactive) (+tabbar-or-ivy-jump ?a)))
+  (define-key tabbar-mode-map (kbd "C-x C-6 2") (lambda () (interactive) (+tabbar-or-ivy-jump ?s)))
+  (define-key tabbar-mode-map (kbd "C-x C-6 3") (lambda () (interactive) (+tabbar-or-ivy-jump ?d)))
+  (define-key tabbar-mode-map (kbd "C-x C-6 4") (lambda () (interactive) (+tabbar-or-ivy-jump ?f)))
+  (define-key tabbar-mode-map (kbd "C-x C-6 5") (lambda () (interactive) (+tabbar-or-ivy-jump ?g)))
+  (define-key tabbar-mode-map (kbd "C-x C-6 6") (lambda () (interactive) (+tabbar-or-ivy-jump ?h)))
+  (define-key tabbar-mode-map (kbd "C-x C-6 7") (lambda () (interactive) (+tabbar-or-ivy-jump ?j)))
+  (define-key tabbar-mode-map (kbd "C-x C-6 8") (lambda () (interactive) (+tabbar-or-ivy-jump ?k)))
+  (define-key tabbar-mode-map (kbd "C-x C-6 9") (lambda () (interactive) (+tabbar-or-ivy-jump ?l)))
+  (define-key tabbar-mode-map (kbd "C-x C-6 0") (lambda () (interactive) (+tabbar-or-ivy-jump 59)))
 
   ;; disable tabbar track killed buffer
   (defun tabbar-buffer-track-killed ()
