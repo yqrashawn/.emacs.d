@@ -105,3 +105,6 @@
   :config
   (push 'company-lsp company-backends))
 
+(use-package sqlformat
+  :straight t
+  :hook (sql-mode . sqlformat-on-save-mode))

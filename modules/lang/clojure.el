@@ -100,7 +100,7 @@
         cider-repl-history-file (concat spacemacs-cache-directory "cider-repl-history")
         nrepl-hide-special-buffers t
         cider-eldoc-display-context-dependent-info t
-        cider-pprint-fn 'fipp)
+        cider-print-fn 'puget)
   (add-hook 'clojure-mode-hook 'cider-mode)
   (add-hook 'clojure-mode-hook #'rainbow-delimiters-mode)
   (dolist (x '(spacemacs-jump-handlers-clojure-mode
@@ -116,7 +116,7 @@
   (add-hook 'clojurec-mode-hook #'spacemacs//init-jump-handlers-clojurec-mode)
   (add-hook 'cider-repl-mode-hook #'spacemacs//init-jump-handlers-cider-repl-mode)
   :config
-  (add-hook 'clojure-mode-hook (defl () (setq-mode-local clojure-mode company-idle-delay 0.5)))
+  (add-hook 'clojure-mode-hook (defl () (setq-mode-local clojure-mode company-idle-delay 0.2)))
 
   ;; TODO: having this work for cider-macroexpansion-mode would be nice,
   ;;       but the problem is that it uses clojure-mode as its major-mode
