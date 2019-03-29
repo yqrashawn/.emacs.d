@@ -188,7 +188,6 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
   :init
   (defun +parinfer-hs-toggle-folding ()
     (interactive)
-    (print company-my-keymap)
     (if company-my-keymap
         (company-select-previous)
       (progn
