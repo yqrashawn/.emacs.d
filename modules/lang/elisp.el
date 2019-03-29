@@ -166,7 +166,7 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
     ("z" nil))
   (define-key lispy-mode-map (kbd "C-x C-6 q") #'lispy-describe-inline)
   (define-key lispy-mode-map (kbd "C-x C-6 w") #'lispy-arglist-inline)
-  (evil-define-key 'insert lispy-mode-map (kbd "C-k") 'lispy-kill)
+  ;; (evil-define-key 'insert lispy-mode-map (kbd "C-k") 'lispy-kill)
   (evil-define-key 'insert lispy-mode-map (kbd "C-d") 'lispy-delete)
   (evil-define-key 'insert lispy-mode-map (kbd "C-r") 'undo-tree-redo)
   (evil-define-key 'insert lispy-mode-map (kbd "C-e") 'lispy-move-end-of-line)
@@ -186,6 +186,14 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
          (lisp-mode . parinfer-mode))
   :commands (parinfer-mode parinfer-mode-enable parinfer-toggle-mode)
   :init
+  (defun +parinfer-hs-toggle-folding ()
+    (interactive)
+    (print company-my-keymap)
+    (if company-my-keymap
+        (company-select-previous)
+      (progn
+        (hs-toggle-hiding)
+        (backward-char))))
   (setq parinfer-lighters '(" Par:I" . " Par:P"))
   (setq parinfer-display-error t)
   (setq parinfer-indent-mode-confirm nil)
@@ -198,9 +206,11 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
            smart-tab      ; C-b & C-f jump positions and smart shift with tab & S-tab.
            smart-yank))
   :config
+  (evil-define-key 'insert parinfer-mode-map (kbd "C-k") '+parinfer-hs-toggle-folding)
+  (define-key parinfer-mode-map (kbd "C-k") '+parinfer-hs-toggle-folding)
   (define-key parinfer-mode-map (kbd "C-x C-6 q") #'lispy-describe-inline)
   (define-key parinfer-mode-map (kbd "C-x C-6 w") #'lispy-arglist-inline)
-  (define-key parinfer-mode-map (kbd "C-k") #'lispy-kill)
+  ;; (define-key parinfer-mode-map (kbd "C-k") #'lispy-kill)
   (define-key parinfer-mode-map (kbd "C-d") #'lispy-delete)
   (define-key parinfer-mode-map (kbd "C-d") #'lispy-delete)
   (define-key parinfer-mode-map (kbd "C-a") #'lispy-move-beginning-of-line)

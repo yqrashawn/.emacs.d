@@ -203,7 +203,7 @@ Available PROPS:
   (define-key company-active-map (kbd "C-x C-6 9") (kbd "M-9"))
   (define-key company-active-map (kbd "C-x C-6 0") (kbd "M-0"))
 
-    (defvar-local company-fci-mode-on-p nil)
+  (defvar-local company-fci-mode-on-p nil)
 
   (defun company-turn-off-fci (&rest ignore)
     (when (boundp 'fci-mode)
