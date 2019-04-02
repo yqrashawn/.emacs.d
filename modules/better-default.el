@@ -69,7 +69,6 @@ file stored in the cache directory and `nil' to disable auto-saving.")
 
 (use-package dash
   :straight t
-  :defer t
   :config (dash-enable-font-lock))
 
 (use-package s

@@ -494,6 +494,15 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   :init
   (evil-define-key 'normal dired-mode-map "F" 'fd-dired)
   (define-key yq-s-map "8" 'fd-dired))
+(setq-default dired-omit-files "^\\.?#\\|^\\.$\\|^\\.\\.$")
+(use-feature dired-x
+  :hook (dired-mode . dired-omit-mode)
+  :commands (dired-jump
+             dired-jump-other-window
+             dired-omit-mode)
+  :config
+  (setq dired-omit-files
+        (concat dired-omit-files "\\|^\\.DS_Store$\\|^__MACOSX$\\|^\\.localized$")))
 (use-package dired+
   :straight t
   :init
@@ -508,14 +517,6 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
 (use-package dired-filter
   :straight t
   :hook (dired-mode . dired-filter-mode))
-(use-package dired-x
-  :hook (dired-mode . dired-omit-mode)
-  :commands (dired-jump
-             dired-jump-other-window
-             dired-omit-mode)
-  :config
-  (setq dired-omit-files
-        (concat dired-omit-files "\\|^\\.DS_Store$\\|^__MACOSX$\\|^\\.localized$")))
 
 (defun yq/find-org|gtd () (interactive) (find-file "~/Dropbox/ORG/gtd.org"))
 (defun yq/find-org|project () (interactive) (find-file "~/Dropbox/ORG/project.org"))
