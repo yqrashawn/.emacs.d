@@ -91,8 +91,18 @@
   :hook (typescript-mode . prettier-js-mode)
   :init
   (yq/add-toggle prettier-js :mode prettier-js-mode)
-  (evil-define-key 'normal js2-mode-map (kbd ",=") 'prettier-js)
-  (evil-define-key 'normal js2-mode-map ",tp" 'yq/toggle-prettier-js))
+  (with-eval-after-load #'js2-mode
+    (spacemacs/set-leader-keys-for-major-mode 'js2-mode "=" 'prettier-js)
+    (evil-define-key 'normal js2-mode-map (kbd ",=") #'prettier-js)
+    (evil-define-key 'normal js2-mode-map ",tp" 'yq/toggle-prettier-js))
+  (with-eval-after-load #'rjsx-mode
+    (spacemacs/set-leader-keys-for-major-mode 'rjsx-mode "=" 'prettier-js)
+    (evil-define-key 'normal rjsx-mode-map (kbd ",=") #'prettier-js)
+    (evil-define-key 'normal rjsx-mode-map ",tp" 'yq/toggle-prettier-js))
+  (with-eval-after-load #'typescript-mode
+    (spacemacs/set-leader-keys-for-major-mode 'typescript-mode "=" 'prettier-js)
+    (evil-define-key 'normal typescript-mode-map (kbd ",=") #'prettier-js)
+    (evil-define-key 'normal typescript-mode-map ",tp" 'yq/toggle-prettier-js)))
 
 (use-package rjsx-mode
   :straight t
@@ -107,9 +117,8 @@
       (beginning-of-line)
       (if (looking-at-p "^ +\/?> *$")
           (delete-char sgml-basic-offset))))
-  (evil-define-key 'insert rjsx-mode-map (kbd "C-d") 'rjsx-delete-creates-full-tag
-    (spacemacs/set-leader-keys-for-major-mode 'rjsx-mode "=" 'prettier-js)
-    (spacemacs/set-leader-keys-for-major-mode 'rjsx-mode "m" 'js2-mode)))
+  (evil-define-key 'insert rjsx-mode-map (kbd "C-d") 'rjsx-delete-creates-full-tag)
+  (spacemacs/set-leader-keys-for-major-mode 'rjsx-mode "m" 'js2-mode))
 
 (use-package js2-refactor
   :straight t

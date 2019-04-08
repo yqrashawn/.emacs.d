@@ -1588,3 +1588,7 @@ Info-mode:
 
 ;; use f5 as f1
 (define-key key-translation-map [f5] [f1])
+
+(use-package edit-indirect
+  :straight t
+  :commands (edit-indirect-region))
