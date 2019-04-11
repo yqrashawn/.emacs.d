@@ -221,8 +221,9 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
                    :upstream (:host github :repo "abo-abo/swiper"))
   :config
   ;; (define-key yq-s-map (kbd "n") 'spacemacs/swiper-all-region-or-symbol)
-  (global-set-key (kbd "C-SPC") 'swiper)
-  (global-set-key (kbd "^@") 'swiper)
+  (global-set-key (kbd "C-SPC") #'counsel-grep-or-swiper)
+  (global-set-key (kbd "^@") #'counsel-grep-or-swiper)
+  (global-set-key (kbd "C-s") #'swiper-isearch)
   (global-set-key (kbd "C-S-SPC") 'spacemacs/swiper-region-or-symbol)
   (define-key evil-normal-state-map "gN" 'spacemacs/swiper-region-or-symbol)
   (spacemacs/set-leader-keys "fes" (lambda () (interactive) (find-file-existing "~/.ssh/config") (swiper))))
@@ -233,6 +234,8 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
                    :upstream (:host github :repo "abo-abo/swiper"))
   :diminish counsel-mode
   :config
+  (setq counsel-grep-base-command
+        "rg -i -M 120 --no-heading --line-number --color never %s %s")
   (and (fboundp 'counsel--elisp-to-pcre) (defalias 'counsel-unquote-regex-parens 'counsel--elisp-to-pcre))
   (defun counsel-imenu-comments ()
     "Imenu display comments."

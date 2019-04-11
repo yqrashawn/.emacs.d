@@ -1592,3 +1592,10 @@ Info-mode:
 (use-package edit-indirect
   :straight t
   :commands (edit-indirect-region))
+
+(yq/get-modules "scale-to-fit.el")
+(scale-to-fit-setup 80)
+
+(defun +major-mode-map ()
+  (interactive)
+  (symbol-value (read (concat (symbol-name major-mode) "-map"))))

@@ -511,7 +511,8 @@ Inserted by installing org-mode or when a release is made."
   :init
   (setq org-capture-templates
         '(("c" "Inbox Entry" entry
-           (file+olp org-default-inbox-file "Inbox")
+           ;; (file+olp org-default-inbox-file "Inbox")
+           (file org-default-inbox-file)
            "* %? %^G\n:PROPERTIES:\n:CREATED: %U\n:END:\n\n%i")))
   :config
   (setq org-capture--clipboards t)
@@ -620,7 +621,6 @@ SCHEDULED: %^T
 
 (use-package org-download
   :straight t
-  :after org
   :hook ((dired-mode org-mode) . org-download-enable))
 
 (use-package ob
