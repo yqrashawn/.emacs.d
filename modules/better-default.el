@@ -1595,7 +1595,7 @@ Info-mode:
 
 (yq/get-modules "scale-to-fit.el")
 (text-scale-mode 1)
-(scale-to-fit-setup 80)
+(scale-to-fit-setup 100)
 
 (defun +major-mode-map ()
   (interactive)

@@ -24,7 +24,7 @@
   :safe #'numberp
   :group 'scale-to-fit)
 
-(defcustom scale-to-fit-max-scale 0 "Maximum scale for fitting."
+(defcustom scale-to-fit-max-scale 1 "Maximum scale for fitting."
   :type 'number
   :safe #'numberp
   :group 'scale-to-fit)
@@ -42,6 +42,7 @@
 (defun scale-to-fit (width)
   "Scale text down if window is narrower than WIDTH columns.
 If SHRINK-ONLY is non-nil, do not enlarge text beyond scale 0."
+  (interactive)
   (let* ((raw-scale (scale-to-fit--calculate-scale width))
          (scale (min (max raw-scale scale-to-fit-min-scale) scale-to-fit-max-scale)))
     (when scale-to-fit--debug
@@ -56,13 +57,15 @@ If SHRINK-ONLY is non-nil, do not enlarge text beyond scale 0."
 WIDTH should evaluate to the target width in columns.
 MIN and MAX are buffer-local values for `scale-to-fit-min-scale' and `scale-to-fit-max-scale'."
   `(let ((fun (lambda (&optional _)
+                (text-scale-mode 1)
                 (scale-to-fit ,width))))
      (when ,min
        (setq-local scale-to-fit-min-scale ,min))
      (when ,max
        (setq-local scale-to-fit-max-scale ,max))
-     (add-hook 'hack-local-variables-hook fun nil t)
-     (add-hook 'window-size-change-functions fun nil t)))
+     (add-hook 'hack-local-variables-hook fun)
+     (add-hook 'buffer-list-update-hook fun)
+     (add-hook 'window-size-change-functions fun)))
 
 (provide 'scale-to-fit)
 ;;; scale-to-fit.el ends here
