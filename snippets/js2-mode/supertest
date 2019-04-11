@@ -6,4 +6,8 @@ request(app)
   .${1:getOrPost}
   .set("authorization", $2)
   .send($3)
+  .then(res => {
+    if (res.statusCode >= 300) throw res;
+    return res;
+  })
   .catch(he);
