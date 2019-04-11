@@ -1594,6 +1594,7 @@ Info-mode:
   :commands (edit-indirect-region))
 
 (yq/get-modules "scale-to-fit.el")
+(text-scale-mode 1)
 (scale-to-fit-setup 80)
 
 (defun +major-mode-map ()
