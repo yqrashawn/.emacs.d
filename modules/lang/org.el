@@ -327,11 +327,18 @@ Inserted by installing org-mode or when a release is made."
                 (2 font-lock-function-name-face)
                 (3 font-lock-comment-face prepend))))
 
+  ;; https://emacs.stackexchange.com/questions/44147/quickly-clear-org-babel-results-buffer
+  (defun +org-open-at-point-and-remove-output ()
+    (interactive)
+    (org-open-at-point)
+    (org-babel-remove-result))
+
   ;; Open links and files with RET in normal state
   ;; (evil-define-key 'normal org-mode-map (kbd "RET") 'org-open-at-point)
   (evil-define-key 'normal org-mode-map
     "t" 'org-todo
     ",'" 'org-edit-special
+    ",," '+org-open-at-point-and-remove-output
     ",c" 'org-capture
     ",Cc" 'org-clock-cancel
     ",Ci" 'org-clock-in
