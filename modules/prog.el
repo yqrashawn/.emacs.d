@@ -646,3 +646,19 @@ _j_  js2      _T_     text   _f_  fundamental
     (evil-define-key 'normal (+major-mode-map) (kbd "'") #'corral-double-quotes-backward))
   :hook ((js2-mode typescript-mode rjsx-mode) . #'yq-setup-corral-keymap))
 
+(use-package request-deferred
+  :straight t
+  :defer t)
+
+(use-package leetcode
+  :straight (:host github :repo "kaiwk/leetcode.el")
+  :custom
+  (leetcode-prefer-language "javascript")
+  :commands (leetcode)
+  :config
+  (evilified-state-evilify leetcode--problems-mode leetcode--problems-mode-map
+    (kbd "RET") #'leetcode-show-descri
+    "j" #'next-line
+    "k" #'previous-line
+    "r" #'leetcode-problems-refresh
+    "q" #'quit-window))
