@@ -18,7 +18,7 @@
 (setq save-silently t)
 
 ;; enter pgp password in emacs
-(setq epa-pinentry-mode 'loopback)
+(setq epa-pinentry-mode nil)
 
 ;; https://emacs.stackexchange.com/questions/3673/how-to-make-vc-and-magit-treat-a-symbolic-link-to-a-real-file-in-git-repo-just
 (setq find-file-visit-truename t)
@@ -215,7 +215,8 @@ file stored in the cache directory and `nil' to disable auto-saving.")
 (setq global-auto-revert-non-file-buffers t
       auto-revert-verbose nil)
 (add-to-list 'global-auto-revert-ignore-modes 'Buffer-menu-mode)
-(add-to-list 'completion-styles 'flex t)
+;; (add-to-list 'completion-styles 'flex t)
+;; (setq completion-styles '(basic partial-completion emacs22))
 (xterm-mouse-mode 1)
 (setq initial-major-mode 'text-mode)
 (setq-default fill-column 80)
@@ -1600,3 +1601,7 @@ Info-mode:
 (defun +major-mode-map ()
   (interactive)
   (symbol-value (read (concat (symbol-name major-mode) "-map"))))
+
+(use-package define-word
+  :straight t
+  :commands (define-word))

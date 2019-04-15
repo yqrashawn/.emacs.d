@@ -124,3 +124,7 @@
     "W" 'git-timemachine-kill-revision
     "c" 'git-timemachine-show-current-revision)
   (add-hook 'git-timemachine-mode-hook 'yq/fix-evil-state-bug))
+
+(use-package smeargle
+  :straight t
+  :commands (smeargle))

@@ -8,7 +8,7 @@
   ;;                               (time-subtract after-init-time before-init-time)))
   ;;                      gcs-done)))
   ;; Always load newest byte code
-  ;; (setq load-prefer-newer t)
+  (setq load-prefer-newer t)
   (setq debug-on-error t)
   (setq debug-on-quit t)
 
@@ -34,11 +34,14 @@
         '(("http" . "127.0.0.1:6152")
           ("https" . "127.0.0.1:6152")))
 
-;;; Temporarily disable the file name handler.
+  ;;; Temporarily disable the file name handler.
   (setq default-file-name-handler-alist file-name-handler-alist)
   (setq file-name-handler-alist nil)
   (defun ambrevar/reset-file-name-handler-alist ()
-    (setq file-name-handler-alist default-file-name-handler-alist))
+    (setq file-name-handler-alist
+          (append default-file-name-handler-alist
+                  file-name-handler-alist))
+    (cl-delete-duplicates file-name-handler-alist :test 'equal))
   (add-hook 'after-init-hook #'ambrevar/reset-file-name-handler-alist)
 
   (defvar bootstrap-version)
@@ -154,6 +157,7 @@
     (setq gc-timer (run-with-idle-timer 2 nil #'maybe-gc)))
 
   (schedule-maybe-gc)
+
 
   (setq debug-on-error nil)
   (setq debug-on-quit nil))

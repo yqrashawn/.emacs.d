@@ -24,7 +24,7 @@
   :safe #'numberp
   :group 'scale-to-fit)
 
-(defcustom scale-to-fit-max-scale 1 "Maximum scale for fitting."
+(defcustom scale-to-fit-max-scale 0 "Maximum scale for fitting."
   :type 'number
   :safe #'numberp
   :group 'scale-to-fit)
