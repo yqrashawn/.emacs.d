@@ -1597,8 +1597,7 @@ Info-mode:
   :commands (edit-indirect-region))
 
 (yq/get-modules "scale-to-fit.el")
-(text-scale-mode 1)
-(scale-to-fit-setup 100)
+(spacemacs/set-leader-keys "tT" #'scale-to-fit-toggle)
 
 (defun +major-mode-map ()
   (interactive)
