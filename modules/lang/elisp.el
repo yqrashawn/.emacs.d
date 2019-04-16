@@ -34,16 +34,18 @@ the current buffer."
   ;; (add-hook 'emacs-lisp-mode-hook
   ;;           (lambda () (setq-local lisp-indent-function #'common-lisp-indent-function)))
   :config
-  (add-hook 'emacs-lisp-mode-hook (lambda () (setq-local evil-shift-width 1)))
-  (add-hook 'emacs-lisp-mode-hook (lambda () (setq mode-name "λ")))
-  (add-hook 'emacs-lisp-mode-hook (lambda () (setq-local company-backends '(company-capf
-                                                                            company-tabnine
-                                                                            (company-dabbrev-code
-                                                                             company-gtags
-                                                                             company-etags
-                                                                             company-keywords)
-                                                                            company-files
-                                                                            company-dabbrev))))
+  (add-hook 'emacs-lisp-mode-hook (lambda ()
+                                    (setq-local evil-shift-width 1)
+                                    (setq-local company-idle-delay 0.2)
+                                    (setq mode-name "λ")
+                                    (setq-local company-backends '(company-capf
+                                                                   company-tabnine
+                                                                   (company-dabbrev-code
+                                                                    company-gtags
+                                                                    company-etags
+                                                                    company-keywords)
+                                                                   company-files
+                                                                   company-dabbrev))))
   (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
   ;; Idea from http://www.reddit.com/r/emacs/comments/312ge1/i_created_this_function_because_i_was_tired_of/
   (defun spacemacs/eval-current-form ()

@@ -526,21 +526,14 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
 ;; (spacemacs/set-leader-keys "3" 'yq/find-org|gtd)
 ;; (spacemacs/set-leader-keys "4" 'yq/find-org|project)
 
-(defun yq/org ()
-  (interactive)
-  (counsel-fzf "" "~/Dropbox/" nil "-t f -e org"))
-(defun yq/books ()
-  (interactive)
-  (counsel-fzf "" "~/Dropbox/Books/" nil "-t f"))
+
 (defun yq/dropbox ()
   (interactive)
-  (counsel-fzf "" "~/Dropbox/"))
+  (counsel-fzf "" "~/Dropbox/" "Dropbox Files: "))
 (defun yq/workspace ()
   (interactive)
   (counsel-fzf "" "~/workspace/"))
 
-(spacemacs/set-leader-keys "fo" 'yq/org)
-(spacemacs/set-leader-keys "fb" 'yq/books)
 (spacemacs/set-leader-keys "f1" 'yq/dropbox)
 (spacemacs/set-leader-keys "fw" 'yq/workspace)
 
