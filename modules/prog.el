@@ -160,11 +160,12 @@ Available PROPS:
     ;; return the expanded macro in correct order
     (reverse result)))
 
+(setq +company-default-idle-delay 0.2)
 (use-package company
   :straight t
   :diminish company-mode
   :init
-  (setq company-idle-delay 0
+  (setq company-idle-delay +company-default-idle-delay
         company-selection-wrap-around t
         company-show-numbers t
         company-minimum-prefix-length 1
@@ -282,9 +283,11 @@ Available PROPS:
     (company-tabnine-restart-server)
     (if company-tabnine--disabled
         (progn
+          (setq company-idle-delay 0)
           (setq company-tabnine--disabled nil)
           (message "Turn on company-tabnine"))
       (progn
+        (setq company-idle-delay +company-default-idle-delay)
         (setq company-tabnine--disabled t)
         (message "Turn off company-tabnine"))))
   (setq company-tabnine--disabled t)
