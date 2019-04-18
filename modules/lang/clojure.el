@@ -327,7 +327,7 @@
   :init
   (evil-define-key 'normal clojure-mode-map (kbd ", ESC") 'hydra-cljr-help-menu/body)
   :config
-  (cljr-add-keybindings-with-prefix "C-c C-f")
+  (cljr-add-keybindings-with-prefix "C-c j")
 
   ;; Usually we do not set keybindings in :config, however this must be done
   ;; here because it reads the variable `cljr--all-helpers'. Since
