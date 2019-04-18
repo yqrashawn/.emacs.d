@@ -352,9 +352,13 @@ file stored in the cache directory and `nil' to disable auto-saving.")
             (message
              "Indented selected region."))
         (progn
-          (evil-indent
-           (point-min)
-           (point-max))
+          (if lispyville-mode
+              (lispyville-prettify
+               (point-min)
+               (point-max))
+            (evil-indent
+             (point-min)
+             (point-max)))
           (message "Indented buffer.")))
       (whitespace-cleanup))))
 

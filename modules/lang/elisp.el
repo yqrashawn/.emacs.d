@@ -386,10 +386,21 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
      mark-toggle))
   :config
   ;; (advice-add #'lispyville-escape :after (defl (&optional arg) (parinfer--switch-to-indent-mode-1)))
+  (evil-define-key nil evil-inner-text-objects-map
+    "t" #'lispyville-inner-atom
+    "l" #'lispyville-inner-list
+    "x" #'lispyville-inner-sexp
+    "d" #'lispyville-inner-function)
+  (evil-define-key nil evil-outer-text-objects-map
+    "t" #'lispyville-a-atom
+    "l" #'lispyville-a-list
+    "x" #'lispyville-a-sexp
+    "d" #'lispyville-a-function)
   (lispyville--define-key 'normal "V" #'evil-visual-line)
   (lispyville--define-key 'normal "\C-v" #'evil-visual-block)
   (lispyville--define-key 'normal "{" #'lispyville-previous-opening)
   (lispyville--define-key 'normal "}" #'lispyville-next-opening)
   (lispyville--define-key 'normal "[" #'lispyville-previous-closing)
   (lispyville--define-key 'normal "]" #'lispyville-next-closing)
-  (lispy-define-key parinfer-mode-map "v" #'lispyville-toggle-mark-type))
+  (evil-define-key 'normal lispyville-mode-map "v" (lispyville-wrap-command lispy-mark-symbol special))
+  (lispyville--define-key '(normal insert visual) [remap comment-line] #'lispyville-comment-or-uncomment-line))

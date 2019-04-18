@@ -35,7 +35,23 @@
   (global-evil-leader-mode)
   (defalias 'spacemacs/set-leader-keys 'evil-leader/set-key)
   (defalias 'spacemacs/set-leader-keys-for-major-mode 'evil-leader/set-key-for-mode)
-  (evil-leader/set-leader "<SPC>" "M-"))
+  (evil-leader/set-leader "<SPC>" "M-")
+  :config
+  (add-hook 'evil-leader-mode-hook
+            (lambda ()
+              (when evil-leader/in-all-states
+                (let* ((prefixed (read-kbd-macro (concat evil-leader/non-normal-prefix evil-leader/leader)))
+                       (mode-map (cdr (assoc major-mode evil-leader--mode-maps)))
+                       (map (or mode-map evil-leader--default-map)))
+                  (if evil-leader-mode
+                      (progn
+                        (define-key evil-visual-state-map prefixed map)
+                        (define-key evil-motion-state-map prefixed map)
+                        (define-key evil-insert-state-map prefixed map))
+                    (progn
+                      (define-key evil-visual-state-map prefixed nil)
+                      (define-key evil-motion-state-map prefixed nil)
+                      (define-key evil-insert-state-map prefixed nil))))))))
 
 (use-package evil
   :straight t

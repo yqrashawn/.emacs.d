@@ -19,6 +19,10 @@
    ("\\.ejs\\'"        . web-mode)
    ("\\.djhtml\\'"     . web-mode))
   :config
+  (add-hook 'web-mode-hook (lambda ()
+                             (when web-mode
+                               (evil-define-key nil evil-inner-text-objects-map "t" #'evil-inner-tag)
+                               (evil-define-key nil evil-outer-text-objects-map "t" #'evil-a-tag))))
   ;; ugly imenu for vue functions
   ;; for better looking one https://github.com/fxbois/web-mode/issues/886
   (add-to-list 'web-mode-imenu-regexp-list
