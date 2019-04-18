@@ -1,3 +1,6 @@
+(use-package frog-menu
+  :disabled
+  :straight (:host github :repo "clemera/frog-menu"))
 (setq yq-quick-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l ?\; ?q ?w ?e ?r
                          ?t ?y ?u ?i ?o ?p ?z ?x ?c ?v ?b ?n ?m
                          ?A ?S ?D ?F ?G ?H ?J ?K ?L ?Q ?W ?E ?R
@@ -984,3 +987,11 @@ first."))
 ;;          ("C-x 7 w l" . 'emacs-chunkwm-windmove-right)
 ;;          ("C-x 7 w j" . 'emacs-chunkwm-windmove-down)
 ;;          ("C-x 7 w k" . 'emacs-chunkwm-windmove-up)))
+(use-package flyspell-correct
+  :straight t)
+
+(use-package flyspell-correct-ivy
+  :straight t
+  :bind ("C-;" . flyspell-correct-at-point)
+  :init
+  (setq flyspell-correct-interface #'flyspell-correct-ivy))

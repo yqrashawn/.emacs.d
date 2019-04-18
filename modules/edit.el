@@ -2,6 +2,8 @@
 
 (use-package expand-region
   :straight t
+  :custom
+  (expand-region-smart-cursor t)
   :config
   (define-key yq-s-map "v" 'er/expand-region)
   (setq expand-region-contract-fast-key "V"

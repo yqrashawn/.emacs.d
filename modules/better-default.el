@@ -1606,3 +1606,11 @@ Info-mode:
 (use-package define-word
   :straight t
   :commands (define-word))
+
+(use-feature flyspell
+  :hook ((git-commit-mode org-mode text-mode markdown-mode) . flyspell-mode))
+
+(use-package auto-dictionary
+  :straight t
+  :hook (flyspell-mode . auto-dictionary-mode))
+
