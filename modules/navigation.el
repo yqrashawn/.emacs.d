@@ -610,6 +610,14 @@ When ARG is non-nil search in junk files."
 
 (use-package avy
   :straight t
+  :custom
+  (avy-keys-alist `((avy-goto-char . (?k ?j ?l ?d ?n ?p ?s ?a))
+                    (evil-avy-goto-char-timer . (?k ?j ?l ?d ?n ?p ?s ?a))
+                    (lispy-ace-symbol . (?j ?k ?l ?a ?s ?d ?f ?h))
+                    (lispy-ace-subword . (?j ?k ?l ?a ?s ?d ?f ?h))
+                    (lispy-ace-paren . (?j ?k ?l ?a ?s ?d ?f ?h))
+                    (lispy-ace-char . (?j ?k ?l ?a ?s ?d ?f ?h))
+                    (lispy-ace-replace . (?j ?k ?l ?a ?s ?d ?f ?h))))
   :init
   (setq avy-indent-line-overlay t)
   (setq avy-timeout-seconds 0.3)
@@ -787,10 +795,18 @@ Return a list of one element based on major mode."
     (if (minibufferp) (ivy-previous-line)
       (counsel-tabbar-groups)))
 
+  (defun +tabbar-backward-tab ()
+    (interactive)
+    (if (and parinfer-mode (evil-insert-state-p))
+        (lispyville-backward-atom-begin)
+      (tabbar-backward-tab)))
   (defun +tabbar-forward-tab-or-ivy-done ()
     (interactive)
-    (if (minibufferp) (ivy-done)
-      (tabbar-forward-tab)))
+    (if (minibufferp)
+        (ivy-done)
+      (if (and parinfer-mode (evil-insert-state-p))
+          (lispyville-forward-atom)
+        (tabbar-forward-tab))))
   ;; (global-set-key (kbd "C-x C-9 j") #'+tabbar-switch-group-next-line)
   ;; (global-set-key (kbd "C-x C-9 k") #'+tabbar-switch-group-prevouse-line)
   ;; (global-set-key (kbd "C-M-S-s-j") #'+tabbar-switch-group-next-line)
@@ -801,7 +817,7 @@ Return a list of one element based on major mode."
   (global-set-key (kbd "C-x C-9 l") #'+tabbar-forward-tab-or-ivy-done)
   (global-set-key (kbd "C-M-S-s-p") #'tabbar-backward-group)
   (global-set-key (kbd "C-M-S-s-n") #'tabbar-forward-group)
-  (global-set-key (kbd "C-M-S-s-h") #'tabbar-backward-tab)
+  (global-set-key (kbd "C-M-S-s-h") #'+tabbar-backward-tab)
   (global-set-key (kbd "C-M-S-s-l") #'+tabbar-forward-tab-or-ivy-done)
   (defun tabbar-move-current-tab-one-place-left ()
     "Move current tab one place left, unless it's already the leftmost."

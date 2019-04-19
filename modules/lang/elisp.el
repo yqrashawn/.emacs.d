@@ -149,6 +149,11 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
   :init
   (yq/add-toggle lispy :mode lispy-mode)
   :config
+  (defun conditionally-enable-lispy ()
+    (when (eq this-command 'eval-expression)
+      (lispy-mode 1)))
+  (add-hook 'minibuffer-setup-hook 'conditionally-enable-lispy)
+
   (advice-add
    #'special-lispy-eval
    :before (lambda ()
@@ -181,8 +186,6 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
 (use-package parinfer
   :straight (:host github :repo "yqrashawn/parinfer-mode")
   :after lispy
-  :bind
-  (("C-," . parinfer-toggle-mode))
   :hook ((clojure-mode .  parinfer-mode)
          (emacs-lisp-mode . parinfer-mode)
          (lisp-mode . parinfer-mode))
@@ -192,9 +195,11 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
     (interactive)
     (if company-my-keymap
         (company-select-previous)
-      (progn
-        (hs-toggle-hiding)
-        (backward-char))))
+      (if (region-active-p)
+          (lispy-kill)
+        (progn
+          (hs-toggle-hiding)
+          (backward-char)))))
   (setq parinfer-lighters '(" Par:I" . " Par:P"))
   (setq parinfer-display-error t)
   (setq parinfer-indent-mode-confirm nil)
@@ -207,14 +212,42 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
            smart-tab      ; C-b & C-f jump positions and smart shift with tab & S-tab.
            smart-yank))
   :config
+  (require 'ccc)
+  (defun +lispy-update-cursor-style ()
+    (when (and parinfer-mode (evil-insert-state-p))
+      (if (lispyville--special-p)
+          (progn (setq-local cursor-type '(bar . 6))
+                 (ccc-set-buffer-local-cursor-color "plum1"))
+        (progn (setq-local cursor-type '(bar . 6))
+               (ccc-set-buffer-local-cursor-color "green")))))
+  (add-hook 'post-command-hook '+lispy-update-cursor-style)
+  (define-key parinfer-mode-map (kbd "C-.") #'parinfer-toggle-mode)
   (evil-define-key 'insert parinfer-mode-map (kbd "C-k") '+parinfer-hs-toggle-folding)
   (define-key parinfer-mode-map (kbd "C-k") '+parinfer-hs-toggle-folding)
   (define-key parinfer-mode-map (kbd "C-x C-6 q") #'lispy-describe-inline)
   (define-key parinfer-mode-map (kbd "C-x C-6 w") #'lispy-arglist-inline)
+  (define-key parinfer-mode-map (kbd "C-x C-6 z") #'lispy-left)
+  (define-key parinfer-mode-map (kbd "C-x C-6 x") #'lispy-right)
+  (define-key parinfer-mode-map (kbd "C-x C-6 c") #'lispy-mark-symbol)
+  (define-key parinfer-mode-map (kbd "y")
+    (lambda (beg end &optional region)
+      (interactive (list
+                    (mark)
+                    (point)
+                    (prefix-numeric-value
+                     current-prefix-arg)))
+      (if (region-active-p)
+          (progn
+            (kill-ring-save beg end region)
+            (lispy-left 1)
+            (keyboard-quit))
+        (self-insert-command 1))))
   ;; (define-key parinfer-mode-map (kbd "C-k") #'lispy-kill)
   (define-key parinfer-mode-map (kbd "C-d") #'lispy-delete)
-  (define-key parinfer-mode-map (kbd "C-d") #'lispy-delete)
-  (define-key parinfer-mode-map (kbd "C-a") #'lispy-move-beginning-of-line)
+  (evil-define-key 'insert parinfer-mode-map (kbd "C-d") #'lispy-delete)
+  ;; (evil-define-key 'insert parinfer-mode-map (kbd "C-a") #'lispy-move-beginning-of-line)
+  (evil-define-key 'insert parinfer-mode-map (kbd "C-e") #'lispy-move-end-of-line)
+  ;; (define-key parinfer-mode-map (kbd "C-a") #'lispy-move-beginning-of-line)
   (define-key parinfer-mode-map (kbd "C-e") #'lispy-move-end-of-line)
   ;; (evil-define-key 'normal parinfer-mode-map (kbd "C-a") #'lispy-move-beginning-of-line)
   (evil-define-key 'normal parinfer-mode-map (kbd "C-e") #'lispy-move-end-of-line)
@@ -226,6 +259,50 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
   :straight t
   :commands (eval-sexp-fu-flash-mode)
   :hook (emacs-lisp-mode . eval-sexp-fu-flash-mode))
+
+(use-package lispyville
+  :straight (:host github :repo "noctuid/lispyville")
+  :after (parinfer lispy)
+  :commands (lispyville-mode)
+  :hook (parinfer-mode . lispyville-mode)
+  :custom
+  (lispyville-motions-put-into-special t)
+  (lispyville-key-theme
+   '(operators
+     c-w
+     (escape insert visual)
+     prettify
+     (additional-movement normal visual motion)
+     (atom-movement normal visual motion)
+     commentary
+     slurp/barf-lispy
+     wrap
+     additional
+     additional-insert
+     (additional-wrap normal visual insert)
+     mark
+     mark-toggle))
+  :config
+  ;; (advice-add #'lispyville-escape :after (defl (&optional arg) (parinfer--switch-to-indent-mode-1)))
+  (evil-define-key nil evil-inner-text-objects-map
+    "t" #'lispyville-inner-atom
+    "l" #'lispyville-inner-list
+    "x" #'lispyville-inner-sexp
+    "d" #'lispyville-inner-function)
+  (evil-define-key nil evil-outer-text-objects-map
+    "t" #'lispyville-a-atom
+    "l" #'lispyville-a-list
+    "x" #'lispyville-a-sexp
+    "d" #'lispyville-a-function)
+  (lispyville--define-key 'normal "V" #'evil-visual-line)
+  (lispyville--define-key 'normal "\C-v" #'evil-visual-block)
+  (lispyville--define-key 'normal "{" #'lispyville-previous-opening)
+  (lispyville--define-key 'normal "}" #'lispyville-next-opening)
+  (lispyville--define-key 'normal "[" #'lispyville-previous-closing)
+  (lispyville--define-key 'normal "]" #'lispyville-next-closing)
+  (evil-define-key 'normal lispyville-mode-map "v" (lispyville-wrap-command lispy-mark-symbol special))
+  (lispyville--define-key '(normal insert visual) [remap comment-line] #'lispyville-comment-or-uncomment-line)
+  (lispyville--define-key 'insert [remap delete-backward-char] #'lispy-delete-backward))
 
 (use-package edebug
   :commands (edebug-defun)
@@ -301,6 +378,7 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
     "s" #'edebug-step-mode
     "S" #'edebug-next-mode)
   (advice-add 'edebug-mode :after 'spacemacs//edebug-mode))
+
 ;;   (defhydra hydra-edebug (:color amaranth
 ;;                                  :hint  nil)
 ;;     "
@@ -361,46 +439,3 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
 ;;   :init
 ;;   (advice-add 'describe-function-1 :after #'elisp-demos-advice-describe-function-1)
 ;;   (advice-add 'helpful-update :after #'elisp-demos-advice-helpful-update))
-
-(use-package lispyville
-  :straight (:host github :repo "noctuid/lispyville")
-  :after (parinfer lispy)
-  :commands (lispyville-mode)
-  :hook (parinfer-mode . lispyville-mode)
-  :custom
-  (lispyville-motions-put-into-special nil)
-  (lispyville-key-theme
-   '(operators
-     c-w
-     (escape insert visual)
-     prettify
-     (additional-movement normal visual motion)
-     (atom-movement normal visual motion)
-     ;; commentary
-     slurp/barf-lispy
-     wrap
-     additional
-     additional-insert
-     (additional-wrap normal visual insert)
-     mark
-     mark-toggle))
-  :config
-  ;; (advice-add #'lispyville-escape :after (defl (&optional arg) (parinfer--switch-to-indent-mode-1)))
-  (evil-define-key nil evil-inner-text-objects-map
-    "t" #'lispyville-inner-atom
-    "l" #'lispyville-inner-list
-    "x" #'lispyville-inner-sexp
-    "d" #'lispyville-inner-function)
-  (evil-define-key nil evil-outer-text-objects-map
-    "t" #'lispyville-a-atom
-    "l" #'lispyville-a-list
-    "x" #'lispyville-a-sexp
-    "d" #'lispyville-a-function)
-  (lispyville--define-key 'normal "V" #'evil-visual-line)
-  (lispyville--define-key 'normal "\C-v" #'evil-visual-block)
-  (lispyville--define-key 'normal "{" #'lispyville-previous-opening)
-  (lispyville--define-key 'normal "}" #'lispyville-next-opening)
-  (lispyville--define-key 'normal "[" #'lispyville-previous-closing)
-  (lispyville--define-key 'normal "]" #'lispyville-next-closing)
-  (evil-define-key 'normal lispyville-mode-map "v" (lispyville-wrap-command lispy-mark-symbol special))
-  (lispyville--define-key '(normal insert visual) [remap comment-line] #'lispyville-comment-or-uncomment-line))

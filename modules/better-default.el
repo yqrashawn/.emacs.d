@@ -1618,3 +1618,7 @@ Info-mode:
   :straight t
   :hook (flyspell-mode . auto-dictionary-mode))
 
+;; for cursor style
+(use-package ccc
+  :straight t
+  :defer t)

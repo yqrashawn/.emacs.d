@@ -51,20 +51,17 @@
 ;; (load-theme 'default-white)
 ;; (load-theme 'zenburn)
 
-(defvar dotspacemacs-colorize-cursor-according-to-state t
-  "If non nil the cursor color matches the state color in GUI Emacs.")
-
 (defvar spacemacs-evil-cursors '(("normal" "DarkGoldenrod2" box)
-                                 ("insert" "chartreuse3" (bar . 2))
+                                 ("insert" "chartreuse3" (bar . 4))
                                  ("emacs" "SkyBlue2" box)
-                                 ("hybrid" "SkyBlue2" (bar . 2))
-                                 ("replace" "chocolate" (hbar . 2))
+                                 ("hybrid" "SkyBlue2" (bar . 4))
+                                 ("replace" "chocolate" (hbar . 4))
                                  ("evilified" "LightGoldenrod3" box)
-                                 ("visual" "gray" (hbar . 2))
+                                 ("visual" "gray" (hbar . 4))
                                  ("motion" "plum3" box)
                                  ("lisp" "HotPink1" box)
                                  ("iedit" "firebrick1" box)
-                                 ("iedit-insert" "firebrick1" (bar . 2)))
+                                 ("iedit-insert" "firebrick1" (bar . 4)))
   "Colors assigned to evil states with cursor definitions.
 To add your own, use `spacemacs/add-evil-curosr'.")
 
@@ -77,8 +74,7 @@ For evil states that do not need an evil cursor use
   (add-to-list 'spacemacs-evil-cursors (list state color shape))
   (spacemacs/define-evil-state-face state color)
   (set (intern (format "evil-%s-state-cursor" state))
-       (list (when dotspacemacs-colorize-cursor-according-to-state color)
-             shape)))
+       (list color shape)))
 
 (defun spacemacs/define-evil-state-face (state color)
   "Define a face for an evil state.
