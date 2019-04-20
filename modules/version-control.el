@@ -29,8 +29,8 @@
     (interactive)
     (async-shell-command "git submodule foreach git fetch --all && git submodule foreach git merge origin/master"))
   (magit-define-popup-action 'magit-submodule-popup ?U "pull all submodules" '+magit-submodule-pull-all)
-  (add-to-list 'magit-diff-arguments "--minimal")
-  (add-to-list 'magit-diff-section-arguments "--minimal")
+  ;; (add-to-list 'magit-diff-arguments "--minimal")
+  ;; (add-to-list 'magit-diff-section-arguments "--minimal")
   (evil-define-key 'normal magit-mode-map (kbd "<tab>") 'magit-section-toggle)
   ;; add submodule in magit-status buffer
   ;; https://emacs.stackexchange.com/a/39009/14357

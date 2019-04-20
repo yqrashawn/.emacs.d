@@ -1,4 +1,11 @@
 (yq/add-toggle parinfer :mode parinfer-mode)
+(defun yq/lispy-file-p ()
+  (memq
+   major-mode
+   '(emacs-lisp-mode
+     clojure-mode
+     lisp-mode
+     scheme-mode)))
 
 (defun yq/toggle-parinfer-mode ()
   (interactive)
@@ -212,6 +219,14 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
            smart-tab      ; C-b & C-f jump positions and smart shift with tab & S-tab.
            smart-yank))
   :config
+  ;; fix conflicts between evil-iedit and parinfer-mode lispy bindings
+  (add-hook
+   'evil-iedit-insert-state-entry-hook
+   (lambda () (parinfer-mode -1)))
+  (add-hook
+   'evil-iedit-insert-state-exit-hook
+   (lambda (and (yq/lispy-file-p) (parinfer-mode 1))))
+
   (require 'ccc)
   (defun +lispy-update-cursor-style ()
     (when (and parinfer-mode (evil-insert-state-p))

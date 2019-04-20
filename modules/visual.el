@@ -147,7 +147,7 @@ has been changed to THEME."
   :hook (after-init . doom-modeline-init)
   :init
   (setq doom-modeline-height 15
-        doom-modeline-icon nil
+        ;; doom-modeline-icon nil
         doom-modeline-buffer-file-name-style 'file-name
         doom-modeline-minor-modes t
         doom-modeline-env-version t
@@ -170,7 +170,7 @@ has been changed to THEME."
                    'help-echo "Tabbar Group")
        " ")))
   (doom-modeline-def-modeline 'main
-    '(bar workspace-number window-number evil-state matches tabbar-group buffer-info remote-host buffer-position parrot selection-info)
+    '(bar window-number evil-state matches tabbar-group buffer-info remote-host buffer-position parrot selection-info)
     '(misc-info persp-name lsp irc mu4e github debug fancy-battery minor-modes buffer-encoding major-mode process vcs checker)))
 
 (use-package vim-empty-lines-mode

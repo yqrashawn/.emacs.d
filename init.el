@@ -15,7 +15,8 @@
   (setq gc-cons-threshold 134217728)
   (setq gc-cons-percentage 0.6)
 
-  (setq straight-check-for-modifications 'live-with-find)
+  ;; check package update infos
+  (setq straight-vc-git-auto-fast-forward nil)
   ;; (package-initialize)
   (setq scroll-bar-background nil)
   (menu-bar-mode -1)
