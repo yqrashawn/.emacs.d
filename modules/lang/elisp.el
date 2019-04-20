@@ -222,10 +222,20 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
   ;; fix conflicts between evil-iedit and parinfer-mode lispy bindings
   (add-hook
    'evil-iedit-insert-state-entry-hook
-   (lambda () (parinfer-mode -1)))
+   (lambda () (when parinfer-mode
+                (parinfer-mode -1))))
   (add-hook
    'evil-iedit-insert-state-exit-hook
-   (lambda (and (yq/lispy-file-p) (parinfer-mode 1))))
+   (lambda () (when (and (not parinfer-mode) (yq/lispy-file-p))
+                (parinfer-mode 1))))
+  (add-hook
+   'evil-multiedit-insert-state-entry-hook
+   (lambda () (when parinfer-mode
+                (parinfer-mode -1))))
+  (add-hook
+   'evil-multiedit-insert-state-exit-hook
+   (lambda () (when (and (not parinfer-mode) (yq/lispy-file-p))
+                (parinfer-mode 1))))
 
   (require 'ccc)
   (defun +lispy-update-cursor-style ()

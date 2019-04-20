@@ -1,4 +1,7 @@
-(use-package iedit :straight t)
+(use-package iedit
+  :straight t
+  :custom
+  (iedit-auto-buffering t))
 
 (use-package expand-region
   :straight t
@@ -9,6 +12,8 @@
 
 (use-package evil-iedit-state
   :straight t
+  :custom
+  (evil-multiedit-store-in-search-history t)
   :config
   (define-key evil-iedit-state-map "V" nil)
   (define-key evil-iedit-state-map "m" 'iedit-show/hide-unmatched-lines))
