@@ -147,12 +147,12 @@ has been changed to THEME."
   :hook (after-init . doom-modeline-init)
   :init
   (setq doom-modeline-height 15
-        ;; doom-modeline-icon nil
         doom-modeline-buffer-file-name-style 'file-name
         doom-modeline-minor-modes t
         doom-modeline-env-version t
         doom-modeline-lsp nil)
   :config
+  (setq doom-modeline-icon nil)
   (doom-modeline-def-segment tabbar-group
     (when (and tabbar-mode (doom-modeline--active))
       (let ((tb-groups (+tabbar-get-groups))

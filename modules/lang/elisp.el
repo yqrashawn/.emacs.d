@@ -193,6 +193,7 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
 (use-package parinfer
   :straight (:host github :repo "yqrashawn/parinfer-mode")
   :after lispy
+  :diminish parinfer-mode
   :hook ((clojure-mode .  parinfer-mode)
          (emacs-lisp-mode . parinfer-mode)
          (lisp-mode . parinfer-mode))
@@ -288,6 +289,7 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
 (use-package lispyville
   :straight (:host github :repo "noctuid/lispyville")
   :after (parinfer lispy)
+  :diminish lispyville-mode
   :commands (lispyville-mode)
   :hook (parinfer-mode . lispyville-mode)
   :custom

@@ -193,17 +193,6 @@ Available PROPS:
 
   (global-company-mode)
   :config
-  (define-key company-active-map (kbd "C-x C-6 1") (kbd "M-1"))
-  (define-key company-active-map (kbd "C-x C-6 2") (kbd "M-2"))
-  (define-key company-active-map (kbd "C-x C-6 3") (kbd "M-3"))
-  (define-key company-active-map (kbd "C-x C-6 4") (kbd "M-4"))
-  (define-key company-active-map (kbd "C-x C-6 5") (kbd "M-5"))
-  (define-key company-active-map (kbd "C-x C-6 6") (kbd "M-6"))
-  (define-key company-active-map (kbd "C-x C-6 7") (kbd "M-7"))
-  (define-key company-active-map (kbd "C-x C-6 8") (kbd "M-8"))
-  (define-key company-active-map (kbd "C-x C-6 9") (kbd "M-9"))
-  (define-key company-active-map (kbd "C-x C-6 0") (kbd "M-0"))
-
   (defvar-local company-fci-mode-on-p nil)
 
   (defun company-turn-off-fci (&rest ignore)
@@ -218,20 +207,10 @@ Available PROPS:
   (add-hook 'company-completion-finished-hook 'company-maybe-turn-on-fci)
   (add-hook 'company-completion-cancelled-hook 'company-maybe-turn-on-fci)
 
-  (define-key company-active-map [return] 'company-complete-selection)
-  (define-key company-active-map (kbd "RET") 'company-complete-selection)
-
   (defun spacemacs//company-complete-common-or-cycle-backward ()
     "Complete common prefix or cycle backward."
     (interactive)
     (company-complete-common-or-cycle -1))
-
-  (define-key company-active-map (kbd "TAB") 'company-complete-common-or-cycle)
-  (define-key company-active-map (kbd "<tab>") 'company-complete-common-or-cycle)
-  (define-key company-active-map (kbd "<S-tab>")
-    'spacemacs//company-complete-common-or-cycle-backward)
-  (define-key company-active-map (kbd "<backtab>")
-    'spacemacs//company-complete-common-or-cycle-backward)
 
   (setq company-show-numbers-function 'yq//company-format-numbers)
 
@@ -245,17 +224,43 @@ Available PROPS:
   ;; (add-to-list 'company-frontends #'company-tng-frontend)
   ;; (add-to-list 'company-frontends #'company-pseudo-tooltip-frontend)
   ;; (add-to-list 'company-frontends #'company-echo-metadata-frontend)
-  (define-key company-active-map (kbd "C-j") 'company-select-next)
-  (define-key company-active-map (kbd "C-k") 'company-select-previous)
-  (define-key company-active-map (kbd "C-l") 'company-complete-selection)
-  (define-key company-active-map (kbd "C-w") 'evil-delete-backward-word)
-  (define-key company-active-map (kbd "C-d") 'company-show-location)
-  (define-key company-active-map (kbd "C-m") 'newline-and-indent)
-  (define-key company-active-map (kbd "C-r") 'company-show-doc-buffer)
 
-  (evil-define-key 'insert company-active-map (kbd "C-j") 'company-select-next)
-  (evil-define-key 'insert company-active-map (kbd "C-k") 'company-select-previous)
-  (evil-define-key 'insert company-active-map (kbd "C-r") 'company-show-doc-buffer))
+  (setq company-active-map
+        (let ((keymap (make-sparse-keymap)))
+          (define-key keymap "\e\e\e" 'company-abort)
+          (define-key keymap "\C-g" 'company-abort)
+          (define-key keymap (kbd "C-j") 'company-select-next)
+          (define-key keymap (kbd "C-k") 'company-select-previous)
+          (define-key keymap (kbd "<down>") 'company-select-next-or-abort)
+          (define-key keymap (kbd "<up>") 'company-select-previous-or-abort)
+          (define-key keymap [remap scroll-up-command] 'company-next-page)
+          (define-key keymap [remap scroll-down-command] 'company-previous-page)
+          (define-key keymap [down-mouse-1] 'ignore)
+          (define-key keymap [down-mouse-3] 'ignore)
+          (define-key keymap [mouse-1] 'company-complete-mouse)
+          (define-key keymap [mouse-3] 'company-select-mouse)
+          (define-key keymap [up-mouse-1] 'ignore)
+          (define-key keymap [up-mouse-3] 'ignore)
+          (define-key keymap [return] 'company-complete-selection)
+          (define-key keymap (kbd "C-m") #'newline-and-indent)
+          (define-key keymap (kbd "C-l") 'company-complete-selection)
+          (define-key keymap (kbd "RET") 'company-complete-selection)
+          (define-key keymap [tab] 'company-complete-common)
+          (define-key keymap (kbd "TAB") 'company-complete-common-or-cycle)
+          (define-key company-active-map (kbd "<S-tab>")
+            'spacemacs//company-complete-common-or-cycle-backward)
+          (define-key company-active-map (kbd "<backtab>")
+            'spacemacs//company-complete-common-or-cycle-backward)
+          (define-key keymap (kbd "<f1>") 'company-show-doc-buffer)
+          (define-key keymap (kbd "C-r") 'company-show-doc-buffer)
+          ;; (define-key keymap "\C-w" 'company-show-location)
+          (define-key keymap "\C-s" 'company-search-candidates)
+          (define-key keymap "\C-\M-s" 'company-filter-candidates)
+          (dotimes (i 10)
+            (define-key keymap (read-kbd-macro (format "M-%d" i)) 'company-complete-number))
+          (dotimes (i 10)
+            (define-key keymap (read-kbd-macro (format "C-x C-6 %d" i)) 'company-complete-number))
+          keymap)))
 
 (use-package company-statistics
   :straight t
@@ -617,6 +622,7 @@ _j_  js2      _T_     text   _f_  fundamental
 
 (use-package repl-toggle
   :straight t
+  :diminish repl-toggle-mode
   :custom
   (rtog/mode-repl-alist
    '((emacs-lisp-mode . ielm)
