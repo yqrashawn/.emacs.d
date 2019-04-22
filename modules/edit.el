@@ -1,7 +1,8 @@
 (use-package iedit
   :straight t
-  :custom
-  (iedit-auto-buffering t))
+  :config
+  (dolist (mode '(clojure-mode emacs-lisp-mode))
+          (setq-mode-local mode iedit-auto-buffering t)))
 
 (use-package expand-region
   :straight t
