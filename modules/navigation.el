@@ -102,7 +102,7 @@
                  'spacemacs//counsel-occur)
   (evil-set-initial-state 'ivy-occur-grep-mode 'normal)
   (evil-make-overriding-map ivy-occur-mode-map 'normal)
-  (define-key yq-s-map "b" 'ivy-switch-buffer)
+  ;; (define-key yq-s-map "b" 'ivy-switch-buffer)
   (ido-mode -1)
   (defun yq-ivy-format-function (cands)
     "Transform CANDS into a string for minibuffer."
@@ -1011,3 +1011,27 @@ first."))
   :bind ("C-;" . flyspell-correct-at-point)
   :init
   (setq flyspell-correct-interface #'flyspell-correct-ivy))
+
+(use-package helm
+  :straight t
+  :defer t
+  :custom
+  (helm-display-buffer-default-height 0.35)
+  (helm-default-display-buffer-functions #'display-buffer-in-side-window)
+  :bind ("C-`" . helm-top)
+  :init
+  (define-key yq-s-map "b" #'helm-mini)
+  :config
+  (define-key helm-map (kbd "C-j") #'helm-next-line)
+  (define-key helm-map (kbd "C-k") #'helm-previous-line)
+  (define-key helm-map (kbd "C-h") #'helm-next-source)
+  (define-key helm-map (kbd "C-l") (kbd "RET"))
+  (define-key helm-map (kbd "C-S-j") 'helm-follow-action-forward)
+  (define-key helm-map (kbd "C-S-k") 'helm-follow-action-backward)
+  (define-key helm-map (kbd "C-S-h") 'describe-key)
+  (with-eval-after-load 'helm-files
+    (dolist (keymap (list helm-find-files-map helm-read-file-map))
+      (define-key keymap (kbd "C-l") 'helm-execute-persistent-action)
+      (define-key keymap (kbd "C-h") 'helm-find-files-up-one-level)
+      ;; rebind `describe-key' for convenience
+      (define-key keymap (kbd "C-S-h") 'describe-key))))

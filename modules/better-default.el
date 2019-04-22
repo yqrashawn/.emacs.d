@@ -293,7 +293,7 @@ file stored in the cache directory and `nil' to disable auto-saving.")
   (next-error-recenter t)
   (async-shell-command-buffer 'new-buffer)
   :bind
-  ("C-`" . list-processes)
+  ;; ("C-`" . list-processes)
   ([remap goto-line] . goto-line-with-linum-mode)
   (:map minibuffer-local-map
         ("<escape>"  . abort-recursive-edit))
@@ -1578,21 +1578,6 @@ Info-mode:
   :config
   (progn
     (setq webpaste-provider-priority '("ptpb.pw" "dpaste.de" "ix.io"))))
-
-(use-package symbol-overlay
-  :straight t
-  :commands (symbol-overlay-put)
-  :init
-  (define-key evil-normal-state-map "gu" 'symbol-overlay-put)
-  :config
-  (setq symbol-overlay-map
-        (let ((map (make-sparse-keymap)))
-          (define-key map (kbd "i") 'symbol-overlay-put)
-          (define-key map (kbd "p") 'symbol-overlay-jump-prev)
-          (define-key map (kbd "n") 'symbol-overlay-jump-next)
-          (define-key map (kbd "<") 'symbol-overlay-jump-first)
-          (define-key map (kbd ">") 'symbol-overlay-jump-last)
-          map)))
 
 ;; use f5 as f1
 (define-key key-translation-map [f5] [f1])

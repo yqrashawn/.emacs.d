@@ -327,9 +327,17 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
   (lispyville--define-key 'normal "}" #'lispyville-next-opening)
   (lispyville--define-key 'normal "[" #'lispyville-previous-closing)
   (lispyville--define-key 'normal "]" #'lispyville-next-closing)
-  (evil-define-key 'normal lispyville-mode-map "v" (lispyville-wrap-command lispy-mark-symbol special))
-  (lispyville--define-key '(normal insert visual) [remap comment-line] #'lispyville-comment-or-uncomment-line)
+  ;; (evil-define-key 'normal lispyville-mode-map "v" (lispyville-wrap-command lispy-mark-symbol special))
+  ;; (lispyville--define-key '(normal insert visual) [remap comment-line] #'lispyville-comment-or-uncomment-line)
   (lispyville--define-key 'insert [remap delete-backward-char] #'lispy-delete-backward))
+
+(use-package highlight-defined
+  :straight t
+  :hook (emacs-lisp-mode . highlight-defined-mode))
+
+(use-package highlight-quoted
+  :straight t
+  :hook (emacs-lisp-mode . highlight-quoted-mode))
 
 (use-package edebug
   :commands (edebug-defun)
