@@ -44,8 +44,14 @@
 
 (use-package doom-themes
   :straight t
+  :disabled
   :defer t
   :init (setq yq/light-theme 'doom-nord-light))
+
+(use-package spacemacs-theme
+  :straight t
+  :defer t
+  :init (setq yq/light-theme 'spacemacs-light))
 
 ;; (load-theme 'yq-default-emacs-theme)
 ;; (load-theme 'default-white)

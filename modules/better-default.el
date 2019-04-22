@@ -401,10 +401,10 @@ If the universal prefix argument is used then kill the buffer too."
 (add-hook 'prog-mode-hook 'show-paren-mode)
 
 (use-package windmove
-  :bind(("C-M-S-s-7 h" . 'windmove-left)
-        ("C-M-S-s-7 l" . 'windmove-right)
-        ("C-M-S-s-7 j" . 'windmove-down)
-        ("C-M-S-s-7 k" . 'windmove-up))
+  :bind(("C-M-s-7 h" . 'windmove-left)
+        ("C-M-s-7 l" . 'windmove-right)
+        ("C-M-s-7 j" . 'windmove-down)
+        ("C-M-s-7 k" . 'windmove-up))
   :config
   (defun hydra-move-splitter-left (arg)
     "Move window splitter left."
@@ -454,8 +454,8 @@ If the universal prefix argument is used then kill the buffer too."
          ("C-x 9 w k" . 'buf-move-up)))
 
 (use-package winner
-  :bind(("C-M-S-s-7 u". 'winner-undo)
-        ("C-M-S-s-7 r". 'winner-redo))
+  :bind(("C-M-s-7 u". 'winner-undo)
+        ("C-M-s-7 r". 'winner-redo))
   :init
   (winner-mode t)
   (setq spacemacs/winner-boring-buffers '("*Completions*"

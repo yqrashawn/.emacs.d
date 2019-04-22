@@ -25,7 +25,6 @@
     (load-theme yq/dark-theme 'no-confirm))
   (spacemacs/set-default-font yq/font18))
 
-
 (defun yq/day-p ()
   "Return t/nil if it's day or night."
   (interactive)
