@@ -345,21 +345,16 @@ file stored in the cache directory and `nil' to disable auto-saving.")
            spacemacs-indent-sensitive-modes)
     (save-excursion
       (if (region-active-p)
-          (progn
-            (indent-region
-             (region-beginning)
-             (region-end))
-            (message
-             "Indented selected region."))
-        (progn
-          (if lispyville-mode
-              (lispyville-prettify
-               (point-min)
-               (point-max))
-            (evil-indent
+          (indent-region
+           (region-beginning)
+           (region-end))
+        (if (memq major-mode '(clojure-mode emacs-lisp-mode))
+            (lispyville-prettify
              (point-min)
-             (point-max)))
-          (message "Indented buffer.")))
+             (point-max))
+          (evil-indent
+           (point-min)
+           (point-max))))
       (whitespace-cleanup))))
 
 (defun yq/kill-this-buffer (&optional arg)

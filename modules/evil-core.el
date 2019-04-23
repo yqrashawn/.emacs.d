@@ -8,58 +8,55 @@
   :straight t
   :diminish undo-tree-mode
   :defer t
+  :custom
+  (undo-tree-enable-undo-in-region nil)
+  (undo-tree-history-directory-alist '(("." . "~/emacs.d/.cache/undo")))
+  (undo-tree-auto-save-history t)
+  :bind ("s-y" . undo-tree-redo)
   :config
   (setq undo-limit 78643200)
   (setq undo-outer-limit 104857600)
   (setq undo-strong-limit 157286400)
-  (setq undo-tree-enable-undo-in-region nil)
-  (setq undo-tree-history-directory-alist '(("." . "~/emacs.d/.cache/undo")))
   ;; (setq undo-tree-history-directory-alist
   ;;       `((".*" . ,temporary-file-directory)))
-  (setq undo-tree-auto-save-history t)
-  (global-undo-tree-mode)
-  (global-set-key (kbd "s-y") 'undo-tree-redo))
+  (global-undo-tree-mode))
 
 (use-package goto-chg
   :straight (:host github :repo "emacs-evil/goto-chg")
-  :defer t
-  :init
-  (customize-set-variable 'glc-default-span 4)
-  (global-set-key (kbd "C-x C-8 [") #'goto-last-change)
-  (global-set-key (kbd "C-x C-8 ]") #'goto-last-change-reverse))
+  :bind
+  ("C-x C-8 [" . goto-last-change)
+  ("C-x C-8 ]" . goto-last-change-reverse))
 
 (use-package evil-leader
   :straight t
+  :custom
+  (evil-leader/in-all-states t)
   :init
-  (setq evil-leader/in-all-states t)
   (global-evil-leader-mode)
   (defalias 'spacemacs/set-leader-keys 'evil-leader/set-key)
   (defalias 'spacemacs/set-leader-keys-for-major-mode 'evil-leader/set-key-for-mode)
   (evil-leader/set-leader "<SPC>" "M-")
   :config
-  (add-hook 'evil-leader-mode-hook
-            (lambda ()
-              (when evil-leader/in-all-states
-                (let* ((prefixed (read-kbd-macro (concat evil-leader/non-normal-prefix evil-leader/leader)))
-                       (mode-map (cdr (assoc major-mode evil-leader--mode-maps)))
-                       (map (or mode-map evil-leader--default-map)))
-                  (if evil-leader-mode
-                      (progn
-                        (define-key evil-visual-state-map prefixed map)
-                        (define-key evil-motion-state-map prefixed map)
-                        (define-key evil-insert-state-map prefixed map))
-                    (progn
-                      (define-key evil-visual-state-map prefixed nil)
-                      (define-key evil-motion-state-map prefixed nil)
-                      (define-key evil-insert-state-map prefixed nil))))))))
+  (add-hook
+   'evil-leader-mode-hook
+   (lambda ()
+     (when evil-leader/in-all-states
+       (let* ((prefixed (read-kbd-macro (concat evil-leader/non-normal-prefix evil-leader/leader)))
+              (mode-map (cdr (assoc major-mode evil-leader--mode-maps)))
+              (map (or mode-map evil-leader--default-map)))
+         (if evil-leader-mode
+             (progn
+               (define-key evil-visual-state-map prefixed map)
+               (define-key evil-motion-state-map prefixed map)
+               (define-key evil-insert-state-map prefixed map))
+           (progn
+             (define-key evil-visual-state-map prefixed nil)
+             (define-key evil-motion-state-map prefixed nil)
+             (define-key evil-insert-state-map prefixed nil))))))))
 
 (use-package evil
   :straight t
   :init
-  (setq-default evil-symbol-word-search t)
-  (define-prefix-command 'yq-s-map)
-  (setq local-function-key-map (delq '(kp-tab . [9]) local-function-key-map))
-  (setq evil-want-find-undo t)
   (customize-set-variable 'evil-intercept-maps nil)
   (customize-set-variable 'evil-move-cursor-back nil)
   (customize-set-variable 'evil-want-C-u-scroll t)
@@ -70,6 +67,9 @@
   (customize-set-variable 'evil-shift-width 2)
   (customize-set-variable 'evil-show-paren-range 1)
   (customize-set-variable 'evil-ex-substitute-global t)
+  (define-prefix-command 'yq-s-map)
+  (setq local-function-key-map (delq '(kp-tab . [9]) local-function-key-map))
+  (setq evil-want-find-undo t)
   (setq evil-insert-state-cursor '(box "green"))
   (defun yq/update-evil-emacs-state-modes (mode-to-remove)
     "remove MODE-TO-REMOVE from evil-emacs-state-modes"

@@ -1,8 +1,10 @@
 (use-package iedit
   :straight t
-  :config
-  (dolist (mode '(clojure-mode emacs-lisp-mode))
-          (setq-mode-local mode iedit-auto-buffering t)))
+  :preface
+  (defun +iedit-auto-buffering-setup ()
+    (setq-local iedit-auto-buffering t))
+  :hook
+  ((clojure-mode emacs-lisp-mode) . +iedit-auto-buffering-setup))
 
 (use-package expand-region
   :straight t
