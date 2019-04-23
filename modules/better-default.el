@@ -348,7 +348,7 @@ file stored in the cache directory and `nil' to disable auto-saving.")
           (indent-region
            (region-beginning)
            (region-end))
-        (if (memq major-mode '(clojure-mode emacs-lisp-mode))
+        (if (fboundp 'lispyvile-prettify (memq major-mode '(clojure-mode emacs-lisp-mode)))
             (lispyville-prettify
              (point-min)
              (point-max))

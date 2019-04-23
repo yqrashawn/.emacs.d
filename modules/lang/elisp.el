@@ -216,7 +216,7 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
            pretty-parens  ; different paren styles for different modes.
            evil           ; If you use Evil.
            lispy          ; If you use Lispy. With this extension, you should install Lispy and do not enable lispy-mode directly.
-           lispyville
+           ;; lispyville
            smart-tab      ; C-b & C-f jump positions and smart shift with tab & S-tab.
            smart-yank))
   :config
@@ -246,7 +246,7 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
                  (ccc-set-buffer-local-cursor-color "plum1"))
         (progn (setq-local cursor-type '(bar . 6))
                (ccc-set-buffer-local-cursor-color "green")))))
-  (add-hook 'post-command-hook '+lispy-update-cursor-style)
+  ;; (add-hook 'post-command-hook '+lispy-update-cursor-style)
   (define-key parinfer-mode-map (kbd "C-.") #'parinfer-toggle-mode)
   (evil-define-key 'insert parinfer-mode-map (kbd "C-k") '+parinfer-hs-toggle-folding)
   (define-key parinfer-mode-map (kbd "C-k") '+parinfer-hs-toggle-folding)
@@ -288,6 +288,7 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
 
 (use-package lispyville
   :straight (:host github :repo "noctuid/lispyville")
+  :disabled
   :after (parinfer lispy)
   :diminish lispyville-mode
   :commands (lispyville-mode)
