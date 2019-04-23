@@ -41,6 +41,7 @@ the current buffer."
   ;; (add-hook 'emacs-lisp-mode-hook
   ;;           (lambda () (setq-local lisp-indent-function #'common-lisp-indent-function)))
   :config
+  (yq/setup-sp-keys-for-lispy-modes emacs-lisp-mode-map)
   (add-hook 'emacs-lisp-mode-hook (lambda ()
                                     (setq-local evil-shift-width 1)
                                     (setq-local company-idle-delay 0.2)
@@ -238,15 +239,17 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
    (lambda () (when (and (not parinfer-mode) (yq/lispy-file-p))
                 (parinfer-mode 1))))
 
+  ;; lispy special mode cursor
   (require 'ccc)
   (defun +lispy-update-cursor-style ()
     (when (and parinfer-mode (evil-insert-state-p))
-      (if (lispyville--special-p)
+      (if (or (lispy-right-p) (lispy-left-p) (region-active-p))
           (progn (setq-local cursor-type '(bar . 6))
                  (ccc-set-buffer-local-cursor-color "plum1"))
         (progn (setq-local cursor-type '(bar . 6))
                (ccc-set-buffer-local-cursor-color "green")))))
-  ;; (add-hook 'post-command-hook '+lispy-update-cursor-style)
+  (add-hook 'post-command-hook '+lispy-update-cursor-style)
+
   (define-key parinfer-mode-map (kbd "C-.") #'parinfer-toggle-mode)
   (evil-define-key 'insert parinfer-mode-map (kbd "C-k") '+parinfer-hs-toggle-folding)
   (define-key parinfer-mode-map (kbd "C-k") '+parinfer-hs-toggle-folding)

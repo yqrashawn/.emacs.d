@@ -31,7 +31,7 @@
   :diminish clojure-mode
   :diminish clojurescript-mode
   :custom
-  (clojure-align-forms-automatically t)
+  (clojure-align-forms-automatically nil)
   (clojure-align-reader-conditionals t)
   (clojure-defun-indents '(fn-traced))
   :init

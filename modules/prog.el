@@ -496,6 +496,13 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   (smartparens-global-mode t)
   (define-key yq-s-map "d" 'sp-kill-sexp)
   (define-key yq-s-map "," 'sp-copy-sexp)
+  (defun yq/setup-sp-keys-for-lispy-modes (map)
+    (evil-define-key 'normal map
+      ;; "H" #'sp-previous-sexp
+      ;; "L" #'sp-next-sexp
+      "H" #'sp-backward-sexp
+      "L" #'sp-forward-sexp
+      "M" #'sp-mark-sexp))
   (use-package smartparens-config))
 
 (use-package ediff
