@@ -1,3 +1,5 @@
+;;; rust.el ---  rust packages -*- lexical-binding: t; -*-
+
 (spacemacs|define-jump-handlers rust-mode)
 (let ((var "RUST_SRC_PATH"))
   (unless (or (member var exec-path-from-shell-variables) (getenv var))

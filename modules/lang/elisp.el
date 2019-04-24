@@ -1,3 +1,5 @@
+;;; elisp.el --- configs about elisp -*- lexical-binding: t; -*-
+
 (yq/add-toggle parinfer :mode parinfer-mode)
 (defun yq/lispy-file-p ()
   (memq

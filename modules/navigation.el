@@ -1,3 +1,5 @@
+;;; navigation.el --- configs about navigation -*- lexical-binding: t; -*-
+
 (use-package frog-menu
   :disabled
   :straight (:host github :repo "clemera/frog-menu"))
@@ -797,16 +799,17 @@ Return a list of one element based on major mode."
 
   (defun +tabbar-backward-tab ()
     (interactive)
-    (if (and parinfer-mode (evil-insert-state-p) (fboundp 'lispyville-backward-atom-begin))
-        (lispyville-backward-atom-begin)
+    (if (and parinfer-mode (evil-insert-state-p))
+        (sp-backward-sexp)
       (tabbar-backward-tab)))
   (defun +tabbar-forward-tab-or-ivy-done ()
     (interactive)
     (if (minibufferp)
         (ivy-done)
-      (if (and parinfer-mode (evil-insert-state-p) (fboundp 'lispyville-forward-atom))
-          (lispyville-forward-atom)
+      (if (and parinfer-mode (evil-insert-state-p))
+          (sp-forward-sexp)
         (tabbar-forward-tab))))
+
   ;; (global-set-key (kbd "C-x C-9 j") #'+tabbar-switch-group-next-line)
   ;; (global-set-key (kbd "C-x C-9 k") #'+tabbar-switch-group-prevouse-line)
   ;; (global-set-key (kbd "C-M-S-s-j") #'+tabbar-switch-group-next-line)

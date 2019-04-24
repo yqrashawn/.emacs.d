@@ -1,3 +1,5 @@
+;;; c.el --- configs language c -*- lexical-binding: t; -*-
+
 (yq/get-modules "lang/c-funcs.el")
 (defconst c-c++-modes '(c-mode c++-mode)
   "Primary major modes of the `c-c++' layer.")

@@ -1,3 +1,5 @@
+;;; ruby.el ---  ruby packages -*- lexical-binding: t; -*-
+
 (spacemacs|define-jump-handlers enh-ruby-mode)
 (spacemacs|define-jump-handlers ruby-mode)
 

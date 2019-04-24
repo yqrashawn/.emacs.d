@@ -1,3 +1,5 @@
+;;; python.el ---  python packages -*- lexical-binding: t; -*-
+
 (spacemacs|define-jump-handlers python-mode)
 (spacemacs|define-jump-handlers cython-mode anaconda-mode-goto)
 

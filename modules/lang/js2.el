@@ -1,3 +1,5 @@
+;;; js2.el ---  javascript packages -*- lexical-binding: t; -*-
+
 (yq/get-modules "lang/js2-imenu.el")
 (spacemacs|define-jump-handlers js2-mode)
 (setq js-indent-level 2)

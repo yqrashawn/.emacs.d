@@ -1,3 +1,5 @@
+;;; init.el --- init scripts                   -*- lexical-binding: t; -*-
+
 ;; https://www.reddit.com/r/emacs/comments/3kqt6e/2_easy_little_known_steps_to_speed_up_emacs_start/
 (let ((file-name-handler-alist nil))
   ;; (add-hook 'emacs-startup-hook
@@ -58,6 +60,11 @@
         (eval-print-last-sexp)))
     (load bootstrap-file nil 'nomessage))
 
+  (straight-use-package 'auto-compile)
+  (auto-compile-on-save-mode 1)
+  (auto-compile-on-load-mode 1)
+
+  (straight-use-package 'auto-compile)
   (straight-use-package 'diminish)
   (setq use-package-enable-imenu-support t)
   (straight-use-package 'use-package)

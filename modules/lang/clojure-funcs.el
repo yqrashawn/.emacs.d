@@ -1,3 +1,5 @@
+;;; clojure-funcs.el ---  clojure packages -*- lexical-binding: t; -*-
+
 (spacemacs|define-jump-handlers clojure-mode)
 (spacemacs|define-jump-handlers clojurec-mode)
 (spacemacs|define-jump-handlers clojurescript-mode)

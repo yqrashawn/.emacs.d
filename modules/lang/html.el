@@ -1,3 +1,5 @@
+;;; html.el ---  html packages -*- lexical-binding: t; -*-
+
 (use-package web-mode
   :straight t
   :mode

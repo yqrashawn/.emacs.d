@@ -1,3 +1,5 @@
+;;; md.el ---  markdown packages -*- lexical-binding: t; -*-
+
 (use-package markdown-mode
   :mode
   (("\\.m[k]d" . markdown-mode)

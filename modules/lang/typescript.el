@@ -1,3 +1,5 @@
+;;; typescript.el ---  typescript packages -*- lexical-binding: t; -*-
+
 (spacemacs|define-jump-handlers typescript-mode)
 (defvar typescript-fmt-tool 'tide
   "The name of the tool to be used

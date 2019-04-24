@@ -1,3 +1,5 @@
+;;; css.el ---  css packages -*- lexical-binding: t; -*-
+
 (use-package css-mode
   :straight t
   :defer t

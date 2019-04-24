@@ -1,3 +1,5 @@
+;;; org.el ---  org packages -*- lexical-binding: t; -*-
+
 (defmacro spacemacs|org-emphasize (fname char)
   "Make function for setting the emphasis in org mode"
   `(defun ,fname () (interactive)
