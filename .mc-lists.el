@@ -5,14 +5,18 @@
       '(
         evil-backward-char
         evil-backward-word-begin
+        evil-change
         evil-delete-backward-word
         evil-delete-char
         evil-forward-char
         evil-forward-word-begin
         evil-forward-word-end
         evil-insert
+        evil-next-line
         evil-next-visual-line
         evil-normal-state
+        evil-outer-arg
+        evil-previous-line
         evil-previous-visual-line
         lispy-braces
         lispy-brackets

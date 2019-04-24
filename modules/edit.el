@@ -48,3 +48,13 @@
         try-complete-lisp-symbol))
 
 (define-key evil-insert-state-map (kbd "C-l") 'hippie-expand)
+
+;; only works with lisp
+(use-package easy-kill
+  :straight t
+  :disabled
+  :commands (easy-kill easy-mark)
+  :bind
+  (:map evil-normal-state-map
+        ("w" . easy-mark)
+        ("W" . easy-kill)))
