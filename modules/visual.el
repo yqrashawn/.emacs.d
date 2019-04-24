@@ -139,8 +139,10 @@ has been changed to THEME."
 (spacemacs//adaptive-evil-highlight-persist-face)
 (add-hook 'spacemacs-post-theme-change-hook 'spacemacs//adaptive-evil-highlight-persist-face)
 
-;; (use-package all-the-icons
-;;   :straight t)
+(use-package all-the-icons
+  :straight t
+  :defer t)
+;; (all-the-icons-install-fonts)
 ;; (straight-use-package 'all-the-icons)
 
 (use-package minions
@@ -158,7 +160,7 @@ has been changed to THEME."
         doom-modeline-env-version t
         doom-modeline-lsp nil)
   :config
-  (setq doom-modeline-icon nil)
+  ;; (setq doom-modeline-icon nil)
   (doom-modeline-def-segment tabbar-group
     (when (and tabbar-mode (doom-modeline--active))
       (let ((tb-groups (+tabbar-get-groups))
@@ -176,8 +178,8 @@ has been changed to THEME."
                    'help-echo "Tabbar Group")
        " ")))
   (doom-modeline-def-modeline 'main
-    '(bar workspace-name window-number modals matches tabbar-group buffer-info remote-host selection-info)
-    '(misc-info persp-name lsp irc github debug fancy-battery minor-modes input-method buffer-encoding major-mode process vcs checker)))
+    '(bar workspace-name window-number modals matches tabbar-group buffer-info remote-host buffer-position parrot selection-info)
+    '(objed-state misc-info persp-name lsp irc mu4e github debug fancy-battery minor-modes input-method buffer-encoding major-mode process vcs checker)))
 
 (use-package vim-empty-lines-mode
   :straight (:host github :repo "jmickelin/vim-empty-lines-mode")

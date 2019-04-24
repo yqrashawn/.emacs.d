@@ -1038,3 +1038,8 @@ first."))
       (define-key keymap (kbd "C-h") 'helm-find-files-up-one-level)
       ;; rebind `describe-key' for convenience
       (define-key keymap (kbd "C-S-h") 'describe-key))))
+
+(use-package eyebrowse
+  :straight t
+  :init
+  (eyebrowse-mode t))
