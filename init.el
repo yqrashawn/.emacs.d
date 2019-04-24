@@ -141,6 +141,14 @@
     :straight t
     :commands (which-key-mode))
 
+  (use-package keycast
+    :straight t
+    :commands (keycast-mode))
+
+  (use-package command-log-mode
+    :straight t
+    :commands (global-command-log-mode))
+
   ;; (use-package zpresent)
 
   (global-set-key (kbd "M-0") 'delete-frame)
