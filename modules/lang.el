@@ -24,6 +24,7 @@
 (yq/get-modules "lang/lua.el")
 (yq/get-modules "lang/clojure.el")
 (yq/get-modules "lang/restclient.el")
+(yq/get-modules "lang/sql.el")
 
 (use-package yaml-mode
   :straight t
@@ -105,6 +106,4 @@
   :config
   (push 'company-lsp company-backends))
 
-(use-package sqlformat
-  :straight t
-  :hook (sql-mode . sqlformat-on-save-mode))
+

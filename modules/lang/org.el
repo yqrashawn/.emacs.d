@@ -483,7 +483,12 @@ Inserted by installing org-mode or when a release is made."
       (org-eval-in-calendar '(calendar-backward-year 1))))
   (define-key org-read-date-minibuffer-local-map (kbd "M-J")
     (lambda () (interactive)
-      (org-eval-in-calendar '(calendar-forward-year 1)))))
+      (org-eval-in-calendar '(calendar-forward-year 1))))
+  (defun org-babel-get-header (params key &optional others)
+    (delq nil
+          (mapcar
+           (lambda (p) (when (funcall (if others #'not #'identity) (eq (car p) key)) p))
+           params))))
 
 (use-package org-tempo)
 
@@ -637,6 +642,8 @@ SCHEDULED: %^T
   :init
   (setq org-babel-load-languages
         '((emacs-lisp . t)
+          (sql . t)
+          (sql-mode . t)
           (clojure . t)
           (shell . t)
           (restclient . t)
@@ -664,6 +671,9 @@ SCHEDULED: %^T
 ;; https://github.com/krisajenkins/ob-mongo/tree/371bf19c7c10eab2f86424f8db8ab685997eb5aa
 (use-package ob-mongo
   :straight t
+  :after ob)
+
+(use-feature ob-sql
   :after ob)
 
 (use-package org-fancy-priorities

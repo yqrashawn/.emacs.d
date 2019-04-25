@@ -254,7 +254,7 @@ file stored in the cache directory and `nil' to disable auto-saving.")
   :custom
   (confirm-kill-processes nil)
   (confirm-kill-emacs nil)
-  (enable-local-variables :safe)
+  (enable-local-variables t)
   (confirm-nonexistent-file-or-buffer nil)
   :init
   ;; Auto-save file
