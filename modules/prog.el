@@ -678,3 +678,12 @@ _j_  js2      _T_     text   _f_  fundamental
     "k" #'previous-line
     "r" #'leetcode-problems-refresh
     "q" #'quit-window))
+
+(use-package dash-at-point
+  :straight t
+  :bind
+  (:map evil-normal-state-map
+        ("sa" . dash-at-point))
+  :init
+  (assq-delete-all 'clojure-mode dash-at-point-mode-alist)
+  (add-to-list 'dash-at-point-mode-alist '(clojure-mode . "ClojureDocs")))

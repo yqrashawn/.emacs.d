@@ -143,7 +143,6 @@ has been changed to THEME."
   :straight t
   :defer t)
 ;; (all-the-icons-install-fonts)
-;; (straight-use-package 'all-the-icons)
 
 (use-package minions
   :straight t

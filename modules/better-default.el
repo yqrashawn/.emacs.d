@@ -378,6 +378,7 @@ If the universal prefix argument is used then kill the buffer too."
       (kill-buffer-and-window)
     (delete-window)))
 
+(get-buffer-window "*Help*")
 (use-package mwim
   :straight t
   :config
@@ -1603,3 +1604,8 @@ Info-mode:
 (use-package ccc
   :straight t
   :defer t)
+
+(use-package gcmh
+  :straight t
+  :init
+  (gcmh-mode 1))
