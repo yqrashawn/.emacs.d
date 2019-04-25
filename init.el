@@ -18,7 +18,7 @@
   (setq gc-cons-percentage 0.6)
 
   ;; check package update infos
-  (setq straight-vc-git-auto-fast-forward nil)
+  (setq straight-vc-git-auto-fast-forward t)
   ;; (package-initialize)
   (setq scroll-bar-background nil)
   (menu-bar-mode -1)

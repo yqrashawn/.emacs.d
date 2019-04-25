@@ -20,7 +20,8 @@
   :config
   ;; docs: https://oremacs.com/swiper/#completion-styles
   (setq ivy-re-builders-alist
-        '((magit-log-other . ivy--regex-fuzzy)
+        '((magit-status . ivy--regex-fuzzy)
+          (magit-log-other . ivy--regex-fuzzy)
           (magit-file-checkout . ivy--regex-fuzzy)
           (magit-checkout . ivy--regex-fuzzy)
           (magit-reset-index . ivy--regex-fuzzy)
