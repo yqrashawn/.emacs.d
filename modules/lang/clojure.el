@@ -460,6 +460,12 @@
     (kbd "l") 'sayid-show-traced
     (kbd "h") 'sayid-traced-buf-show-help))
 
+;; TODO won't work
+(use-package flycheck-clj-kondo
+  :straight t
+  :init
+  (add-hook 'clojure-mode-hook (defl () (require 'flycheck-clj-kondo))))
+
 (use-package 4clojure :straight t)
 
 (defun ms/in-comment-p ()
