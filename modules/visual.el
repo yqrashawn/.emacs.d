@@ -197,6 +197,8 @@ has been changed to THEME."
   :hook (prog-mode . symbol-overlay-mode)
   :init
   (define-key evil-normal-state-map "gu" 'symbol-overlay-put)
+  (yq/add-toggle symbol-overlay :mode symbol-overlay-mode)
+  (spacemacs/set-leader-keys "tH" 'yq/toggle-symbol-overlay)
   :config
   (setq symbol-overlay-map
         (let ((map (make-sparse-keymap)))
