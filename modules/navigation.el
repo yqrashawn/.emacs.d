@@ -644,7 +644,7 @@ When ARG is non-nil search in junk files."
   (setq tabbar-cycle-scope 'tabs
         tabbar-use-images nil
         tabbar-separator (cons 1.2 nil))
-  (tabbar-mode 1)
+  ;; (tabbar-mode 1)
   (defun +tabbar-update-face-depends-on-theme ()
     (set-face-attribute
      'tabbar-default nil

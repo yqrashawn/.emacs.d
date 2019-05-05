@@ -177,7 +177,7 @@ has been changed to THEME."
                    'help-echo "Tabbar Group")
        " ")))
   (doom-modeline-def-modeline 'main
-    '(bar workspace-name window-number evil-state  matches tabbar-group buffer-info remote-host buffer-position parrot selection-info)
+    '(bar workspace-name window-number modals matches buffer-info remote-host selection-info)
     '(misc-info persp-name lsp irc mu4e github debug fancy-battery minor-modes input-method buffer-encoding major-mode process vcs checker)))
 
 (use-package vim-empty-lines-mode
