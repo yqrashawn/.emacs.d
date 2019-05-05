@@ -687,3 +687,25 @@ _j_  js2      _T_     text   _f_  fundamental
   :init
   (assq-delete-all 'clojure-mode dash-at-point-mode-alist)
   (add-to-list 'dash-at-point-mode-alist '(clojure-mode . "ClojureDocs")))
+
+(use-package docker
+  :straight t
+  :commands (docker)
+  :config
+  (evilified-state-evilify docker-container-mode docker-container-mode-map
+    "?" 'docker-container-help-popup
+    "C" 'docker-container-cp-popup
+    "D" 'docker-container-rm-popup
+    "I" 'docker-container-inspect-popup
+    "K" 'docker-container-kill-popup
+    "L" 'docker-container-logs-popup
+    "O" 'docker-container-stop-popup
+    "P" 'docker-container-pause-popup
+    "R" 'docker-container-restart-popup
+    "S" 'docker-container-start-popup
+    "a" 'docker-container-attach-popup
+    "b" 'docker-container-shell-popup
+    "d" 'docker-container-diff-popup
+    "f" 'docker-container-find-file-popup
+    "i" 'docker-container-ls-popup
+    "r" 'docker-container-rename-selection))
