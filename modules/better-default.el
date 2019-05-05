@@ -1609,3 +1609,15 @@ Info-mode:
   :straight t
   :init
   (gcmh-mode 1))
+
+(use-package whitespace-cleanup-mode
+  :straight t
+  :init
+  (global-whitespace-cleanup-mode))
+
+(use-package mic-paren
+  :straight t
+  :custom
+  (paren-sexp-mode 'match)
+  :init
+  (paren-activate))

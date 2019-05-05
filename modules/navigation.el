@@ -680,14 +680,14 @@ When ARG is non-nil search in junk files."
      :foreground (face-attribute 'default :background)
      :background (face-attribute 'default :background)
      :box '(:line-width -1 :style pressed-button)))
-  (+tabbar-update-face-depends-on-theme)
-  (add-hook 'spacemacs-post-theme-change-hook '+tabbar-update-face-depends-on-theme)
 
   ;; hide button
   (customize-set-variable 'tabbar-scroll-right-button '(("") ""))
   (customize-set-variable 'tabbar-scroll-left-button '(("") ""))
   (customize-set-variable 'tabbar-buffer-home-button '(("") ""))
   :config
+  (+tabbar-update-face-depends-on-theme)
+  (add-hook 'spacemacs-post-theme-change-hook '+tabbar-update-face-depends-on-theme)
   (add-hook 'after-save-hook #'tabbar-display-update)
   (defun tabbar-buffer-list ()
     "Return the list of buffers to show in tabs.
