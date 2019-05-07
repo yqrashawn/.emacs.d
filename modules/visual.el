@@ -71,7 +71,7 @@
                 (custom-theme-set-faces
                  'spacemacs-light
                  ;;;;; mic-paren
-                 `(paren-face-match ((t (:background "#fffff3")))))))))
+                 `(paren-face-match ((t (:background "#dbd9d1")))))))))
 
 ;; (load-theme 'yq-default-emacs-theme)
 ;; (load-theme 'default-white)
