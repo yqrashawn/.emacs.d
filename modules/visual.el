@@ -229,3 +229,8 @@ has been changed to THEME."
           (define-key map (kbd "<") 'symbol-overlay-jump-first)
           (define-key map (kbd ">") 'symbol-overlay-jump-last)
           map)))
+
+(use-package pretty-mode
+  :straight t
+  :init
+  (global-pretty-mode t))

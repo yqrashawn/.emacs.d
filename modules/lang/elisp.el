@@ -72,8 +72,8 @@ Unlike `eval-defun', this does not go to topmost function."
     (interactive)
     (let ((symb (variable-at-point)))
       (if (and symb
-               (not (equal symb 0))
-               (not (fboundp symb)))
+             (not (equal symb 0))
+             (not (fboundp symb)))
           (find-variable-other-window symb)
         (find-function-at-point))))
 
@@ -91,7 +91,7 @@ Requires smartparens because all movement is done using `sp-up-sexp'."
       (save-excursion
         (let ((max 10))
           (while (and (> max 0)
-                      (sp-point-in-string-or-comment))
+                    (sp-point-in-string-or-comment))
             (decf max)
             (sp-up-sexp)))
         (sp-up-sexp arg)
@@ -344,6 +344,10 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
 (use-package highlight-quoted
   :straight t
   :hook (emacs-lisp-mode . highlight-quoted-mode))
+
+(use-package ipretty
+  :straight t
+  :hook (emacs-lisp-mode . ipretty-mode))
 
 (use-package edebug
   :commands (edebug-defun)
