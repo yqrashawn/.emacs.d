@@ -209,6 +209,7 @@ has been changed to THEME."
 
 (use-package highlight-blocks
   :straight t
+  :disabled t
   :hook (prog-mode . highlight-blocks-mode))
 
 (use-package symbol-overlay
