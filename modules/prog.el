@@ -493,7 +493,7 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   :straight t
   :diminish smartparens-mode
   :config
-  (smartparens-global-mode t)
+  (smartparens-global-strict-mode t)
   (define-key yq-s-map "d" 'sp-kill-sexp)
   (define-key yq-s-map "," 'sp-copy-sexp)
   (defun yq/setup-sp-keys-for-lispy-modes (map)

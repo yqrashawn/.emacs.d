@@ -78,7 +78,17 @@
            (lambda (index)
              (eq index mode-to-remove))
            evil-emacs-state-modes)))
+
+  (defun yq/update-evil-insert-state-modes (mode-to-remove)
+    "remove MODE-TO-REMOVE from evil-emacs-state-modes"
+    (setq evil-insert-state-modes
+          (seq-remove
+           (lambda (index)
+             (eq index mode-to-remove))
+           evil-insert-state-modes)))
   :config
+  (yq/update-evil-insert-state-modes 'eshell-mode)
+  (add-to-list 'evil-emacs-state-modes 'eshell-mode)
   (define-key evil-ex-completion-map (kbd "C-a") #'move-beginning-of-line)
   (define-key evil-ex-completion-map (kbd "C-b") #'backward-char)
   (define-key evil-normal-state-map (kbd "C-b") 'evil-execute-in-emacs-state)
@@ -152,6 +162,7 @@
   (define-key evil-normal-state-map "zl" 'hs-hide-level)
   (define-key evil-normal-state-map (kbd "C-k") 'evil-toggle-fold)
   (define-key evil-normal-state-map "s" 'yq-s-map)
+  (define-key evil-normal-state-map "t" 'nil)
   (define-key yq-s-map "k" 'yq/kill-this-buffer)
   (define-key yq-s-map "K" 'projectile-kill-buffers)
   (define-key yq-s-map "c" 'yq/delete-window)
@@ -236,8 +247,10 @@
   (evil-define-key* '(normal motion) evil-snipe-local-mode-map
                     "s" nil
                     "S" nil
-                    "t" #'evil-snipe-s
-                    "T" #'evil-snipe-S)
+                    ;; "t" #'evil-snipe-s
+                    ;; "T" #'evil-snipe-S
+                    "t" nil
+                    "T" nil)
   (yq/add-toggle evil-snipe :mode evil-snipe-mode)
   (add-hook 'org-mode-hook 'yq/toggle-evil-snipe-off)
   (setq evil-snipe-auto-disable-substitute nil)

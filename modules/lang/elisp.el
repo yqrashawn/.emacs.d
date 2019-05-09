@@ -149,7 +149,7 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
   :straight t
   :diminish lispy " ʪ"
   :custom
-  (lispy-eval-display-style 'overlay)
+  (lispy-eval-display-style 'message)
   (lispy-visit-method 'projectile)
   (lispy-safe-copy t)
   (lispy-safe-delete t)
@@ -293,49 +293,50 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
 
 (use-package lispyville
   :straight (:host github :repo "noctuid/lispyville")
-  :disabled
   :after (parinfer lispy)
   :diminish lispyville-mode
   :commands (lispyville-mode)
   :hook (parinfer-mode . lispyville-mode)
   :custom
-  (lispyville-motions-put-into-special t)
   (lispyville-key-theme
-   '(operators
-     c-w
-     (escape insert visual)
-     prettify
-     (additional-movement normal visual motion)
-     (atom-movement normal visual motion)
-     commentary
+   '(c-w
+     (atom-movement t)
+     (additional-movement normal motion)
      slurp/barf-lispy
-     wrap
      additional
      additional-insert
-     (additional-wrap normal visual insert)
-     mark
-     mark-toggle))
+     (additional-wrap normal visual insert)))
   :config
-  ;; (advice-add #'lispyville-escape :after (defl (&optional arg) (parinfer--switch-to-indent-mode-1)))
-  (evil-define-key nil evil-inner-text-objects-map
-    "t" #'lispyville-inner-atom
-    "l" #'lispyville-inner-list
-    "x" #'lispyville-inner-sexp
-    "d" #'lispyville-inner-function)
-  (evil-define-key nil evil-outer-text-objects-map
-    "t" #'lispyville-a-atom
-    "l" #'lispyville-a-list
-    "x" #'lispyville-a-sexp
-    "d" #'lispyville-a-function)
-  (lispyville--define-key 'normal "V" #'evil-visual-line)
-  (lispyville--define-key 'normal "\C-v" #'evil-visual-block)
-  (lispyville--define-key 'normal "{" #'lispyville-previous-opening)
-  (lispyville--define-key 'normal "}" #'lispyville-next-opening)
-  (lispyville--define-key 'normal "[" #'lispyville-previous-closing)
-  (lispyville--define-key 'normal "]" #'lispyville-next-closing)
-  ;; (evil-define-key 'normal lispyville-mode-map "v" (lispyville-wrap-command lispy-mark-symbol special))
-  ;; (lispyville--define-key '(normal insert visual) [remap comment-line] #'lispyville-comment-or-uncomment-line)
-  (lispyville--define-key 'insert [remap delete-backward-char] #'lispy-delete-backward))
+  (lispyville--define-key 'normal
+    "tR" #'lispyville-raise-list
+    "tr" #'lispy-raise-sexp
+    "tt" #'transpose-sexps
+    "tJ" #'lispy-join
+    "J" #'lispyville-join
+    "t/" #'lispy-splice
+    "ts" #'lispy-split
+    "tC" #'lispy-convolute
+    "txb" (lambda ()
+            (interactive)
+            (if (and (fboundp 'cljr-introduce-let)
+                   (memq major-mode lispy-clojure-modes))
+                (cljr-introduce-let)
+              (lispy-bind-variable)))
+    (kbd "M-RET") #'lispyville-wrap-round
+    (kbd "M-]") #'lispyville-wrap-braces
+    (kbd "M-[") #'lispyville-wrap-brackets
+    "{" #'lispyville-insert-at-beginning-of-list
+    "}" #'lispyville-insert-at-end-of-list
+    "[" #'lispyville-previous-closing
+    "]" #'lispyville-next-opening)
+  (lispyville--define-key 'insert
+    (kbd "M-RET") #'lispyville-wrap-round
+    (kbd "M-]") #'lispyville-wrap-braces
+    (kbd "M-[") #'lispyville-wrap-brackets)
+  (lispyville--define-key 'visual
+    (kbd "(") #'lispyville-wrap-round
+    (kbd "{") #'lispyville-wrap-braces
+    (kbd "[") #'lispyville-wrap-brackets))
 
 (use-package highlight-defined
   :straight t

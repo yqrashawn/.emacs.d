@@ -1,8 +1,8 @@
 (add-hook 'comint-mode-hook 'yq/toggle-hl-line-off)
+
 (defun spacemacs//init-eshell ()
   (if (string-match ".*sudo.*@" (buffer-name))
       (company-mode -1))
-  (evil-emacs-state)
   (setq pcomplete-cycle-completions nil)
   (defun eshell/clear ()
     (let ((inhibit-read-only t))
@@ -14,6 +14,7 @@
     (eshell-send-input))
   (define-key eshell-mode-map (kbd "C-l") 'spacemacs/eshell-clear-keystroke)
   (define-key eshell-mode-map (kbd "C-d") 'eshell-delchar-or-maybe-eof))
+
 (add-hook 'eshell-mode-hook 'spacemacs//init-eshell)
 
 (defvar spacemacs-repl-list '()
