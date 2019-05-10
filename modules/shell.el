@@ -15,6 +15,8 @@
   (define-key eshell-mode-map (kbd "C-l") 'spacemacs/eshell-clear-keystroke)
   (define-key eshell-mode-map (kbd "C-d") 'eshell-delchar-or-maybe-eof))
 
+(yq/update-evil-insert-state-modes 'eshell-mode)
+(add-to-list 'evil-emacs-state-modes 'eshell-mode)
 (add-hook 'eshell-mode-hook 'spacemacs//init-eshell)
 
 (defvar spacemacs-repl-list '()

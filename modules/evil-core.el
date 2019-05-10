@@ -87,8 +87,6 @@
              (eq index mode-to-remove))
            evil-insert-state-modes)))
   :config
-  (yq/update-evil-insert-state-modes 'eshell-mode)
-  (add-to-list 'evil-emacs-state-modes 'eshell-mode)
   (define-key evil-ex-completion-map (kbd "C-a") #'move-beginning-of-line)
   (define-key evil-ex-completion-map (kbd "C-b") #'backward-char)
   (define-key evil-normal-state-map (kbd "C-b") 'evil-execute-in-emacs-state)
