@@ -212,3 +212,10 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
 
 (evil-set-initial-state 'term-mode 'emacs)
 (global-set-key (kbd "C-'") 'spacemacs/default-pop-shell)
+
+(use-package better-shell
+  :straight t
+  :disabled
+  :bind
+  (("M-'" . better-shell-shell)
+   ("M-\"" . better-shell-remote-open)))
