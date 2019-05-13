@@ -46,12 +46,10 @@
   (add-hook 'spacemacs-post-theme-change-hook
             (lambda ()
               (when (eq yq/current-theme 'zenburn)
-                (custom-theme-set-faces
-                 'zenburn
-                 ;;;;; mic-paren
-                 `(paren-face-match ((t (:background "#506575"))))
-                 `(paren-face-mismatch ((t (:background "#DC8CC3"))))
-                 `(paren-face-no-match ((t (:background "#CC9393")))))))))
+                ;; mic-paren
+                (set-face-background 'paren-face-match "#506575")
+                (set-face-background 'paren-face-mismatch "#DC8CC3")
+                (set-face-background 'paren-face-no-match "#CC9393")))))
 
 (use-package doom-themes
   :straight t
@@ -68,10 +66,9 @@
   (add-hook 'spacemacs-post-theme-change-hook
             (lambda ()
               (when (eq yq/current-theme 'spacemacs-light)
-                (custom-theme-set-faces
-                 'spacemacs-light
-                 ;;;;; mic-paren
-                 `(paren-face-match ((t (:background "#dbd9d1")))))))))
+                ;; mic-paren
+                (set-face-background 'paren-face-match "#dbd9d1")))))
+
 
 ;; (load-theme 'yq-default-emacs-theme)
 ;; (load-theme 'default-white)

@@ -67,6 +67,7 @@
 (straight-use-package 'diminish)
 (setq use-package-enable-imenu-support t)
 (straight-use-package 'use-package)
+(straight-use-package 'use-package-ensure-system-package)
 
 (defmacro def (name &rest body)
   (declare (indent 1) (debug t))

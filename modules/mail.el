@@ -16,10 +16,24 @@
  starttls-extra-arguments nil
  starttls-use-gnutls t)
 
+(defconst mu4e-mu-version "1.1.0"
+  "Required mu binary version; mu4e's version must agree with this.")
+
+(defconst mu4e-builddir "/usr/local/opt/mu"
+  "Top-level build directory.")
+
+(defconst mu4e-doc-dir "/usr/local/opt/mu/share/doc/mu"
+  "Mu4e's data-dir.")
+
+(provide 'mu4e-meta)
+
 (use-package mu4e
-  :straight t
+  ;; :straight t
+  :straight (:host github :repo "djcb/mu" :branch "master"
+                   :files ("mu4e/*"))
+  :ensure-system-package mu
   ;; :straight (:host github :repo "emacsmirror/mu4e" :branch "master"
-  ;;            :files ("mu4e/*" ("mu4e/mu4e-meta.el.in" . "mu4e-meta.el")))
+  ;;                  :files ("mu4e/*" ("mu4e/mu4e-meta.el.in" . "mu4e-meta.el")))
   :custom
   (mu4e-attachment-dir "~/Downloads")
   (mu4e-compose-signature-auto-include nil)
