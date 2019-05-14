@@ -47,6 +47,7 @@
             (lambda ()
               (when (eq yq/current-theme 'zenburn)
                 ;; mic-paren
+                (set-face-foreground 'paren-face-match nil)
                 (set-face-background 'paren-face-match "#506575")
                 (set-face-background 'paren-face-mismatch "#DC8CC3")
                 (set-face-background 'paren-face-no-match "#CC9393")))))
