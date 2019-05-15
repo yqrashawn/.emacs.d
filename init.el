@@ -107,6 +107,7 @@
         (load-file elc-file-path)
       (load-file el-file-path))))
 
+(yq/get-modules "core-display-init.el")
 (yq/get-modules "evil-core.el")
 (yq/get-modules "better-default.el")
 (yq/get-modules "navigation.el")

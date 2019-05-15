@@ -231,15 +231,43 @@ has been changed to THEME."
 (use-package pretty-magit
   :load-path "~/.emacs.d/modules"
   :after magit
-  :init
-  (pretty-magit-setup)
   :config
+  (pretty-magit-setup)
   (pretty-magit-add-leaders
    '(("Feature" ? (:foreground "slate gray" :height 1.2))
      ("Add"     ? (:foreground "#375E97" :height 1.2))
      ("Fix"     ? (:foreground "#FB6542" :height 1.2))
      ("Clean"   ? (:foreground "#FFBB00" :height 1.2))
      ("Docs"    ? (:foreground "#3F681C" :height 1.2)))))
+
+(use-package pretty-fonts
+  :load-path "~/.emacs.d/modules"
+  :config
+  ;; !! This is required to avoid segfault when using emacs as daemon !!
+  (spacemacs|do-after-display-system-init
+   (pretty-fonts-add-hook 'prog-mode-hook pretty-fonts-fira-code-alist)
+   (pretty-fonts-add-hook 'org-mode-hook  pretty-fonts-fira-code-alist)
+
+   (pretty-fonts-set-fontsets-for-fira-code)
+   (pretty-fonts-set-fontsets
+    '(;; All-the-icons fontsets
+      ("fontawesome"
+       ;;                         
+       #xf07c #xf0c9 #xf0c4 #xf0cb #xf017 #xf101)
+
+      ("all-the-icons"
+       ;;    
+       #xe907 #xe928)
+
+      ("github-octicons"
+       ;;                               
+       #xf091 #xf059 #xf076 #xf075 #xe192  #xf016 #xf071)
+
+      ("material icons"
+       ;;              
+       #xe871 #xe918 #xe3e7  #xe5da
+       ;;              
+       #xe3d0 #xe3d1 #xe3d2 #xe3d4)))))
 
 ;; (use-package pretty-mode
 ;;   :straight t
