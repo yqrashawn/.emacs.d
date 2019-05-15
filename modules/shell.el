@@ -219,3 +219,47 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
   :bind
   (("M-'" . better-shell-shell)
    ("M-\"" . better-shell-remote-open)))
+
+(use-package pretty-eshell
+  :load-path "~/.emacs.d/modules"
+  :init
+  ;; More prompt styling
+  (setq pretty-eshell-header "\n︳")
+  (setq pretty-eshell-prompt-string " ")
+  :config
+  ;; Directory
+  (pretty-eshell-section
+   esh-dir
+   "\xf07c"  ; 
+   (abbreviate-file-name (eshell/pwd))
+   '(:foreground "#268bd2" :bold bold :underline t))
+
+  ;; Git Branch
+  (pretty-eshell-section
+   esh-git
+   "\xe907"  ; 
+   (magit-get-current-branch)
+   '(:foreground "#8D6B94"))
+
+  ;; Python Virtual Environment
+  (pretty-eshell-section
+   esh-python
+   "\xe928"  ; 
+   pyvenv-virtual-env-name)
+
+  ;; Time
+  (pretty-eshell-section
+   esh-clock
+   "\xf017"  ; 
+   (format-time-string "%H:%M" (current-time))
+   '(:foreground "forest green"))
+
+  ;; Prompt Number
+  (pretty-eshell-section
+   esh-num
+   "\xf0c9"  ; 
+   (number-to-string pretty-eshell-prompt-num)
+   '(:foreground "brown"))
+
+  (setq pretty-eshell-funcs
+        (list esh-dir esh-git esh-python esh-clock esh-num)))

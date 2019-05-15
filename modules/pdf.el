@@ -112,3 +112,11 @@
   (evil-define-key 'normal pdf-outline-buffer-mode-map "f" 'pdf-outline-follow-mode)
   (evil-define-key 'normal pdf-outline-buffer-mode-map "q" 'pdf-outline-quit)
   (evil-define-key 'normal pdf-outline-buffer-mode-map (kbd "TAB") 'pdf-outline-toggle-subtree))
+
+(use-package pdf-view-restore
+  :straight (:host github :repo "007kevin/pdf-view-restore")
+  :custom
+  (pdf-view-restore-filename "~/.emacs.d/.pdf-view-restore")
+  :after pdf-tools
+  :config
+  (add-hook 'pdf-view-mode-hook 'pdf-view-restore-mode))

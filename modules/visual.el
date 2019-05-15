@@ -228,6 +228,19 @@ has been changed to THEME."
           (define-key map (kbd ">") 'symbol-overlay-jump-last)
           map)))
 
+(use-package pretty-magit
+  :load-path "~/.emacs.d/modules"
+  :after magit
+  :init
+  (pretty-magit-setup)
+  :config
+  (pretty-magit-add-leaders
+   '(("Feature" ? (:foreground "slate gray" :height 1.2))
+     ("Add"     ? (:foreground "#375E97" :height 1.2))
+     ("Fix"     ? (:foreground "#FB6542" :height 1.2))
+     ("Clean"   ? (:foreground "#FFBB00" :height 1.2))
+     ("Docs"    ? (:foreground "#3F681C" :height 1.2)))))
+
 ;; (use-package pretty-mode
 ;;   :straight t
 ;;   :init
