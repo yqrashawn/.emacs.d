@@ -128,3 +128,12 @@
 (use-package smeargle
   :straight t
   :commands (smeargle))
+
+(use-package magit-todos
+  :straight t
+  :after (magit)
+  :init
+  (magit-todos-mode)
+  :config
+  (define-key magit-todos-section-map "j" nil)
+  (define-key magit-todos-item-section-map (kbd "M-RET") #'magit-todos-peek-at-item))

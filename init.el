@@ -121,7 +121,6 @@
 (yq/get-modules "comm-funcs.el")
 (yq/get-modules "mail.el")
 (yq/get-modules "visual.el")
-(yq/get-modules "fira-code.el")
 (yq/get-modules "auto-detect-which-machine.el")
 ;; (yq/get-modules "pdf.el")
 

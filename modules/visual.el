@@ -42,7 +42,6 @@
   :defer t
   :init
   (setq yq/dark-theme 'zenburn)
-  :config
   (add-hook 'spacemacs-post-theme-change-hook
             (lambda ()
               (when (eq yq/current-theme 'zenburn)
@@ -63,7 +62,6 @@
   :defer t
   :init
   (setq yq/light-theme 'spacemacs-light)
-  :config
   (add-hook 'spacemacs-post-theme-change-hook
             (lambda ()
               (when (eq yq/current-theme 'spacemacs-light)
