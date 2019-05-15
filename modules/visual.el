@@ -269,7 +269,16 @@ has been changed to THEME."
        ;;              
        #xe3d0 #xe3d1 #xe3d2 #xe3d4)))))
 
-;; (use-package pretty-mode
-;;   :straight t
-;;   :init
-;;   (global-pretty-mode t))
+(use-package pretty-mode
+  :straight t
+  :disabled
+  :init
+  (global-pretty-mode t)
+  :config
+  (pretty-deactivate-groups
+   '(:equality :ordering :ordering-double :ordering-triple
+               :arrows :arrows-twoheaded :punctuation
+               :logic :sets :Rightarrow))
+
+  (pretty-activate-groups
+   '(:sub-and-superscripts :greek :arithmetic-nary)))

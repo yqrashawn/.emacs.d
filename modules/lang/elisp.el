@@ -149,7 +149,7 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
   :straight t
   :diminish lispy " ʪ"
   :custom
-  (lispy-eval-display-style 'message)
+  (lispy-eval-display-style 'overlay)
   (lispy-visit-method 'projectile)
   (lispy-safe-copy t)
   (lispy-safe-delete t)
