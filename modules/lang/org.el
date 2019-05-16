@@ -1,5 +1,6 @@
 ;;; org.el ---  org packages -*- lexical-binding: t; -*-
 
+;; TODO fix org-capture
 (defmacro spacemacs|org-emphasize (fname char)
   "Make function for setting the emphasis in org mode"
   `(defun ,fname () (interactive)
@@ -56,6 +57,7 @@ Inserted by installing org-mode or when a release is made."
 (provide 'org-version)
 (straight-use-package 'org-plus-contrib)
 (straight-use-package 'org)
+(load-file (concat user-emacs-directory "straight/repos/org/lisp/org-macs.el"))
 
 (use-package org
   :straight org-plus-contrib
