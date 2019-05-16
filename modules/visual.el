@@ -177,22 +177,22 @@ has been changed to THEME."
         doom-modeline-lsp nil)
   :config
   ;; (setq doom-modeline-icon nil)
-  (doom-modeline-def-segment tabbar-group
-    (when (and tabbar-mode (doom-modeline--active))
-      (let ((tb-groups (+tabbar-get-groups))
-            (tb-cur-group (first (+tabbar-buffer-groups))))
-        (mapcar
-         (lambda (group)
-           (+propertize-tabbar-group-for-modeline group (string= group tb-cur-group))) tb-groups))))
-  (defun +propertize-tabbar-group-for-modeline (group &optional cur-group-p)
-    (let ((face (if cur-group-p 'doom-modeline-evil-emacs-state 'mode-line-emphasis))
-          (active (doom-modeline--active)))
-      (concat
-       " "
-       (propertize group
-                   'face face
-                   'help-echo "Tabbar Group")
-       " ")))
+  ;; (doom-modeline-def-segment tabbar-group
+  ;;   (when (and tabbar-mode (doom-modeline--active))
+  ;;     (let ((tb-groups (+tabbar-get-groups))
+  ;;           (tb-cur-group (first (+tabbar-buffer-groups))))
+  ;;       (mapcar
+  ;;        (lambda (group)
+  ;;          (+propertize-tabbar-group-for-modeline group (string= group tb-cur-group))) tb-groups))))
+  ;; (defun +propertize-tabbar-group-for-modeline (group &optional cur-group-p)
+  ;;   (let ((face (if cur-group-p 'doom-modeline-evil-emacs-state 'mode-line-emphasis))
+  ;;         (active (doom-modeline--active)))
+  ;;     (concat
+  ;;      " "
+  ;;      (propertize group
+  ;;                  'face face
+  ;;                  'help-echo "Tabbar Group")
+  ;;      " ")))
   (doom-modeline-def-modeline 'main
     '(bar workspace-name window-number modals matches buffer-info remote-host selection-info)
     '(misc-info persp-name lsp irc mu4e github debug fancy-battery minor-modes input-method buffer-encoding major-mode process vcs checker)))

@@ -1594,7 +1594,7 @@ Info-mode:
   :commands (define-word))
 
 (use-feature flyspell
-  :hook ((git-commit-mode org-mode text-mode markdown-mode) . flyspell-mode))
+  :hook ((org-mode text-mode markdown-mode) . flyspell-mode))
 
 (use-package auto-dictionary
   :straight t

@@ -2,7 +2,10 @@
 (remove-hook 'find-file-hooks 'vc-find-file-hook)
 
 (use-package git-commit
-  :straight t)
+  :straight t
+  :config
+  ;; https://emacs.stackexchange.com/a/41405
+  (add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell))
 
 (use-package magit-popup
   :straight t)
