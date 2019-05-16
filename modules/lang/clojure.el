@@ -466,7 +466,8 @@
   :init
   (add-hook 'clojure-mode-hook (defl () (require 'flycheck-clj-kondo))))
 
-(use-package 4clojure :straight t)
+(use-package 4clojure
+  :straight (:host github :repo "yqrashawn/4clojure.el"))
 
 (defun ms/in-comment-p ()
   (nth 4 (syntax-ppss)))
