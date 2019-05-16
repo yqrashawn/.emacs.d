@@ -164,11 +164,12 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
       (lispy-mode 1)))
   (add-hook 'minibuffer-setup-hook 'conditionally-enable-lispy)
 
-  (advice-add
-   #'special-lispy-eval
-   :before (lambda ()
-             (or (fboundp 'cider--make-overlay)
-                 (require 'cider))))
+  ;; bug fix
+  ;; (advice-add
+  ;;  #'special-lispy-eval
+  ;;  :before (lambda ()
+  ;;            (or (fboundp 'cider--make-overlay)
+  ;;                (require 'cider))))
   (defhydra lh-knight ()
     "knight"
     ("j" lispy-knight-down)

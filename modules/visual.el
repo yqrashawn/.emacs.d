@@ -269,14 +269,15 @@ has been changed to THEME."
 
 (use-package pretty-mode
   :straight t
-  :disabled
   :init
   (global-pretty-mode t)
   :config
+  (pretty-deactivate-patterns :Rightarrow)
+  (pretty-deactivate-patterns :twoheadrightarrow)
   (pretty-deactivate-groups
    '(:equality :ordering :ordering-double :ordering-triple
                :arrows :arrows-twoheaded :punctuation
-               :logic :sets :Rightarrow))
+               :logic :sets))
 
   (pretty-activate-groups
    '(:sub-and-superscripts :greek :arithmetic-nary)))
