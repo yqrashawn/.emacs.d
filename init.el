@@ -63,7 +63,6 @@
 ;; (auto-compile-on-save-mode 1)
 ;; (auto-compile-on-load-mode 1)
 
-;; (straight-use-package 'auto-compile)
 (straight-use-package 'diminish)
 (setq use-package-enable-imenu-support t)
 (straight-use-package 'use-package)
