@@ -269,7 +269,7 @@ has been changed to THEME."
 
 (use-package pretty-mode
   :straight t
-  :disbaled
+  :disabled
   :init
   (global-pretty-mode t)
   :config
