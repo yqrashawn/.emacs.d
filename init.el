@@ -123,6 +123,9 @@
 (yq/get-modules "auto-detect-which-machine.el")
 ;; (yq/get-modules "pdf.el")
 
+;; (use-package pullover
+;;   :straight (:host github :repo "ubolonton/pullover"))
+
 (use-package server
   :init
   (unless (server-running-p) (server-start)))

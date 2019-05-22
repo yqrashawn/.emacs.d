@@ -72,8 +72,8 @@
   ;; (global-set-key (kbd "C-x C-8 l") 'ivy-alt-done)
   (global-set-key (kbd "C-x C-9 j") '+ivy-switch-buffer-next-line)
   (global-set-key (kbd "C-x C-9 k") '+ivy-switch-buffer-prev-line)
-  (global-set-key (kbd "C-M-S-s-j") '+ivy-switch-buffer-next-line)
-  (global-set-key (kbd "C-M-S-s-k") '+ivy-switch-buffer-prev-line)
+  ;; (global-set-key (kbd "C-M-S-s-j") '+ivy-switch-buffer-next-line)
+  ;; (global-set-key (kbd "C-M-S-s-k") '+ivy-switch-buffer-prev-line)
   ;; (global-set-key (kbd "C-x C-8 a" ) 'ivy-beginning-of-buffer)
   ;; (global-set-key (kbd "C-x C-8 e" ) 'ivy-end-of-buffer)
   ;; (global-set-key (kbd "C-x C-8 u" ) 'ivy-scroll-down-command)
@@ -1044,3 +1044,9 @@ first."))
   :straight t
   :init
   (eyebrowse-mode t))
+
+(use-package iflipb
+  :straight t
+  :bind
+  (("C-M-S-s-j" . iflipb-next-buffer)
+   ("C-M-S-s-k" . iflipb-previous-buffer)))
