@@ -656,6 +656,7 @@ If the universal prefix argument is used then kill the buffer too."
      ("*Messages*"                          :dedicated t   :position left   :stick t    :noselect t   :width  0.5)
      ("*Org-Babel Error Output*"            :dedicated t   :position bottom :stick nil  :noselect t   :width  0.5)
      ("*Org Babel Results*"                 :dedicated t   :position bottom :stick t    :noselect t   :width  0.5)
+     ("*Org-Babel Results*"                 :dedicated t   :position bottom :stick t    :noselect t   :width  0.5)
      ("*mu4e-update*"                       :dedicated t   :position bottom :stick nil  :noselect t)
      ("*HTTP Response*"                     :dedicated t   :position bottom :stick t    :noselect t   :height 0.4 :kill t)
      ("*compilation*"                       :dedicated t   :position bottom :stick t    :noselect t   :height 0.4 :kill t)
