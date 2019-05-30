@@ -1425,9 +1425,8 @@ Info-mode:
 
 (use-package async
   :straight t
-  :init
-  (autoload 'dired-async-mode "dired-async.el" nil t)
-  (dired-async-mode 1)
+  :config
+  ;; (dired-async-mode 1)
   (async-bytecomp-package-mode 1))
 
 (use-package smtpmail-async
@@ -1652,7 +1651,8 @@ Info-mode:
   :commands (define-word))
 
 (use-feature flyspell
-  :hook ((org-mode text-mode markdown-mode) . flyspell-mode))
+  :hook ((prog-mode . flyspell-prog-mode)
+         ((org-mode text-mode markdown-mode) . flyspell-mode)))
 
 (use-package auto-dictionary
   :straight t
