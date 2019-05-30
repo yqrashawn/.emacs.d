@@ -1678,4 +1678,10 @@ Info-mode:
   :custom
   (paren-sexp-mode 'match)
   :init
-  (paren-activate))
+  (setq +mic-paren-modes '(clojure-mode emacs-lisp-mode))
+  (add-hook
+   'prog-mode-hook
+   (lambda ()
+     (if (memq major-mode +mic-paren-modes)
+         (paren-activate)
+       (paren-deactivate)))))
