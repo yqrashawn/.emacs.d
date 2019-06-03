@@ -492,6 +492,18 @@ Inserted by installing org-mode or when a release is made."
            (lambda (p) (when (funcall (if others #'not #'identity) (eq (car p) key)) p))
            params))))
 
+;; (use-package org-tempo
+;;   :config
+;;   (setq org-structure-template-alist '(("a" . "export ascii")
+;;                                        ("c" . "center")
+;;                                        ("C" . "comment")
+;;                                        ("e" . "example")
+;;                                        ("E" . "export")
+;;                                        ("h" . "export html")
+;;                                        ("l" . "export latex")
+;;                                        ("q" . "quote")
+;;                                        ("s" . "src")
+;;                                        ("v" . "verse"))))
 (use-package org-tempo)
 
 (use-package htmlize
@@ -838,23 +850,6 @@ _vr_ reset      ^^                       ^^                 _._ toggle hydra
   (add-hook 'org-agenda-mode-hook 'hydra-org-agenda/body))
 (spacemacs/set-leader-keys "2" (lambda () (interactive) (org-agenda nil "r")))
 
-;; (use-package org-brain
-;;   :straight t
-;;   :disabled
-;;   :after org
-;;   :init
-;;   (setq org-brain-path "~/Dropbox/ORG/BRAIN/")
-;;   ;; For Evil users
-;;   (evil-set-initial-state 'org-brain-visualize-mode 'emacs)
-;;   (add-to-list 'org-structure-template-alist '("d" . "description"))
-;;   :config
-;;   (setq org-id-track-globally t)
-;;   (push '("b" "Brain" plain (function org-brain-goto-end)
-;;           "* %i%?" )
-;;         org-capture-templates)
-;;   (setq org-brain-visualize-default-choices 'all)
-;;   (setq org-brain-title-max-length 12))
-
 ;; (use-package org-alert
 ;;   :straight t
 ;;   :after org org-agenda
@@ -864,3 +859,11 @@ _vr_ reset      ^^                       ^^                 _._ toggle hydra
 ;;   (setq org-alert-interval 600)
 ;;   :config
 ;;   (org-alert-enable))
+
+(use-package deft
+  :straight t
+  :commands (deft)
+  :custom
+  (deft-extensions '("org" "txt" "md" "markdown" "tex"))
+  (deft-directory "~/Dropbox/notes")
+  (deft-recursive t))

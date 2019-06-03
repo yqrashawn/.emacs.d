@@ -82,6 +82,8 @@
   :straight t
   :commands lsp-ui-mode
   :custom
+  (lsp-ui-doc-delay 0.8)
+  (lsp-ui-sideline-delay 0.8)
   (lsp-ui-doc-use-childframe t)
   (lsp-ui-doc-header t)
   (lsp-ui-doc-include-signature nil)
