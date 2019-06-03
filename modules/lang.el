@@ -26,6 +26,11 @@
 (yq/get-modules "lang/restclient.el")
 (yq/get-modules "lang/sql.el")
 
+(use-package adoc-mode
+  :straight t
+  :defer t
+  :mode ("\\.adoc\\'" . adoc-mode))
+
 (use-package yaml-mode
   :straight t
   :defer t
