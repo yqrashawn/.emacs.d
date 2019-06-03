@@ -1651,7 +1651,7 @@ Info-mode:
   :commands (define-word))
 
 (use-feature flyspell
-  :hook ((prog-mode . flyspell-prog-mode)
+  :hook (;;(prog-mode . flyspell-prog-mode)
          ((org-mode text-mode markdown-mode) . flyspell-mode)))
 
 (use-package auto-dictionary

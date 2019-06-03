@@ -239,6 +239,7 @@ has been changed to THEME."
      ("Docs"    ? (:foreground "#3F681C" :height 1.2)))))
 
 (use-package pretty-fonts
+  :disabled
   :load-path "~/.emacs.d/modules"
   :config
   ;; !! This is required to avoid segfault when using emacs as daemon !!
