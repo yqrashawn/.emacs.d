@@ -866,4 +866,6 @@ _vr_ reset      ^^                       ^^                 _._ toggle hydra
   :custom
   (deft-extensions '("org" "txt" "md" "markdown" "tex"))
   (deft-directory "~/Dropbox/notes")
-  (deft-recursive t))
+  (deft-recursive t)
+  :init
+  (add-to-list 'evil-insert-state-modes 'deft-mode))
