@@ -16,7 +16,7 @@
  starttls-extra-arguments nil
  starttls-use-gnutls t)
 
-(defconst mu4e-mu-version "1.1.0"
+(defconst mu4e-mu-version "1.2.0"
   "Required mu binary version; mu4e's version must agree with this.")
 
 (defconst mu4e-builddir "/usr/local/opt/mu"

@@ -5,8 +5,9 @@
 (setq js-indent-level 2)
 (use-package js2-mode
   :straight t
-  :mode "\\.js\\'"
+  ;; :mode "\\.js\\'"
   :diminish (js2-mode . "JS")
+  ;; :hook (js-mode . js2-minor-mode)
   :init
   (add-hook 'js2-mode-hook 'js2-imenu-extras-mode)
   :config
@@ -57,7 +58,7 @@
   :defer t
   :commands (tern-mode)
   :diminish tern-mode
-  :hook (js2-mode . tern-mode)
+  :hook ((js-mode js2-mode) . tern-mode)
   :init
   (spacemacs//tern-detect)
   :config
@@ -68,11 +69,11 @@
 
 (use-package company-tern
   :straight t
-  :after js2-mode
+  :after tern
   :init
   (spacemacs|add-company-backends
     :backends (company-tabnine company-tern)
-    :modes js2-mode
+    :modes (js-mode js2-mode)
     :after-hook t))
 
 (use-package json-mode
@@ -88,28 +89,19 @@
   :straight t
   :diminish prettier-js-mode
   :commands (prettier-js-mode prettier-js)
-  :hook (js2-mode . prettier-js-mode)
-  :hook (rjsx-mode . prettier-js-mode)
-  :hook (typescript-mode . prettier-js-mode)
+  :hook ((typescript-mode js-mdoe rjsx-mode js2-mode) . prettier-js-mode)
   :init
   (yq/add-toggle prettier-js :mode prettier-js-mode)
-  (with-eval-after-load #'js2-mode
-    (spacemacs/set-leader-keys-for-major-mode 'js2-mode "=" 'prettier-js)
-    (evil-define-key 'normal js2-mode-map (kbd ",=") #'prettier-js)
-    (evil-define-key 'normal js2-mode-map ",tp" 'yq/toggle-prettier-js))
-  (with-eval-after-load #'rjsx-mode
-    (spacemacs/set-leader-keys-for-major-mode 'rjsx-mode "=" 'prettier-js)
-    (evil-define-key 'normal rjsx-mode-map (kbd ",=") #'prettier-js)
-    (evil-define-key 'normal rjsx-mode-map ",tp" 'yq/toggle-prettier-js))
-  (with-eval-after-load #'typescript-mode
-    (spacemacs/set-leader-keys-for-major-mode 'typescript-mode "=" 'prettier-js)
-    (evil-define-key 'normal typescript-mode-map (kbd ",=") #'prettier-js)
-    (evil-define-key 'normal typescript-mode-map ",tp" 'yq/toggle-prettier-js)))
+  (dolist (mode '(js2-mode js-mode rjsx-mode typescript-mode))
+    (spacemacs/set-leader-keys-for-major-mode mode "=" 'prettier-js))
+  (dolist (map'(js2-mode-map js-mode-map rjsx-mode-map typescript-mode-map))
+    (evil-define-key 'normal map (kbd ",=") #'prettier-js)
+    (evil-define-key 'normal map ",tp" 'yq/toggle-prettier-js)))
 
 (use-package rjsx-mode
   :straight t
   :defer t
-  :mode (("\\.jsx\\'" . rjsx-mode) ("components\\/.*\\.js\\'" . rjsx-mode))
+  :mode (("\\.js\\'" . rjsx-mode) ("\\.jsx\\'" . rjsx-mode) ("components\\/.*\\.js\\'" . rjsx-mode))
   :commands (rjsx-delete-creates-full-tag rjsx-electric-gt rjsx-electric-lt rjsx-rename-tag-at-point)
   :init
   :config
@@ -188,12 +180,10 @@
 
 (use-package add-node-modules-path
   :straight t
-  :after js2-mode
-  :hook (js2-mode . #'add-node-modules-path))
+  :hook ((js-mode js2-mode rjsx-mode typescript-mode) . #'add-node-modules-path))
 
 (use-package js-comint
   :straight t
-  :after js2-mode
   :commands (run-js switch-to-js)
   :init
   (setq js-program-command "node"
