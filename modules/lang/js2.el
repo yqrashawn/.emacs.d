@@ -2,6 +2,9 @@
 
 (yq/get-modules "lang/js2-imenu.el")
 (spacemacs|define-jump-handlers js2-mode)
+(spacemacs|define-jump-handlers typescript-mode)
+(spacemacs|define-jump-handlers js-mode)
+(spacemacs|define-jump-handlers rjsx-mode)
 (setq js-indent-level 2)
 (use-package js2-mode
   :straight t
