@@ -1665,11 +1665,13 @@ Info-mode:
 
 (use-package gcmh
   :straight t
+  :diminish gcmh-mode
   :init
   (gcmh-mode 1))
 
 (use-package whitespace-cleanup-mode
   :straight t
+  :diminish whitespace-cleanup-mode
   :init
   (global-whitespace-cleanup-mode))
 

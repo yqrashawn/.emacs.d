@@ -211,6 +211,7 @@ has been changed to THEME."
 
 (use-package symbol-overlay
   :straight t
+  :diminish symbol-overlay-mode
   :commands (symbol-overlay-put)
   :hook (prog-mode . symbol-overlay-mode)
   :init
