@@ -168,6 +168,7 @@ has been changed to THEME."
 
 (use-package doom-modeline
   :straight t
+  :disabled
   :hook (after-init . doom-modeline-init)
   :init
   (setq doom-modeline-height 15

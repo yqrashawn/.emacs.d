@@ -92,20 +92,6 @@
   :config
   (add-to-list 'forge-alist '("917.bimsop.com" "917.bimsop.com/api/v1" "917.bimsop.com" forge-gogs-repository)))
 
-;; (use-package magithub
-;;   :straight t
-;;   :disabled
-;;   :after magit
-;;   :config
-;;   (magithub-feature-autoinject '(completion commit-browse))
-;;   (setq magithub-clone-default-directory "~/workspace/THIRD/"
-;;         magithub-dir spacemacs-cache-directory))
-
-;; (use-package magit-todos
-;;   :straight t
-;;   :after magit
-;;   :init magit-todos-mode)
-
 (use-package diff-hl
   :straight t
   :commands (global-diff-hl-mode)
@@ -135,6 +121,8 @@
 (use-package magit-todos
   :straight t
   :after (magit)
+  :custom
+  (magit-todos-show-branch-list nil)
   :init
   (magit-todos-mode)
   :config
