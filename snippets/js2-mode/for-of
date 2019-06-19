@@ -1,5 +1,5 @@
 # name : for...of
-# key: fro
+# key: foro
 # --
 for (const ${1:var} of ${2:array}) {
   ${3:funcs}

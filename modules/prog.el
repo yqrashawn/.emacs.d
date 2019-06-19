@@ -489,6 +489,9 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   (add-to-list 'warning-suppress-types '(yasnippet backquote-change))
   (yas-reload-all))
 
+(use-package yasnippet-snippets
+  :straight t)
+
 (use-package smartparens
   :straight t
   :diminish smartparens-mode
