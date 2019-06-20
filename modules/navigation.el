@@ -1047,6 +1047,13 @@ first."))
 
 (use-package iflipb
   :straight t
+  :custom
+  (iflipb-always-ignore-buffers
+   (lambda (name)
+     (print name)
+     (or (string-match-p "^magit" name)
+         (string-match-p "^\*" name)
+         (string-match-p "^ " name))))
   :bind
   (("C-M-S-s-j" . iflipb-next-buffer)
    ("C-M-S-s-k" . iflipb-previous-buffer)))
