@@ -29,6 +29,7 @@
           (magit-reset-hard . ivy--regex-fuzzy)
           (magit-log-read-revs . ivy--regex-fuzzy)
           (magit-log-current . ivy--regex-fuzzy)
+          (counsel-git . ivy--regex-fuzzy)
           (projector-run-command-buffer-prompt . ivy--regex-fuzzy)
           (spacemacs/counsel-search . spacemacs/ivy--regex-plus)
           (spacemacs/search-auto . spacemacs/ivy--regex-plus)
@@ -480,7 +481,8 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
     "l" 'dired-find-file
     "s" 'nil
     "sk" 'yq/kill-this-buffer
-    "sm" #'counsel-fzf
+    "sM" #'counsel-fzf
+    "sm" #'counsel-git
     ;; "sm" #'projectile-find-file-dwim
     "sj" #'counsel-recentf
     "sJ" #'projectile-recentf
