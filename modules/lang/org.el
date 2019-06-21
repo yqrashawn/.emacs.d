@@ -231,6 +231,7 @@ Inserted by installing org-mode or when a release is made."
   (advice-add 'org-archive-default-command :after '+org/save-all-buffers)
   (evil-define-key 'normal org-mode-map (kbd "<tab>") 'org-cycle)
 
+  ;; tsfile
   (defun my-handle-tsfile-link (querystring)
     (let ((querystring
            (if (s-contains-p "/" querystring)

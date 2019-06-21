@@ -1,5 +1,35 @@
 ;;; org2.el ---  org packages -*- lexical-binding: t; -*-
+
+;; global keybindings
+(define-key global-map "\C-cl" 'org-store-link)
+(define-key global-map "\C-ca" 'org-agenda)
+(define-key global-map "\C-cc" 'org-capture)
+
+(use-package org-starter
+  :straight t
+  :config
+  (org-starter-define-directory "~/Dropbox/ORG/"
+    :files
+    '(("inbox.org" :key "i" :agenda t :required nil :refile (:maxlevel . 1))
+      ("someday.org" :key "S" :agenda t :required nil :refile (:maxlevel . 1))
+      ("tasks.org" :key "t" :agenda t :required nil :refile (:maxlevel . 1))
+      ("media.org" :key "m" :required nil :refile (:maxlevel . 1))
+      ("diary.org" :key "A" :required nil :refile (:maxlevel . 1)))))
+
 (with-eval-after-load 'org
+  ;; auto save all org buffers after various org operation
+  (defun +org/save-all-buffers (&rest _) (interactive) (org-save-all-org-buffers))
+  (add-hook 'org-capture-mode-hook #'evil-insert-state)
+  (advice-add 'org-todo :after '+org/save-all-buffers)
+  (advice-add 'org-store-log-note :after '+org/save-all-buffers)
+  (advice-add 'org-refile :after '+org/save-all-buffers)
+  (advice-add 'org-agenda-quit :after '+org/save-all-buffers)
+  (advice-add 'org-agenda-priority :after '+org/save-all-buffers)
+  (advice-add 'org-agenda-todo :after '+org/save-all-buffers)
+  (advice-add 'org-agenda-refile :after '+org/save-all-buffers)
+  (add-hook 'org-capture-after-finalize-hook #'+org/save-all-buffers)
+  (advice-add 'org-archive-default-command :after '+org/save-all-buffers)
+
   (defmacro spacemacs|org-emphasize (fname char)
     "Make function for setting the emphasis in org mode"
     `(defun ,fname () (interactive)
@@ -130,8 +160,111 @@
     ",xr" (spacemacs|org-emphasize spacemacs/org-clear "? ")
     ",xs" (spacemacs|org-emphasize spacemacs/org-strike-through ?+)
     ",xu" (spacemacs|org-emphasize spacemacs/org-underline ?_)
-    ",xv" (spacemacs|org-emphasize spacemacs/org-verbatim ?=)))
+    ",xv" (spacemacs|org-emphasize spacemacs/org-verbatim ?=))
+  (defmacro +org-refile (fn-suffix refile-targets)
+    "Generate a command to call `org-refile' with modified targets."
+    `(defun ,(intern (concat "+org-refile-" (symbol-name fn-suffix))) ()
+       ,(format "`org-refile' to %S" refile-targets)
+       (interactive)
+       (org-refile-cache-clear)
+       (let ((org-refile-target-verify-function nil)
+             (org-refile-targets ,refile-targets))
+         (call-interactively 'org-refile))))
+  (+org-refile task '(("~/Dropbox/ORG/tasks.org" :level . 1)))
+  (+org-refile projects '(("~/Dropbox/ORG/projects.org" :level . 2)))
+  (+org-refile someday '(("~/Dropbox/ORG/someday.org" :level . 1)))
+  (+org-refile media '(("~/Dropbox/ORG/media.org" :level . 1)))
+  (+org-refile inbox '(("~/Dropbox/ORG/inbox.org" :level . 1)))
 
+  (defun +org-read-datetree-date (d)
+    "Parse a time string D and return a date to pass to the datetree functions."
+    (let ((dtmp (nthcdr 3 (parse-time-string d))))
+      (list (cadr dtmp) (car dtmp) (caddr dtmp))))
+
+  (defun +org-refile-to-archive-datetree (&optional bfn)
+    "Refile an entry to a datetree under an archive."
+    (interactive)
+    (require 'org-datetree)
+    (let* ((bfn (or bfn (find-file-noselect (expand-file-name "~/Dropbox/ORG/diary.org"))))
+           (datetree-date (+org-read-datetree-date (org-read-date t nil))))
+      (org-refile nil nil (list nil (buffer-file-name bfn) nil
+                                (with-current-buffer bfn
+                                  (save-excursion
+                                    (org-datetree-find-date-create datetree-date)
+                                    (point))))))
+    (setq this-command '+org-refile-to-journal))
+
+  (defhydra +org-workflow-hydra (:color blue :hint nil)
+    "
+  visit            refile          actions
+ ------------------------------------------
+  _i_nbox.org     _M_edia.org    _A_rchive
+  _t_ask.org      _T_ask.org
+  _p_rojects.org  _P_rojects.org
+  _s_omday.org    _S_omday.org
+                  _I_nbox.org
+ "
+    ("i" (lambda () (interactive) (find-file "~/Dropbox/ORG/inbox.org")))
+    ("t" (lambda () (interactive) (find-file "~/Dropbox/ORG/tasks.org")))
+    ("p" (lambda () (interactive) (find-file "~/Dropbox/ORG/projects.org")))
+    ("s" (lambda () (interactive) (find-file "~/Dropbox/ORG/someday.org")))
+    ("m" (lambda () (interactive) (find-file "~/Dropbox/ORG/media.org")))
+    ("T" +org-refile-task)
+    ("P" +org-refile-project)
+    ("S" +org-refile-someday)
+    ("M" +org-refile-media)
+    ("I" +org-refile-inbox)
+    ("A" +org-refile-to-archive-datetree)
+    ("j" org-next-visible-heading :exit nil)
+    ("k" org-previous-visible-heading :exit nil)
+    ("TAB" org-cycle :exit nil)
+    ("<tab>" org-cycle :exit nil)
+    ("." nil :exit t))
+  (evil-define-key 'normal org-mode-map "." #'+org-workflow-hydra/body)
+
+  ;; automatically update todo states depends on checkboxe states
+  (defun org-summary-todo (n-done n-not-done)
+    "Switch entry to DONE when all subentries are done, to TODO otherwise."
+    (let (org-log-done org-log-states)  ; turn off logging
+      (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
+  (add-hook 'org-after-todo-statistics-hook 'org-summary-todo))
+
+(evil-define-key 'normal org-mode-map "." #'+org-workflow-hydra/body)
+
+(with-eval-after-load 'org-capture
+  (setq org-capture-templates '())
+  (add-to-list
+   'org-capture-templates
+   '("c" "Inbox Entry" entry
+     ;; (file+olp org-default-inbox-file "Inbox")
+     (file org-default-inbox-file)
+     "* %? %^G\n:PROPERTIES:\n:CREATED: %U\n:END:\n\n%i")))
+
+(use-package org-web-tools
+  :straight t
+  :after org
+  :init
+  (defun mkm-org-capture/link ()
+    "Make a TODO entry with a link in clipboard. Page title is used as task heading."
+    (let* ((url-string (s-trim (x-get-clipboard)))
+           (pdf (string-suffix-p "pdf" url-string)))
+      (unless pdf
+        (let ((page-title (org-web-tools--html-title (org-web-tools--get-url url-string))))
+          (concat "* "
+                  page-title " %^G"
+                  "\n\t:PROPERTIES:\n\t:URL: "
+                  url-string
+                  "\n\t:CREATED: %U"
+                  "\n\t:END:\n\s\s%?")))))
+
+  (with-eval-after-load 'org-capture
+    (add-to-list
+     'org-capture-templates
+     '("l" "Capture a link from clipboard" entry
+       (file+olp org-default-inbox-file "Inbox")
+       #'mkm-org-capture/link))))
+
+;; obs
 (use-package ob
   :defer t
   :init
