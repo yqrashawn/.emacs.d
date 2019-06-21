@@ -250,7 +250,7 @@
                     "t" nil
                     "T" nil)
   (yq/add-toggle evil-snipe :mode evil-snipe-mode)
-  (add-hook 'org-mode-hook 'yq/toggle-evil-snipe-off)
+  ;; (add-hook 'org-mode-hook 'yq/toggle-evil-snipe-off)
   (setq evil-snipe-auto-disable-substitute nil)
   (evil-snipe-mode 1)
   (setq evil-snipe-repeat-scope 'whole-buffer)

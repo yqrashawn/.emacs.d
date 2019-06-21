@@ -291,3 +291,13 @@
 (use-package ob-mongo
   :straight t
   :after ob)
+
+(use-package deft
+  :straight t
+  :commands (deft deft-new-file deft-find-file)
+  :custom
+  (deft-extensions '("org" "txt" "md" "markdown" "tex"))
+  (deft-directory "~/Dropbox/notes")
+  (deft-recursive t)
+  :init
+  (add-to-list 'evil-insert-state-modes 'deft-mode))

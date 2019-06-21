@@ -860,13 +860,3 @@ _vr_ reset      ^^                       ^^                 _._ toggle hydra
 ;;   (setq org-alert-interval 600)
 ;;   :config
 ;;   (org-alert-enable))
-
-(use-package deft
-  :straight t
-  :commands (deft)
-  :custom
-  (deft-extensions '("org" "txt" "md" "markdown" "tex"))
-  (deft-directory "~/Dropbox/notes")
-  (deft-recursive t)
-  :init
-  (add-to-list 'evil-insert-state-modes 'deft-mode))
