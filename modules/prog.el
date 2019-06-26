@@ -496,6 +496,7 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   :straight t
   :diminish smartparens-mode
   :config
+  (sp-pair "{" nil :post-handlers '(("||\n[i]" "RET")))
   (smartparens-global-strict-mode t)
   (define-key yq-s-map "d" 'sp-kill-sexp)
   (define-key yq-s-map "," 'sp-copy-sexp)
