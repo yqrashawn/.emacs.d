@@ -98,5 +98,6 @@
 
 (setq mc/cmds-to-run-once
       '(
+        evil-downcase
         lispy-cursor-down
         ))
