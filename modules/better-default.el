@@ -1687,3 +1687,12 @@ Info-mode:
      (if (memq major-mode +mic-paren-modes)
          (paren-activate)
        (paren-deactivate)))))
+
+(use-package fence-edit
+  :straight (:host github :repo "aaronbieber/fence-edit.el")
+  :commands (fence-edit-code-at-point fence-edit-dwim)
+  :bind
+  (:map yq-s-map ("z" . fence-edit-dwim))
+  :config
+  (add-to-list 'fence-edit-lang-modes '("css" . css-mode))
+  (add-to-list 'fence-edit-blocks '(".*style.*`" ".*`.*" css)))
