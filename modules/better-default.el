@@ -445,7 +445,17 @@ If the universal prefix argument is used then kill the buffer too."
 (add-hook 'hs-minor-mode-hook (lambda () (diminish 'hs-minor-mode)))
 (add-hook 'auto-revert-mode-hook (lambda () (diminish 'auto-revert-mode)))
 
-(electric-indent-mode)
+(require 'electric)
+(require 'elec-pair)
+(electric-indent-mode 1)
+(electric-layout-mode 1)
+(electric-quote-mode 1)
+(add-to-list 'electric-pair-pairs '(?{ . ?}))
+(add-to-list 'electric-pair-pairs '(?( . ?)))
+(add-to-list 'electric-pair-pairs '(?[ . ?]))
+(add-to-list 'electric-pair-pairs '(?` . ?`))
+(add-to-list 'electric-pair-pairs '(?` . ?'))
+(add-to-list 'electric-quote-chars ?`)
 
 (yq/add-toggle visual-line :mode visual-line-mode)
 (setq org-confirm-babel-evaluate nil)

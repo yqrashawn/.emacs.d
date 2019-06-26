@@ -106,7 +106,7 @@
                  'spacemacs//counsel-occur)
   (evil-set-initial-state 'ivy-occur-grep-mode 'normal)
   (evil-make-overriding-map ivy-occur-mode-map 'normal)
-  ;; (define-key yq-s-map "b" 'ivy-switch-buffer)
+  (define-key yq-s-map "b" 'ivy-switch-buffer)
   (ido-mode -1)
   (defun yq-ivy-format-function (cands)
     "Transform CANDS into a string for minibuffer."
@@ -1021,6 +1021,7 @@ first."))
 (use-package helm
   :straight t
   :defer t
+  :disabled
   :custom
   (helm-display-buffer-default-height 0.35)
   (helm-default-display-buffer-functions #'display-buffer-in-side-window)

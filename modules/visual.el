@@ -3,9 +3,13 @@
 
 (use-package ivy-rich
   :straight t
-  :disabled
-  :after ivy
-  :init (ivy-rich-mode 1))
+  :after counsel
+  :custom
+  (ivy-virtual-abbreviate 'full
+                          ivy-rich-switch-buffer-align-virtual-buffer t
+                          ivy-rich-path-style 'abbrev)
+  :init
+  (ivy-rich-mode))
 
 (use-package golden-ratio-scroll-screen
   :straight t

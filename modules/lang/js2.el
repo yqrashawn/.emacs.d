@@ -97,6 +97,10 @@
   (yq/add-toggle prettier-js :mode prettier-js-mode)
   (dolist (mode '(js2-mode js-mode rjsx-mode typescript-mode))
     (spacemacs/set-leader-keys-for-major-mode mode "=" 'prettier-js))
+  (add-hook 'prettier-js-mode-hook
+            (lambda ()
+              (sp-local-pair major-mode "{" nil :post-handlers '(("||\n[i]" "RET")))
+              (setq-local electric-layout-rules '((?\; . after)))))
 
   (with-eval-after-load 'js2-mode
     (evil-define-key 'normal js2-mode-map (kbd ",=") #'prettier-js)
