@@ -241,7 +241,8 @@ has been changed to THEME."
      ("Add"     ? (:foreground "#375E97" :height 1.2))
      ("Fix"     ? (:foreground "#FB6542" :height 1.2))
      ("Clean"   ? (:foreground "#FFBB00" :height 1.2))
-     ("Docs"    ? (:foreground "#3F681C" :height 1.2)))))
+     ("Docs"    ? (:foreground "#3F681C" :height 1.2))
+     ("Test"    ?T (:foreground "#3F681C" :height 1.2)))))
 
 (use-package pretty-fonts
   :disabled

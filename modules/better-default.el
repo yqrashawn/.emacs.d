@@ -448,7 +448,7 @@ If the universal prefix argument is used then kill the buffer too."
 (require 'electric)
 (require 'elec-pair)
 (electric-indent-mode 1)
-(electric-layout-mode 1)
+;; (electric-layout-mode 1)
 (electric-quote-mode 1)
 (add-to-list 'electric-pair-pairs '(?{ . ?}))
 (add-to-list 'electric-pair-pairs '(?( . ?)))
