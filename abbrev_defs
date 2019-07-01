@@ -242,6 +242,7 @@
     ("catagory" "category" nil :count 0)
     ("categiory" "category" nil :count 0)
     ("certian" "certain" nil :count 0)
+    ("cosnt" "const" nil :count 0)
     ("challange" "challenge" nil :count 0)
     ("challanges" "challenges" nil :count 0)
     ("chaneg" "change" nil :count 0)
