@@ -1705,4 +1705,5 @@ Info-mode:
   (:map yq-s-map ("z" . fence-edit-dwim))
   :config
   (add-to-list 'fence-edit-lang-modes '("css" . css-mode))
+  (evil-define-key 'normal fence-edit-mode-map "sh" #'fence-edit-save)
   (add-to-list 'fence-edit-blocks '(".*style.*`" ".*`.*" css)))
