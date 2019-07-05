@@ -713,3 +713,15 @@ _j_  js2      _T_     text   _f_  fundamental
     "f" 'docker-container-find-file-popup
     "i" 'docker-container-ls-popup
     "r" 'docker-container-rename-selection))
+
+;; (defvar hs-special-modes-alist
+;;   (mapcar 'purecopy
+;;           '((c-mode "{" "}" "/[*/]" nil nil)
+;;             (c++-mode "{" "}" "/[*/]" nil nil)
+;;             (bibtex-mode ("@\\S(*\\(\\s(\\)" 1))
+;;             (java-mode "{" "}" "/[*/]" nil nil)
+;;             (js-mode "{" "}" "/[*/]" nil)
+;;             (rjsx-mode "`\\n\\|`[^;]\\|(\\|{\\|\\[" "`;\\|)\\|}\\|\\]" "/[*/]" nil))))
+
+;; TODO
+(add-to-list 'hs-special-modes-alist '(rjsx-mode "`\\n\\|`[^;]\\|(\\|{\\|\\[" "`;\\|)\\|}\\|\\]" "/[*/]" nil))
