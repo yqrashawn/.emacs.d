@@ -133,11 +133,7 @@
              js2r-expand-node-at-point
              js2r--expand-contract-node-at-point)
   :init
-  (js2r-add-keybindings-with-prefix "C-c m")
-  (with-eval-after-load 'js2-mode
-    (evil-define-key 'normal js2-mode-map ",," 'js2-refactor-hydra/body))
-  (with-eval-after-load 'rjsx-mode
-    (evil-define-key 'normal rjsx-mode-map ",," 'js2-refactor-hydra/body)))
+  (js2r-add-keybindings-with-prefix "C-c m"))
 
 (use-package add-node-modules-path
   :straight t
