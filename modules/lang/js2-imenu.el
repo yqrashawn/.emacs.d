@@ -18,6 +18,7 @@
         ("Filter" "[. \t]filter([ \t]*['\"]\\([^'\"]+\\)" 1)
         ("State" "[. \t]state[(:][ \t]*['\"]\\([^'\"]+\\)" 1)
         ("Factory" "[. \t]factory([ \t]*['\"]\\([^'\"]+\\)" 1)
+        ("Global" "^\\(export const\\|const\\) \\([a-zA-Z][a-zA-Z0-9]*\\) =" 2)
         ("Service" "[. \t]service([ \t]*['\"]\\([^'\"]+\\)" 1)
         ("Module" "[. \t]module( *['\"]\\([a-zA-Z0-9_.]+\\)['\"], *\\[" 1)
         ("ngRoute" "[. \t]when(\\(['\"][a-zA-Z0-9_\/]+['\"]\\)" 1)
@@ -256,6 +257,7 @@ Merge RLT and EXTRA-RLT, items in RLT has *higher* priority."
     (js2-imenu-extras-mode)))
 
 (add-hook 'js2-mode-hook 'my-js2-mode-setup)
+(add-hook 'rjsx-mode-hook 'my-js2-mode-setup)
 
 (setq auto-mode-alist (cons '("\\.json$" . js-mode) auto-mode-alist))
 (setq auto-mode-alist (cons '("\\.jason$" . js-mode) auto-mode-alist))

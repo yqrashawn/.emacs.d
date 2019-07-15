@@ -74,9 +74,10 @@ The return value is nil if no font was found, truthy otherwise."
 
 (defvar yq/default-font-kind "small")
 
-(setq yq/font18 '("Hack"
-                  ;; "Input Mono Black"
-                  ;;"Menlo"
+(setq yq/font18 '(
+                  ;; "Hack"
+                  "Input Mono Narrow"
+                  ;; "Menlo"
                   ;; "Anonymous Pro for Powerline"
                   ;; "InconsolataG for Powerline"
                   ;; "Source Code Pro for Powerline"
@@ -84,9 +85,10 @@ The return value is nil if no font was found, truthy otherwise."
                   :weight normal
                   :width normal
                   :powerline-scale 1.1))
-(setq yq/font15 '("Hack"
-                  ;; "Input Mono Black"
-                  ;;"Menlo"
+(setq yq/font15 '(
+                  ;; "Hack"
+                  "Input Mono Narrow"
+                  ;; "Menlo"
                   ;; "Anonymous Pro for Powerline"
                   ;; "InconsolataG for Powerline"
                   ;; "Source Code Pro for Powerline"
@@ -95,9 +97,10 @@ The return value is nil if no font was found, truthy otherwise."
                   :width normal
                   :powerline-scale 1.1))
 
-(setq yq/font13 '("Hack"
-                  ;; "Input Mono Black"
-                  ;;"Menlo"
+(setq yq/font13 '(
+                  ;; "Hack"
+                  "Input Mono Narrow"
+                  ;; "Menlo"
                   ;; "Anonymous Pro for Powerline"
                   ;; "InconsolataG for Powerline"
                   ;; "Source Code Pro for Powerline"
