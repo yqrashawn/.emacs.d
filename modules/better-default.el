@@ -464,10 +464,11 @@ If the universal prefix argument is used then kill the buffer too."
 (add-hook 'prog-mode-hook 'show-paren-mode)
 
 (use-package windmove
-  :bind(("C-M-s-7 h" . 'windmove-left)
-        ("C-M-s-7 l" . 'windmove-right)
-        ("C-M-s-7 j" . 'windmove-down)
-        ("C-M-s-7 k" . 'windmove-up))
+  :bind
+  (("C-M-s-7 h" . 'windmove-left)
+   ("C-M-s-7 l" . 'windmove-right)
+   ("C-M-s-7 j" . 'windmove-down)
+   ("C-M-s-7 k" . 'windmove-up))
   :config
   (defun hydra-move-splitter-left (arg)
     "Move window splitter left."
@@ -1707,3 +1708,19 @@ Info-mode:
   (add-to-list 'fence-edit-lang-modes '("css" . css-mode))
   (evil-define-key 'normal fence-edit-mode-map "sh" #'fence-edit-save)
   (add-to-list 'fence-edit-blocks '(".*style.*`" ".*`.*" css)))
+
+;; Keychain stuff. Note to self: if you keep having to enter your
+;; keychain password on OS X, make sure that you have the following in .ssh/config:
+;; Host *
+;;    UseKeychain yes
+(use-package keychain-environment
+  :straight t
+  :config
+  (keychain-refresh-environment))
+
+;; try undo-propose
+(use-package undo-propose
+  :straight t
+  :init
+  (define-key evil-normal-state-map "U" #'undo-propose)
+  (evil-define-key 'normal undo-propose-mode-map "u" 'undo-propose-undo))

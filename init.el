@@ -23,8 +23,19 @@
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
+
+;; macos transparent titlebar
 (add-to-list 'default-frame-alist '(ns-transparent-titlebar . t))
+
+;; dark titlebar
 (add-to-list 'default-frame-alist '(ns-appearance . dark))
+
+;; Fullscreen by default, as early as possible.
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
+
+;; UTF-8 everywhere, please.
+(prefer-coding-system 'utf-8)
+
 (defvar yq-emacs-cache-dir (concat user-emacs-directory ".cache/"))
 (defvar spacemacs-cache-directory (concat user-emacs-directory ".cache/"))
 (defvar yq-emacs-dotfile-dir (concat user-emacs-directory "init.el"))
@@ -64,7 +75,9 @@
 ;; (auto-compile-on-load-mode 1)
 
 (straight-use-package 'diminish)
-(setq use-package-enable-imenu-support t)
+
+;; Allow navigation between use-package stanzas with iMenu.
+(setq-default use-package-enable-imenu-support t)
 (straight-use-package 'use-package)
 (straight-use-package 'use-package-ensure-system-package)
 
@@ -130,8 +143,9 @@
   :init
   (unless (server-running-p) (server-start)))
 
-;; (use-package playground
-;;   :straight (:host github :repo "akirak/emacs-playground"))
+(use-package playground
+  :disabled
+  :straight (:host github :repo "akirak/emacs-playground"))
 
 
 ;; (toggle-frame-maximized)

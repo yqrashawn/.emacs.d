@@ -224,6 +224,10 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   :straight (:host github :repo "abo-abo/swiper" :branch "master"
                    :files ("swiper.el")
                    :upstream (:host github :repo "abo-abo/swiper"))
+  :bind
+  ("C-s" . #'swiper-isearch)
+  ("C-c s" . #'swiper-isearch-thing-at-point)
+  ("C-c C-s" . #'swiper-thing-at-point)
   :config
   ;; (define-key yq-s-map (kbd "n") 'spacemacs/swiper-all-region-or-symbol)
   (global-set-key (kbd "C-SPC") #'counsel-grep-or-swiper)
@@ -238,6 +242,9 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
                    :files ("counsel.el")
                    :upstream (:host github :repo "abo-abo/swiper"))
   :diminish counsel-mode
+  :bind
+  ("C-c U" . #'counsel-unicode-char)
+  ("C-c C-y" . #'counsel-yank-pop)
   :config
   (setq counsel-grep-base-command
         "rg -i -M 120 --no-heading --line-number --color never %s %s")
@@ -630,6 +637,7 @@ When ARG is non-nil search in junk files."
   (setq avy-background t)
   (setq avy-highlight-first t)
   (define-key yq-s-map "n" 'avy-goto-char-timer)
+  (define-key yq-s-map "N" 'avy-isearch)
   (define-key yq-s-map "I" 'avy-goto-word-1))
 
 (use-package ace-link

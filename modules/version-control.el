@@ -12,6 +12,8 @@
 
 (use-package magit
   :straight t
+  :custom
+  (magit-diff-refine-hunk t)
   :init
   (magit-auto-revert-mode 1)
   (setq magit-bury-buffer-function (lambda (&optional kill-buffer) (magit-restore-window-configuration t)))
@@ -28,6 +30,7 @@
   (setq magit-blame-echo-style 'margin)
   (setq magit-diff-refine-hunk 'all)
   :config
+  (add-to-list 'magit-no-confirm 'stage-all-changes)
   (defun +magit-submodule-pull-all ()
     (interactive)
     (async-shell-command "git submodule foreach git fetch --all && git submodule foreach git merge origin/master"))

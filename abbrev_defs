@@ -837,6 +837,8 @@
     ("shouldent" "shouldn't" nil :count 0)
     ("shouldnt" "shouldn't" nil :count 0)
     ("showinf" "showing" nil :count 0)
+    ("singin" "signin" nil :count 0)
+    ("singup" "signup" nil :count 0)
     ("signifacnt" "significant" nil :count 0)
     ("simalar" "similar" nil :count 0)
     ("similiar" "similar" nil :count 0)
