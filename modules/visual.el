@@ -289,3 +289,16 @@ has been changed to THEME."
 
   (pretty-activate-groups
    '(:sub-and-superscripts :greek :arithmetic-nary)))
+
+(use-package highlight-indent-guides
+  :straight t
+  :hook (prog-mode . highlight-indent-guides-mode)
+  :custom
+  (highlight-indent-guides-method 'character)
+  (highlight-indent-guides-character ?\|)
+  (highlight-indent-guides-responsive 'top)
+  (highlight-indent-guides-delay 1))
+
+(use-package fill-column-indicator
+  :straight t
+  :commands (fci-mode))

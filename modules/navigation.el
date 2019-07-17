@@ -500,6 +500,12 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
     "ss" #'dired-sort-toggle-or-edit
     "sc" 'yq/delete-window
     "f" #'dired-narrow-fuzzy))
+(use-feature wdired
+  :defer t
+  :config
+  (setq wdired-allow-to-redirect-links t
+        wdired-allow-to-change-permissions t
+        wdired-create-parent-directories t))
 (use-package dired-narrow
   :straight t
   :after dired

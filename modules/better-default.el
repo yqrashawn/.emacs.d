@@ -249,10 +249,11 @@ file stored in the cache directory and `nil' to disable auto-saving.")
 
 (fset 'yes-or-no-p 'y-or-n-p)
 
-(setq make-backup-files nil)
+
 
 (use-package files
   :custom
+  (make-backup-files nil)
   (confirm-kill-processes nil)
   (confirm-kill-emacs nil)
   (enable-local-variables t)
@@ -1599,20 +1600,6 @@ Info-mode:
                             "Very long lines detected - enable so-long-mode? "))
                   (so-long-mode))))))
 
-(use-package highlight-indent-guides
-  :straight t
-  :disabled
-  :hook (prog-mode . highlight-indent-guides-mode)
-  :custom
-  (highlight-indent-guides-method 'character)
-  (highlight-indent-guides-character ?\|)
-  (highlight-indent-guides-responsive nil)
-  (highlight-indent-guides-delay 1))
-
-(use-package fill-column-indicator
-  :straight t
-  :init (fci-mode))
-
 (use-package pcre2el
   :straight t
   :bind
@@ -1663,7 +1650,7 @@ Info-mode:
 
 (use-feature flyspell
   :hook (;;(prog-mode . flyspell-prog-mode)
-         ((org-mode text-mode markdown-mode) . flyspell-mode)))
+         ((git-commit-mode org-mode text-mode markdown-mode) . flyspell-mode)))
 
 (use-package auto-dictionary
   :straight t

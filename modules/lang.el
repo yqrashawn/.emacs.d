@@ -110,6 +110,7 @@
   :straight t
   :after company
   :custom
+  (company-lsp-async t)
   (company-lsp-cache-candidates 'auto)
   :config
   (push 'company-lsp company-backends))

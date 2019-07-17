@@ -164,6 +164,7 @@ Available PROPS:
 (use-package company
   :straight t
   :diminish company-mode
+  :hook (after-init . global-company-mode)
   :init
   (setq company-idle-delay +company-default-idle-delay
         company-selection-wrap-around t
@@ -191,7 +192,6 @@ Available PROPS:
   (defun yq//company-format-numbers (numbered)
     (format " %s" (char-to-string (nth (mod numbered 10) yq//company-numbers))))
 
-  (global-company-mode)
   :config
   (defvar-local company-fci-mode-on-p nil)
 
@@ -333,6 +333,8 @@ If the error list is visible, hide it.  Otherwise, show it."
   :straight t
   :defer t
   :diminish flycheck-mode " ⓢ"
+  :custom
+  (flycheck-check-syntax-automatically 'ssss(save idle-buffer-switch mode-enabled))
   :init
   (setq flycheck-standard-error-navigation nil
         flycheck-global-modes nil)
