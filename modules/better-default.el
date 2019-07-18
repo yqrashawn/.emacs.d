@@ -259,6 +259,12 @@ file stored in the cache directory and `nil' to disable auto-saving.")
   (enable-local-variables t)
   (confirm-nonexistent-file-or-buffer nil)
   :init
+  (defun revert-buffer-no-confirm ()
+    "Revert buffer without confirmation."
+    (interactive)
+    (revert-buffer :ignore-auto :noconfirm))
+  (spacemacs/set-leader-keys "fU" 'revert-buffer-no-confirm)
+
   ;; Auto-save file
   (setq auto-save-default (not (null dotspacemacs-auto-save-file-location)))
   (setq auto-save-list-file-prefix (concat spacemacs-auto-save-directory))

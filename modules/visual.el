@@ -291,6 +291,7 @@ has been changed to THEME."
    '(:sub-and-superscripts :greek :arithmetic-nary)))
 
 (use-package highlight-indent-guides
+  :disabled
   :straight t
   :hook (prog-mode . highlight-indent-guides-mode)
   :custom
