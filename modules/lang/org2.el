@@ -5,6 +5,8 @@
 (define-key global-map "\C-ca" 'org-agenda)
 (define-key global-map "\C-cc" 'org-capture)
 
+(straight-use-package 'org)
+
 (use-package org-starter
   :straight t
   :config
@@ -288,6 +290,7 @@
       (org-redisplay-inline-images)))
   (add-hook 'org-babel-after-execute-hook 'spacemacs/ob-fix-inline-images))
 
+;; https://github.com/krisajenkins/ob-mongo/tree/371bf19c7c10eab2f86424f8db8ab685997eb5aa
 (use-package ob-mongo
   :straight t
   :after ob)

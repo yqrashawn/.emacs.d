@@ -439,6 +439,7 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   :diminish yas-global-mode
   :diminish yas-minor-mode
   :commands (yas-global-mode yas-minor-mode)
+  :hook (after-init . yas-global-mode)
   :init
   ;; https://github.com/joaotavora/yasnippet/issues/785
   (defvar smartparens-mode-original-value)
@@ -459,7 +460,7 @@ is not visible. Otherwise delegates to regular Emacs next-error."
               ;; `sp-auto-complete-advice'.
               '((depth . -100)))
 
-  (add-hook 'prog-mode-hook 'yas-minor-mode)
+  ;; (add-hook 'prog-mode-hook 'yas-minor-mode)
   (setq yas-triggers-in-field t
         yas-wrap-around-region t)
   (setq yas-prompt-functions '(yas-completing-prompt))
