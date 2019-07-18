@@ -334,7 +334,7 @@ If the error list is visible, hide it.  Otherwise, show it."
   :defer t
   :diminish flycheck-mode " ⓢ"
   :custom
-  (flycheck-check-syntax-automatically 'ssss(save idle-buffer-switch mode-enabled))
+  (flycheck-check-syntax-automatically '(save idle-buffer-switch mode-enabled))
   :init
   (setq flycheck-standard-error-navigation nil
         flycheck-global-modes nil)
