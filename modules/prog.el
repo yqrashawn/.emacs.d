@@ -182,12 +182,7 @@ Available PROPS:
         company-dabbrev-code-other-buffers 'all
         company-dabbrev-code-time-limit 1)
   (setq company-search-regexp-function 'company-search-flex-regexp)
-  (customize-set-variable 'company-backends '(company-tabnine
-                                              company-capf
-                                              (company-dabbrev-code
-                                               company-keywords)
-                                              company-files
-                                              company-dabbrev))
+
   (defvar yq//company-numbers '(59 ?a ?s ?d ?f ?g ?h ?j ?k ?l))
   (defun yq//company-format-numbers (numbered)
     (format " %s" (char-to-string (nth (mod numbered 10) yq//company-numbers))))
@@ -282,6 +277,13 @@ Available PROPS:
   ;; Allows TAB to select and complete at the same time.
   (company-tng-configure-default)
   (setq company-tabnine-no-continue nil)
+  :init
+  (customize-set-variable 'company-backends '(company-tabnine
+                                              company-capf
+                                              (company-dabbrev-code
+                                               company-keywords)
+                                              company-files
+                                              company-dabbrev))
   :config
   (defun yq-toggle-company-tabnine ()
     (interactive)

@@ -67,17 +67,34 @@
 
 (use-package lsp-mode
   :straight t
-  :hook ((shell-script-mode web-mode css-mode typescript-mode js2-mode) . lsp-mode)
+  :hook ((shell-script-mode web-mode css-mode typescript-mode js2-mode rjsx-mode) . lsp)
   :custom
+  (lsp-links-check-internal (if *imac* 0.1 0.3))
   (lsp-auto-guess-root nil)
   (lsp-restart 'auto-restart)
   (lsp-prefer-flymake nil)
+  (lsp-eldoc-render-all t)
+  (lsp-enable-on-type-formatting nil)
+  (lsp-prefer-flymake nil)
+  (lsp-lens-check-interval (if *imac* 0.1 0.2))
+  (lsp-enable-symbol-highlighting nil)
+  (lsp-document-highlight-delay (if *imac* 0.2 0.5))
+  (lsp-symbol-highlighting-skip-current t)
   :config
+  (add-hook 'lsp-after-open-hook
+            (lambda ()
+              (remove 'company-tabnine company-backends)
+              (remove 'company-lsp company-backends)
+              (add-to-list 'company-backends 'company-tabnine)
+              (add-to-list 'company-backends 'company-lsp)
+              (setq-local company-backends (remove 'company-capf company-backends))))
   (defun spacemacs//setup-lsp-jump-handler (&rest modes)
     "Set jump handler for LSP with the given MODE."
     (dolist (m modes)
       (add-to-list (intern (format "spacemacs-jump-handlers-%S" m))
-                   '(lsp-ui-peek-find-definitions :async t))))
+                   ;; lsp find definition tends to give two identical result
+                   ;; '(lsp-find-definition :async t)
+                   '(lsp-goto-implementation :async t))))
   (add-hook
    'lsp-after-open-hook
    (defl (spacemacs//setup-lsp-jump-handler major-mode))))
@@ -86,31 +103,35 @@
   :straight t
   :commands lsp-ui-mode
   :custom
-  (lsp-ui-doc-delay 0.8)
-  (lsp-ui-sideline-delay 0.8)
-  (lsp-ui-doc-use-childframe t)
-  (lsp-ui-doc-header t)
+  ;; top right stuff
+  ;; disable for now
+  (lsp-ui-doc-enable nil)
+  (lsp-ui-doc-delay 0.5)
+  ;; header is useless
+  (lsp-ui-doc-header nil)
+  ;; same as eldoc
   (lsp-ui-doc-include-signature nil)
   (lsp-ui-flycheck-enable t)
-  (lsp-ui-sideline-ignore-duplicate t)
-  (lsp-ui-sideline-update-mode 'line)
+
+  ;; sideline
+  (lsp-ui-sideline-enable t)
   (lsp-ui-sideline-delay 0.5)
-  (lsp-ui-peek-always-show nil)
-  :config
-  (define-key lsp-ui-mode-map [remap xref-find-definitions] #'lsp-ui-peek-find-definitions)
-  (define-key lsp-ui-mode-map [remap xref-find-references] #'lsp-ui-peek-find-references)
-  (define-key lsp-ui-peek-mode-map "h" #'lsp-ui-peek--select-prev-file)
-  (define-key lsp-ui-peek-mode-map "j" #'lsp-ui-peek--select-next)
-  (define-key lsp-ui-peek-mode-map "k" #'lsp-ui-peek--select-prev)
-  (define-key lsp-ui-peek-mode-map "l" #'lsp-ui-peek--select-next-file))
+  ;; idicating which symbol cursor is on
+  (lsp-ui-sideline-show-symbol t)
+  ;; wether show hoverd line js info (type info?)
+  (lsp-ui-sideline-show-hover t)
+  ;; the up text show what the codes doing
+  (lsp-ui-sideline-show-code-actions nil)
+  (lsp-ui-sideline-ignore-duplicate t)
+  (lsp-ui-peek-always-show nil))
 
 (use-package company-lsp
   :straight t
   :after company
+  :commands (company-lsp)
   :custom
   (company-lsp-async t)
-  (company-lsp-cache-candidates 'auto)
-  :config
-  (push 'company-lsp company-backends))
+  (company-lsp-cache-candidates (if *imac* nil 'auto))
+  (company-lsp-enable-recompletion (if *imac* t nil)))
 
 

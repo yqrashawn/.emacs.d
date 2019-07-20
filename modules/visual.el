@@ -175,7 +175,7 @@ has been changed to THEME."
   :hook (after-init . doom-modeline-init)
   :init
   (setq doom-modeline-height 15
-        doom-modeline-buffer-file-name-style 'file-name
+        doom-modeline-buffer-file-name-style 'relative-to-project
         doom-modeline-major-mode-icon nil
         doom-modeline-minor-modes nil
         doom-modeline-env-version t

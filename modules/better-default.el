@@ -6,9 +6,10 @@
 (setq *unix* (or *linux* (eq system-type 'usg-unix-v) (eq system-type 'berkeley-unix)))
 (setq *emacs24* (and (not (featurep 'xemacs)) (or (>= emacs-major-version 24))))
 (setq *emacs25* (and (not (featurep 'xemacs)) (or (>= emacs-major-version 25))))
+(setq *imac* (file-exists-p "~/yq.machine.home-imac"))
 (setq *no-memory* (cond
                    (*is-a-mac*
-                    (< (string-to-number (nth 1 (split-string (shell-command-to-string "sysctl hw.physmem")))) 4000000000))
+                    (< (string-to-number (nth 1 (split-string (shell-command-to-string "sysctl hw.physmem")))) 2147483648))
                    (*linux* nil)
                    (t nil)))
 
@@ -1717,3 +1718,12 @@ Info-mode:
   :init
   (define-key evil-normal-state-map "U" #'undo-propose)
   (evil-define-key 'normal undo-propose-mode-map "u" 'undo-propose-undo))
+
+(use-feature xref
+  :config
+  (evil-define-key 'normal xref--xref-buffer-mode-map (kbd "RET") #'xref-quit-and-goto-xref)
+  (define-key xref--xref-buffer-mode-map (kbd "RET") #'xref-quit-and-goto-xref)
+  (define-key xref--button-map (kbd "RET") #'xref-quit-and-goto-xref)
+  (evil-define-key 'normal xref--xref-buffer-mode-map (kbd "TAB") #'xref-goto-xref)
+  (evil-define-key 'normal xref--xref-buffer-mode-map "l" #'xref-quit-and-goto-xref)
+  (evil-define-key 'normal xref--xref-buffer-mode-map (kbd "q") #'quit-window))
