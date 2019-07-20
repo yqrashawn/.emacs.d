@@ -176,11 +176,15 @@ has been changed to THEME."
   :init
   (setq doom-modeline-height 15
         doom-modeline-buffer-file-name-style 'file-name
+        doom-modeline-major-mode-icon nil
         doom-modeline-minor-modes nil
         doom-modeline-env-version t
+        doom-modeline-indent-info t
+        doom-modeline-env-version nil
+        doom-modeline-irc nil
         doom-modeline-lsp nil)
   :config
-  (setq doom-modeline-icon nil)
+  (setq doom-modeline-icon nil))
   ;; (doom-modeline-def-segment tabbar-group
   ;;   (when (and tabbar-mode (doom-modeline--active))
   ;;     (let ((tb-groups (+tabbar-get-groups))
@@ -197,9 +201,7 @@ has been changed to THEME."
   ;;                  'face face
   ;;                  'help-echo "Tabbar Group")
   ;;      " ")))
-  (doom-modeline-def-modeline 'main
-    '(bar workspace-name window-number modals matches buffer-info remote-host selection-info)
-    '(misc-info persp-name fancy-battery irc mu4e github debug lsp minor-modes input-method indent-info buffer-encoding major-mode process vcs checker)))
+
 
 (use-package vim-empty-lines-mode
   :straight (:host github :repo "jmickelin/vim-empty-lines-mode")

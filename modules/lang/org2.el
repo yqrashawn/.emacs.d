@@ -272,9 +272,8 @@
   :init
   (setq org-babel-load-languages
         '((emacs-lisp . t)
-          (sql . t)
-          (sql-mode . t)
           (clojure . t)
+          (clojurescript . t)
           (shell . t)
           (restclient . t)
           (js . t)))
@@ -294,6 +293,19 @@
 (use-package ob-mongo
   :straight t
   :after ob)
+
+(use-package ob-clojurescript
+  :straight t
+  :after ob)
+
+(use-package ob-async
+  :straight t
+  :after ob)
+
+(use-package ob-restclient
+  :straight t
+  :after ob)
+
 
 (use-package deft
   :straight t
