@@ -1,5 +1,8 @@
 ;;; css.el ---  css packages -*- lexical-binding: t; -*-
 
+(spacemacs|define-jump-handlers css-mode)
+(spacemacs|define-jump-handlers scss-mode)
+(spacemacs|define-jump-handlers less-mode)
 (use-package css-mode
   :straight t
   :defer t
