@@ -85,8 +85,8 @@
             (lambda ()
               (remove 'company-tabnine company-backends)
               (remove 'company-lsp company-backends)
-              (add-to-list 'company-backends 'company-tabnine)
               (add-to-list 'company-backends 'company-lsp)
+              (add-to-list 'company-backends 'company-tabnine)
               (setq-local company-backends (remove 'company-capf company-backends))))
   (defun spacemacs//setup-lsp-jump-handler (&rest modes)
     "Set jump handler for LSP with the given MODE."
