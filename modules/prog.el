@@ -306,6 +306,11 @@ Available PROPS:
   :init
   (define-key evil-insert-state-map (kbd "C-;") 'company-try-hard))
 
+(use-package company-prescient
+  :straight t
+  :after (company prescient)
+  :init (company-prescient-mode))
+
 (setq syntax-checking-enable-by-default t)
 
 (defun spacemacs/enable-flycheck (mode)

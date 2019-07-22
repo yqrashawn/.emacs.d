@@ -294,6 +294,15 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   ;; (eval-after-load 'tramp '(setenv "SHELL" "/bin/bash"))
   (spacemacs/set-leader-keys "fT" 'counsel-tramp))
 
+(use-package prescient
+  :straight t)
+
+(use-package ivy-prescient
+  :straight t
+  :after (prescient ivy)
+  :init
+  (ivy-prescient-mode))
+
 (use-feature imenu
   :defer t
   :config
