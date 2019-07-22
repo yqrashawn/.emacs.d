@@ -138,5 +138,3 @@
   (company-lsp-async t)
   (company-lsp-cache-candidates (if *imac* nil 'auto))
   (company-lsp-enable-recompletion (if *imac* t nil)))
-
-
