@@ -102,7 +102,6 @@
 (use-package lsp-ui
   :straight t
   :commands lsp-ui-mode
-  :disabled
   :custom
   ;; top right stuff
   ;; disable for now
@@ -125,7 +124,11 @@
   (lsp-ui-sideline-show-code-actions nil)
   (lsp-ui-sideline-show-diagnostics nil)
   (lsp-ui-sideline-ignore-duplicate t)
-  (lsp-ui-peek-always-show nil))
+  (lsp-ui-peek-always-show nil)
+  :init
+  (defun lsp-ui-flycheck-enable (_))
+  :config
+  (defun lsp-ui-flycheck-enable (_)))
 
 (use-package company-lsp
   :straight t
