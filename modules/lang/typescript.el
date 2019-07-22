@@ -45,23 +45,23 @@ and 'typescript-formatter .")
   (add-hook 'typescript-mode-hook 'eldoc-mode)
   (add-hook 'typescript-mode-hook 'tide-hl-identifier-mode)
   (spacemacs|define-jump-handlers typescript-mode)
-  (spacemacs|define-jump-handlers js2-mode)
+  ;; (spacemacs|define-jump-handlers js2-mode)
   (advice-add 'tide-setup :before-until 'yq/scratch-buffer-p)
   (evilified-state-evilify tide-references-mode tide-references-mode-map
     (kbd "C-k") 'tide-find-previous-reference
     (kbd "C-j") 'tide-find-next-reference
     (kbd "C-l") 'tide-goto-reference)
   (add-hook 'typescript-mode-hook 'tide-setup)
-  (add-hook 'js2-mode-hook 'tide-setup)
-  (add-to-list 'spacemacs-jump-handlers-js2-mode
-               '(tide-jump-to-definition :async t))
+  ;; (add-hook 'js2-mode-hook 'tide-setup)
+  ;; (add-to-list 'spacemacs-jump-handlers-js2-mode
+  ;;              '(tide-jump-to-definition :async t))
   (add-to-list 'spacemacs-jump-handlers-typescript-mode
                '(tide-jump-to-definition :async t))
   (flycheck-add-mode 'typescript-tslint 'typescript-mode)
   (spacemacs/enable-flycheck 'typescript-mode)
   (spacemacs|add-company-backends
     :backends (company-tabnine company-tide)
-    :modes typescript-mode web-mode js2-mode
+    :modes typescript-mode ;; web-mode js2-mode
     :after-hook t)
   :config
   (evil-define-key 'normal typescript-mode-map ",gb" 'tide-jump-back)

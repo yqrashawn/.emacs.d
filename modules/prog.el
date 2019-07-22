@@ -334,17 +334,15 @@ If the error list is visible, hide it.  Otherwise, show it."
 (use-package flycheck
   :straight t
   :defer t
-  :diminish flycheck-mode " ⓢ"
+  :diminish flycheck-mode "ⓢ"
   :custom
   (flycheck-check-syntax-automatically '(save idle-buffer-switch mode-enabled))
+  (flycheck-standard-error-navigation nil)
+  (flycheck-global-modes '(js2-mode rjsx-mode typescript-mode web-mode css-mode scss-mode json-mode))
   :init
-  (setq flycheck-standard-error-navigation nil
-        flycheck-global-modes nil)
   (yq/add-toggle syntax-checking
     :mode flycheck-mode)
   (spacemacs/set-leader-keys "ts" 'yq/toggle-syntax-checking)
-  ;; disable flycheck by default
-  ;; (global-flycheck-mode 1)
   (setq flycheck-json-python-json-executable "/usr/local/bin/python3")
 
   ;; Custom fringe indicator
@@ -393,7 +391,6 @@ is not visible. Otherwise delegates to regular Emacs next-error."
                (not (and buf (get-buffer-window buf)))))
         'flycheck
       'emacs))
-
   (defun spacemacs/next-error (&optional n reset)
     "Dispatch to flycheck or standard emacs error."
     (interactive "P")
@@ -401,7 +398,6 @@ is not visible. Otherwise delegates to regular Emacs next-error."
       (cond
        ((eq 'flycheck sys) (call-interactively 'flycheck-next-error))
        ((eq 'emacs sys) (call-interactively 'next-error)))))
-
   (defun spacemacs/previous-error (&optional n reset)
     "Dispatch to flycheck or standard emacs error."
     (interactive "P")
@@ -410,8 +406,8 @@ is not visible. Otherwise delegates to regular Emacs next-error."
        ((eq 'flycheck sys) (call-interactively 'flycheck-previous-error))
        ((eq 'emacs sys) (call-interactively 'previous-error)))))
 
-  (define-key evil-normal-state-map "]e" 'flycheck-next-error)
-  (define-key evil-normal-state-map "[e" 'flycheck-previous-error)
+  (define-key evil-normal-state-map "]e" 'spacemacs/next-error)
+  (define-key evil-normal-state-map "[e" 'spacemacs/previous-error)
   (define-key flycheck-error-list-mode-map "j" 'next-line)
   (define-key flycheck-error-list-mode-map "k" 'previous-line)
   (define-key flycheck-error-list-mode-map "q" 'quit-window)
@@ -434,7 +430,9 @@ is not visible. Otherwise delegates to regular Emacs next-error."
     "ev" 'flycheck-verify-setup
     "ex" 'flycheck-explain-error-at-point
     "en" 'spacemacs/next-error
-    "ep" 'spacemacs/previous-error))
+    "ep" 'spacemacs/previous-error)
+  (global-flycheck-mode 1))
+
 
 (use-package yasnippet
   :straight t

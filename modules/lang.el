@@ -94,7 +94,7 @@
       (add-to-list (intern (format "spacemacs-jump-handlers-%S" m))
                    ;; lsp find definition tends to give two identical result
                    ;; '(lsp-find-definition :async t)
-                   '(lsp-goto-implementation :async t))))
+                   '(lsp-find-definition :async t))))
   (add-hook
    'lsp-after-open-hook
    (defl (spacemacs//setup-lsp-jump-handler major-mode))))
@@ -102,6 +102,7 @@
 (use-package lsp-ui
   :straight t
   :commands lsp-ui-mode
+  :disabled
   :custom
   ;; top right stuff
   ;; disable for now
@@ -111,7 +112,7 @@
   (lsp-ui-doc-header nil)
   ;; same as eldoc
   (lsp-ui-doc-include-signature nil)
-  (lsp-ui-flycheck-enable t)
+  (lsp-ui-flycheck-enable nil)
 
   ;; sideline
   (lsp-ui-sideline-enable t)
@@ -122,6 +123,7 @@
   (lsp-ui-sideline-show-hover t)
   ;; the up text show what the codes doing
   (lsp-ui-sideline-show-code-actions nil)
+  (lsp-ui-sideline-show-diagnostics nil)
   (lsp-ui-sideline-ignore-duplicate t)
   (lsp-ui-peek-always-show nil))
 

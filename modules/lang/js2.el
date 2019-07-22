@@ -44,39 +44,27 @@
       (message "tern binary not found!"))
     found))
 
-(defun yq//set-tern-key-bindings (mode)
-  "Set the key bindings for tern and the given MODE."
-  (add-to-list 'tern-command "--no-port-file" 'append)
-  (add-to-list (intern (format "spacemacs-jump-handlers-%S" mode))
-               '(tern-find-definition :async t) t)
-  (evil-define-key 'normal js2-mode-map ",t" nil)
-  (evil-define-key 'normal js2-mode-map ",tf" 'tern-find-definition)
-  (evil-define-key 'normal js2-mode-map ",tr" 'tern-rename-variable)
-  (evil-define-key 'normal js2-mode-map ",td" 'tern-get-docs)
-  (evil-define-key 'normal js2-mode-map ",tn" 'tern-find-definition-by-name)
-  (evil-define-key 'normal js2-mode-map ",tp" 'tern-pop-find-definition)
-  (evil-define-key 'normal js2-mode-map ",tt" 'tern-get-type))
-
 (use-package tern
   :defer t
+  :disabled
   :commands (tern-mode)
   :diminish tern-mode
-  :hook ((js-mode js2-mode) . tern-mode)
+  :hook ((js-mode js2-mode rjsx-mode) . tern-mode)
   :init
   (spacemacs//tern-detect)
   :config
   (add-to-list 'tern-command "--no-port-file" 'append)
-  (yq//set-tern-key-bindings 'js2-mode)
-  (dolist (mode '(js2-mode json-mode))
+  (dolist (mode '(js2-mode json-mode rjsx-mode typescript-mode))
     (spacemacs/enable-flycheck mode)))
 
 (use-package company-tern
   :straight t
+  :disabled
   :after tern
   :init
   (spacemacs|add-company-backends
     :backends (company-tabnine company-tern)
-    :modes (js-mode js2-mode)
+    :modes (js-mode js2-mode rjsx-mode)
     :after-hook t))
 
 (use-package json-mode
@@ -161,3 +149,6 @@
   (defun inferior-js-mode-hook-setup ()
     (add-hook 'comint-output-filter-functions 'js-comint-process-output))
   (add-hook 'inferior-js-mode-hook 'inferior-js-mode-hook-setup t))
+
+(dolist (mode '(js2-mode json-mode rjsx-mode typescript-mode))
+  (spacemacs/enable-flycheck mode))
