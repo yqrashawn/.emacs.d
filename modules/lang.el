@@ -81,13 +81,10 @@
   (lsp-document-highlight-delay (if *imac* 0.2 0.5))
   (lsp-symbol-highlighting-skip-current t)
   :config
-  (add-hook 'lsp-after-open-hook
-            (lambda ()
-              (remove 'company-tabnine company-backends)
-              (remove 'company-lsp company-backends)
-              (add-to-list 'company-backends 'company-lsp)
-              (add-to-list 'company-backends 'company-tabnine)
-              (setq-local company-backends (remove 'company-capf company-backends))))
+  ;; temp fix company-lsp
+  (defun yq/lsp-adjust-company-backends ()
+    (setq-local company-backends (cons 'company-tabnine (cons 'company-lsp (remove 'company-capf (remove 'company-lsp (remove 'company-tabnine company-backends)))))))
+  (add-hook 'lsp-after-open-hook 'yq/lsp-adjust-company-backends)
   (defun spacemacs//setup-lsp-jump-handler (&rest modes)
     "Set jump handler for LSP with the given MODE."
     (dolist (m modes)
