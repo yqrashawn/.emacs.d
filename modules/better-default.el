@@ -1727,3 +1727,10 @@ Info-mode:
   (evil-define-key 'normal xref--xref-buffer-mode-map (kbd "TAB") #'xref-goto-xref)
   (evil-define-key 'normal xref--xref-buffer-mode-map "l" #'xref-quit-and-goto-xref)
   (evil-define-key 'normal xref--xref-buffer-mode-map (kbd "q") #'quit-window))
+
+(use-package powerthesaurus
+  :straight t
+  :commands
+  (powerthesaurus-lookup-word
+   powerthesaurus-lookup-word-at-point
+   powerthesaurus-lookup-word-dwim))

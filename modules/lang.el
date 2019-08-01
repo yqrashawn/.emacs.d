@@ -111,7 +111,7 @@
   (lsp-ui-flycheck-enable nil)
 
   ;; sideline
-  (lsp-ui-sideline-enable t)
+  (lsp-ui-sideline-enable nil)
   (lsp-ui-sideline-delay 0.5)
   ;; idicating which symbol cursor is on
   (lsp-ui-sideline-show-symbol t)

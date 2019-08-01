@@ -259,6 +259,7 @@ Available PROPS:
 
 (use-package company-statistics
   :straight t
+  :disabled
   :hook (company-mode . company-statistics-mode))
 
 (use-package company-flx
@@ -308,6 +309,7 @@ Available PROPS:
 
 (use-package company-prescient
   :straight t
+  :disabled
   :after (company prescient)
   :init (company-prescient-mode))
 

@@ -305,3 +305,11 @@ has been changed to THEME."
 (use-package fill-column-indicator
   :straight t
   :commands (fci-mode))
+
+;; visual feedback for evil-ex command
+(use-package evil-traces
+  :straight t
+  :after evil
+  :config
+  (evil-traces-use-diff-faces) ; if you want to use diff's faces
+  (evil-traces-mode))
