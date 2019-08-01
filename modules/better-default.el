@@ -1734,3 +1734,7 @@ Info-mode:
   (powerthesaurus-lookup-word
    powerthesaurus-lookup-word-at-point
    powerthesaurus-lookup-word-dwim))
+
+(use-package discover-my-major
+  :straight t
+  :commands (discover-my-major))
