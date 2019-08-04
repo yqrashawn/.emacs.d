@@ -1,11 +1,23 @@
 ;;; md.el ---  markdown packages -*- lexical-binding: t; -*-
 
 (use-package markdown-mode
-  :mode
-  (("\\.m[k]d" . markdown-mode)
-   ("\\.mdk" . markdown-mode))
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.m[k]d" . markdown-mode)
+         ("\\.mdk" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode))
+  :custom
+  (markdown-command "multimarkdown")
   :defer t
+  :init
+  (defun yq-markdown-open ()
+    (if (not buffer-file-name)
+        (user-error "Must be visiting a file")
+      (save-buffer)
+      (let ((exit-code (call-process "open" nil nil nil "-a" "Marked" buffer-file-name)))
+        (unless (eq exit-code 0)
+          (user-error "Marked failed with exit code %s" exit-code)))))
   :config
+  (setq markdown-open-command 'yq-markdown-open)
   (evil-define-key 'normal markdown-mode-map
     ;; Movement
     ",{"   'markdown-backward-paragraph
