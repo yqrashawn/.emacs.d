@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: arrow-function-describe
+# key: ades
+# --
+describe("$1", () => {
+  it("$2", async () => {
+    $3
+  })
+});

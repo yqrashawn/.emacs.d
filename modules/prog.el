@@ -508,6 +508,7 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   :config
   (sp-pair "{" nil :post-handlers '(("||\n[i]" "RET")))
   ;; (smartparens-global-strict-mode t)
+  (smartparens-global-mode t)
   (define-key yq-s-map "d" 'sp-kill-sexp)
   (define-key yq-s-map "," 'sp-copy-sexp)
   (defun yq/setup-sp-keys-for-lispy-modes (map)

@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: arrow-function-it
+# key: ait
+# --
+it("${1:should}", () => {
+$2
+});

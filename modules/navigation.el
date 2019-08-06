@@ -117,6 +117,7 @@
        #'identity
        cands
        "\n")))
+  (setq ivy-format-functions-alist '((t . yq-ivy-format-function)))
   (setq ivy-format-function 'yq-ivy-format-function)
   (defun +ivy-select-index (&optional key)
     (interactive)
@@ -297,10 +298,12 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   (spacemacs/set-leader-keys "fT" 'counsel-tramp))
 
 (use-package prescient
+  :disabled
   :straight t)
 
 (use-package ivy-prescient
   :straight t
+  :disabled
   :after (prescient ivy)
   :init
   (ivy-prescient-mode))

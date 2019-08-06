@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: arrow-function
+# key: aaf
+# --
+($1) => {
+  $2
+}
