@@ -98,6 +98,7 @@
 
 (use-package lsp-ui
   :straight t
+  :disabled
   :commands lsp-ui-mode
   :custom
   ;; top right stuff
@@ -129,6 +130,7 @@
 
 (use-package company-lsp
   :straight t
+  :disabled
   :after company
   :commands (company-lsp)
   :custom
