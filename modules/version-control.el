@@ -126,8 +126,6 @@
   :after (magit)
   :custom
   (magit-todos-show-branch-list nil)
-  :init
-  (magit-todos-mode)
   :config
   (define-key magit-todos-section-map "j" nil)
   (define-key magit-todos-item-section-map (kbd "M-RET") #'magit-todos-peek-at-item))
