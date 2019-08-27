@@ -216,9 +216,24 @@ Available PROPS:
   ;; lag
   ;; (setq company-transformers '(spacemacs//company-transformer-cancel company-sort-by-occurrence))
   (setq company-transformers '(spacemacs//company-transformer-cancel))
-  ;; (add-to-list 'company-frontends #'company-tng-frontend)
-  ;; (add-to-list 'company-frontends #'company-pseudo-tooltip-frontend)
-  ;; (add-to-list 'company-frontends #'company-echo-metadata-frontend)
+  (setq company-frontends '(company-pseudo-tooltip-frontend company-echo-metadata-frontend))
+
+  ;; https://github.com/TommyX12/company-tabnine/blob/master/README.md
+  ;; workaround for company-transformers
+  (setq company-tabnine--disable-next-transform nil)
+  (defun my-company--transform-candidates (func &rest args)
+    (if (not company-tabnine--disable-next-transform)
+        (apply func args)
+      (setq company-tabnine--disable-next-transform nil)
+      (car args)))
+
+  (defun my-company-tabnine (func &rest args)
+    (when (eq (car args) 'candidates)
+      (setq company-tabnine--disable-next-transform t))
+    (apply func args))
+
+  (advice-add #'company--transform-candidates :around #'my-company--transform-candidates)
+  (advice-add #'company-tabnine :around #'my-company-tabnine)
 
   (setq company-active-map
         (let ((keymap (make-sparse-keymap)))
