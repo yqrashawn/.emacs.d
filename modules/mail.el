@@ -35,6 +35,7 @@
   ;; :straight (:host github :repo "emacsmirror/mu4e" :branch "master"
   ;;                  :files ("mu4e/*" ("mu4e/mu4e-meta.el.in" . "mu4e-meta.el")))
   :custom
+  (mu4e-compose-format-flowed t)
   (mu4e-attachment-dir "~/Downloads")
   (mu4e-compose-signature-auto-include nil)
   (mu4e-drafts-folder "/gmail/Drafts")
