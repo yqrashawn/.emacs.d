@@ -164,3 +164,8 @@
   (evil-define-key 'normal mu4e-main-mode-map "j" 'mu4e~headers-jump-to-maildir)
   (evil-define-key 'normal mu4e-view-mode-map "o" 'ace-link-mu4e)
   (evil-define-key 'normal mu4e-view-mode-map "go" 'mu4e-view-open-attachment))
+
+(use-package org-jira
+  :straight t
+  :custom
+  (jiralib-url "https://conflux-bounty.atlassian.net/"))
