@@ -27,7 +27,7 @@
 
 ;;;; Compositions
 
-(defun pretty-magit--add-magit-faces ()
+(defun pretty-magit--add-magit-faces (&optional a b c)
   "Add face properties and compose symbols for buffer from pretty-magit."
   (interactive)
   (with-silent-modifications
