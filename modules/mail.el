@@ -168,4 +168,7 @@
 (use-package org-jira
   :straight t
   :custom
-  (jiralib-url "https://conflux-bounty.atlassian.net/"))
+  (jiralib-url "https://conflux-bounty.atlassian.net/")
+  (org-jira-progress-issue-flow
+   '(("Backlog" . "In Progress")
+     ("In Progress" . "Done"))))
