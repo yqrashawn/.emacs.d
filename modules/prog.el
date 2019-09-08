@@ -281,7 +281,7 @@ Available PROPS:
   :straight t
   :commands (company-flx-mode)
   :init
-  (company-flx-mode +1))
+  (add-hook 'emacs-lisp-mode-hook (lambda () (company-flx-mode))))
 
 (use-package company-tabnine
   :straight t
