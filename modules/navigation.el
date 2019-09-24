@@ -554,8 +554,9 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   :config
   (setq dired-omit-files
         (concat dired-omit-files "\\|^\\.DS_Store$\\|^__MACOSX$\\|^\\.localized$")))
+
 (use-package dired+
-  :straight t
+  :straight (:host github :repo "emacsmirror/dired-plus")
   :init
   (setq diredp-hide-details-initially-flag nil)
   (evil-leader/set-key "fj" 'diredp-dired-recent-dirs)
@@ -565,6 +566,7 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   (evil-define-key 'normal dired-mode-map "j" 'diredp-next-line)
   (evil-define-key 'normal dired-mode-map "k" 'diredp-previous-line)
   (evil-define-key 'normal dired-mode-map "l" 'diredp-find-file-reuse-dir-buffer))
+
 (use-package dired-filter
   :straight t
   :hook (dired-mode . dired-filter-mode))

@@ -749,3 +749,10 @@ _j_  js2      _T_     text   _f_  fundamental
 
 ;; TODO
 (add-to-list 'hs-special-modes-alist '(rjsx-mode "`\\n\\|`[^;]\\|(\\|{\\|\\[" "`;\\|)\\|}\\|\\]" "/[*/]" nil))
+
+(use-package editorconfig
+  :straight t
+  :config
+  (add-hook 'editorconfig-after-apply-functions
+            (lambda () (message "editorconfig applied")))
+  (editorconfig-mode 1))

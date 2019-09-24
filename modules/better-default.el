@@ -258,6 +258,7 @@ file stored in the cache directory and `nil' to disable auto-saving.")
   (confirm-kill-processes nil)
   (confirm-kill-emacs nil)
   (enable-local-variables t)
+  (remote-file-name-inhibit-cache 1800)
   (confirm-nonexistent-file-or-buffer nil)
   :init
   (defun revert-buffer-no-confirm ()
@@ -295,6 +296,11 @@ file stored in the cache directory and `nil' to disable auto-saving.")
       (unless (file-exists-p dir)
         (make-directory dir t))))
   (push #'find-file-maybe-make-directories find-file-not-found-functions))
+
+(use-feature tramp
+  :custom
+  (tramp-connection-timeout 15)
+  (tramp-completion-reread-directory-timeout 900))
 
 (use-feature simple
   :custom
@@ -1458,7 +1464,9 @@ Info-mode:
 
 (use-package auth-source
   :no-require t
-  :config (setq auth-sources '("~/.authinfo.gpg" "~/.netrc")))
+  :config
+  (setq auth-sources '("~/.authinfo.gpg" "~/.netrc"))
+  (setq auth-source-gpg-encrypt-to '("namy.19@gmail.com")))
 
 ;; (use-feature ansi-color
 ;;   :config

@@ -1,4 +1,4 @@
-(use-package help-fns+
+(use-package help-fns-plus
   :straight t
   :commands (describe-keymap)
   :init
