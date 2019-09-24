@@ -87,6 +87,8 @@
 (use-package forge
   :straight (:host github :repo "magit/forge")
   :after evil-magit
+  :custom
+  (forge-pull-notifications nil)
   :commands (forge-dispatch)
   :bind ((:map forge-issue-section-map
                ("C-c C-v" . forge-browse-topic))
