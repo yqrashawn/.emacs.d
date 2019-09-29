@@ -316,3 +316,12 @@
   (deft-recursive t)
   :init
   (add-to-list 'evil-insert-state-modes 'deft-mode))
+
+(use-package org-jira
+  :straight t
+  :after (org org-clock)
+  :custom
+  (jiralib-url "https://conflux-bounty.atlassian.net/")
+  (org-jira-progress-issue-flow
+   '(("Backlog" . "In Progress")
+     ("In Progress" . "Done"))))
