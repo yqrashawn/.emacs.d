@@ -12,11 +12,24 @@
   :config
   (org-starter-define-directory "~/Dropbox/ORG/"
     :files
-    '(("inbox.org" :key "i" :agenda t :required nil :refile (:maxlevel . 1))
-      ("someday.org" :key "S" :agenda t :required nil :refile (:maxlevel . 1))
-      ("tasks.org" :key "t" :agenda t :required nil :refile (:maxlevel . 1))
-      ("media.org" :key "m" :required nil :refile (:maxlevel . 1))
-      ("diary.org" :key "A" :required nil :refile (:maxlevel . 1)))))
+    '(("inbox.org"
+       :key "i"
+       :agenda t
+       :required t
+       :refile (:maxlevel . 1)
+       :capture (("c"
+                  "Inbox Entry"
+                  entry
+                  (file org-default-inbox-file)
+                  "* %? %^G\n:PROPERTIES:\n:CREATED: %U\n:END:\n\n%i")))
+      ("someday.org" :key "S" :agenda t :required t :refile (:maxlevel . 1))
+      ("tasks.org" :key "t" :agenda t :required t :refile (:maxlevel . 1))
+      ("media.org" :key "m" :required t :refile (:maxlevel . 1))
+      ("diary.org" :key "A" :required t :refile (:maxlevel . 1))))
+  (org-starter-def-capture "c" "Inbox" entry (file "inbox.org")
+                           "* TODO %? %^G\n:PROPERTIES:\n:CREATED: %U\n:END:\n\n%i"
+                           :jump-to-captured t)
+  (spacemacs/set-leader-keys "2" 'org-starter-find-file-by-key))
 
 (with-eval-after-load 'org
   ;; auto save all org buffers after various org operation
@@ -234,13 +247,7 @@
 (evil-define-key 'normal org-mode-map "." #'+org-workflow-hydra/body)
 
 (with-eval-after-load 'org-capture
-  (setq org-capture-templates '())
-  (add-to-list
-   'org-capture-templates
-   '("c" "Inbox Entry" entry
-     ;; (file+olp org-default-inbox-file "Inbox")
-     (file org-default-inbox-file)
-     "* %? %^G\n:PROPERTIES:\n:CREATED: %U\n:END:\n\n%i")))
+  (setq org-capture-templates '()))
 
 (use-package org-web-tools
   :straight t
@@ -306,16 +313,26 @@
   :straight t
   :after ob)
 
-
-(use-package deft
+(use-package evil-org
+  ;; key themes
+  ;; org (org-agenda-open-link "[[file:~/.emacs.d/straight/repos/evil-org-mode/doc/keythemes.org::*Basic][Basic]]")
+  ;; agenda (org-agenda-open-link "[[file:~/.emacs.d/straight/repos/evil-org-mode/README.org::*Agenda][Agenda]]")
   :straight t
-  :commands (deft deft-new-file deft-find-file)
+  :diminish evil-org-mode
+  :after (evil org)
+  :hook
+  (org-mode . evil-org-mode)
   :custom
-  (deft-extensions '("org" "txt" "md" "markdown" "tex"))
-  (deft-directory "~/Dropbox/notes")
-  (deft-recursive t)
+  (evil-org-key-theme '(textobjects insert navigation additional shift todo heading))
   :init
-  (add-to-list 'evil-insert-state-modes 'deft-mode))
+  (add-hook 'evil-org-mode-hook
+            (lambda ()
+              (evil-org-set-key-theme)))
+  :config
+  (require 'evil-org-agenda)
+  (evil-org-agenda-set-keys)
+  (define-key evil-org-mode-map ">" 'evil-org->)
+  (define-key evil-org-mode-map "<" 'evil-org-<))
 
 (use-package org-jira
   :straight t
