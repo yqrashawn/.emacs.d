@@ -1105,3 +1105,32 @@ first."))
   :bind
   (("C-M-S-s-j" . iflipb-next-buffer)
    ("C-M-S-s-k" . iflipb-previous-buffer)))
+
+(use-package double-saber
+  :straight t
+  :after (ivy wgrep)
+  :init
+  (add-hook 'ivy-occur-grep-mode-hook
+            (lambda ()
+              (double-saber-mode)
+              (setq-local double-saber-start-line 5)))
+  (defadvice ivy-wgrep-change-to-wgrep-mode (after ivy-wgrep-change-to-wgrep-mode-double-sabber-advice activate)
+    "disable `double-saber-mode' when enter wgrep mode"
+    (interactive)
+    (double-saber-mode -1))
+
+  (defadvice wgrep-finish-edit (after ivy-wgrep-change-to-wgrep-mode-double-sabber-advice activate)
+    "enable `double-saber-mode' when leave wgrep mode"
+    (interactive)
+    (double-saber-mode 1))
+
+  (defadvice wgrep-abort-changes (after ivy-wgrep-change-to-wgrep-mode-double-sabber-advice activate)
+    "enable `double-saber-mode' when leave wgrep mode"
+    (interactive)
+    (double-saber-mode 1))
+  :config
+  (evil-define-key 'normal double-saber-mode-map "x" #'double-saber-narrow)
+  (evil-define-key 'normal double-saber-mode-map "d" #'double-saber-delete)
+  (evil-define-key 'normal double-saber-mode-map "S" #'double-saber-sort-lines)
+  (evil-define-key 'normal double-saber-mode-map "u" #'double-saber-undo)
+  (evil-define-key 'normal double-saber-mode-map (kbd "C-r") #'double-saber-redo))
