@@ -316,3 +316,9 @@ has been changed to THEME."
   :config
   (evil-traces-use-diff-faces) ; if you want to use diff's faces
   (evil-traces-mode))
+
+(use-package foldit
+  :load-path "./foldit.el"
+  :after (hideshow)
+  :init
+  (foldit-global-mode))

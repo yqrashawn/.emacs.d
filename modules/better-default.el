@@ -714,6 +714,18 @@ if prefix argument ARG is given, switch to it in an other, possibly new window."
 
 (evil-leader/set-key "bs" 'spacemacs/switch-to-scratch-buffer)
 
+(defun narrow-to-region-indirect-buffer (start end)
+  (interactive "r")
+  (with-current-buffer (clone-indirect-buffer
+                        (generate-new-buffer-name
+                         (concat (buffer-name) "-indirect-"
+                                 (number-to-string start) "-"
+                                 (number-to-string end)))
+                        'display)
+    (narrow-to-region start end)
+    (deactivate-mark)
+    (goto-char (point-min))))
+
 ;; http://endlessparentheses.com/emacs-narrow-or-widen-dwim.html
 (defun narrow-or-widen-dwim (p)
   "Widen if buffer is narrowed, narrow-dwim otherwise.
@@ -1720,7 +1732,13 @@ Info-mode:
   :config
   (add-to-list 'fence-edit-lang-modes '("css" . css-mode))
   (evil-define-key 'normal fence-edit-mode-map "sh" #'fence-edit-save)
-  (add-to-list 'fence-edit-blocks '(".*style.*`" ".*`.*" css)))
+  (setq
+   styled-component-start
+   (rx-to-string '(: (1+ (and (+ word) (0+ "\.") (0+ "(" (+ alpha) ")"))) "`" eol)))
+  (setq styled-component-end (rx-to-string '(: "`;" eol)))
+
+  (add-to-list 'fence-edit-blocks `(,styled-component-start ,styled-component-end css))
+  (setq fence-edit-default-mode 'fundamental-mode))
 
 ;; Keychain stuff. Note to self: if you keep having to enter your
 ;; keychain password on OS X, make sure that you have the following in .ssh/config:
