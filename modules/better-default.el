@@ -1545,9 +1545,20 @@ Info-mode:
   Mode: %s"
      fname access mod change size mode)))
 
+(use-package proced-narrow
+  :straight t
+  :after proced
+  :commands (proced-narrow)
+  :init
+  (evilified-state-evilify proced-mode proced-mode-map
+    "/" #'proced-narrow))
+
 (with-eval-after-load 'proced
   (evilified-state-evilify proced-mode proced-mode-map
-    "K" #'proced-send-signal))
+    "K" #'proced-send-signal
+    "R" #'proced-renice
+    "r" #'revert-buffer
+    "/" #'proced-narrow))
 
 (use-package terminal-here
   :straight t
