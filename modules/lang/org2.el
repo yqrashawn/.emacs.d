@@ -342,3 +342,34 @@
   (org-jira-progress-issue-flow
    '(("Backlog" . "In Progress")
      ("In Progress" . "Done"))))
+
+(use-package ejira
+  :straight (:host github :repo "nyyManni/ejira"
+                   :files
+                   (:defaults (:exclude "helm-ejira.el") "ejira*"))
+  :commands (ejira-update-my-projects)
+  :custom
+  (jiralib2-url "https://conflux-bounty.atlassian.net")
+  (jiralib2-auth 'token)
+  (ejira-org-directory "~/jira")
+  (ejira-priorities-alist    '(("Highest" . ?A)
+                               ("High"    . ?B)
+                               ("Medium"  . ?C)
+                               ("Low"     . ?D)
+                               ("Lowest"  . ?E)))
+  (ejira-todo-states-alist   '(("To Do"       . 1)
+                               ("In Progress" . 2)
+                               ("Done"        . 3)))
+  (ejira-projects '("CBV9" "DAG"))
+  :init
+  ;; (load-library "~/.emacs.d/.authinfo.el.gpg")
+  ;; (setq jiralib2-user-login-name my-jira-login-email
+  ;;       jiralib2-token my-jira-token)
+  :config
+  (add-hook 'jiralib2-post-login-hook #'ejira-guess-epic-sprint-fields)
+  (require 'ejira-agenda)
+  (add-to-list 'org-agenda-files ejira-org-directory)
+  (org-add-agenda-custom-command
+   '("j" "My JIRA issues"
+     ((ejira-jql "resolution = unresolved and assignee = currentUser()"
+                 ((org-agenda-overriding-header "Assigned to me")))))))

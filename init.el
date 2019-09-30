@@ -47,6 +47,11 @@
       '(("http" . "127.0.0.1:6152")
         ("https" . "127.0.0.1:6152")))
 
+;; debug
+;; (setq url-proxy-services
+;;       '(("http" . "127.0.0.1:9090")
+;;         ("https" . "127.0.0.1:9090")))
+
 ;;; Temporarily disable the file name handler.
 (setq default-file-name-handler-alist file-name-handler-alist)
 (setq file-name-handler-alist nil)

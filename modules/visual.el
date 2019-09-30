@@ -320,5 +320,5 @@ has been changed to THEME."
 (use-package foldit
   :load-path "./foldit.el"
   :after (hideshow)
-  :init
+  :config
   (foldit-global-mode))
