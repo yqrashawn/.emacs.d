@@ -322,3 +322,12 @@ has been changed to THEME."
   :after (hideshow)
   :config
   (foldit-global-mode))
+
+(use-package solaire-mode
+  :straight t
+  :disabled
+  :init (solaire-global-mode))
+
+(use-package highlight-escape-sequences
+  :straight t
+  :init (hes-mode))
