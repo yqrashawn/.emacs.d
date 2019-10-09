@@ -362,9 +362,7 @@
                                ("Done"        . 3)))
   (ejira-projects '("CBV9" "DAG"))
   :init
-  ;; (load-library "~/.emacs.d/.authinfo.el.gpg")
-  ;; (setq jiralib2-user-login-name my-jira-login-email
-  ;;       jiralib2-token my-jira-token)
+  (load-file "~/Dropbox/sync/.emacs.el")
   :config
   (add-hook 'jiralib2-post-login-hook #'ejira-guess-epic-sprint-fields)
   (require 'ejira-agenda)
