@@ -438,6 +438,18 @@ If the universal prefix argument is used then kill also the window."
         (kill-buffer-and-window)
       (kill-buffer))))
 
+(defun yq/bury-this-buffer (&optional arg)
+  "Kill the current buffer.
+If the universal prefix argument is used then kill also the window."
+  (interactive "P")
+  (if (window-minibuffer-p)
+      (abort-recursive-edit)
+    (if (equal '(4) arg)
+        (progn
+          (bury-buffer)
+          (yq/delete-window))
+      (bury-buffer))))
+
 (global-set-key (kbd "s-k") 'yq/kill-this-buffer)
 (global-set-key (kbd "C-x k") 'yq/kill-this-buffer)
 

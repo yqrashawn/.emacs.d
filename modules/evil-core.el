@@ -161,7 +161,7 @@
   (define-key evil-normal-state-map (kbd "C-k") 'evil-toggle-fold)
   (define-key evil-normal-state-map "s" 'yq-s-map)
   (define-key evil-normal-state-map "t" 'nil)
-  (define-key yq-s-map "k" 'yq/kill-this-buffer)
+  (define-key yq-s-map "k" 'yq/bury-this-buffer)
   (define-key yq-s-map "K" 'projectile-kill-buffers)
   (define-key yq-s-map "c" 'yq/delete-window)
   (define-key yq-s-map "h" 'save-buffer)

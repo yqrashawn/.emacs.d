@@ -152,3 +152,9 @@
 
 (dolist (mode '(js2-mode json-mode rjsx-mode typescript-mode))
   (spacemacs/enable-flycheck mode))
+
+(use-package eslintd-fix
+  :straight t
+  :after (rjsx-mode)
+  :hook (rjsx-mode . eslintd-fix-mode)
+  :custom (eslintd-fix-executable "eslint_d"))

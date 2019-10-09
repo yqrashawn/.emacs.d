@@ -453,7 +453,10 @@ is not visible. Otherwise delegates to regular Emacs next-error."
     "ex" 'flycheck-explain-error-at-point
     "en" 'spacemacs/next-error
     "ep" 'spacemacs/previous-error)
-  (global-flycheck-mode 1))
+  (global-flycheck-mode 1)
+  :config
+  (setq flycheck-javascript-eslint-executable "eslint_d"))
+
 
 
 (use-package yasnippet

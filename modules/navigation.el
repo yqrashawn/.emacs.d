@@ -516,7 +516,7 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   (evil-define-key 'normal dired-mode-map
     "l" 'dired-find-file
     "s" 'nil
-    "sk" 'yq/kill-this-buffer
+    "sk" 'yq/bury-this-buffer
     "sM" #'counsel-fzf
     "sm" #'counsel-git
     ;; "sm" #'projectile-find-file-dwim
@@ -589,7 +589,7 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
 
 (defun yq/open-with-call-alfred-osascript (file)
   (shell-command (concat "osascript -e '" (format "-- Search for the file
-    tell application \"Alfred 3\"
+    tell application \"Alfred 4\"
       search \"%1$s\"
     end tell
 
@@ -673,7 +673,7 @@ When ARG is non-nil search in junk files."
   (setq avy-enter-times-out nil)
   (setq avy-background t)
   (setq avy-highlight-first t)
-  (define-key yq-s-map "n" 'avy-goto-char-timer)
+  (define-key yq-s-map "n" 'avy-goto-char-2)
   (define-key yq-s-map "N" 'avy-isearch)
   (define-key yq-s-map "I" 'avy-goto-word-1))
 

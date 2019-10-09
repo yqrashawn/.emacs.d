@@ -426,6 +426,14 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
     "S" #'edebug-next-mode)
   (advice-add 'edebug-mode :after 'spacemacs//edebug-mode))
 
+(use-package highlight-function-calls
+  :straight t
+  :hook (emacs-lisp-mode . highlight-function-calls-mode))
+
+(use-package highlight-stages
+  :straight t
+  :hook (emacs-lisp-mode . highlight-stages-mode))
+
 ;;   (defhydra hydra-edebug (:color amaranth
 ;;                                  :hint  nil)
 ;;     "
