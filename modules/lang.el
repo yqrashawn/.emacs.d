@@ -130,7 +130,6 @@
 
 (use-package company-lsp
   :straight t
-  :disabled
   :after company
   :commands (company-lsp)
   :custom
