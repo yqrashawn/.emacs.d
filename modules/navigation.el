@@ -695,6 +695,7 @@ When ARG is non-nil search in junk files."
 
 (use-package ace-link
   :straight t
+  :disabled
   :commands (ace-link)
   :init
   (define-key evil-normal-state-map "go" #'ace-link)

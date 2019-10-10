@@ -1792,3 +1792,10 @@ Info-mode:
   :straight t
   :commands (cycle-quotes)
   :bind ((:map yq-s-map) ("Q" . cycle-quotes)))
+
+(use-package link-hint
+  :straight t
+  :commands (link-hint-open-link)
+  :init
+  (define-key evil-normal-state-map "go" #'link-hint-open-link)
+  (evil-define-key 'normal helpful-mode-map "o" #'link-hint-open-link))
