@@ -1787,3 +1787,8 @@ Info-mode:
 (use-package discover-my-major
   :straight t
   :commands (discover-my-major))
+
+(use-package cycle-quotes
+  :straight t
+  :commands (cycle-quotes)
+  :bind ((:map yq-s-map) ("Q" . cycle-quotes)))

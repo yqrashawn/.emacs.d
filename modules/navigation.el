@@ -380,11 +380,15 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   (when (executable-find "fd")
     (setq projectile-git-command "fd . -t f -0"
           projectile-generic-command projectile-git-command))
-  (add-to-list 'projectile-globally-ignored-directories "node_modules")
-  (add-to-list 'projectile-project-root-files "package.json")
-  (add-to-list 'projectile-project-root-files ".tabnine_root")
+  (setq projectile-globally-ignored-directories
+        (append projectile-globally-ignored-directories
+                '("node_modules" "build" "tests" ".cache")))
+
+  (setq projectile-project-root-files
+        (append projectile-project-root-files
+                '(".tabnine_root")))
   (setq projectile-sort-order 'recently-active)
-  (setq projectile-globally-ignored-file-suffixes '(".elc" ".min.js" ".min.css" ".unmin.js" ".unmin.css"))
+  (setq projectile-globally-ignored-file-suffixes '(".elc" ".min.js" ".min.css" ".unmin.js" ".unmin.css" ".map"))
   (setq projectile-verbose nil)
   (setq projectile-enable-idle-timer t)
   (setq projectile-idle-timer-seconds 300)
@@ -565,11 +569,23 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   (evil-define-key 'normal dired-mode-map "h" 'diredp-up-directory-reuse-dir-buffer)
   (evil-define-key 'normal dired-mode-map "j" 'diredp-next-line)
   (evil-define-key 'normal dired-mode-map "k" 'diredp-previous-line)
-  (evil-define-key 'normal dired-mode-map "l" 'diredp-find-file-reuse-dir-buffer))
+  (evil-define-key 'normal dired-mode-map "l" 'diredp-find-file-reuse-dir-buffer)
+  :config
+  (add-hook 'dired-mode-hook '(lambda () (dired-hide-details-mode 0))))
 
 (use-package dired-filter
   :straight t
-  :hook (dired-mode . dired-filter-mode))
+  :after dired
+  :hook (dired-mode . dired-filter-mode)
+  :custom
+  (dired-filter-group-saved-groups
+   '(("default"
+      ("JavaScript" (extension "js" "json"))
+      ("emacs" (extension "el" "eld"))
+      ("binary" (extension "elc" "bin"))
+      ("MarkUp" (extension "md" "org"))
+      ("Archives" (extension "zip" "rar" "gz" "bz2" "tar"))
+      ("Images" (extension "png" "gif" "jpeg" "jpg"))))))
 
 (defun yq/find-org|gtd () (interactive) (find-file "~/Dropbox/ORG/gtd.org"))
 (defun yq/find-org|project () (interactive) (find-file "~/Dropbox/ORG/project.org"))

@@ -274,8 +274,7 @@ Available PROPS:
 
 (use-package company-statistics
   :straight t
-  :disabled
-  :hook (company-mode . company-statistics-mode))
+  :hook ((clojure-mode emacs-lisp-mode ) . company-statistics-mode))
 
 (use-package company-flx
   :straight t
@@ -759,3 +758,8 @@ _j_  js2      _T_     text   _f_  fundamental
   (add-hook 'editorconfig-after-apply-functions
             (lambda (props) (message "editorconfig applied")))
   (editorconfig-mode 1))
+
+(use-package imenu-list
+  :straight t
+  :commands (imenu-list-smart-toggle)
+  :bind ((:map yq-s-map ("L" . imenu-list-smart-toggle))))

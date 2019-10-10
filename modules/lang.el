@@ -136,3 +136,13 @@
   (company-lsp-async t)
   (company-lsp-cache-candidates (if *imac* nil 'auto))
   (company-lsp-enable-recompletion (if *imac* t nil)))
+
+(use-package image+
+  :straight t
+  :after 'image-mode
+  :hook (image-mode . image+)
+  :bind ((:map image-mode-map
+               ("0" . imagex-sticky-restore-original)
+               ("+" . imagex-sticky-maximize)
+               ("=" . imagex-sticky-zoom-in)
+               ("-" . imagex-sticky-zoom-out))))
