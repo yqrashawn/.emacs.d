@@ -1799,3 +1799,7 @@ Info-mode:
   :init
   (define-key evil-normal-state-map "go" #'link-hint-open-link)
   (evil-define-key 'normal helpful-mode-map "o" #'link-hint-open-link))
+
+(use-package sudo-edit
+  :straight t
+  :commands (sudo-edit))
