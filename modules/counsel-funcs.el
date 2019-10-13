@@ -107,8 +107,8 @@ with options to run in the shell.")
     (lambda (string &optional _pred &rest _unused)
       "Grep in the current directory for STRING."
       ;; `counsel-more-chars' returns non-nil when more chars are needed,
-      ;; minimal chars count is configurable via `counsel-more-chars-alist'
-      (or (counsel-more-chars)
+      ;; minimal chars count is configurable via `ivy-more-chars-alist'
+      (or (ivy-more-chars)
           (let* ((default-directory (ivy-state-directory ivy-last))
                  (args (if (string-match-p " -- " string)
                            (let ((split (split-string string " -- ")))
