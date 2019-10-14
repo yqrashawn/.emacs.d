@@ -242,8 +242,8 @@ has been changed to THEME."
   :config
   (pretty-magit-setup)
   (pretty-magit-add-leaders
-   '(("Feature" ? (:foreground "slate gray" :height 1.2))
-     ("Add"     ? (:foreground "#375E97" :height 1.2))
+   '(("Add"     ? (:foreground "#375E97" :height 1.2))
+     ("Feature" ? (:foreground "slate gray" :height 1.2))
      ("Fix"     ? (:foreground "#FB6542" :height 1.2))
      ("Clean"   ? (:foreground "#FFBB00" :height 1.2))
      ("Docs"    ? (:foreground "#3F681C" :height 1.2))
