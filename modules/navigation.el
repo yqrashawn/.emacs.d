@@ -36,6 +36,9 @@
           (magit-branch-and-checkout . ivy--regex-fuzzy)
           (magit-branch-spinoff . ivy--regex-fuzzy)
           (magit-branch-spinout . ivy--regex-fuzzy)
+          (magit-push-other . ivy--regex-fuzzy)
+          (magit-push-current . ivy--regex-fuzzy)
+          (magit-push-current . ivy--regex-fuzzy)
           (magit-branch-maybe-adjust-upstream . ivy--regex-fuzzy)
           (magit-branch-rename . ivy--regex-fuzzy)
           (magit-branch-shelve . ivy--regex-fuzzy)
@@ -44,6 +47,7 @@
           (magit-branch-delete . ivy--regex-fuzzy)
           (magit-log-read-revs . ivy--regex-fuzzy)
           (magit-log-current . ivy--regex-fuzzy)
+          (magit-log-read-revs . ivy--regex-fuzzy)
           (counsel-git . ivy--regex-fuzzy)
           (projector-run-command-buffer-prompt . ivy--regex-fuzzy)
           (spacemacs/counsel-search . spacemacs/ivy--regex-plus)
@@ -695,7 +699,6 @@ When ARG is non-nil search in junk files."
 
 (use-package ace-link
   :straight t
-  :disabled
   :commands (ace-link)
   :init
   (define-key evil-normal-state-map "go" #'ace-link)
