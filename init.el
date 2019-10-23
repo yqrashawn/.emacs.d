@@ -18,6 +18,12 @@
 
 ;; check package update infos
 (setq straight-vc-git-auto-fast-forward t)
+(setq straight-fix-org t)
+;; Tell straight.el about the profiles we are going to be using.
+(setq straight-profiles
+      '((nil . "default.el")
+        ;; Packages which are pinned to a specific commit.
+        (pinned . "pinned.el")))
 ;; (package-initialize)
 (setq scroll-bar-background nil)
 (menu-bar-mode -1)
@@ -74,6 +80,9 @@
       (goto-char (point-max))
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
+
+(autoload #'straight-x-pull-all "straight-x")
+(autoload #'straight-x-freeze-versions "straight-x")
 
 ;; (straight-use-package 'auto-compile)
 ;; (auto-compile-on-save-mode 1)

@@ -5,7 +5,8 @@
 (define-key global-map "\C-ca" 'org-agenda)
 (define-key global-map "\C-cc" 'org-capture)
 
-(straight-use-package 'org)
+(straight-use-package '(org :type built-in))
+;; (require 'org)
 
 (use-package org-starter
   :straight t
@@ -360,7 +361,7 @@
   (ejira-todo-states-alist   '(("To Do"       . 1)
                                ("In Progress" . 2)
                                ("Done"        . 3)))
-  (ejira-projects '("CBV9" "DAG"))
+  (ejira-projects '("DAG"))
   :init
   (load-file "~/Dropbox/sync/.emacs.el")
   :config

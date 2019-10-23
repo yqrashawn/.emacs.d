@@ -15,7 +15,6 @@
   :custom
   (magit-diff-refine-hunk t)
   :init
-  (magit-auto-revert-mode 1)
   (setq magit-bury-buffer-function (lambda (&optional kill-buffer) (magit-restore-window-configuration t)))
   ;; (setq magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1)
   (setq magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
@@ -30,6 +29,7 @@
   (setq magit-blame-echo-style 'margin)
   (setq magit-diff-refine-hunk 'all)
   :config
+  (magit-auto-revert-mode 1)
   (add-to-list 'magit-no-confirm 'stage-all-changes)
   (defun +magit-submodule-pull-all ()
     (interactive)
