@@ -494,3 +494,7 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
 ;;   :init
 ;;   (advice-add 'describe-function-1 :after #'elisp-demos-advice-describe-function-1)
 ;;   (advice-add 'helpful-update :after #'elisp-demos-advice-helpful-update))
+
+(use-package easy-escape
+  :straight t
+  :hook (emacs-lisp-mode . easy-escape-minor-mode))

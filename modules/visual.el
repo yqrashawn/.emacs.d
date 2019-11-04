@@ -174,19 +174,24 @@ has been changed to THEME."
   :straight t
   :hook (after-init . doom-modeline-init)
   :init
+
   (setq doom-modeline-height 15
         doom-modeline-buffer-file-name-style 'relative-to-project
-        doom-modeline-major-mode-icon nil
+        doom-modeline-icon (display-graphic-p)
+        doom-modeline-mu4e t
+        doom-modeline-major-mode-icon t
+        doom-modeline-major-mode-color-icon t
+        doom-modeline-buffer-state-icon t
+        doom-modeline-buffer-modification-icon t
+        doom-modeline-indent-info t
         doom-modeline-minor-modes nil
         doom-modeline-env-version t
         doom-modeline-indent-info t
-        doom-modeline-env-version nil
-        doom-modeline-irc nil
-        doom-modeline-lsp nil)
+        doom-modeline-irc nil)
   :config
   (doom-modeline-def-modeline 'main
     '(bar workspace-name window-number modals matches buffer-info remote-host parrot selection-info)
-    '(objed-state misc-info persp-name fancy-battery grip irc mu4e github debug lsp minor-modes input-method indent-info buffer-encoding major-mode process vcs checker))
+    '(misc-info persp-name grip irc mu4e github debug lsp minor-modes input-method indent-info buffer-encoding major-mode process vcs checker))
   (setq doom-modeline-icon nil))
   ;; (doom-modeline-def-segment tabbar-group
   ;;   (when (and tabbar-mode (doom-modeline--active))
