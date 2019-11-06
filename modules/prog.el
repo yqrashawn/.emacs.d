@@ -226,7 +226,6 @@ Available PROPS:
         (apply func args)
       (setq company-tabnine--disable-next-transform nil)
       (car args)))
-
   (defun my-company-tabnine (func &rest args)
     (when (eq (car args) 'candidates)
       (setq company-tabnine--disable-next-transform t))
@@ -292,7 +291,6 @@ Available PROPS:
   ;; Allows TAB to select and complete at the same time.
   (company-tng-configure-default)
   (setq company-tabnine-no-continue nil)
-  :init
   (customize-set-variable 'company-backends '(company-tabnine
                                               company-capf
                                               (company-dabbrev-code
