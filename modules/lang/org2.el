@@ -5,8 +5,8 @@
 (define-key global-map "\C-ca" 'org-agenda)
 (define-key global-map "\C-cc" 'org-capture)
 
-(straight-use-package '(org :type built-in))
-;; (require 'org)
+;; (straight-use-package '(org :type built-in))
+(straight-use-package 'org)
 
 (use-package org-starter
   :straight t

@@ -1721,7 +1721,8 @@ Info-mode:
   :straight t
   :diminish whitespace-cleanup-mode
   :init
-  (global-whitespace-cleanup-mode))
+  (global-whitespace-cleanup-mode)
+  (add-hook 'markdown-mode-hook (lambda () (whitespace-cleanup-mode -1))))
 
 (use-package mic-paren
   :straight t
