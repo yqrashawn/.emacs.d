@@ -26,7 +26,7 @@
         (pinned . "pinned.el")))
 ;; (package-initialize)
 (setq scroll-bar-background nil)
-(menu-bar-mode -1)
+(menu-bar-mode t)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 
@@ -36,8 +36,8 @@
 ;; dark titlebar
 (add-to-list 'default-frame-alist '(ns-appearance . dark))
 
-;; Fullscreen by default, as early as possible.
-(add-to-list 'default-frame-alist '(fullscreen . maximized))
+;; Fullscreen by default, as early as possible. use yabai
+;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
 ;; UTF-8 everywhere, please.
 (prefer-coding-system 'utf-8)
