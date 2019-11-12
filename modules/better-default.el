@@ -299,8 +299,12 @@ file stored in the cache directory and `nil' to disable auto-saving.")
 
 (use-feature tramp
   :custom
+  (tramp-ssh-controlmaster-options "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no")
   (tramp-connection-timeout 15)
-  (tramp-completion-reread-directory-timeout 900))
+  (tramp-completion-reread-directory-timeout 900)
+  :config
+  (add-to-list 'tramp-connection-properties
+               (list ".*" "locale" "LC_ALL=C")))
 
 (use-feature simple
   :custom
