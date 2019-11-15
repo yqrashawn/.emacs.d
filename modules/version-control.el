@@ -29,6 +29,7 @@
   (setq magit-blame-echo-style 'margin)
   (setq magit-diff-refine-hunk 'all)
   :config
+  (magit-wip-mode 1)
   (magit-auto-revert-mode 1)
   (add-to-list 'magit-no-confirm 'stage-all-changes)
   (defun +magit-submodule-pull-all ()
