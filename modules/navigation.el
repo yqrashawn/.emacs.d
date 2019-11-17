@@ -693,7 +693,7 @@ When ARG is non-nil search in junk files."
   (setq avy-enter-times-out nil)
   (setq avy-background t)
   (setq avy-highlight-first t)
-  (define-key yq-s-map "n" 'avy-goto-char-2)
+  (define-key yq-s-map "n" 'avy-goto-word-1)
   (define-key yq-s-map "N" 'avy-isearch)
   (define-key yq-s-map "I" 'avy-goto-word-1))
 
