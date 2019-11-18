@@ -39,6 +39,7 @@
 
 (use-package apropospriate-theme
   :straight (:host github :repo "waymondo/apropospriate-theme")
+  :disabled
   :defer t)
 
 (use-package zenburn-theme
@@ -312,7 +313,7 @@ has been changed to THEME."
 
 (use-package fill-column-indicator
   :straight t
-  :commands (fci-mode))
+  :hook ((text-mode markdown-mode org-mode ) . fci-mode))
 
 ;; visual feedback for evil-ex command
 (use-package evil-traces
@@ -324,6 +325,7 @@ has been changed to THEME."
 
 (use-package foldit
   :load-path "./foldit.el"
+  :disabled
   :after (hideshow)
   :config
   (foldit-global-mode))
@@ -335,4 +337,5 @@ has been changed to THEME."
 
 (use-package highlight-escape-sequences
   :straight t
+  :disabled
   :init (hes-mode))

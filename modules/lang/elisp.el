@@ -432,6 +432,7 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
 
 (use-package highlight-stages
   :straight t
+  :disabled
   :hook (emacs-lisp-mode . highlight-stages-mode))
 
 ;;   (defhydra hydra-edebug (:color amaranth

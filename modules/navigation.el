@@ -1,12 +1,10 @@
 ;;; navigation.el --- configs about navigation -*- lexical-binding: t; -*-
 
-(use-package frog-menu
-  :disabled
-  :straight (:host github :repo "clemera/frog-menu"))
 (setq yq-quick-keys '(?a ?s ?d ?f ?g ?h ?j ?k ?l ?\; ?q ?w ?e ?r
                          ?t ?y ?u ?i ?o ?p ?z ?x ?c ?v ?b ?n ?m
                          ?A ?S ?D ?F ?G ?H ?J ?K ?L ?Q ?W ?E ?R
                          ?T ?Y ?U ?I ?O ?P ?Z ?X ?C ?V ?B ?N ?M))
+
 (use-package ivy
   :straight (:host github :repo "abo-abo/swiper" :branch "master"
                    :files
@@ -343,7 +341,6 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
 
 (use-package helpful
   :straight t
-  :after counsel
   :commands (helpful-variable helpful-key helpful-function)
   :init
   (spacemacs/set-leader-keys "hdV" 'helpful-variable)
@@ -400,6 +397,7 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
 
 (use-package counsel-projectile
   :straight t
+  :after (counsel projectile)
   :init
   (counsel-projectile-mode +1)
   (spacemacs/set-leader-keys "p" nil)
@@ -562,7 +560,6 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   :config
   (setq dired-omit-files
         (concat dired-omit-files "\\|^\\.DS_Store$\\|^__MACOSX$\\|^\\.localized$")))
-
 (use-package dired+
   :straight (:host github :repo "emacsmirror/dired-plus")
   :init
@@ -576,7 +573,6 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   (evil-define-key 'normal dired-mode-map "l" 'diredp-find-file-reuse-dir-buffer)
   :config
   (add-hook 'dired-mode-hook '(lambda () (dired-hide-details-mode 0))))
-
 (use-package dired-filter
   :straight t
   :after dired
@@ -590,12 +586,6 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
       ("MarkUp" (extension "md" "org"))
       ("Archives" (extension "zip" "rar" "gz" "bz2" "tar"))
       ("Images" (extension "png" "gif" "jpeg" "jpg"))))))
-
-(defun yq/find-org|gtd () (interactive) (find-file "~/Dropbox/ORG/gtd.org"))
-(defun yq/find-org|project () (interactive) (find-file "~/Dropbox/ORG/project.org"))
-;; (spacemacs/set-leader-keys "3" 'yq/find-org|gtd)
-;; (spacemacs/set-leader-keys "4" 'yq/find-org|project)
-
 
 (defun yq/dropbox ()
   (interactive)
@@ -625,7 +615,6 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
       (yq/open-with-call-alfred-osascript (dired-get-filename nil t))
     (and (file-exists-p buffer-file-name) (yq/open-with-call-alfred-osascript buffer-file-name))))
 
-(define-key yq-s-map (kbd ".") 'yq/open-with-alfred)
 (spacemacs/set-leader-keys "bb" 'yq/open-with-alfred)
 
 (use-package open-junk-file
@@ -670,11 +659,11 @@ When ARG is non-nil search in junk files."
 (yq/update-evil-emacs-state-modes 'ibuffer-mode)
 (add-to-list 'ibuffer-never-show-predicates "^\\*Ibuffer")
 (add-to-list 'ibuffer-never-show-predicates "^\\*Straight")
+(add-to-list 'ibuffer-never-show-predicates "^\\*:Buffers:")
+(add-to-list 'ibuffer-never-show-predicates "^\\*mu4e")
 ;; (add-to-list 'ibuffer-never-show-predicates "^\\*scratch")
 ;; (add-to-list 'ibuffer-never-show-predicates "^\\*Messages")
 ;; (add-to-list 'ibuffer-never-show-predicates "^\\*Warnings")
-(add-to-list 'ibuffer-never-show-predicates "^\\*:Buffers:")
-(add-to-list 'ibuffer-never-show-predicates "^\\*mu4e")
 ;; (add-to-list 'ibuffer-never-show-predicates "^\\*Help")
 
 (use-package avy
@@ -707,6 +696,7 @@ When ARG is non-nil search in junk files."
 
 (use-package tabbar
   :straight t
+  :disabled
   :init
   (setq tabbar-cycle-scope 'tabs
         tabbar-use-images nil
@@ -1014,6 +1004,7 @@ first."))
 
 (use-package color-rg
   :straight (:host github :repo "manateelazycat/color-rg")
+  :disabled
   :commands (color-rg-search-input
              color-rg-search-symbol
              color-rg-search-project)
@@ -1074,6 +1065,7 @@ first."))
 ;;          ("C-x 7 w l" . 'emacs-chunkwm-windmove-right)
 ;;          ("C-x 7 w j" . 'emacs-chunkwm-windmove-down)
 ;;          ("C-x 7 w k" . 'emacs-chunkwm-windmove-up)))
+
 (use-package flyspell-correct
   :straight t)
 
@@ -1081,7 +1073,7 @@ first."))
   :straight t
   :bind ("C-;" . flyspell-correct-at-point)
   :init
-  (setq flyspell-correct-interface #'flyspell-correct-ivy))
+  (setq flyspell-correct-interface #'flyspell-correct-wrapper))
 
 (use-package helm
   :straight t
@@ -1110,6 +1102,7 @@ first."))
 
 (use-package eyebrowse
   :straight t
+  :disabled
   :init
   (eyebrowse-mode t))
 

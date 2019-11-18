@@ -253,6 +253,7 @@
 (use-package org-web-tools
   :straight t
   :after org
+  :disabled
   :init
   (defun mkm-org-capture/link ()
     "Make a TODO entry with a link in clipboard. Page title is used as task heading."
@@ -337,6 +338,7 @@
 
 (use-package org-jira
   :straight t
+  :disabled
   :after (org org-clock)
   :custom
   (jiralib-url "https://conflux-bounty.atlassian.net/")

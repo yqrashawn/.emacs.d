@@ -299,6 +299,8 @@ file stored in the cache directory and `nil' to disable auto-saving.")
 
 (use-feature tramp
   :custom
+  (tramp-default-method "scp")
+  (vc-ignore-dir-regexp (format "\\(%s\\)\\|\\(%s\\)" vc-ignore-dir-regexp tramp-file-name-regexp))
   (tramp-ssh-controlmaster-options "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no")
   (tramp-connection-timeout 15)
   (tramp-completion-reread-directory-timeout 900)
@@ -1769,9 +1771,10 @@ Info-mode:
 ;; try undo-propose
 (use-package undo-propose
   :straight t
+  :disabled
   :init
   (define-key evil-normal-state-map "U" #'undo-propose)
-  (evil-define-key 'normal undo-propose-mode-map "u" 'undo-propose-undo))
+  (evil-define-key 'normal undo-propose-mode-map "u" 'undo))
 
 (use-feature xref
   :config

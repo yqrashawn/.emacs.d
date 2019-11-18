@@ -39,19 +39,19 @@
   ;; This regexp matches shebang expressions like `#!/usr/bin/env boot'
   (add-to-list 'magic-mode-alist '("#!.*boot\\s-*$" . clojure-mode))
   :config
-  (add-hook
-   'clojure-mode-hook
-   (lambda ()
-     (setq-local company-idle-delay 0.2)
-     (setq-local evil-shift-width 1)
-     (setq-local company-backends '(company-capf
-                                    company-tabnine
-                                    (company-dabbrev-code
-                                     company-gtags
-                                     company-etags
-                                     company-keywords)
-                                    company-files
-                                    company-dabbrev))))
+  (defun +setup-company-for-clojure ()
+    (setq-local company-idle-delay 0.2)
+    (setq-local evil-shift-width 1)
+    (setq-local company-backends '(company-capf
+                                   company-tabnine
+                                   (company-dabbrev-code
+                                    company-gtags
+                                    company-etags
+                                    company-keywords)
+                                   company-files
+                                   company-dabbrev)))
+
+  (add-hook 'clojure-mode-hook '+setup-company-for-clojure)
   (dolist (map (list clojure-mode-map clojurec-mode-map clojurescript-mode-map))
     (evil-define-key* 'normal map
                       ",fl" 'clojure-align))
@@ -128,6 +128,7 @@
   (add-hook 'clojurec-mode-hook #'spacemacs//init-jump-handlers-clojurec-mode)
   (add-hook 'cider-repl-mode-hook #'spacemacs//init-jump-handlers-cider-repl-mode)
   :config
+  (add-hook 'cider-repl-mode-hook '+setup-company-for-clojure)
   (add-hook 'clojure-mode-hook (defl () (setq-mode-local clojure-mode company-idle-delay 0.2)))
 
   ;; TODO: having this work for cider-macroexpansion-mode would be nice,
