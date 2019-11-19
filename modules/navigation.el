@@ -586,6 +586,17 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
       ("MarkUp" (extension "md" "org"))
       ("Archives" (extension "zip" "rar" "gz" "bz2" "tar"))
       ("Images" (extension "png" "gif" "jpeg" "jpg"))))))
+(use-package dired-git-info
+  :straight (:host github :repo "clemera/dired-git-info")
+  :commands (dired-git-info-mode)
+  :after dired
+  :init
+  (define-key dired-mode-map "(" 'dired-git-info-mode))
+(use-package dired-quick-sort
+  :straight t
+  :after dired
+  :init
+  (dired-quick-sort-setup))
 
 (defun yq/dropbox ()
   (interactive)

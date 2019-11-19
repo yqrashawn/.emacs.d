@@ -1667,12 +1667,6 @@ Info-mode:
   :straight (:host github :repo "jackkamm/undo-propose-el")
   :commands (undo-propose))
 
-(use-package dired-git-info
-  :straight (:host github :repo "clemera/dired-git-info")
-  :commands (dired-git-info-mode)
-  :after dired
-  :init
-  (define-key dired-mode-map "(" 'dired-git-info-mode))
 
 (use-package ix
   :straight t
