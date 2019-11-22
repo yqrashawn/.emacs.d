@@ -132,3 +132,9 @@
   :config
   (define-key magit-todos-section-map "j" nil)
   (define-key magit-todos-item-section-map (kbd "M-RET") #'magit-todos-peek-at-item))
+
+(use-package vc-msg
+  :straight t
+  :commands (vc-msg-show)
+  :init
+  (spacemacs/set-leader-keys "gl" #'vc-msg-show))
