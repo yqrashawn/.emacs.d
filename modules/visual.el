@@ -174,43 +174,21 @@ has been changed to THEME."
 (use-package doom-modeline
   :straight t
   :hook (after-init . doom-modeline-init)
-  :init
-
-  (setq doom-modeline-height 15
-        doom-modeline-buffer-file-name-style 'relative-to-project
-        doom-modeline-icon (display-graphic-p)
-        doom-modeline-mu4e t
-        doom-modeline-major-mode-icon t
-        doom-modeline-major-mode-color-icon t
-        doom-modeline-buffer-state-icon t
-        doom-modeline-buffer-modification-icon t
-        doom-modeline-indent-info t
-        doom-modeline-minor-modes nil
-        doom-modeline-env-version t
-        doom-modeline-indent-info t
-        doom-modeline-irc nil)
-  :config
-  (doom-modeline-def-modeline 'main
-    '(bar workspace-name window-number modals matches buffer-info remote-host parrot selection-info)
-    '(misc-info persp-name grip irc mu4e github debug lsp minor-modes input-method indent-info buffer-encoding major-mode process vcs checker))
-  (setq doom-modeline-icon nil))
-  ;; (doom-modeline-def-segment tabbar-group
-  ;;   (when (and tabbar-mode (doom-modeline--active))
-  ;;     (let ((tb-groups (+tabbar-get-groups))
-  ;;           (tb-cur-group (first (+tabbar-buffer-groups))))
-  ;;       (mapcar
-  ;;        (lambda (group)
-  ;;          (+propertize-tabbar-group-for-modeline group (string= group tb-cur-group))) tb-groups))))
-  ;; (defun +propertize-tabbar-group-for-modeline (group &optional cur-group-p)
-  ;;   (let ((face (if cur-group-p 'doom-modeline-evil-emacs-state 'mode-line-emphasis))
-  ;;         (active (doom-modeline--active)))
-  ;;     (concat
-  ;;      " "
-  ;;      (propertize group
-  ;;                  'face face
-  ;;                  'help-echo "Tabbar Group")
-  ;;      " ")))
-
+  :custom
+  (doom-modeline-height 15)
+  (doom-modeline-buffer-file-name-style 'relative-to-project)
+  (doom-modeline-icon (display-graphic-p))
+  (doom-modeline-mu4e t)
+  (doom-modeline-major-mode-icon t)
+  (doom-modeline-major-mode-color-icon t)
+  (doom-modeline-buffer-state-icon t)
+  (doom-modeline-buffer-modification-icon t)
+  (doom-modeline-indent-info t)
+  (doom-modeline-minor-modes nil)
+  (doom-modeline-env-version t)
+  (doom-modeline-indent-info t)
+  (doom-modeline-irc nil)
+  (doom-modeline-percent-position nil))
 
 (use-package vim-empty-lines-mode
   :straight (:host github :repo "jmickelin/vim-empty-lines-mode")

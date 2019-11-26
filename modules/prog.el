@@ -161,63 +161,53 @@ Available PROPS:
     (reverse result)))
 
 (setq +company-default-idle-delay 0.2)
+(defvar yq//company-numbers '(59 ?a ?s ?d ?f ?g ?h ?j ?k ?l))
+(defun yq//company-format-numbers (numbered)
+  (format " %s" (char-to-string (nth (mod numbered 10) yq//company-numbers))))
+(defun spacemacs//company-transformer-cancel (candidates)
+  "Cancel completion if prefix is in the list `company-mode-completion-cancel-keywords'"
+  (unless (member company-prefix company-mode-completion-cancel-keywords)
+    candidates))
 (use-package company
   :straight t
   :diminish company-mode
   :hook (after-init . global-company-mode)
+  :custom
+  (company-idle-delay +company-default-idle-delay)
+  (company-selection-wrap-around t)
+  (company-show-numbers t)
+  (company-minimum-prefix-length 1)
+  (company-require-match nil)
+  (company-dabbrev-ignore-case t)
+  (company-tooltip-align-annotations t)
+  (company-tooltip-flip-when-above nil)
+  (company-dabbrev-downcase nil)
+  (company-dabbrev-minimum-length 2)
+  (company-dabbrev-time-limit 1)
+  (company-echo-delay 0.2)
+  (company-dabbrev-code-everywhere t)
+  (company-dabbrev-code-other-buffers 'all)
+  (company-dabbrev-code-time-limit 1)
+  (company-search-regexp-function 'company-search-flex-regexp)
+  (company-show-numbers-function 'yq//company-format-numbers)
+  ;; (company-transformers '(spacemacs//company-transformer-cancel company-sort-by-occurrence)) ; lag
+  (company-transformers '(spacemacs//company-transformer-cancel))
+  (company-frontends '(company-pseudo-tooltip-frontend company-echo-metadata-frontend))
   :init
-  (setq company-idle-delay +company-default-idle-delay
-        company-selection-wrap-around t
-        company-show-numbers t
-        company-minimum-prefix-length 1
-        company-require-match nil
-        company-dabbrev-ignore-case t
-        company-tooltip-align-annotations t
-        company-tooltip-flip-when-above nil
-        company-dabbrev-downcase nil
-        company-dabbrev-minimum-length 2
-        company-dabbrev-time-limit 1
-        company-echo-delay 0.2
-        company-dabbrev-code-everywhere t
-        company-dabbrev-code-other-buffers 'all
-        company-dabbrev-code-time-limit 1)
-  (setq company-search-regexp-function 'company-search-flex-regexp)
+  (with-eval-after-load 'fci-mode
+    (defvar-local company-fci-mode-on-p nil)
 
-  (defvar yq//company-numbers '(59 ?a ?s ?d ?f ?g ?h ?j ?k ?l))
-  (defun yq//company-format-numbers (numbered)
-    (format " %s" (char-to-string (nth (mod numbered 10) yq//company-numbers))))
+    (defun company-turn-off-fci (&rest ignore)
+      (when (and (boundp 'fci-mode) fci-mode)
+        (setq company-fci-mode-on-p fci-mode)
+        (when fci-mode (fci-mode -1))))
 
-  :config
-  (defvar-local company-fci-mode-on-p nil)
+    (defun company-maybe-turn-on-fci (&rest ignore)
+      (when company-fci-mode-on-p (fci-mode 1)))
 
-  (defun company-turn-off-fci (&rest ignore)
-    (when (boundp 'fci-mode)
-      (setq company-fci-mode-on-p fci-mode)
-      (when fci-mode (fci-mode -1))))
-
-  (defun company-maybe-turn-on-fci (&rest ignore)
-    (when company-fci-mode-on-p (fci-mode 1)))
-
-  (add-hook 'company-completion-started-hook 'company-turn-off-fci)
-  (add-hook 'company-completion-finished-hook 'company-maybe-turn-on-fci)
-  (add-hook 'company-completion-cancelled-hook 'company-maybe-turn-on-fci)
-
-  (defun spacemacs//company-complete-common-or-cycle-backward ()
-    "Complete common prefix or cycle backward."
-    (interactive)
-    (company-complete-common-or-cycle -1))
-
-  (setq company-show-numbers-function 'yq//company-format-numbers)
-
-  (defun spacemacs//company-transformer-cancel (candidates)
-    "Cancel completion if prefix is in the list `company-mode-completion-cancel-keywords'"
-    (unless (member company-prefix company-mode-completion-cancel-keywords)
-      candidates))
-  ;; lag
-  ;; (setq company-transformers '(spacemacs//company-transformer-cancel company-sort-by-occurrence))
-  (setq company-transformers '(spacemacs//company-transformer-cancel))
-  (setq company-frontends '(company-pseudo-tooltip-frontend company-echo-metadata-frontend))
-
+    (add-hook 'company-completion-started-hook 'company-turn-off-fci)
+    (add-hook 'company-completion-finished-hook 'company-maybe-turn-on-fci)
+    (add-hook 'company-completion-cancelled-hook 'company-maybe-turn-on-fci))
   ;; https://github.com/TommyX12/company-tabnine/blob/master/README.md
   ;; workaround for company-transformers
   (setq company-tabnine--disable-next-transform nil)
@@ -231,9 +221,9 @@ Available PROPS:
       (setq company-tabnine--disable-next-transform t))
     (apply func args))
 
+  :config
   (advice-add #'company--transform-candidates :around #'my-company--transform-candidates)
   (advice-add #'company-tabnine :around #'my-company-tabnine)
-
   (setq company-active-map
         (let ((keymap (make-sparse-keymap)))
           (define-key keymap "\e\e\e" 'company-abort)
@@ -256,10 +246,6 @@ Available PROPS:
           (define-key keymap (kbd "RET") 'company-complete-selection)
           (define-key keymap [tab] 'company-complete-common)
           (define-key keymap (kbd "TAB") 'company-complete-common-or-cycle)
-          (define-key company-active-map (kbd "<S-tab>")
-            'spacemacs//company-complete-common-or-cycle-backward)
-          (define-key company-active-map (kbd "<backtab>")
-            'spacemacs//company-complete-common-or-cycle-backward)
           (define-key keymap (kbd "<f1>") 'company-show-doc-buffer)
           (define-key keymap (kbd "C-r") 'company-show-doc-buffer)
           ;; (define-key keymap "\C-w" 'company-show-location)

@@ -1158,3 +1158,7 @@ first."))
   (evil-define-key 'normal double-saber-mode-map "S" #'double-saber-sort-lines)
   (evil-define-key 'normal double-saber-mode-map "u" #'double-saber-undo)
   (evil-define-key 'normal double-saber-mode-map (kbd "C-r") #'double-saber-redo))
+
+(use-package rg
+  :straight t
+  :commands (rg rg-literal rg-dwim rg-project))

@@ -243,15 +243,19 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
                 (parinfer-mode 1))))
 
   ;; lispy special mode cursor
-  (require 'ccc)
-  (defun +lispy-update-cursor-style ()
-    (when (and parinfer-mode (evil-insert-state-p))
-      (if (or (lispy-right-p) (lispy-left-p) (region-active-p))
+  (use-package ccc ; for cursor style
+    :straight t
+    :after (parinfer)
+    :init
+    (defun +lispy-update-cursor-style ()
+      (when (and parinfer-mode (evil-insert-state-p))
+        (if (or (lispy-right-p) (lispy-left-p) (region-active-p))
+            (progn (setq-local cursor-type '(bar . 6))
+                   (ccc-set-buffer-local-cursor-color "plum1"))
           (progn (setq-local cursor-type '(bar . 6))
-                 (ccc-set-buffer-local-cursor-color "plum1"))
-        (progn (setq-local cursor-type '(bar . 6))
-               (ccc-set-buffer-local-cursor-color "green")))))
-  (add-hook 'post-command-hook '+lispy-update-cursor-style)
+                 (ccc-set-buffer-local-cursor-color "green")))))
+    :config
+    (add-hook 'post-command-hook '+lispy-update-cursor-style))
 
   (define-key parinfer-mode-map (kbd "C-.") #'parinfer-toggle-mode)
   (evil-define-key 'insert parinfer-mode-map (kbd "C-k") '+parinfer-hs-toggle-folding)
@@ -499,3 +503,13 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
 (use-package easy-escape
   :straight t
   :hook (emacs-lisp-mode . easy-escape-minor-mode))
+
+(use-package symex
+  :straight t
+  :after company
+  :bind ("s-'" . symex-mode-interface)
+  :config
+  (dolist (mode-name symex-lisp-modes)
+    (let ((mode-hook (intern (concat (symbol-name mode-name)
+                                     "-hook"))))
+      (add-hook mode-hook 'symex-mode))))
