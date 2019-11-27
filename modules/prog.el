@@ -198,7 +198,7 @@ Available PROPS:
     (defvar-local company-fci-mode-on-p nil)
 
     (defun company-turn-off-fci (&rest ignore)
-      (when (and (boundp 'fci-mode) fci-mode)
+      (when (boundp 'fci-mode)
         (setq company-fci-mode-on-p fci-mode)
         (when fci-mode (fci-mode -1))))
 
@@ -208,6 +208,27 @@ Available PROPS:
     (add-hook 'company-completion-started-hook 'company-turn-off-fci)
     (add-hook 'company-completion-finished-hook 'company-maybe-turn-on-fci)
     (add-hook 'company-completion-cancelled-hook 'company-maybe-turn-on-fci))
+
+  (defun +bind-company-active-map-key (_)
+    (interactive)
+    (evil-local-set-key 'insert (kbd "C-j") #'company-select-next)
+    (evil-local-set-key 'insert (kbd "C-k") #'company-select-previous)
+    (evil-local-set-key 'insert (kbd "C-r") #'company-show-doc-buffer)
+    (evil-local-set-key 'insert (kbd "RET") #'company-complete-selection)
+    (evil-local-set-key 'insert (kbd "C-l") #'company-complete-selection))
+
+  (defun +unbind-company-active-map-key (_)
+    (interactive)
+    (evil-local-set-key 'insert (kbd "C-j") nil)
+    (evil-local-set-key 'insert (kbd "C-k") nil)
+    (evil-local-set-key 'insert (kbd "C-r") nil)
+    (evil-local-set-key 'insert (kbd "RET") nil)
+    (evil-local-set-key 'insert (kbd "C-l") nil))
+
+  (add-hook 'company-completion-started-hook '+bind-company-active-map-key)
+  (add-hook 'company-completion-finished-hook '+unbind-company-active-map-key)
+  (add-hook 'company-completion-cancelled-hook '+unbind-company-active-map-key)
+
   ;; https://github.com/TommyX12/company-tabnine/blob/master/README.md
   ;; workaround for company-transformers
   (setq company-tabnine--disable-next-transform nil)
