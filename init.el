@@ -26,7 +26,7 @@
         (pinned . "pinned.el")))
 ;; (package-initialize)
 (setq scroll-bar-background nil)
-(menu-bar-mode t)
+(menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
 
@@ -208,9 +208,8 @@
 (setq debug-on-error nil)
 (setq debug-on-quit nil)
 
-(when (not (display-graphic-p))
-  (use-package osx-clipboard
-    :straight t
-    :diminish osx-clipboard-mode
-    :config
-    (osx-clipboard-mode 1)))
+(use-package osx-clipboard
+  :straight t
+  :diminish osx-clipboard-mode
+  :config
+  (osx-clipboard-mode 1))

@@ -298,6 +298,7 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
 
 (use-package lispyville
   :straight (:host github :repo "noctuid/lispyville")
+  :disabled
   :after (parinfer lispy)
   :diminish lispyville-mode
   :commands (lispyville-mode)
@@ -324,7 +325,7 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
     "txb" (lambda ()
             (interactive)
             (if (and (fboundp 'cljr-introduce-let)
-                   (memq major-mode lispy-clojure-modes))
+                     (memq major-mode lispy-clojure-modes))
                 (cljr-introduce-let)
               (lispy-bind-variable)))
     (kbd "M-RET") #'lispyville-wrap-round
