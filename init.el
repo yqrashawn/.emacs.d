@@ -212,4 +212,4 @@
   :straight t
   :diminish osx-clipboard-mode
   :config
-  (osx-clipboard-mode 1))
+  (osx-clipboard-mode +1))
