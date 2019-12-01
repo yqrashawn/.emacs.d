@@ -192,7 +192,6 @@
 (add-hook 'minibuffer-setup-hook #'my-minibuffer-setup-hook)
 (add-hook 'minibuffer-exit-hook #'my-minibuffer-exit-hook)
 
-
 (setq gc-cons-percentage 0.1)
 (defvar gc-timer nil)
 (defun maybe-gc ()
@@ -208,3 +207,10 @@
 
 (setq debug-on-error nil)
 (setq debug-on-quit nil)
+
+(when (not (display-graphic-p))
+  (use-package osx-clipboard
+    :straight t
+    :diminish osx-clipboard-mode
+    :config
+    (osx-clipboard-mode 1)))

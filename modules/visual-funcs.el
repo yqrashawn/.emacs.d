@@ -74,41 +74,19 @@ The return value is nil if no font was found, truthy otherwise."
 
 (defvar yq/default-font-kind "small")
 
-(setq yq/font18 '(
-                  ;; "Hack"
-                  "Input Mono Narrow"
-                  ;; "Menlo"
-                  ;; "Anonymous Pro for Powerline"
-                  ;; "InconsolataG for Powerline"
-                  ;; "Source Code Pro for Powerline"
-                  :size 18
-                  :weight normal
-                  :width normal
-                  :powerline-scale 1.1))
-(setq yq/font15 '(
-                  ;; "Hack"
-                  "Input Mono Narrow"
-                  ;; "Menlo"
-                  ;; "Anonymous Pro for Powerline"
-                  ;; "InconsolataG for Powerline"
-                  ;; "Source Code Pro for Powerline"
-                  :size 15
-                  :weight normal
-                  :width normal
-                  :powerline-scale 1.1))
-
-(setq yq/font13 '(
-                  ;; "Hack"
-                  "Input Mono Narrow"
-                  ;; "Menlo"
-                  ;; "Anonymous Pro for Powerline"
-                  ;; "InconsolataG for Powerline"
-                  ;; "Source Code Pro for Powerline"
-                  :size 13
-                  :weight normal
-                  :width normal
-                  :powerline-scale 1.1))
-
+(defmacro yq/font (size)
+  `'(
+     ;; "Hack"
+     "Input Mono Narrow"
+     ;; "Iosevka Nerd Font Mono"
+     ;; "Menlo"
+     ;; "Anonymous Pro for Powerline"
+     ;; "InconsolataG for Powerline"
+     ;; "Source Code Pro for Powerline"
+     :size ,size
+     :weight normal
+     :width normal
+     :powerline-scale 1.1))
 
 ;; (spacemacs/set-default-font yq/small-screen-default-font)
 
@@ -117,10 +95,10 @@ The return value is nil if no font was found, truthy otherwise."
   (interactive)
   (if (string= yq/default-font-kind "small")
       (progn (setq yq/default-font-kind "large")
-             (spacemacs/set-default-font yq/font13))
+             (spacemacs/set-default-font (yq/font 13)))
     (if (string= yq/default-font-kind "large")
         (progn (setq yq/default-font-kind "small")
-               (spacemacs/set-default-font yq/font15)))))
+               (spacemacs/set-default-font (yq/font 15))))))
 
 (defun disable-all-themes ()
   (interactive)
