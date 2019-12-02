@@ -208,8 +208,9 @@
 (setq debug-on-error nil)
 (setq debug-on-quit nil)
 
-(use-package osx-clipboard
-  :straight t
-  :diminish osx-clipboard-mode
-  :config
-  (osx-clipboard-mode +1))
+(when (not (display-graphic-p))
+  (use-package osx-clipboard
+    :straight t
+    :diminish osx-clipboard-mode
+    :config
+    (osx-clipboard-mode +1)))
