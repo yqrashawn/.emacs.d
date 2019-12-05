@@ -350,6 +350,7 @@
   :straight (:host github :repo "nyyManni/ejira"
                    :files
                    (:defaults (:exclude "helm-ejira.el") "ejira*"))
+  :disabled
   :commands (ejira-update-my-projects)
   :custom
   (jiralib2-url "https://conflux-bounty.atlassian.net")
