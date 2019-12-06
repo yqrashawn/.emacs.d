@@ -592,6 +592,7 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   :after dired
   :init
   (define-key dired-mode-map "(" 'dired-git-info-mode))
+
 (use-package dired-quick-sort
   :straight t
   :after dired

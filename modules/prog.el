@@ -291,6 +291,8 @@ Available PROPS:
 (use-package company-tabnine
   :straight t
   :after company
+  :custom
+  (company-tabnine-binaries-folder "~/.TabNine/binaries/")
   :init
   ;; Number the candidates (use M-1, M-2 etc to select completions).
 
