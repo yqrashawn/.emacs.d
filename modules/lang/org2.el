@@ -1,38 +1,7 @@
 ;;; org2.el ---  org packages -*- lexical-binding: t; -*-
 
-;; global keybindings
-(define-key global-map "\C-cl" 'org-store-link)
-(define-key global-map "\C-ca" 'org-agenda)
-(define-key global-map "\C-cc" 'org-capture)
-
-;; (straight-use-package '(org :type built-in))
-(straight-use-package 'org)
-
-(use-package org-starter
-  :straight t
-  :config
-  (org-starter-define-directory "~/Dropbox/ORG/"
-    :files
-    '(("inbox.org"
-       :key "i"
-       :agenda t
-       :required t
-       :refile (:maxlevel . 1)
-       :capture (("c"
-                  "Inbox Entry"
-                  entry
-                  (file org-default-inbox-file)
-                  "* %? %^G\n:PROPERTIES:\n:CREATED: %U\n:END:\n\n%i")))
-      ("someday.org" :key "S" :agenda t :required t :refile (:maxlevel . 1))
-      ("tasks.org" :key "t" :agenda t :required t :refile (:maxlevel . 1))
-      ("media.org" :key "m" :required t :refile (:maxlevel . 1))
-      ("diary.org" :key "A" :required t :refile (:maxlevel . 1))))
-  (org-starter-def-capture "c" "Inbox" entry (file "inbox.org")
-                           "* TODO %? %^G\n:PROPERTIES:\n:CREATED: %U\n:END:\n\n%i"
-                           :jump-to-captured t)
-  (spacemacs/set-leader-keys "2" 'org-starter-find-file-by-key))
-
 (with-eval-after-load 'org
+  (add-to-list 'org-modules 'org-tempo)
   ;; auto save all org buffers after various org operation
   (defun +org/save-all-buffers (&rest _) (interactive) (org-save-all-org-buffers))
   (add-hook 'org-capture-mode-hook #'evil-insert-state)
@@ -245,6 +214,44 @@
       (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
   (add-hook 'org-after-todo-statistics-hook 'org-summary-todo))
 
+;; global keybindings
+(define-key global-map "\C-cl" 'org-store-link)
+(define-key global-map "\C-ca" 'org-agenda)
+(define-key global-map "\C-cc" 'org-capture)
+
+(use-package org-download
+  :straight t
+  :after org
+  :hook (dired-mode . org-download-enable))
+
+;; (straight-use-package 'org)
+
+(use-package org-starter
+  :straight t
+  :config
+  (org-starter-define-directory "~/Dropbox/ORG/"
+                                :files
+                                '(("inbox.org"
+                                   :key "i"
+                                   :agenda t
+                                   :required t
+                                   :refile (:maxlevel . 1)
+                                   :capture (("c"
+                                              "Inbox Entry"
+                                              entry
+                                              (file org-default-inbox-file)
+                                              "* %? %^G\n:PROPERTIES:\n:CREATED: %U\n:END:\n\n%i")))
+                                  ("someday.org" :key "S" :agenda t :required t :refile (:maxlevel . 1))
+                                  ("tasks.org" :key "t" :agenda t :required t :refile (:maxlevel . 1))
+                                  ("media.org" :key "m" :required t :refile (:maxlevel . 1))
+                                  ("diary.org" :key "A" :required t :refile (:maxlevel . 1))))
+  (org-starter-def-capture "c" "Inbox" entry (file "inbox.org")
+                           "* TODO %? %^G\n:PROPERTIES:\n:CREATED: %U\n:END:\n\n%i"
+                           :jump-to-captured t)
+  (spacemacs/set-leader-keys "2" 'org-starter-find-file-by-key))
+
+
+
 (evil-define-key 'normal org-mode-map "." #'+org-workflow-hydra/body)
 
 (with-eval-after-load 'org-capture
@@ -274,6 +281,11 @@
      '("l" "Capture a link from clipboard" entry
        (file+olp org-default-inbox-file "Inbox")
        #'mkm-org-capture/link))))
+
+;; ox
+(use-package ox-hugo
+  :straight t
+  :after (org ox))
 
 ;; obs
 (use-package ob
