@@ -24,6 +24,7 @@
 (yq/get-modules "lang/clojure.el")
 (yq/get-modules "lang/restclient.el")
 (yq/get-modules "lang/sql.el")
+(yq/get-modules "lang/plantuml.el")
 
 (use-package adoc-mode
   :straight t

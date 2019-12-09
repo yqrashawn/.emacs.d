@@ -688,6 +688,7 @@ If the universal prefix argument is used then kill the buffer too."
   (setq
    popwin:special-display-config
    '(("*cider-error*"                       :dedicated t   :position bottom :stick t    :noselect t   :height 0.4)
+     ("*PLANTUML Preview*"                  :dedicated t   :position bottom :stick t    :noselect t   :height 0.4)
      ("\*rg-scan-async\*.*"      :regexp t  :dedicated t   :position bottom :stick nil  :noselect t   :height 0.1)
      ("*Contents*"                          :dedicated t   :position bottom :stick t    :noselect t   :height 0.4)
      ;; ("*Occur*"                             :dedicated nil :position bottom :stick t    :noselect nil :height 0.4)

@@ -1,6 +1,10 @@
 ;;; org2.el ---  org packages -*- lexical-binding: t; -*-
 
 (with-eval-after-load 'org
+  (setq org-startup-indented t)
+  (setq org-display-inline-images t)
+  (setq org-redisplay-inline-images t)
+  (setq org-startup-with-inline-images "inlineimages")
   (add-to-list 'org-modules 'org-tempo)
   ;; auto save all org buffers after various org operation
   (defun +org/save-all-buffers (&rest _) (interactive) (org-save-all-org-buffers))
@@ -292,12 +296,14 @@
   :defer t
   :init
   (setq org-babel-load-languages
-        '((emacs-lisp . t)
-          (clojure . t)
-          (clojurescript . t)
-          (shell . t)
-          (restclient . t)
-          (js . t)))
+        (append
+         '((emacs-lisp . t)
+           (clojure . t)
+           (clojurescript . t)
+           (shell . t)
+           (restclient . t)
+           (js . t))
+         org-babel-load-languages))
   (defun spacemacs//org-babel-do-load-languages ()
     "Load all the languages declared in `org-babel-load-languages'."
     (org-babel-do-load-languages 'org-babel-load-languages
