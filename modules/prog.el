@@ -587,6 +587,8 @@ is not visible. Otherwise delegates to regular Emacs next-error."
 (use-package git-link
   :straight t
   :commands (git-link git-link-commit git-link-homepage)
+  :custom
+  (git-link-use-commit t)
   :config
   (defun git-link-gogs (hostname dirname filename branch commit start end)
     (format "http://%s/%s/src/%s/%s"
@@ -607,8 +609,7 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   (add-to-list 'git-link-remote-alist
                '("917\\.bimsop\\.com" git-link-gogs))
   (add-to-list 'git-link-commit-remote-alist
-               '("917\\.bimsop\\.com" git-link-commit-gogs))
-  (setq git-link-open-in-browser t))
+               '("917\\.bimsop\\.com" git-link-commit-gogs)))
 
 ;; shell and conf
 (add-to-list 'auto-mode-alist '("\\.[^b][^a][a-zA-Z]*rc$" . conf-mode))
@@ -770,3 +771,12 @@ _j_  js2      _T_     text   _f_  fundamental
   :straight t
   :commands (imenu-list-smart-toggle)
   :bind ((:map yq-s-map ("L" . imenu-list-smart-toggle))))
+
+(use-package copy-as-format
+  :straight t
+  :defer t
+  :init
+  (spacemacs/set-leader-keys "ccg" #'copy-as-format-github)
+  (spacemacs/set-leader-keys "ccs" #'copy-as-format-slack)
+  (spacemacs/set-leader-keys "cco" #'copy-as-format-org-mode)
+  (spacemacs/set-leader-keys "ccm" #'copy-as-format-markdown))
