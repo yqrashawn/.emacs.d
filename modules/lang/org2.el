@@ -6,12 +6,16 @@
   (define-key global-map "\C-ca" 'org-agenda)
   (define-key global-map "\C-cc" 'org-capture)
 
+  ;; custom variable
   (setq org-startup-indented t)
   (setq org-insert-heading-respect-content t)
   (setq org-display-inline-images t)
   (setq org-redisplay-inline-images t)
   (setq org-startup-with-inline-images "inlineimages")
+
+  ;; enable org template
   (add-to-list 'org-modules 'org-tempo)
+
   ;; auto save all org buffers after various org operation
   (defun +org/save-all-buffers (&rest _) (interactive) (org-save-all-org-buffers))
   (add-hook 'org-capture-mode-hook #'evil-insert-state)
@@ -25,6 +29,7 @@
   (add-hook 'org-capture-after-finalize-hook #'+org/save-all-buffers)
   (advice-add 'org-archive-default-command :after '+org/save-all-buffers)
 
+  ;; keybindings
   (defmacro spacemacs|org-emphasize (fname char)
     "Make function for setting the emphasis in org mode"
     `(defun ,fname () (interactive)
@@ -156,6 +161,8 @@
     ",xs" (spacemacs|org-emphasize spacemacs/org-strike-through ?+)
     ",xu" (spacemacs|org-emphasize spacemacs/org-underline ?_)
     ",xv" (spacemacs|org-emphasize spacemacs/org-verbatim ?=))
+
+  ;; refile
   (defmacro +org-refile (fn-suffix refile-targets)
     "Generate a command to call `org-refile' with modified targets."
     `(defun ,(intern (concat "+org-refile-" (symbol-name fn-suffix))) ()
@@ -171,11 +178,11 @@
   (+org-refile media '(("~/Dropbox/ORG/media.org" :level . 1)))
   (+org-refile inbox '(("~/Dropbox/ORG/inbox.org" :level . 1)))
 
+  ;; archive with datetree
   (defun +org-read-datetree-date (d)
     "Parse a time string D and return a date to pass to the datetree functions."
     (let ((dtmp (nthcdr 3 (parse-time-string d))))
       (list (cadr dtmp) (car dtmp) (caddr dtmp))))
-
   (defun +org-refile-to-archive-datetree (&optional bfn)
     "Refile an entry to a datetree under an archive."
     (interactive)
@@ -189,6 +196,7 @@
                                     (point))))))
     (setq this-command '+org-refile-to-journal))
 
+  ;; hydra
   (defhydra +org-workflow-hydra (:color blue :hint nil)
     "
   visit            refile          actions
@@ -217,12 +225,22 @@
     ("." nil :exit t))
   (evil-define-key 'normal org-mode-map "." #'+org-workflow-hydra/body)
 
-  ;; automatically update todo states depends on checkboxe states
+  ;; automatically update todo list states depends on checkboxe states
   (defun org-summary-todo (n-done n-not-done)
     "Switch entry to DONE when all subentries are done, to TODO otherwise."
     (let (org-log-done org-log-states)  ; turn off logging
       (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
   (add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
+
+  ;; make org-store-link ask for description
+  ;; https://emacs.stackexchange.com/questions/13093/get-org-link-to-insert-link-description-automatically/13104#13104
+  (defun +org-link-describe (link desc)
+    (if (file-exists-p link)
+        desc
+      (read-string "Description: " desc)))
+  (setf org-make-link-description-function '+org-link-describe)
+
+  ;; ob
   (setq org-babel-load-languages
         (append
          '((emacs-lisp . t)

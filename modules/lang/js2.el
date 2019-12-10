@@ -21,21 +21,21 @@
   (setq js2-mode-show-strict-warnings nil)
   (evil-define-key 'normal js2-mode-map "," nil)
   (evil-define-key 'normal js2-mode-map ",d" nil)
-  (evil-define-key 'normal js2-mode-map ",zc" 'js2-mode-hide-element)
-  (evil-define-key 'normal js2-mode-map ",zo" 'js2-mode-show-element)
-  (evil-define-key 'normal js2-mode-map ",zr" 'js2-mode-show-all)
-  (evil-define-key 'normal js2-mode-map ",ze" 'js2-mode-toggle-element)
-  (evil-define-key 'normal js2-mode-map ",zf" 'js2-mode-toggle-hide-functions)
-  (evil-define-key 'normal js2-mode-map ",zC" 'js2-mode-toggle-hide-comments)
-  (evil-define-key 'normal js2-mode-map ",w" 'js2-mode-toggle-warnings-and-errors))
+  (evil-define-key 'normal js2-mode-map ",zc" #'js2-mode-hide-element)
+  (evil-define-key 'normal js2-mode-map ",zo" #'js2-mode-show-element)
+  (evil-define-key 'normal js2-mode-map ",zr" #'js2-mode-show-all)
+  (evil-define-key 'normal js2-mode-map ",ze" #'js2-mode-toggle-element)
+  (evil-define-key 'normal js2-mode-map ",zf" #'js2-mode-toggle-hide-functions)
+  (evil-define-key 'normal js2-mode-map ",zC" #'js2-mode-toggle-hide-comments)
+  (evil-define-key 'normal js2-mode-map ",w" #'js2-mode-toggle-warnings-and-errors))
 
 (use-package js-doc
   :straight t
   :commands (js-doc-insert-file-doc js-doc-insert-function-doc js-doc-insert-tag js-doc-describe-tag):init
-  (evil-define-key 'normal js2-mode-map ",db" 'js-doc-insert-file-doc)
-  (evil-define-key 'normal js2-mode-map ",df" 'js-doc-insert-function-doc)
-  (evil-define-key 'normal js2-mode-map ",df" 'js-doc-insert-tag)
-  (evil-define-key 'normal js2-mode-map ",df" 'js-doc-describe-tag))
+  (evil-define-key 'normal js2-mode-map ",db" #'js-doc-insert-file-doc)
+  (evil-define-key 'normal js2-mode-map ",df" #'js-doc-insert-function-doc)
+  (evil-define-key 'normal js2-mode-map ",df" #'js-doc-insert-tag)
+  (evil-define-key 'normal js2-mode-map ",df" #'js-doc-describe-tag))
 
 (defun spacemacs//tern-detect ()
   "Detect tern binary and warn if not found."
@@ -55,6 +55,8 @@
   :config
   (add-to-list 'tern-command "--no-port-file" 'append)
   (dolist (mode '(js2-mode json-mode rjsx-mode typescript-mode))
+    (let ((l (intern (format "spacemacs-jump-handlers-%S" mode))))
+      (when (special-variable-p l) (add-to-list l'(tern-find-definition :async t))))
     (spacemacs/enable-flycheck mode)))
 
 (use-package company-tern

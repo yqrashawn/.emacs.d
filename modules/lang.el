@@ -90,8 +90,6 @@
     "Set jump handler for LSP with the given MODE."
     (dolist (m modes)
       (add-to-list (intern (format "spacemacs-jump-handlers-%S" m))
-                   ;; lsp find definition tends to give two identical result
-                   ;; '(lsp-find-definition :async t)
                    '(lsp-find-definition :async t))))
   (add-hook
    'lsp-after-open-hook
@@ -99,7 +97,6 @@
 
 (use-package lsp-ui
   :straight t
-  :disabled
   :commands lsp-ui-mode
   :custom
   ;; top right stuff

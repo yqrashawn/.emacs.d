@@ -780,3 +780,26 @@ _j_  js2      _T_     text   _f_  fundamental
   (spacemacs/set-leader-keys "ccs" #'copy-as-format-slack)
   (spacemacs/set-leader-keys "cco" #'copy-as-format-org-mode)
   (spacemacs/set-leader-keys "ccm" #'copy-as-format-markdown))
+
+;; (use-feature semantiic-mode
+;;   :custom
+;;   (semantic-default-submodes
+;;    '(;; Use a database of parsed tags
+;;      global-semanticdb-minor-mode
+;;      ;; Perform semantic actions during idle time
+;;      global-semantic-idle-scheduler-mode
+;;      ;; Generate a summary of the current tag when idle
+;;      global-semantic-idle-summary-mode
+;;      ;; Decorate buffers with additional semantic information
+;;      global-semantic-decoration-mode
+;;      ;; Highlight the name of the function you're currently in
+;;      global-semantic-highlight-func-mode
+;;      ;; show the name of the function at the top in a sticky
+;;      global-semantic-stickyfunc-mode
+;;      ;; Show a breadcrumb of location during idle time
+;;      global-semantic-idle-breadcrumbs-mode
+;;      ;; Switch to recently changed tags with `semantic-mrub-switch-tags',
+;;      ;; or `C-x B'
+;;      global-semantic-mru-bookmark-mode
+;;      global-semantic-idle-local-symbol-highlight-mode))
+;;   :hook ((emacs-lisp-mode js2-mode rjsx-mode js-mode python-mode java-mode c-mode) . semantic-mode))
