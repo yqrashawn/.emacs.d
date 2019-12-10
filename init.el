@@ -16,9 +16,12 @@
 (setq gc-cons-threshold 134217728)
 (setq gc-cons-percentage 0.6)
 
+(add-to-list 'load-path "~/org-mode/lisp")
+(add-to-list 'load-path "~/org-mode/contrib/lisp")
+
 ;; check package update infos
 (setq straight-vc-git-auto-fast-forward t)
-(setq straight-fix-org t)
+;; (setq straight-fix-org t)
 ;; Tell straight.el about the profiles we are going to be using.
 (setq straight-profiles
       '((nil . "default.el")
@@ -120,11 +123,21 @@
 
 (use-package exec-path-from-shell
   :straight t
+  :custom
+  (exec-path-from-shell-arguments '("-l"))
   :init
-  (setq exec-path-from-shell-arguments '("-l"))
-  :config
-  (when (memq window-system '(mac ns x))
-    (exec-path-from-shell-initialize)))
+  (dolist (dir
+           (list
+            "/usr/local/bin"
+            (expand-file-name "~/local/bin")))
+    (when (and (file-exists-p dir) (not (member dir exec-path)))
+      (setenv "PATH" (concat dir ":" (getenv "PATH")))
+      (setq exec-path (append (list dir) exec-path))))
+  (defun +copy-right-env ()
+    (when (memq window-system '(mac ns x))
+      (exec-path-from-shell-initialize)
+      (exec-path-from-shell-copy-env "JAVA_HOME")))
+  (add-hook' after-init-hook '+copy-right-env))
 
 (defun yq/get-modules (module-dir)
   (let* ((el-file-path (concat user-emacs-directory "modules/" module-dir))
@@ -133,8 +146,6 @@
         (load-file elc-file-path)
       (load-file el-file-path))))
 
-(add-to-list 'load-path "~/org-mode/lisp")
-(add-to-list 'load-path "~/org-mode/contrib/lisp")
 (yq/get-modules "core-display-init.el")
 (yq/get-modules "evil-core.el")
 (yq/get-modules "better-default.el")

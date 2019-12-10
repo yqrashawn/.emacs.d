@@ -1,7 +1,13 @@
 ;;; org2.el ---  org packages -*- lexical-binding: t; -*-
 
 (with-eval-after-load 'org
+  ;; global keybindings
+  (define-key global-map "\C-cl" 'org-store-link)
+  (define-key global-map "\C-ca" 'org-agenda)
+  (define-key global-map "\C-cc" 'org-capture)
+
   (setq org-startup-indented t)
+  (setq org-insert-heading-respect-content t)
   (setq org-display-inline-images t)
   (setq org-redisplay-inline-images t)
   (setq org-startup-with-inline-images "inlineimages")
@@ -216,16 +222,36 @@
     "Switch entry to DONE when all subentries are done, to TODO otherwise."
     (let (org-log-done org-log-states)  ; turn off logging
       (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
-  (add-hook 'org-after-todo-statistics-hook 'org-summary-todo))
+  (add-hook 'org-after-todo-statistics-hook 'org-summary-todo)
+  (setq org-babel-load-languages
+        (append
+         '((emacs-lisp . t)
+           (clojure . t)
+           (clojurescript . t)
+           (shell . t)
+           (restclient . t)
+           (js . t))
+         org-babel-load-languages)))
 
-;; global keybindings
-(define-key global-map "\C-cl" 'org-store-link)
-(define-key global-map "\C-ca" 'org-agenda)
-(define-key global-map "\C-cc" 'org-capture)
+
+;; obs
+(use-feature ob
+  :defer t
+  :init
+  (defun spacemacs//org-babel-do-load-languages ()
+    "Load all the languages declared in `org-babel-load-languages'."
+    (org-babel-do-load-languages 'org-babel-load-languages
+                                 org-babel-load-languages))
+  (add-hook 'org-mode-hook 'spacemacs//org-babel-do-load-languages)
+  ;; Fix redisplay of inline images after a code block evaluation.
+  (defun spacemacs/ob-fix-inline-images ()
+    "Fix redisplay of inline images after a code block evaluation."
+    (when org-inline-image-overlays
+      (org-redisplay-inline-images)))
+  (add-hook 'org-babel-after-execute-hook 'spacemacs/ob-fix-inline-images))
 
 (use-package org-download
   :straight t
-  :after org
   :hook (dired-mode . org-download-enable))
 
 ;; (straight-use-package 'org)
@@ -234,27 +260,25 @@
   :straight t
   :config
   (org-starter-define-directory "~/Dropbox/ORG/"
-                                :files
-                                '(("inbox.org"
-                                   :key "i"
-                                   :agenda t
-                                   :required t
-                                   :refile (:maxlevel . 1)
-                                   :capture (("c"
-                                              "Inbox Entry"
-                                              entry
-                                              (file org-default-inbox-file)
-                                              "* %? %^G\n:PROPERTIES:\n:CREATED: %U\n:END:\n\n%i")))
-                                  ("someday.org" :key "S" :agenda t :required t :refile (:maxlevel . 1))
-                                  ("tasks.org" :key "t" :agenda t :required t :refile (:maxlevel . 1))
-                                  ("media.org" :key "m" :required t :refile (:maxlevel . 1))
-                                  ("diary.org" :key "A" :required t :refile (:maxlevel . 1))))
+    :files
+    '(("inbox.org"
+       :key "i"
+       :agenda t
+       :required t
+       :refile (:maxlevel . 1)
+       :capture (("c"
+                  "Inbox Entry"
+                  entry
+                  (file org-default-inbox-file)
+                  "* %? %^G\n:PROPERTIES:\n:CREATED: %U\n:END:\n\n%i")))
+      ("someday.org" :key "S" :agenda t :required t :refile (:maxlevel . 1))
+      ("tasks.org" :key "t" :agenda t :required t :refile (:maxlevel . 1))
+      ("media.org" :key "m" :required t :refile (:maxlevel . 1))
+      ("diary.org" :key "A" :required t :refile (:maxlevel . 1))))
   (org-starter-def-capture "c" "Inbox" entry (file "inbox.org")
                            "* TODO %? %^G\n:PROPERTIES:\n:CREATED: %U\n:END:\n\n%i"
                            :jump-to-captured t)
   (spacemacs/set-leader-keys "2" 'org-starter-find-file-by-key))
-
-
 
 (evil-define-key 'normal org-mode-map "." #'+org-workflow-hydra/body)
 
@@ -263,7 +287,6 @@
 
 (use-package org-web-tools
   :straight t
-  :after org
   :disabled
   :init
   (defun mkm-org-capture/link ()
@@ -289,32 +312,8 @@
 ;; ox
 (use-package ox-hugo
   :straight t
-  :after (org ox))
+  :defer t)
 
-;; obs
-(use-package ob
-  :defer t
-  :init
-  (setq org-babel-load-languages
-        (append
-         '((emacs-lisp . t)
-           (clojure . t)
-           (clojurescript . t)
-           (shell . t)
-           (restclient . t)
-           (js . t))
-         org-babel-load-languages))
-  (defun spacemacs//org-babel-do-load-languages ()
-    "Load all the languages declared in `org-babel-load-languages'."
-    (org-babel-do-load-languages 'org-babel-load-languages
-                                 org-babel-load-languages))
-  (add-hook 'org-mode-hook 'spacemacs//org-babel-do-load-languages)
-  ;; Fix redisplay of inline images after a code block evaluation.
-  (defun spacemacs/ob-fix-inline-images ()
-    "Fix redisplay of inline images after a code block evaluation."
-    (when org-inline-image-overlays
-      (org-redisplay-inline-images)))
-  (add-hook 'org-babel-after-execute-hook 'spacemacs/ob-fix-inline-images))
 
 ;; https://github.com/krisajenkins/ob-mongo/tree/371bf19c7c10eab2f86424f8db8ab685997eb5aa
 (use-package ob-mongo
@@ -339,7 +338,6 @@
   ;; agenda (org-agenda-open-link "[[file:~/.emacs.d/straight/repos/evil-org-mode/README.org::*Agenda][Agenda]]")
   :straight t
   :diminish evil-org-mode
-  :after (evil org)
   :hook
   (org-mode . evil-org-mode)
   :custom
@@ -353,43 +351,3 @@
   (evil-org-agenda-set-keys)
   (define-key evil-org-mode-map ">" 'evil-org->)
   (define-key evil-org-mode-map "<" 'evil-org-<))
-
-(use-package org-jira
-  :straight t
-  :disabled
-  :after (org org-clock)
-  :custom
-  (jiralib-url "https://conflux-bounty.atlassian.net/")
-  (org-jira-progress-issue-flow
-   '(("Backlog" . "In Progress")
-     ("In Progress" . "Done"))))
-
-(use-package ejira
-  :straight (:host github :repo "nyyManni/ejira"
-                   :files
-                   (:defaults (:exclude "helm-ejira.el") "ejira*"))
-  :disabled
-  :commands (ejira-update-my-projects)
-  :custom
-  (jiralib2-url "https://conflux-bounty.atlassian.net")
-  (jiralib2-auth 'token)
-  (ejira-org-directory "~/jira")
-  (ejira-priorities-alist    '(("Highest" . ?A)
-                               ("High"    . ?B)
-                               ("Medium"  . ?C)
-                               ("Low"     . ?D)
-                               ("Lowest"  . ?E)))
-  (ejira-todo-states-alist   '(("To Do"       . 1)
-                               ("In Progress" . 2)
-                               ("Done"        . 3)))
-  (ejira-projects '("DAG"))
-  :init
-  (load-file "~/Dropbox/sync/.emacs.el")
-  :config
-  (add-hook 'jiralib2-post-login-hook #'ejira-guess-epic-sprint-fields)
-  (require 'ejira-agenda)
-  (add-to-list 'org-agenda-files ejira-org-directory)
-  (org-add-agenda-custom-command
-   '("j" "My JIRA issues"
-     ((ejira-jql "resolution = unresolved and assignee = currentUser()"
-                 ((org-agenda-overriding-header "Assigned to me")))))))

@@ -9,11 +9,11 @@
               (lambda ()
                 (when org-inline-image-overlays
                   (org-redisplay-inline-images))))
+
     (org-babel-do-load-languages 'org-babel-load-languages '((plantuml . t)))
     (setq org-plantuml-jar-path "/usr/local/Cellar/plantuml/1.2019.12/libexec/plantuml.jar")
-    (add-to-list 'org-src-lang-modes '("puml" . plantuml))
-    (add-to-list 'org-src-lang-modes '("iuml" . plantuml))
     (add-to-list 'org-src-lang-modes '("plantuml" . plantuml))
+
     ;; TODO check documents for ob-plantuml, see if there's any other way to delete the image first
     (defun org-babel-execute:plantuml (body params)
       "Execute a block of plantuml code with org-babel.
@@ -55,12 +55,15 @@ This function is called by `org-babel-execute-src-block'."
                             (org-babel-process-file-name in-file)
                             " > "
                             (org-babel-process-file-name out-file)))))
+        (print full-body)
         (unless (file-exists-p org-plantuml-jar-path)
           (error "Could not find plantuml.jar at %s" org-plantuml-jar-path))
         (with-temp-file in-file (insert full-body))
         (delete-file out-file)
         (message "%s" cmd) (org-babel-eval cmd "")
         nil))))
+
+
 
 (use-package flycheck-plantuml
   :straight t
