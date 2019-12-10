@@ -762,9 +762,7 @@ _j_  js2      _T_     text   _f_  fundamental
 
 (use-package editorconfig
   :straight t
-  :config
-  (add-hook 'editorconfig-after-apply-functions
-            (lambda (props) (message "editorconfig applied")))
+  :init
   (editorconfig-mode 1))
 
 (use-package imenu-list

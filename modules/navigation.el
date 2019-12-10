@@ -11,47 +11,14 @@
                    (:defaults (:exclude "swiper.el" "counsel.el" "ivy-hydra.el") "doc/ivy-help.org")
                    :upstream (:host github :repo "abo-abo/swiper"))
   :diminish ivy-mode
+  :defer t
   :custom
-  (ivy-magic-tilde . nil)
-  ;; :init
-  ;; (add-to-list 'ivy-re-builders-alist '(t . spacemacs/ivy--regex-plus))
-  :config
-  ;; docs: https://oremacs.com/swiper/#completion-styles
-  (setq ivy-re-builders-alist
-        '((magit-status . ivy--regex-fuzzy)
-          (magit-rebase-branch . ivy--regex-fuzzy)
-          (magit-log-other . ivy--regex-fuzzy)
-          (magit-file-checkout . ivy--regex-fuzzy)
-          (magit-checkout . ivy--regex-fuzzy)
-          (forge-create-pullreq . ivy--regex-fuzzy)
-          (magit-reset-index . ivy--regex-fuzzy)
-          (magit-reset-soft . ivy--regex-fuzzy)
-          (magit-reset-hard . ivy--regex-fuzzy)
-          (magit-branch-reset . ivy--regex-fuzzy)
-          (magit-branch-create . ivy--regex-fuzzy)
-          (magit-branch-checkout . ivy--regex-fuzzy)
-          (magit-branch-or-checkout . ivy--regex-fuzzy)
-          (magit-branch-and-checkout . ivy--regex-fuzzy)
-          (magit-branch-spinoff . ivy--regex-fuzzy)
-          (magit-branch-spinout . ivy--regex-fuzzy)
-          (magit-push-other . ivy--regex-fuzzy)
-          (magit-push-current . ivy--regex-fuzzy)
-          (magit-push-current . ivy--regex-fuzzy)
-          (magit-branch-maybe-adjust-upstream . ivy--regex-fuzzy)
-          (magit-branch-rename . ivy--regex-fuzzy)
-          (magit-branch-shelve . ivy--regex-fuzzy)
-          (magit-branch-unshelve . ivy--regex-fuzzy)
-          (magit-branch-orphan . ivy--regex-fuzzy)
-          (magit-branch-delete . ivy--regex-fuzzy)
-          (magit-log-read-revs . ivy--regex-fuzzy)
-          (magit-log-current . ivy--regex-fuzzy)
-          (magit-log-read-revs . ivy--regex-fuzzy)
-          (counsel-git . ivy--regex-fuzzy)
-          (projector-run-command-buffer-prompt . ivy--regex-fuzzy)
-          (spacemacs/counsel-search . spacemacs/ivy--regex-plus)
-          (spacemacs/search-auto . spacemacs/ivy--regex-plus)
-          (t . ivy--regex-plus)))
-
+  (ivy-use-selectable-prompt t)
+  (ivy-magic-tilde nil)
+  (ivy-height 16)
+  (ivy-use-virtual-buffers t)
+  :init
+  (define-key yq-s-map "b" 'ivy-switch-buffer)
   ;; http://pragmaticemacs.com/emacs/open-a-recent-directory-in-dired-revisited/
   (defun bjm/ivy-dired-recent-dirs ()
     "Present a list of recently used directories and open the selected one in dired"
@@ -96,9 +63,45 @@
   ;; (global-set-key (kbd "C-x C-8 e" ) 'ivy-end-of-buffer)
   ;; (global-set-key (kbd "C-x C-8 u" ) 'ivy-scroll-down-command)
   ;; (global-set-key (kbd "C-x C-8 d" ) 'ivy-scroll-up-command)
+  :config
+  (ivy-set-actions 'counsel-recentf spacemacs--ivy-file-actions)
+  ;; docs: https://oremacs.com/swiper/#completion-styles
+  (setq ivy-re-builders-alist
+        '((magit-status . ivy--regex-fuzzy)
+          (magit-rebase-branch . ivy--regex-fuzzy)
+          (magit-log-other . ivy--regex-fuzzy)
+          (magit-file-checkout . ivy--regex-fuzzy)
+          (magit-checkout . ivy--regex-fuzzy)
+          (forge-create-pullreq . ivy--regex-fuzzy)
+          (magit-reset-index . ivy--regex-fuzzy)
+          (magit-reset-soft . ivy--regex-fuzzy)
+          (magit-reset-hard . ivy--regex-fuzzy)
+          (magit-branch-reset . ivy--regex-fuzzy)
+          (magit-branch-create . ivy--regex-fuzzy)
+          (magit-branch-checkout . ivy--regex-fuzzy)
+          (magit-branch-or-checkout . ivy--regex-fuzzy)
+          (magit-branch-and-checkout . ivy--regex-fuzzy)
+          (magit-branch-spinoff . ivy--regex-fuzzy)
+          (magit-branch-spinout . ivy--regex-fuzzy)
+          (magit-push-other . ivy--regex-fuzzy)
+          (magit-push-current . ivy--regex-fuzzy)
+          (magit-push-current . ivy--regex-fuzzy)
+          (magit-branch-maybe-adjust-upstream . ivy--regex-fuzzy)
+          (magit-branch-rename . ivy--regex-fuzzy)
+          (magit-branch-shelve . ivy--regex-fuzzy)
+          (magit-branch-unshelve . ivy--regex-fuzzy)
+          (magit-branch-orphan . ivy--regex-fuzzy)
+          (magit-branch-delete . ivy--regex-fuzzy)
+          (magit-log-read-revs . ivy--regex-fuzzy)
+          (magit-log-current . ivy--regex-fuzzy)
+          (magit-log-read-revs . ivy--regex-fuzzy)
+          (counsel-git . ivy--regex-fuzzy)
+          (projector-run-command-buffer-prompt . ivy--regex-fuzzy)
+          (spacemacs/counsel-search . spacemacs/ivy--regex-plus)
+          (spacemacs/search-auto . spacemacs/ivy--regex-plus)
+          (t . ivy--regex-plus)))
+
   (ivy-mode 1)
-  (setq ivy-height 16)
-  (setq ivy-use-virtual-buffers t)
   (defun yq/ivy-evil-registers ()
     "Show evil registers"
     (interactive)
@@ -116,14 +119,11 @@
     (insert (replace-regexp-in-string "\\^J" "\n"
                                       (substring-no-properties candidate 4))))
 
-  (setq ivy-use-selectable-prompt t)
   (evil-define-key 'normal ivy-occur-mode-map "w" 'ivy-wgrep-change-to-wgrep-mode)
   (evil-define-key 'normal ivy-occur-mode-map "s" 'wgrep-save-all-buffers)
-  (ivy-set-occur 'spacemacs/counsel-search
-                 'spacemacs//counsel-occur)
+  (ivy-set-occur 'spacemacs/counsel-search 'spacemacs//counsel-occur)
   (evil-set-initial-state 'ivy-occur-grep-mode 'normal)
   (evil-make-overriding-map ivy-occur-mode-map 'normal)
-  (define-key yq-s-map "b" 'ivy-switch-buffer)
   (ido-mode -1)
   (defun yq-ivy-format-function (cands)
     "Transform CANDS into a string for minibuffer."
@@ -156,6 +156,7 @@
 (use-package ivy-hydra
   :straight t
   :after ivy
+  :defer t
   :config
   (defun yq/ivy-call-kill-buffer-action ()
     "Call the current action without exiting completion."
@@ -242,11 +243,12 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   :straight (:host github :repo "abo-abo/swiper" :branch "master"
                    :files ("swiper.el")
                    :upstream (:host github :repo "abo-abo/swiper"))
+  :defer t
   :bind
   ("C-s" . #'swiper-isearch)
   ("C-c s" . #'swiper-isearch-thing-at-point)
   ("C-c C-s" . #'swiper-thing-at-point)
-  :config
+  :init
   ;; (define-key yq-s-map (kbd "n") 'spacemacs/swiper-all-region-or-symbol)
   (global-set-key (kbd "C-SPC") #'counsel-grep-or-swiper)
   (global-set-key (kbd "^@") #'counsel-grep-or-swiper)
@@ -259,10 +261,31 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   :straight (:host github :repo "abo-abo/swiper" :branch "master"
                    :files ("counsel.el")
                    :upstream (:host github :repo "abo-abo/swiper"))
+  :defer t
   :diminish counsel-mode
   :bind
   ("C-c U" . #'counsel-unicode-char)
   ("C-c C-y" . #'counsel-yank-pop)
+  :init
+  (spacemacs/set-leader-keys "<SPC>" #'counsel-M-x)
+  (spacemacs/set-leader-keys "ff" #'counsel-find-file)
+  (spacemacs/set-leader-keys "fF" 'find-file-other-window)
+  (spacemacs/set-leader-keys "hk" #'counsel-descbinds)
+  (spacemacs/set-leader-keys "hf" #'counsel-describe-function)
+  (spacemacs/set-leader-keys "hdf" #'counsel-describe-face)
+  (spacemacs/set-leader-keys "hdv" #'counsel-describe-variable)
+  (spacemacs/set-leader-keys "hdk" #'describe-key)
+  (spacemacs/set-leader-keys "hdK" 'describe-keymap)
+  (spacemacs/set-leader-keys "hdl" #'view-lossage)
+  (spacemacs/set-leader-keys "fJ" 'spacemacs/open-junk-file)
+  (define-key yq-s-map "f" #'counsel-rg)
+  (define-key yq-s-map "l" 'spacemacs/counsel-jump-in-buffer)
+  (define-key yq-s-map "j" #'counsel-buffer-or-recentf)
+  (global-set-key (kbd "C-x C-r") #'counsel-recentf)
+  (define-key yq-s-map "m" #'counsel-fzf)
+  (spacemacs/set-leader-keys "sm" (lambda () (interactive) (let ((current-prefix-arg '(1))) (call-interactively 'counsel-fzf))))
+  (define-key yq-s-map (kbd "SPC") 'counsel-M-x)
+  (define-key evil-normal-state-map (kbd "M-y" ) 'counsel-yank-pop)
   :config
   (setq counsel-grep-base-command
         "rg -i -M 120 --no-heading --line-number --color never %s %s")
@@ -284,26 +307,7 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   (define-key ivy-switch-buffer-map (kbd "C-d") 'ivy-switch-buffer-kill)
   (define-key ivy-minibuffer-map (kbd "C-w") 'backward-kill-word)
   (define-key ivy-minibuffer-map (kbd "<escape>") 'minibuffer-keyboard-quit)
-  (global-set-key (kbd "C-x C-f") 'counsel-find-file)
-  (spacemacs/set-leader-keys "<SPC>" 'counsel-M-x)
-  (spacemacs/set-leader-keys "ff" 'counsel-find-file)
-  (spacemacs/set-leader-keys "fF" 'find-file-other-window)
-  (spacemacs/set-leader-keys "hk" #'counsel-descbinds)
-  (spacemacs/set-leader-keys "hf" #'counsel-describe-function)
-  (spacemacs/set-leader-keys "hdf" #'counsel-describe-face)
-  (spacemacs/set-leader-keys "hdv" #'counsel-describe-variable)
-  (spacemacs/set-leader-keys "hdk" #'describe-key)
-  (spacemacs/set-leader-keys "hdK" 'describe-keymap)
-  (spacemacs/set-leader-keys "hdl" #'view-lossage)
-  (spacemacs/set-leader-keys "fJ" 'spacemacs/open-junk-file)
-  (define-key yq-s-map "f" #'counsel-rg)
-  (define-key yq-s-map "l" 'spacemacs/counsel-jump-in-buffer)
-  (define-key yq-s-map "j" #'counsel-buffer-or-recentf)
-  (global-set-key (kbd "C-x C-r") #'counsel-recentf)
-  (define-key yq-s-map "m" #'counsel-fzf)
-  (spacemacs/set-leader-keys "sm" (lambda () (interactive) (let ((current-prefix-arg '(1))) (call-interactively 'counsel-fzf))))
-  (define-key yq-s-map (kbd "SPC") 'counsel-M-x)
-  (define-key evil-normal-state-map (kbd "M-y" ) 'counsel-yank-pop))
+  (global-set-key (kbd "C-x C-f") 'counsel-find-file))
 
 (use-package counsel-tramp
   :straight t
@@ -366,12 +370,14 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
 
 (use-package smex
   :straight t
+  :defer t
   :init
   (setq-default smex-history-length 128)
   (setq-default smex-save-file (concat yq-emacs-cache-dir ".smex-items")))
 
 (use-package projectile
   :straight t
+  :defer t
   :diminish projectile-mode
   :init
   (setq projectile-project-search-path '("~/workspace/" "~/.emacs.d/straight/repos/"))
@@ -397,6 +403,7 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
 
 (use-package counsel-projectile
   :straight t
+  :defer t
   :after (counsel projectile)
   :init
   (counsel-projectile-mode +1)
@@ -430,9 +437,6 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   (spacemacs/set-leader-keys "fel" 'counsel-find-library))
 
 (yq/get-modules "counsel-funcs.el")
-(ivy-set-actions
- 'counsel-recentf
- spacemacs--ivy-file-actions)
 
 (spacemacs/set-leader-keys "sd" 'spacemacs/search-dir-rg)
 (spacemacs/set-leader-keys "sD" 'spacemacs/search-dir-rg-region-or-symbol)
@@ -442,6 +446,7 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
 (define-key yq-s-map "F" 'spacemacs/search-project-rg-region-or-symbol)
 
 (use-feature dired
+  :defer t
   :init
   (setq insert-directory-program "/usr/local/bin/gls"
         dired-listing-switches "-laGh1vt"
@@ -547,6 +552,7 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   :commands (dired-narrow-fuzzy))
 (use-package fd-dired
   :straight (:host github :repo "yqrashawn/fd-dired")
+  :commands (fd-dired)
   :after dired
   :init
   (evil-define-key 'normal dired-mode-map "F" 'fd-dired)
@@ -562,6 +568,7 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
         (concat dired-omit-files "\\|^\\.DS_Store$\\|^__MACOSX$\\|^\\.localized$")))
 (use-package dired+
   :straight (:host github :repo "emacsmirror/dired-plus")
+  :defer t
   :init
   (setq diredp-hide-details-initially-flag nil)
   (evil-leader/set-key "fj" 'diredp-dired-recent-dirs)
@@ -596,8 +603,7 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
 (use-package dired-quick-sort
   :straight t
   :after dired
-  :init
-  (dired-quick-sort-setup))
+  :hook (dired-mode . dired-quick-sort-setup))
 
 (defun yq/dropbox ()
   (interactive)
@@ -631,7 +637,6 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
 
 (use-package open-junk-file
   :straight t
-  :defer t
   :commands (open-junk-file)
   :init
   (setq open-junk-file-format (concat spacemacs-cache-directory "junk/%Y/%m/%d-%H%M%S."))
@@ -660,19 +665,25 @@ When ARG is non-nil search in junk files."
 
 (use-package evil-ex-fasd
   :straight (:host github :repo "yqrashawn/evil-ex-fasd")
+  :commands (evil-ex-fasd)
   :init (define-key evil-normal-state-map (kbd "C-f") 'evil-ex-fasd))
 
 (use-package dired-rsync
   :straight t
   :commands (dired-rsync)
+  :after dired
   :init
   (bind-key "C-c C-r" 'dired-rsync dired-mode-map))
 
+
 (yq/update-evil-emacs-state-modes 'ibuffer-mode)
-(add-to-list 'ibuffer-never-show-predicates "^\\*Ibuffer")
-(add-to-list 'ibuffer-never-show-predicates "^\\*Straight")
-(add-to-list 'ibuffer-never-show-predicates "^\\*:Buffers:")
-(add-to-list 'ibuffer-never-show-predicates "^\\*mu4e")
+(use-feature ibuffer
+  :defer t
+  :config
+  (add-to-list 'ibuffer-never-show-predicates "^\\*Ibuffer")
+  (add-to-list 'ibuffer-never-show-predicates "^\\*Straight")
+  (add-to-list 'ibuffer-never-show-predicates "^\\*:Buffers:")
+  (add-to-list 'ibuffer-never-show-predicates "^\\*mu4e"))
 ;; (add-to-list 'ibuffer-never-show-predicates "^\\*scratch")
 ;; (add-to-list 'ibuffer-never-show-predicates "^\\*Messages")
 ;; (add-to-list 'ibuffer-never-show-predicates "^\\*Warnings")
@@ -680,6 +691,7 @@ When ARG is non-nil search in junk files."
 
 (use-package avy
   :straight t
+  :defer t
   :custom
   (avy-keys-alist `((avy-goto-char . (?k ?j ?l ?d ?n ?p ?s ?a))
                     (evil-avy-goto-char-timer . (?k ?j ?l ?d ?n ?p ?s ?a))
@@ -900,7 +912,7 @@ Return a list of one element based on major mode."
            (first-buf (car old-bufs))
            (new-bufs (list)))
       (if (string= (buffer-name) (format "%s" (car first-buf)))
-          old-bufs ; the current tab is the leftmost
+          old-bufs                    ; the current tab is the leftmost
         (setq not-yet-this-buf first-buf)
         (setq old-bufs (cdr old-bufs))
         (while (and
@@ -1071,18 +1083,21 @@ first."))
       (color-rg-apply-changed)
       (evil-evilified-state))))
 
-;; (use-package emacs-chunkwm
-;;   :straight (:host github :repo "yqrashawn/emacs-chunkwm")
-;;   :bind (("C-x 7 w h" . 'emacs-chunkwm-windmove-left)
-;;          ("C-x 7 w l" . 'emacs-chunkwm-windmove-right)
-;;          ("C-x 7 w j" . 'emacs-chunkwm-windmove-down)
-;;          ("C-x 7 w k" . 'emacs-chunkwm-windmove-up)))
+(use-package emacs-chunkwm
+  :straight (:host github :repo "yqrashawn/emacs-chunkwm")
+  :disabled
+  :bind (("C-x 7 w h" . 'emacs-chunkwm-windmove-left)
+         ("C-x 7 w l" . 'emacs-chunkwm-windmove-right)
+         ("C-x 7 w j" . 'emacs-chunkwm-windmove-down)
+         ("C-x 7 w k" . 'emacs-chunkwm-windmove-up)))
 
 (use-package flyspell-correct
-  :straight t)
+  :straight t
+  :defer t)
 
 (use-package flyspell-correct-ivy
   :straight t
+  :defer t
   :bind ("C-;" . flyspell-correct-at-point)
   :init
   (setq flyspell-correct-interface #'flyspell-correct-wrapper))
@@ -1120,6 +1135,7 @@ first."))
 
 (use-package iflipb
   :straight t
+  :defer t
   :custom
   (iflipb-always-ignore-buffers
    (lambda (name)
@@ -1134,6 +1150,7 @@ first."))
 (use-package double-saber
   :straight t
   :after (ivy wgrep)
+  :defer t
   :init
   (add-hook 'ivy-occur-grep-mode-hook
             (lambda ()

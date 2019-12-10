@@ -97,6 +97,14 @@
 (setq-default use-package-enable-imenu-support t)
 (straight-use-package 'use-package)
 (straight-use-package 'use-package-ensure-system-package)
+(use-package benchmark-init
+  :straight t
+  :hook (after-init . benchmark-init/dactivate)
+  :init
+  (benchmark-init/activate))
+
+(straight-use-package 'benchmark-init)
+(add-hook 'after-init-hook 'benchmark-init/deactivate)
 
 (defmacro def (name &rest body)
   (declare (indent 1) (debug t))

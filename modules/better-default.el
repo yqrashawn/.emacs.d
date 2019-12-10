@@ -48,6 +48,7 @@ file stored in the cache directory and `nil' to disable auto-saving.")
 (size-indication-mode t)
 
 (use-feature emacs
+  :defer t
   :init
   (setq-default
    echo-keystrokes 1e-6 ;; echo keystrokes quicker
@@ -70,10 +71,12 @@ file stored in the cache directory and `nil' to disable auto-saving.")
   (defalias 'yes-or-no-p #'y-or-n-p))
 
 (use-package dash
+  :defer t
   :straight t
   :config (dash-enable-font-lock))
 
 (use-package s
+  :defer t
   :bind
   ("s-;" . transform-symbol-at-point)
   :config
@@ -102,6 +105,7 @@ file stored in the cache directory and `nil' to disable auto-saving.")
 
 (use-package alert
   :straight t
+  :defer t
   :custom
   (alert-default-style 'osx-notifier)
   :config
@@ -110,16 +114,19 @@ file stored in the cache directory and `nil' to disable auto-saving.")
       (alert str :buffer buf))))
 
 (use-feature profiler
+  :defer t
   :bind
   ("C-x p r"  . profiler-report)
   ("C-x p 1"  . profiler-start)
   ("C-x p 0"  . profiler-stop))
 
 (use-feature warnings
+  :defer t
   :custom
   (warning-suppress-types '((undo discard-info))))
 
 (use-feature comint
+  :defer t
   :bind
   (:map comint-mode-map
         ("RET"       . comint-return-dwim)
@@ -158,6 +165,7 @@ file stored in the cache directory and `nil' to disable auto-saving.")
       (with-current-buffer buffer (comint-write-input-ring)))))
 
 (use-feature compile
+  :defer t
   :custom
   (compilation-always-kill t)
   (compilation-ask-about-save nil)
@@ -181,6 +189,7 @@ file stored in the cache directory and `nil' to disable auto-saving.")
   (advice-add 'start-process-shell-command :around #'make-shell-command-behave-interactively))
 
 (use-feature executable
+  :defer t
   :hook
   (after-save . executable-make-buffer-file-executable-if-script-p))
 
@@ -253,6 +262,7 @@ file stored in the cache directory and `nil' to disable auto-saving.")
 
 
 (use-package files
+  :defer t
   :custom
   (make-backup-files nil)
   (confirm-kill-processes nil)
@@ -298,6 +308,7 @@ file stored in the cache directory and `nil' to disable auto-saving.")
   (push #'find-file-maybe-make-directories find-file-not-found-functions))
 
 (use-feature tramp
+  :defer t
   :custom
   (tramp-default-method "scp")
   (vc-ignore-dir-regexp (format "\\(%s\\)\\|\\(%s\\)" vc-ignore-dir-regexp tramp-file-name-regexp))
@@ -309,6 +320,7 @@ file stored in the cache directory and `nil' to disable auto-saving.")
                (list ".*" "locale" "LC_ALL=C")))
 
 (use-feature simple
+  :defer t
   :custom
   (save-interprogram-paste-before-kill t)
   (next-error-recenter t)
@@ -470,6 +482,7 @@ If the universal prefix argument is used then kill the buffer too."
 (get-buffer-window "*Help*")
 (use-package mwim
   :straight t
+  :defer t
   :config
   (global-set-key (kbd "C-a") 'mwim-beginning-of-code-or-line)
   (global-set-key (kbd "C-e") 'mwim-end-of-code-or-line))
@@ -496,6 +509,7 @@ If the universal prefix argument is used then kill the buffer too."
 (add-hook 'prog-mode-hook 'show-paren-mode)
 
 (use-package windmove
+  :defer t
   :bind
   (("C-M-s-7 h" . 'windmove-left)
    ("C-M-s-7 l" . 'windmove-right)
@@ -543,6 +557,7 @@ If the universal prefix argument is used then kill the buffer too."
 
 (use-package buffer-move
   :straight t
+  :defer t
   :commands (buf-move-right buf-move-left buf-move-down buf-move-up)
   :bind (("C-x 9 w h" . 'buf-move-left)
          ("C-x 9 w l" . 'buf-move-right)
@@ -550,6 +565,7 @@ If the universal prefix argument is used then kill the buffer too."
          ("C-x 9 w k" . 'buf-move-up)))
 
 (use-package winner
+  :defer t
   :bind(("C-M-s-7 u". 'winner-undo)
         ("C-M-s-7 r". 'winner-redo))
   :init
@@ -576,6 +592,7 @@ If the universal prefix argument is used then kill the buffer too."
 (spacemacs/set-leader-keys "tn" 'yq/toggle-line-numbers)
 
 (use-package savehist
+  :defer t
   :init
   ;; Minibuffer history
   (setq savehist-file (concat spacemacs-cache-directory "savehist")
@@ -590,6 +607,7 @@ If the universal prefix argument is used then kill the buffer too."
 
 ;; recentf
 (use-package recentf
+  :defer t
   :init
   (setq recentf-keep '(file-remote-p file-readable-p))
   (setq recentf-save-file (concat user-emacs-directory "recentf")
@@ -620,6 +638,7 @@ If the universal prefix argument is used then kill the buffer too."
 
 ;; saveplace remembers your location in a file when saving files
 (use-package saveplace
+  :defer t
   :init
   (if (fboundp 'save-place-mode)
       ;; Emacs 25 has a proper mode for `save-place'
@@ -794,6 +813,7 @@ If the universal prefix argument is used then will the windows too."
 
 (use-package restart-emacs
   :straight t
+  :defer t
   :commands (restart-emacs)
   :init
   (spacemacs/set-leader-keys "qq" 'save-buffers-kill-emacs)
@@ -808,9 +828,11 @@ If the universal prefix argument is used then will the windows too."
 (spacemacs/set-leader-keys "tF" 'yq/toggle-auto-fill)
 
 ;; (use-package edit-server
+;;   :defer t
 ;;   :straight t
 ;;   :config (edit-server-start))
 ;; (use-package atomic-chrome
+;;   :defer t
 ;;   :straight t
 ;;   :config (atomic-chrome-start-server))
 
@@ -1005,6 +1027,7 @@ FILENAME is deleted using `spacemacs/delete-file' function.."
 
 (use-package autoinsert
   :straight t
+  :defer t
   :init
   ;; Don't want to be prompted before insertion:
   (setq auto-insert-query nil)
@@ -1102,6 +1125,7 @@ otherwise it is scaled down."
 
 (use-package keyfreq
   :straight t
+  :defer t
   :init
   (defun turnon-keyfreq-mode ()
     (interactive)
@@ -1306,6 +1330,7 @@ otherwise it is scaled down."
 
 (use-package hydra
   :straight t
+  :defer t
   :init
   ;; ibuffer
   (defhydra hydra-ibuffer-main (:color pink :hint nil)
@@ -1469,8 +1494,8 @@ Info-mode:
 (global-set-key (kbd "C-x \\") #'align-regexp)
 (setq tab-always-indent 'complete)
 
-
 (use-package uniquify
+  :defer t
   :config
   (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
   (setq uniquify-separator "/")
@@ -1481,6 +1506,7 @@ Info-mode:
 
 (use-package async
   :straight t
+  :defer t
   :config
   ;; (dired-async-mode 1)
   (async-bytecomp-package-mode 1))
@@ -1494,12 +1520,14 @@ Info-mode:
         message-send-mail-function 'async-smtpmail-send-it))
 
 (use-package auth-source
+  :defer t
   :no-require t
   :config
   (setq auth-sources '("~/.authinfo.gpg" "~/.netrc"))
   (setq auth-source-gpg-encrypt-to '("namy.19@gmail.com")))
 
 ;; (use-feature ansi-color
+;;   :defer t
 ;;   :config
 ;;   (add-to-list
 ;;    'eshell-output-filter-functions
@@ -1629,6 +1657,8 @@ Info-mode:
 
 (use-package beacon
   :straight t
+  :defer t
+  :disabled
   :diminish beacon-mode
   :init
   (setq beacon-blink-when-focused t)
@@ -1638,7 +1668,6 @@ Info-mode:
 
 (use-package auto-yasnippet
   :straight t
-  :disabled
   :init
   (global-set-key (kbd "M-h") #'aya-create)
   (global-set-key (kbd "M-l") #'aya-expand))
@@ -1659,6 +1688,7 @@ Info-mode:
 
 (use-package pcre2el
   :straight t
+  :defer t
   :bind
   ("C-c / p /" . rxt-explain-pcre)
   ("C-c / /" . rxt-explain))
@@ -1675,6 +1705,7 @@ Info-mode:
 
 (use-package webpaste
   :straight t
+  :defer t
   :bind (("C-c C-p C-b" . webpaste-paste-buffer)
          ("C-c C-p C-r" . webpaste-paste-region))
   :config
@@ -1700,11 +1731,13 @@ Info-mode:
   :commands (define-word))
 
 (use-feature flyspell
+  :defer t
   :hook (;;(prog-mode . flyspell-prog-mode)
          ((git-commit-mode org-mode text-mode markdown-mode) . flyspell-mode)))
 
 (use-package auto-dictionary
   :straight t
+  :defer t
   :hook (flyspell-mode . auto-dictionary-mode))
 
 (use-package gcmh
@@ -1755,8 +1788,7 @@ Info-mode:
 ;;    UseKeychain yes
 (use-package keychain-environment
   :straight t
-  :config
-  (keychain-refresh-environment))
+  :hook (after-init . keychain-refresh-environment))
 
 ;; try undo-propose
 (use-package undo-propose
@@ -1767,6 +1799,7 @@ Info-mode:
   (evil-define-key 'normal undo-propose-mode-map "u" 'undo))
 
 (use-feature xref
+  :defer t
   :config
   (evil-define-key 'normal xref--xref-buffer-mode-map (kbd "RET") #'xref-quit-and-goto-xref)
   (define-key xref--xref-buffer-mode-map (kbd "RET") #'xref-quit-and-goto-xref)

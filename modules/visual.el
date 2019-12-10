@@ -47,14 +47,16 @@
   :defer t
   :init
   (setq yq/dark-theme 'zenburn)
+  (defun +set-mic-paren-face ()
+    ;; mic-paren
+    (set-face-foreground 'paren-face-match nil)
+    (set-face-background 'paren-face-match "#506575")
+    (set-face-background 'paren-face-mismatch "#DC8CC3")
+    (set-face-background 'paren-face-no-match "#CC9393"))
   (add-hook 'spacemacs-post-theme-change-hook
             (lambda ()
-              (when (eq yq/current-theme 'zenburn)
-                ;; mic-paren
-                (set-face-foreground 'paren-face-match nil)
-                (set-face-background 'paren-face-match "#506575")
-                (set-face-background 'paren-face-mismatch "#DC8CC3")
-                (set-face-background 'paren-face-no-match "#CC9393")))))
+              (when (and (eq yq/current-theme 'zenburn) (facep 'paren-face-match))
+                (+set-mic-paren-face)))))
 
 (use-package doom-themes
   :straight t
