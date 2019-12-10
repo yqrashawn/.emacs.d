@@ -29,7 +29,6 @@ the current buffer."
 (use-package ielm
   :straight t
   :init
-  (add-hook 'ielm-mode-hook #'rainbow-delimiters-mode)
   (spacemacs|define-jump-handlers ielm-mode)
   :config (define-key inferior-emacs-lisp-mode-map (kbd "C-c C-z") 'kill-buffer-and-window))
 
@@ -56,7 +55,6 @@ the current buffer."
                                                                     company-keywords)
                                                                    company-files
                                                                    company-dabbrev))))
-  (add-hook 'emacs-lisp-mode-hook #'rainbow-delimiters-mode)
   ;; Idea from http://www.reddit.com/r/emacs/comments/312ge1/i_created_this_function_because_i_was_tired_of/
   (defun spacemacs/eval-current-form ()
     "Find and evaluate the current def* or set* command.

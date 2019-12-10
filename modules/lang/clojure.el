@@ -28,8 +28,8 @@
 
 (use-package clojure-mode
   :straight t
-  :diminish clojure-mode
-  :diminish clojurescript-mode
+  :diminish (clojurescript-mode clojure-mode)
+  :mode ("\\\.clojure\\\'" . clojure-mode)
   :custom
   (clojure-align-forms-automatically nil)
   (clojure-align-reader-conditionals t)
@@ -39,6 +39,8 @@
   ;; This regexp matches shebang expressions like `#!/usr/bin/env boot'
   (add-to-list 'magic-mode-alist '("#!.*boot\\s-*$" . clojure-mode))
   :config
+  (require 'clojure-snippets)
+  (require 'clojure-mode-extra-font-locking)
   (defun +setup-company-for-clojure ()
     (setq-local company-idle-delay 0.2)
     (setq-local evil-shift-width 1)
@@ -62,6 +64,7 @@
 (use-package cider
   ;; :straight (:host github :repo "clojure-emacs/cider")
   :straight t
+  :hook (clojure-mode . cider-mode)
   :custom
   (cider-completion-annotations-include-ns 'always)
   (cider-connection-message-fn 'cider-random-tip)
@@ -73,6 +76,10 @@
   (cider-repl-wrap-history t)
   (cider-stacktrace-default-filters '(tooling dup java))
   :init
+  (add-hook 'clojure-mode-hook (defl () (setq-mode-local clojure-mode company-idle-delay 0.2)))
+  (add-hook 'clojure-mode-hook #'spacemacs//init-jump-handlers-clojure-mode)
+  (add-hook 'clojurescript-mode-hook #'spacemacs//init-jump-handlers-clojurescript-mode)
+  (add-hook 'clojurec-mode-hook #'spacemacs//init-jump-handlers-clojurec-mode)
   ;; (customize-set-variable 'cider-default-repl-command 'lein)
   (spacemacs|add-company-backends
     :backends (company-capf)
@@ -83,12 +90,6 @@
   (spacemacs|define-jump-handlers clojure-mode)
   (add-to-list (intern (format "spacemacs-jump-handlers-%S" 'clojure-mode))
                '(cider-find-dwim :async t))
-  (add-hook 'cider-mode-hook 'eldoc-mode)
-  (add-hook 'cider-repl-mode-hook 'eldoc-mode)
-  (add-hook 'cider-repl-mode-hook #'rainbow-delimiters-mode)
-  (add-hook 'cider-clojure-interaction-mode-hook 'eldoc-mode)
-  (add-hook 'cider-repl-mode-hook #'cider-company-enable-fuzzy-completion)
-  (add-hook 'cider-mode-hook #'cider-company-enable-fuzzy-completion)
   (spacemacs/register-repl 'cider 'cider-jack-in "cider")
   (evil-define-key 'normal clojure-mode-map ",c" 'cider-cheatsheet)
 
@@ -113,8 +114,6 @@
         nrepl-hide-special-buffers t
         cider-eldoc-display-context-dependent-info t
         cider-print-fn 'puget)
-  (add-hook 'clojure-mode-hook 'cider-mode)
-  (add-hook 'clojure-mode-hook #'rainbow-delimiters-mode)
   (dolist (x '(spacemacs-jump-handlers-clojure-mode
                spacemacs-jump-handlers-clojurec-mode
                spacemacs-jump-handlers-clojurescript-mode
@@ -123,16 +122,12 @@
     (add-to-list x 'spacemacs/clj-find-var))
   (add-to-list 'evil-insert-state-modes 'cider-repl-mode)
   (add-to-list 'evil-insert-state-modes 'cider--debug-mode)
-  (add-hook 'clojure-mode-hook #'spacemacs//init-jump-handlers-clojure-mode)
-  (add-hook 'clojurescript-mode-hook #'spacemacs//init-jump-handlers-clojurescript-mode)
-  (add-hook 'clojurec-mode-hook #'spacemacs//init-jump-handlers-clojurec-mode)
+  (add-hook 'cider-mode-hook #'cider-company-enable-fuzzy-completion)
   (add-hook 'cider-repl-mode-hook #'spacemacs//init-jump-handlers-cider-repl-mode)
-  :config
+  (add-hook 'cider-repl-mode-hook #'cider-company-enable-fuzzy-completion)
   (add-hook 'cider-repl-mode-hook '+setup-company-for-clojure)
-  (add-hook 'clojure-mode-hook (defl () (setq-mode-local clojure-mode company-idle-delay 0.2)))
-
-  ;; TODO: having this work for cider-macroexpansion-mode would be nice,
-  ;;       but the problem is that it uses clojure-mode as its major-mode
+  :config
+  (require 'cider-eval-sexp-fu)
   (define-key cider-repl-mode-map (kbd "s-k") 'cider-quit)
   (dolist (map (list clojure-mode-map
                      clojurec-mode-map
@@ -312,8 +307,7 @@
     (clojure/fancify-symbols 'cider-repl-mode)
     (clojure/fancify-symbols 'cider-clojure-interaction-mode))
 
-  (defadvice cider-jump-to-var (before add-evil-jump activate)
-    (evil-set-jump))
+  (defadvice cider-jump-to-var (before add-evil-jump activate) (evil-set-jump))
   (cider-register-cljs-repl-type 're-frame-template
                                  "(do (require 'figwheel-sidecar.repl-api)
                                       (figwheel-sidecar.repl-api/start-figwheel!)
@@ -326,6 +320,7 @@
 (use-package clj-refactor
   :straight t
   :diminish clj-refactor-mode
+  :after (clojure-mode)
   :hook (clojure-mode . clj-refactor-mode)
   :init
   (evil-define-key 'normal clojure-mode-map (kbd ", ESC") 'hydra-cljr-help-menu/body)
@@ -351,21 +346,20 @@
 
 (use-package cider-eval-sexp-fu
   :straight t
-  :after cider)
+  :defer t)
 
 (use-package clojure-snippets
   :straight t
-  :after clojure-mode)
+  :defer t)
 
 (use-package flycheck-clojure
   :straight t
   :after (flycheck cider)
-  :config
-  (flycheck-clojure-setup))
+  :hook (clojure-mode . flycheck-clojure-setup))
 
 (use-package clojure-mode-extra-font-locking
   :straight t
-  :after clojure-mode)
+  :defer t)
 
 ;; (use-package clojure-cheatsheet
 ;;   :straight t
@@ -463,88 +457,13 @@
     (kbd "l") 'sayid-show-traced
     (kbd "h") 'sayid-traced-buf-show-help))
 
-;; TODO won't work
 (use-package flycheck-clj-kondo
   :straight t
-  :init
-  (add-hook 'clojure-mode-hook (defl () (require 'flycheck-clj-kondo))))
+  :hook (clojure-mode . (lambda () (require 'flycheck-clj-kondo))))
 
 (use-package 4clojure
-  :straight (:host github :repo "yqrashawn/4clojure.el"))
-
-(defun ms/in-comment-p ()
-  (nth 4 (syntax-ppss)))
-
-(defun ms/in-literal-p ()
-  (nth 3 (syntax-ppss)))
-
-(defun clojure|js-object-key-to-clojure-keyword (begin end)
-  (interactive "r")
-  (let ((txt (delete-and-extract-region begin end)))
-    (insert (concat ":" (replace-regexp-in-string " " "-" (replace-regexp-in-string "\"" "" txt))))))
-
-(defun clojure|js-object-to-clojure-edn (begin end)
-  (interactive "r")
-  (let ((txt (buffer-substring begin end)))
-    (with-temp-buffer
-      (insert txt)
-      (js2-mode)
-
-      ;; remove comma
-      (goto-char (point-min))
-      (while (search-forward "," nil t)
-        ;; (goto-char (match-beginning))
-        (if (and (not (ms/in-comment-p))
-                 (not (ms/in-literal-p)))
-            (replace-match "")))
-
-      ;; replace // with ;;
-      (goto-char (point-min))
-      (while (search-forward "//" nil t)
-        (if (ms/in-comment-p)
-            (replace-match ";;")))
-
-      ;; process "foo bar":
-      (goto-char (point-min))
-      (while (search-forward-regexp "[a-z_]+[ ]*:" nil t)
-        (if (not (ms/in-literal-p))
-            (replace-match (concat
-                            ":"
-                            (replace-regexp-in-string
-                             "[ ]*:"
-                             ""
-                             (match-string-no-properties 0))))))
-
-      ;; process foo:
-      (goto-char (point-min))
-      (while (search-forward-regexp "\"[a-z_ ]+\"[ ]*:" nil t)
-        (if (not (ms/in-literal-p))
-            (replace-match (concat
-                            ":"
-                            (replace-regexp-in-string
-                             " "
-                             "-"
-                             (replace-regexp-in-string
-                              "[ ]*:"
-                              ""
-                              (replace-regexp-in-string
-                               "\""
-                               ""
-                               (match-string-no-properties 0))))))))
-
-      ;; {\n to {
-      (goto-char (point-min))
-      (while (search-forward-regexp "{\n" nil t)
-        (if (not (ms/in-literal-p)) (replace-match "{")))
-
-      (clojure-mode)
-      (parinfer--switch-to-paren-mode)
-      (ignore-errors (parinfer--reindent-sexp))
-
-      (while (search-forward-regexp "{[ ]+:" nil t)
-        (if (not (ms/in-literal-p)) (replace-match "{:")))
-
-      (kill-ring-save (point-min) (point-max)))))
+  :straight (:host github :repo "yqrashawn/4clojure.el")
+  :defer t)
 
 (provide 'clojure)
 ;;; clojure.el ends here

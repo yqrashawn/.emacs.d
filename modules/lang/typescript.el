@@ -42,7 +42,6 @@ and 'typescript-formatter .")
   :commands (typescript/jump-to-type-def)
   :init
   (setq tide-format-options '(:indentSize 2 :tabSize 2 :insertSpaceAfterSemicolonInForStatements t))
-  (add-hook 'typescript-mode-hook 'eldoc-mode)
   (add-hook 'typescript-mode-hook 'tide-hl-identifier-mode)
   (spacemacs|define-jump-handlers typescript-mode)
   ;; (spacemacs|define-jump-handlers js2-mode)

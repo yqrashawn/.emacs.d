@@ -29,16 +29,16 @@
 (use-package adoc-mode
   :straight t
   :defer t
-  :mode ("\\.adoc\\'" . adoc-mode))
+  :mode ("\\\.adoc\\\'" . adoc-mode))
 
 (use-package yaml-mode
   :straight t
   :defer t
-  :mode ("\\.yaml\\'" . yaml-mode))
+  :mode ("\\\.yaml\\\'" . yaml-mode))
 
 (use-package groovy-mode
   :straight t
-  :mode (("\\Jenkinsfile\\'" . groovy-mode))
+  :mode (("\\\Jenkinsfile\\\'" . groovy-mode))
   :init
   (setq groovy-indent-offset 2))
 
@@ -54,13 +54,13 @@
 
 (use-package dotenv-mode
   :straight t
-  :mode (("\\.env\\..*\\'" . dotenv-mode)))
+  :mode (("\\\.env\\..*\\\'" . dotenv-mode)))
 
 (use-package conf-mode
   :straight t
-  :mode (("\\.conf\\'"    . conf-space-mode)
-         ("\\.setup.*\\'" . conf-space-mode)
-         ("/\\(Cargo.lock\\|\\.cargo/config\\)\\'" . conf-toml-mode)))
+  :mode (("\\\.conf\\\'"    . conf-space-mode)
+         ("\\\.setup.*\\\'" . conf-space-mode)
+         ("/\\(Cargo.lock\\|\\.cargo/config\\)\\\'" . conf-toml-mode)))
 
 (use-package crontab-mode
   :straight (:host github :repo "emacs-pe/crontab-mode")

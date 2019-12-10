@@ -577,12 +577,7 @@ is not visible. Otherwise delegates to regular Emacs next-error."
 (use-package eldoc
   :diminish eldoc-mode
   :commands (eldoc-mode)
-  :hook (emacs-lisp-mode . eldoc-mode)
-  :config
-  ;; enable eldoc in `eval-expression'
-  (add-hook 'eval-expression-minibuffer-setup-hook #'eldoc-mode)
-  ;; enable eldoc in IELM
-  (add-hook 'ielm-mode-hook #'eldoc-mode))
+  :hook ((cider-clojure-interaction-mode cider-repl-mode eval-expression-minibuffer-setup ielm-mode prog-mode) . eldoc-mode))
 
 (use-package git-link
   :straight t
@@ -632,7 +627,7 @@ is not visible. Otherwise delegates to regular Emacs next-error."
 
 (use-package rainbow-delimiters
   :straight t
-  :defer t)
+  :hook ((ielm-mode emacs-lisp-mode clojure-mode cider-repl-mode rjsx-mode) . rainbow-delimiters-mode))
 
 (with-eval-after-load 'hydra
   (defhydra hydra-change-mode (:hint nil :color pink)
