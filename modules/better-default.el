@@ -1321,11 +1321,11 @@ otherwise it is scaled down."
   (defhydra hydra-ibuffer-main (:color pink :hint nil)
     "
   ^Mark^        | ^Actions^        | ^View^
-  -^----^--------+-^-------^--------+-^----^-------
+  -^----^-------+-^-------^--------+-^----^-------
   _m_: mark     | _D_: delete      | _g_: refresh
   _u_: unmark   | _S_: save        | _s_: sort
   _*_: specific | _a_: all actions | _/_: filter
-  ^----------^-+-^----^--------+-^-------^--------+-^----^-------
+  ^-----------^-+-^-------^--------+-^-------^----
   "
     ;; ("j" ibuffer-forward-line)
     ("RET" ibuffer-visit-buffer :color blue)

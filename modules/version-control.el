@@ -15,7 +15,8 @@
   :custom
   (magit-diff-refine-hunk t)
   :init
-  (setq magit-bury-buffer-function (lambda (&optional kill-buffer) (magit-restore-window-configuration t)))
+  ;; (setq magit-bury-buffer-function (lambda (&optional kill-buffer) (magit-restore-window-configuration t)))
+  (setq magit-bury-buffer-function #'magit-mode-quit-window)
   ;; (setq magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1)
   (setq magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1)
   (setq magit-save-repository-buffers 'dontask)
@@ -136,5 +137,7 @@
 (use-package vc-msg
   :straight t
   :commands (vc-msg-show)
+  :custom
+  (vc-msg-git-show-commit-function 'magit-show-commit)
   :init
   (spacemacs/set-leader-keys "gl" #'vc-msg-show))

@@ -10,7 +10,7 @@
                 (when org-inline-image-overlays
                   (org-redisplay-inline-images))))
 
-    (org-babel-do-load-languages 'org-babel-load-languages '((plantuml . t)))
+    (add-to-list 'org-babel-load-languages '(plantuml . t))
     (setq org-plantuml-jar-path "/usr/local/Cellar/plantuml/1.2019.12/libexec/plantuml.jar")
     (add-to-list 'org-src-lang-modes '("plantuml" . plantuml))
 

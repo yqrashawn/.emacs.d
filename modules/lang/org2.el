@@ -7,6 +7,8 @@
   (define-key global-map "\C-cc" 'org-capture)
 
   ;; custom variable
+  (setq org-link-context-for-files t)
+  (setq org-link-file-path-type 'relative)
   (setq org-image-actual-width nil)
   (setq org-startup-indented t)
   (setq org-insert-heading-respect-content t)
@@ -235,11 +237,11 @@
 
   ;; make org-store-link ask for description
   ;; https://emacs.stackexchange.com/questions/13093/get-org-link-to-insert-link-description-automatically/13104#13104
-  (defun +org-link-describe (link desc)
-    (if (file-exists-p link)
-        desc
-      (read-string "Description: " desc)))
-  (setf org-make-link-description-function '+org-link-describe)
+  ;; (defun +org-link-describe (link desc)
+  ;;   (if (file-exists-p link)
+  ;;       desc
+  ;;     (read-string "Description: " desc)))
+  ;; (setf org-make-link-description-function '+org-link-describe)
 
   ;; ob
   (setq org-babel-load-languages
