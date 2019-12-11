@@ -278,6 +278,7 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   (spacemacs/set-leader-keys "hdK" 'describe-keymap)
   (spacemacs/set-leader-keys "hdl" #'view-lossage)
   (spacemacs/set-leader-keys "fJ" 'spacemacs/open-junk-file)
+  (spacemacs/set-leader-keys "fel" 'counsel-find-library)
   (define-key yq-s-map "f" #'counsel-rg)
   (define-key yq-s-map "l" 'spacemacs/counsel-jump-in-buffer)
   (define-key yq-s-map "j" #'counsel-buffer-or-recentf)
@@ -377,7 +378,7 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
 
 (use-package projectile
   :straight t
-  :defer t
+  :hook (after-init . projectile-mode)
   :diminish projectile-mode
   :init
   (setq projectile-project-search-path '("~/workspace/" "~/.emacs.d/straight/repos/"))
@@ -403,7 +404,7 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
 
 (use-package counsel-projectile
   :straight t
-  :defer t
+  :hook (projectile-mode . counsel-projectile-mode)
   :after (counsel projectile)
   :init
   (counsel-projectile-mode +1)
@@ -420,21 +421,12 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   (defun +counsel-projectile-switch-buffer-prev-line ()
     (interactive)
     (if (minibufferp) (ivy-previous-line)
-      (counsel-projectile-switch-to-buffer)))
+      (counsel-projectile-switch-to-buffer))))
 
   ;; (global-set-key (kbd "C-x C-9 j") '+counsel-projectile-switch-buffer-next-line)
   ;; (global-set-key (kbd "C-x C-9 k") '+counsel-projectile-switch-buffer-prev-line)
   ;; (global-set-key (kbd "C-M-S-s-j") '+counsel-projectile-switch-buffer-next-line)
   ;; (global-set-key (kbd "C-M-S-s-k") '+counsel-projectile-switch-buffer-prev-line)
-  (defun yq/.emacs.d ()
-    (interactive)
-    (counsel-fzf "" "~/.emacs.d/" nil "-t f --no-ignore-vcs -E 'straight/build/*'"))
-  (defun yq/.emacs.d.el ()
-    (interactive)
-    (counsel-fzf "" "~/.emacs.d/" nil "-t f -e el --no-ignore-vcs -E 'straight/build/*'"))
-  (spacemacs/set-leader-keys "fef" 'yq/.emacs.d.el)
-  (spacemacs/set-leader-keys "feF" 'yq/.emacs.d)
-  (spacemacs/set-leader-keys "fel" 'counsel-find-library))
 
 (yq/get-modules "counsel-funcs.el")
 
@@ -481,6 +473,9 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
        (kill-this-buffer)
        (save-buffers-kill-terminal 't))))
   :config
+  (require 'dired-aux)
+  (require 'dired+)
+  (add-to-list 'dired-compress-file-suffixes '("\\.zip\\'" ".zip" "unzip"))
   (add-hook 'dired-mode-hook #'hl-line-mode)
   (evil-define-key 'normal dired-mode-map (kbd ";") 'avy-goto-subword-1)
   ;; search file name only when focus is over file
@@ -548,21 +543,20 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
         wdired-create-parent-directories t))
 (use-package dired-narrow
   :straight t
-  :after dired
   :commands (dired-narrow-fuzzy))
 (use-package fd-dired
   :straight (:host github :repo "yqrashawn/fd-dired")
   :commands (fd-dired)
-  :after dired
   :init
   (evil-define-key 'normal dired-mode-map "F" 'fd-dired)
   (define-key yq-s-map "8" 'fd-dired))
-(setq-default dired-omit-files "^\\.?#\\|^\\.$\\|^\\.\\.$")
 (use-feature dired-x
   :hook (dired-mode . dired-omit-mode)
   :commands (dired-jump
              dired-jump-other-window
              dired-omit-mode)
+  :custom
+  (dired-omit-files "^\\.?#\\|^\\.$\\|^\\.\\.$")
   :config
   (setq dired-omit-files
         (concat dired-omit-files "\\|^\\.DS_Store$\\|^__MACOSX$\\|^\\.localized$")))
@@ -582,7 +576,6 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   (add-hook 'dired-mode-hook '(lambda () (dired-hide-details-mode 0))))
 (use-package dired-filter
   :straight t
-  :after dired
   :hook (dired-mode . dired-filter-mode)
   :custom
   (dired-filter-group-saved-groups
@@ -596,8 +589,7 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
 (use-package dired-git-info
   :straight (:host github :repo "clemera/dired-git-info")
   :commands (dired-git-info-mode)
-  :after dired
-  :init
+  :config
   (define-key dired-mode-map "(" 'dired-git-info-mode))
 
 (use-package dired-quick-sort
@@ -677,17 +669,19 @@ When ARG is non-nil search in junk files."
 
 
 (yq/update-evil-emacs-state-modes 'ibuffer-mode)
+
 (use-feature ibuffer
+  :defer t
+  :config
+  (require 'ibuf-ext))
+
+(use-feature ibuf-ext
   :defer t
   :config
   (add-to-list 'ibuffer-never-show-predicates "^\\*Ibuffer")
   (add-to-list 'ibuffer-never-show-predicates "^\\*Straight")
   (add-to-list 'ibuffer-never-show-predicates "^\\*:Buffers:")
   (add-to-list 'ibuffer-never-show-predicates "^\\*mu4e"))
-;; (add-to-list 'ibuffer-never-show-predicates "^\\*scratch")
-;; (add-to-list 'ibuffer-never-show-predicates "^\\*Messages")
-;; (add-to-list 'ibuffer-never-show-predicates "^\\*Warnings")
-;; (add-to-list 'ibuffer-never-show-predicates "^\\*Help")
 
 (use-package avy
   :straight t
