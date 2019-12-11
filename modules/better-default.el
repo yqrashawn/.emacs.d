@@ -46,9 +46,9 @@ file stored in the cache directory and `nil' to disable auto-saving.")
 
 (setq source-directory (concat user-home-directory "emacs"))
 (size-indication-mode t)
+(auto-compression-mode t)
 
 (use-feature emacs
-  :defer t
   :init
   (setq-default
    echo-keystrokes 1e-6 ;; echo keystrokes quicker
@@ -71,12 +71,10 @@ file stored in the cache directory and `nil' to disable auto-saving.")
   (defalias 'yes-or-no-p #'y-or-n-p))
 
 (use-package dash
-  :defer t
   :straight t
   :config (dash-enable-font-lock))
 
 (use-package s
-  :defer t
   :bind
   ("s-;" . transform-symbol-at-point)
   :config
@@ -121,30 +119,21 @@ file stored in the cache directory and `nil' to disable auto-saving.")
   ("C-x p 0"  . profiler-stop))
 
 (use-feature warnings
-  :defer t
   :custom
   (warning-suppress-types '((undo discard-info))))
 
 (use-feature comint
   :defer t
-  :bind
-  (:map comint-mode-map
-        ("RET"       . comint-return-dwim)
-        ("C-r"       . comint-history-isearch-backward-regexp)
-        ("C-u"       . comint-clear-buffer)
-        ("C-p"     . comint-previous-matching-input-from-input)
-        ("C-n" . comint-next-matching-input-from-input))
   :custom
   (comint-prompt-read-only t)
-  :hook
-  (comint-mode . text-smaller-no-truncation)
-  :config
-  (setq-default comint-input-ignoredups t
-                comint-scroll-show-maximum-output nil
-                comint-output-filter-functions
-                '(ansi-color-process-output
-                  comint-truncate-buffer
-                  comint-watch-for-password-prompt))
+  (comint-input-ignoredups t)
+  (comint-scroll-show-maximum-output nil)
+  :init
+  (setq-default
+   comint-output-filter-functions
+   '(ansi-color-process-output
+     comint-truncate-buffer
+     comint-watch-for-password-prompt))
   (defun text-smaller-no-truncation ()
     (set (make-local-variable 'scroll-margin) 0)
     (text-scale-set -0.25))
@@ -159,6 +148,17 @@ file stored in the cache directory and `nil' to disable auto-saving.")
       (find-file (ffap-file-at-point)))
      (t
       (comint-next-prompt 1))))
+  :hook
+  (comint-mode . text-smaller-no-truncation)
+  :bind
+  (:map comint-mode-map
+        ("RET"       . comint-return-dwim)
+        ("C-r"       . comint-history-isearch-backward-regexp)
+        ("C-u"       . comint-clear-buffer)
+        ("C-p"     . comint-previous-matching-input-from-input)
+        ("C-n" . comint-next-matching-input-from-input))
+  :config
+  (define-key comint-mode-map (kbd "C-d") nil)
   (add-hook 'kill-buffer-hook #'comint-write-input-ring)
   (add-lam 'kill-emacs-hook
     (dolist (buffer (buffer-list))
@@ -171,7 +171,7 @@ file stored in the cache directory and `nil' to disable auto-saving.")
   (compilation-ask-about-save nil)
   :hook
   (compilation-mode . text-smaller-no-truncation)
-  :init
+  :config
   (add-hook 'compilation-finish-functions #'alert-after-finish-in-background))
 
 (use-feature shell
@@ -231,20 +231,18 @@ file stored in the cache directory and `nil' to disable auto-saving.")
 (xterm-mouse-mode 1)
 (setq initial-major-mode 'text-mode)
 (setq-default fill-column 80)
-(use-package abbrev
-  :defer t
-  :ensure nil
+(use-feature abbrev
   :diminish abbrev-mode
   :custom
   (abbrev-file-name (concat user-emacs-directory "abbrev_defs"))
+  :init
   (abbrev-mode 1)
   :config
   (if (file-exists-p abbrev-file-name)
       (quietly-read-abbrev-file)))
+
 (setq save-interprogram-paste-before-kill t)
 (setq-default sentence-end-double-space nil)
-(with-eval-after-load 'comint
-  (define-key comint-mode-map (kbd "C-d") nil))
 (setq window-combination-resize t)
 (setq column-number-mode t)
 (blink-cursor-mode -1)
@@ -261,8 +259,7 @@ file stored in the cache directory and `nil' to disable auto-saving.")
 
 
 
-(use-package files
-  :defer t
+(use-feature files
   :custom
   (make-backup-files nil)
   (confirm-kill-processes nil)
@@ -320,7 +317,6 @@ file stored in the cache directory and `nil' to disable auto-saving.")
                (list ".*" "locale" "LC_ALL=C")))
 
 (use-feature simple
-  :defer t
   :custom
   (save-interprogram-paste-before-kill t)
   (next-error-recenter t)
@@ -482,8 +478,8 @@ If the universal prefix argument is used then kill the buffer too."
 (get-buffer-window "*Help*")
 (use-package mwim
   :straight t
-  :defer t
-  :config
+  :commands (mwim-beginning-of-code-or-line mwim-end-of-code-or-line)
+  :init
   (global-set-key (kbd "C-a") 'mwim-beginning-of-code-or-line)
   (global-set-key (kbd "C-e") 'mwim-end-of-code-or-line))
 
@@ -511,10 +507,10 @@ If the universal prefix argument is used then kill the buffer too."
 (use-package windmove
   :defer t
   :bind
-  (("C-M-s-7 h" . 'windmove-left)
-   ("C-M-s-7 l" . 'windmove-right)
-   ("C-M-s-7 j" . 'windmove-down)
-   ("C-M-s-7 k" . 'windmove-up))
+  (("C-M-s-7 h" . #'windmove-left)
+   ("C-M-s-7 l" . #'windmove-right)
+   ("C-M-s-7 j" . #'windmove-down)
+   ("C-M-s-7 k" . #'windmove-up))
   :config
   (defun hydra-move-splitter-left (arg)
     "Move window splitter left."
@@ -557,7 +553,6 @@ If the universal prefix argument is used then kill the buffer too."
 
 (use-package buffer-move
   :straight t
-  :defer t
   :commands (buf-move-right buf-move-left buf-move-down buf-move-up)
   :bind (("C-x 9 w h" . 'buf-move-left)
          ("C-x 9 w l" . 'buf-move-right)
@@ -565,7 +560,6 @@ If the universal prefix argument is used then kill the buffer too."
          ("C-x 9 w k" . 'buf-move-up)))
 
 (use-package winner
-  :defer t
   :bind(("C-M-s-7 u". 'winner-undo)
         ("C-M-s-7 r". 'winner-redo))
   :init
@@ -591,8 +585,7 @@ If the universal prefix argument is used then kill the buffer too."
 (yq/add-toggle line-numbers :mode display-line-numbers-mode)
 (spacemacs/set-leader-keys "tn" 'yq/toggle-line-numbers)
 
-(use-package savehist
-  :defer t
+(use-feature savehist
   :init
   ;; Minibuffer history
   (setq savehist-file (concat spacemacs-cache-directory "savehist")
@@ -606,8 +599,7 @@ If the universal prefix argument is used then kill the buffer too."
   (savehist-mode t))
 
 ;; recentf
-(use-package recentf
-  :defer t
+(use-feature recentf
   :init
   (setq recentf-keep '(file-remote-p file-readable-p))
   (setq recentf-save-file (concat user-emacs-directory "recentf")
@@ -637,8 +629,7 @@ If the universal prefix argument is used then kill the buffer too."
     (add-to-list 'recentf-exclude "\\indium-eval-.*")))
 
 ;; saveplace remembers your location in a file when saving files
-(use-package saveplace
-  :defer t
+(use-feature saveplace
   :init
   (if (fboundp 'save-place-mode)
       ;; Emacs 25 has a proper mode for `save-place'
@@ -647,8 +638,7 @@ If the universal prefix argument is used then kill the buffer too."
   ;; Save point position between sessions
   (setq save-place-file (concat spacemacs-cache-directory "places")))
 
-(use-package whitespace
-  :defer t
+(use-feature whitespace
   :diminish whitespace-mode
   :diminish whitespace-global-modes
   :init
@@ -691,10 +681,9 @@ If the universal prefix argument is used then kill the buffer too."
 
 (use-package bookmark
   :defer t
-  :init
-  (setq bookmark-default-file (concat spacemacs-cache-directory "bookmarks")
-        ;; autosave each change
-        bookmark-save-flag 1))
+  :custom
+  (bookmark-default-file (concat spacemacs-cache-directory "bookmarks"))
+  (bookmark-save-flag 1))
 
 (use-package popwin
   :straight (:host github :repo "yqrashawn/popwin-el")
@@ -813,7 +802,6 @@ If the universal prefix argument is used then will the windows too."
 
 (use-package restart-emacs
   :straight t
-  :defer t
   :commands (restart-emacs)
   :init
   (spacemacs/set-leader-keys "qq" 'save-buffers-kill-emacs)
@@ -1025,9 +1013,7 @@ FILENAME is deleted using `spacemacs/delete-file' function.."
   :straight t
   :mode "/\\.gitattributes\\'" "/\\.git/info/attributes\\'" "/git/attributes\\'")
 
-(use-package autoinsert
-  :straight t
-  :defer t
+(use-feature autoinsert
   :init
   ;; Don't want to be prompted before insertion:
   (setq auto-insert-query nil)
@@ -1069,15 +1055,15 @@ otherwise it is scaled down."
 (global-set-key (kbd "s-=") 'spacemacs/scale-up-font)
 (global-set-key (kbd "s--") 'spacemacs/scale-down-font)
 
-(use-package info
-  :straight t
-  :commands (info)
-  :config
+(use-feature info
+  :defer t
+  :init
   (spacemacs/set-leader-keys "?" #'info-display-manual)
+  :config
   (define-key Info-mode-map "s" nil)
-  (define-key Info-mode-map "ss" 'Info-search)
-  (define-key Info-mode-map "sj" 'counsel-recentf)
-  (define-key Info-mode-map (kbd "s SPC") 'counsel-M-x)
+  (define-key Info-mode-map "ss" #'Info-search)
+  (define-key Info-mode-map "sj" #'counsel-recentf)
+  (define-key Info-mode-map (kbd "s SPC") #'counsel-M-x)
   (define-key Info-mode-map "sc" 'yq/delete-window)
   (define-key Info-mode-map "sk" 'yq/kill-this-buffer)
   (evil-define-key 'normal
@@ -1125,7 +1111,6 @@ otherwise it is scaled down."
 
 (use-package keyfreq
   :straight t
-  :defer t
   :init
   (defun turnon-keyfreq-mode ()
     (interactive)
@@ -1159,9 +1144,9 @@ otherwise it is scaled down."
 
 (use-package string-edit
   :straight t
-  :commands (string-edit-at-point)
+  :defer t
   :init
-  (evil-leader/set-key "es" 'string-edit-at-point))
+  (evil-leader/set-key "es" #'string-edit-at-point))
 
 
 ;; {{ eacl and other general grep (rgrep, grep ...) setup
@@ -1492,10 +1477,9 @@ Info-mode:
   (define-key Info-mode-map "." 'hydra-info/body))
 
 (global-set-key (kbd "C-x \\") #'align-regexp)
-(setq tab-always-indent 'complete)
+;; (setq tab-always-indent 'complete)
 
 (use-package uniquify
-  :defer t
   :config
   (setq uniquify-buffer-name-style 'post-forward-angle-brackets)
   (setq uniquify-separator "/")
@@ -1506,25 +1490,22 @@ Info-mode:
 
 (use-package async
   :straight t
-  :defer t
-  :config
-  ;; (dired-async-mode 1)
+  :init
+  (dired-async-mode 1)
   (async-bytecomp-package-mode 1))
 
 (use-package smtpmail-async
   :commands (async-smtpmail-send-it)
   :init
-  (setq send-mail-function 'smtpmail-send-it
-        message-send-mail-function 'smtpmail-send-it)
   (setq send-mail-function 'async-smtpmail-send-it
         message-send-mail-function 'async-smtpmail-send-it))
 
-(use-package auth-source
+(use-feature auth-source
   :defer t
-  :no-require t
-  :config
-  (setq auth-sources '("~/.authinfo.gpg" "~/.netrc"))
-  (setq auth-source-gpg-encrypt-to '("namy.19@gmail.com")))
+  :custom
+  (auth-sources '("~/.authinfo.gpg" "~/.netrc"))
+  (auth-source-gpg-encrypt-to '("namy.19@gmail.com"))
+  :no-require t)
 
 ;; (use-feature ansi-color
 ;;   :defer t
@@ -1668,6 +1649,7 @@ Info-mode:
 
 (use-package auto-yasnippet
   :straight t
+  :defer t
   :init
   (global-set-key (kbd "M-h") #'aya-create)
   (global-set-key (kbd "M-l") #'aya-expand))
@@ -1719,8 +1701,8 @@ Info-mode:
   :straight t
   :commands (edit-indirect-region))
 
-(yq/get-modules "scale-to-fit.el")
-(spacemacs/set-leader-keys "tT" #'scale-to-fit-toggle)
+;; (yq/get-modules "scale-to-fit.el")
+;; (spacemacs/set-leader-keys "tT" #'scale-to-fit-toggle)
 
 (defun +major-mode-map ()
   (interactive)

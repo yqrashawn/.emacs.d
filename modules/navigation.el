@@ -474,7 +474,6 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
        (save-buffers-kill-terminal 't))))
   :config
   (require 'dired-aux)
-  (require 'dired+)
   (add-to-list 'dired-compress-file-suffixes '("\\.zip\\'" ".zip" "unzip"))
   (add-hook 'dired-mode-hook #'hl-line-mode)
   (evil-define-key 'normal dired-mode-map (kbd ";") 'avy-goto-subword-1)
@@ -535,6 +534,8 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
     "ss" #'dired-sort-toggle-or-edit
     "sc" 'yq/delete-window
     "f" #'dired-narrow-fuzzy))
+
+
 (use-feature wdired
   :defer t
   :config
@@ -564,6 +565,8 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   :straight (:host github :repo "emacsmirror/dired-plus")
   :defer t
   :init
+  (with-eval-after-load 'dired
+    (require 'dired+))
   (setq diredp-hide-details-initially-flag nil)
   (evil-leader/set-key "fj" 'diredp-dired-recent-dirs)
   (evil-leader/set-key "fJ" 'diredp-dired-recent-dirs-other-window)
