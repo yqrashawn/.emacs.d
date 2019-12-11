@@ -1491,7 +1491,8 @@ Info-mode:
 (use-package async
   :straight t
   :init
-  (dired-async-mode 1)
+  ;; (autoload 'dired-async-mode "dired-async.el" nil t)
+  ;; (dired-async-mode 1)
   (async-bytecomp-package-mode 1))
 
 (use-package smtpmail-async

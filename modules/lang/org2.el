@@ -7,6 +7,7 @@
   (define-key global-map "\C-cc" 'org-capture)
 
   ;; custom variable
+  (setq org-image-actual-width nil)
   (setq org-startup-indented t)
   (setq org-insert-heading-respect-content t)
   (setq org-display-inline-images t)
