@@ -229,22 +229,9 @@ Available PROPS:
   (add-hook 'company-completion-finished-hook '+unbind-company-active-map-key)
   (add-hook 'company-completion-cancelled-hook '+unbind-company-active-map-key)
 
-  ;; https://github.com/TommyX12/company-tabnine/blob/master/README.md
-  ;; workaround for company-transformers
-  (setq company-tabnine--disable-next-transform nil)
-  (defun my-company--transform-candidates (func &rest args)
-    (if (not company-tabnine--disable-next-transform)
-        (apply func args)
-      (setq company-tabnine--disable-next-transform nil)
-      (car args)))
-  (defun my-company-tabnine (func &rest args)
-    (when (eq (car args) 'candidates)
-      (setq company-tabnine--disable-next-transform t))
-    (apply func args))
-
   :config
-  (advice-add #'company--transform-candidates :around #'my-company--transform-candidates)
-  (advice-add #'company-tabnine :around #'my-company-tabnine)
+  ;; Number the candidates (use M-1, M-2 etc to select completions).
+  (company-tng-configure-default)
   (setq company-active-map
         (let ((keymap (make-sparse-keymap)))
           (define-key keymap "\e\e\e" 'company-abort)
@@ -284,9 +271,7 @@ Available PROPS:
 
 (use-package company-flx
   :straight t
-  :commands (company-flx-mode)
-  :init
-  (add-hook 'emacs-lisp-mode-hook (lambda () (company-flx-mode))))
+  :hook ((clojure-mode emacs-lisp-mode) . company-flx-mode))
 
 (use-package company-tabnine
   :straight t
@@ -294,11 +279,8 @@ Available PROPS:
   :custom
   (company-tabnine-binaries-folder "~/.TabNine/binaries/")
   :init
-  ;; Number the candidates (use M-1, M-2 etc to select completions).
-
   ;; Use the tab-and-go frontend.
   ;; Allows TAB to select and complete at the same time.
-  (company-tng-configure-default)
   (setq company-tabnine-no-continue nil)
   (customize-set-variable 'company-backends '(company-tabnine
                                               company-capf
@@ -306,7 +288,22 @@ Available PROPS:
                                                company-keywords)
                                               company-files
                                               company-dabbrev))
+  ;; https://github.com/TommyX12/company-tabnine/blob/master/README.md
+  ;; workaround for company-transformers
+  (setq company-tabnine--disable-next-transform nil)
+  (defun my-company--transform-candidates (func &rest args)
+    (if (not company-tabnine--disable-next-transform)
+        (apply func args)
+      (setq company-tabnine--disable-next-transform nil)
+      (car args)))
+  (defun my-company-tabnine (func &rest args)
+    (when (eq (car args) 'candidates)
+      (setq company-tabnine--disable-next-transform t))
+    (apply func args))
+
   :config
+  (advice-add #'company--transform-candidates :around #'my-company--transform-candidates)
+  (advice-add #'company-tabnine :around #'my-company-tabnine)
   (defun yq-toggle-company-tabnine ()
     (interactive)
     (company-tabnine-restart-server)
@@ -325,8 +322,8 @@ Available PROPS:
 (use-package company-try-hard
   :straight t
   :after company
-  :init
-  (define-key evil-insert-state-map (kbd "C-;") 'company-try-hard))
+  :defer t
+  :bind ((:map evil-insert-state-map) ("C-;" . company-try-hard)))
 
 (use-package company-prescient
   :straight t
@@ -362,53 +359,16 @@ If the error list is visible, hide it.  Otherwise, show it."
 (use-package flycheck
   :straight t
   :defer t
-  :diminish flycheck-mode "ⓢ"
+  :diminish flycheck-mode
   :custom
   (flycheck-check-syntax-automatically '(save idle-buffer-switch mode-enabled))
   (flycheck-standard-error-navigation nil)
   (flycheck-global-modes '(js2-mode rjsx-mode typescript-mode web-mode css-mode scss-mode json-mode))
   :init
-  (yq/add-toggle syntax-checking
-    :mode flycheck-mode)
+  (yq/add-toggle syntax-checking :mode flycheck-mode)
   (spacemacs/set-leader-keys "ts" 'yq/toggle-syntax-checking)
   (setq flycheck-json-python-json-executable "/usr/local/bin/python3")
 
-  ;; Custom fringe indicator
-  (define-fringe-bitmap 'my-flycheck-fringe-indicator
-    (vector #b00000000
-            #b00000000
-            #b00000000
-            #b00000000
-            #b00000000
-            #b00000000
-            #b00000000
-            #b00011100
-            #b00111110
-            #b00111110
-            #b00111110
-            #b00011100
-            #b00000000
-            #b00000000
-            #b00000000
-            #b00000000
-            #b00000000))
-
-  (let ((bitmap 'my-flycheck-fringe-indicator))
-    (flycheck-define-error-level 'error
-      :severity 2
-      :overlay-category 'flycheck-error-overlay
-      :fringe-bitmap bitmap
-      :fringe-face 'flycheck-fringe-error)
-    (flycheck-define-error-level 'warning
-      :severity 1
-      :overlay-category 'flycheck-warning-overlay
-      :fringe-bitmap bitmap
-      :fringe-face 'flycheck-fringe-warning)
-    (flycheck-define-error-level 'info
-      :severity 0
-      :overlay-category 'flycheck-info-overlay
-      :fringe-bitmap bitmap
-      :fringe-face 'flycheck-fringe-info))
   (defun spacemacs/error-delegate ()
     "Decide which error API to delegate to.
 
@@ -436,9 +396,6 @@ is not visible. Otherwise delegates to regular Emacs next-error."
 
   (define-key evil-normal-state-map "]e" 'spacemacs/next-error)
   (define-key evil-normal-state-map "[e" 'spacemacs/previous-error)
-  (define-key flycheck-error-list-mode-map "j" 'next-line)
-  (define-key flycheck-error-list-mode-map "k" 'previous-line)
-  (define-key flycheck-error-list-mode-map "q" 'quit-window)
 
   (push '("^\\*Flycheck.+\\*$"
           :regexp t
@@ -461,9 +418,46 @@ is not visible. Otherwise delegates to regular Emacs next-error."
     "ep" 'spacemacs/previous-error)
   (global-flycheck-mode 1)
   :config
+  (define-key flycheck-error-list-mode-map "j" 'next-line)
+  (define-key flycheck-error-list-mode-map "k" 'previous-line)
+  (define-key flycheck-error-list-mode-map "q" 'quit-window)
+
+  ;; Custom fringe indicator
+  (define-fringe-bitmap 'my-flycheck-fringe-indicator
+    (vector #b00000000
+            #b00000000
+            #b00000000
+            #b00000000
+            #b00000000
+            #b00000000
+            #b00000000
+            #b00011100
+            #b00111110
+            #b00111110
+            #b00111110
+            #b00011100
+            #b00000000
+            #b00000000
+            #b00000000
+            #b00000000
+            #b00000000))
+  (let ((bitmap 'my-flycheck-fringe-indicator))
+    (flycheck-define-error-level 'error
+      :severity 2
+      :overlay-category 'flycheck-error-overlay
+      :fringe-bitmap bitmap
+      :fringe-face 'flycheck-fringe-error)
+    (flycheck-define-error-level 'warning
+      :severity 1
+      :overlay-category 'flycheck-warning-overlay
+      :fringe-bitmap bitmap
+      :fringe-face 'flycheck-fringe-warning)
+    (flycheck-define-error-level 'info
+      :severity 0
+      :overlay-category 'flycheck-info-overlay
+      :fringe-bitmap bitmap
+      :fringe-face 'flycheck-fringe-info))
   (setq flycheck-javascript-eslint-executable "eslint_d"))
-
-
 
 (use-package yasnippet
   :straight t
@@ -471,6 +465,10 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   :diminish yas-minor-mode
   :commands (yas-global-mode yas-minor-mode)
   :hook (after-init . yas-global-mode)
+  :custom
+  (yas-triggers-in-field t)
+  (yas-wrap-around-region t)
+  (yas-prompt-functions '(yas-completing-prompt))
   :init
   ;; https://github.com/joaotavora/yasnippet/issues/785
   (defvar smartparens-mode-original-value)
@@ -486,22 +484,13 @@ is not visible. Otherwise delegates to regular Emacs next-error."
     (when (boundp 'smartparens-mode-original-value)
       (setq smartparens-mode smartparens-mode-original-value)
       (makunbound 'smartparens-mode-original-value)))
-  (advice-add 'hippie-expand :after #'reenable-sp-hippie-advice
+  (advice-add 'hippie-expand :after 'reenable-sp-hippie-advice
               ;; Set negative depth to make sure we go after
               ;; `sp-auto-complete-advice'.
               '((depth . -100)))
 
-  ;; (add-hook 'prog-mode-hook 'yas-minor-mode)
-  (setq yas-triggers-in-field t
-        yas-wrap-around-region t)
-  (setq yas-prompt-functions '(yas-completing-prompt))
   (setq yas-minor-mode-map (make-sparse-keymap))
   (define-key yas-minor-mode-map (kbd "M-s-/") 'yas-next-field)
-  ;; (with-eval-after-load 'smartparens
-  ;;   (add-hook 'yas-before-expand-snippet-hook
-  ;;             #'spacemacs//smartparens-disable-before-expand-snippet)
-  ;;   (add-hook 'yas-after-exit-snippet-hook
-  ;;             #'spacemacs//smartparens-restore-after-exit-snippet))
   :config
   (defun +yas-expand-when-inserting-dot ()
     (interactive)
@@ -512,29 +501,28 @@ is not visible. Otherwise delegates to regular Emacs next-error."
             (insert ?.)
             (insert ?.)))
       (insert ?.)))
-
   (define-key evil-insert-state-map "." '+yas-expand-when-inserting-dot)
 
-  (setq yas-snippet-dirs '())
-  (setq yas--default-user-snippets-dir (concat user-home-directory ".emacs.d/snippets/"))
-  (push 'yas--default-user-snippets-dir yas-snippet-dirs)
   (push 'yas-hippie-try-expand hippie-expand-try-functions-list)
-  ;; (add-hook 'snippet-mode 'yq/toggle-aggressive-indent-off)
   (add-to-list 'warning-suppress-types '(yasnippet backquote-change))
   (yas-reload-all))
 
 (use-package yasnippet-snippets
-  :straight t)
+  :straight t
+  :defer t
+  :after (yasnippet))
 
 (use-package smartparens
   :straight t
   :diminish smartparens-mode
-  :config
-  (sp-pair "{" nil :post-handlers '(("||\n[i]" "RET")))
-  ;; (smartparens-global-strict-mode t)
+  :commands (sp-kill-sexp sp-copy-sexp)
+  :init
   (smartparens-global-mode t)
   (define-key yq-s-map "d" 'sp-kill-sexp)
   (define-key yq-s-map "," 'sp-copy-sexp)
+  :config
+  (sp-pair "{" nil :post-handlers '(("||\n[i]" "RET")))
+  ;; (smartparens-global-strict-mode t)
   (defun yq/setup-sp-keys-for-lispy-modes (map)
     (evil-define-key 'normal map
       ;; "H" #'sp-previous-sexp
@@ -542,37 +530,39 @@ is not visible. Otherwise delegates to regular Emacs next-error."
       "H" #'sp-backward-sexp
       "L" #'sp-forward-sexp
       "M" #'sp-mark-sexp))
-  (use-package smartparens-config))
+  (require 'smartparens-config))
 
-(use-package ediff
+(use-feature ediff
   :defer t
+  :custom
+  (ediff-window-setup-function 'ediff-setup-windows-plain)
+  ;; emacs is evil and decrees that vertical shall henceforth be horizontal
+  (ediff-split-window-function 'split-window-horizontally)
+  (ediff-merge-split-window-function 'split-window-horizontally)
   :init
-  ;; first we set some sane defaults
-  (setq-default
-   ediff-window-setup-function 'ediff-setup-windows-plain
-   ;; emacs is evil and decrees that vertical shall henceforth be horizontal
-   ediff-split-window-function 'split-window-horizontally
-   ediff-merge-split-window-function 'split-window-horizontally)
-  ;; (add-hook 'ediff-prepare-buffer-hook #'show-all)
   ;; restore window layout when done
   (add-hook 'ediff-quit-hook #'winner-undo))
 
 (use-package dumb-jump
   :straight t
+  :defer t
   :custom
   (dumb-jump-prefer-searcher 'rg)
   (dumb-jump-force-searcher 'rg)
   (dumb-jump-selector 'ivy)
-  :config
-  (add-to-list 'dumb-jump-project-denoters ".tabnine_root")
+  :bind
+  (:map evil-normal-state-map
+        ("gp" . #'dumb-jump-quick-look)
+        ("gl" . #'dumb-jump-go)
+        ("gL" . #'dumb-jump-go-other-window))
+  :init
   (spacemacs/set-leader-keys "jq" #'dumb-jump-quick-look)
-  (define-key evil-normal-state-map "gp" #'dumb-jump-quick-look)
-  (define-key evil-normal-state-map "gl" #'dumb-jump-go)
-  (define-key evil-normal-state-map "gL" #'dumb-jump-go-other-window)
   ;; Since it's dumb, we add it to the end of the default jump handlers. At
   ;; the time of writing it is the only default jump handler. (gtags remains
   ;; mode-local)
-  (add-to-list 'spacemacs-default-jump-handlers 'dumb-jump-go 'append))
+  (add-to-list 'spacemacs-default-jump-handlers 'dumb-jump-go 'append)
+  :config
+  (add-to-list 'dumb-jump-project-denoters ".tabnine_root"))
 
 (use-package eldoc
   :diminish eldoc-mode
@@ -606,15 +596,6 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   (add-to-list 'git-link-commit-remote-alist
                '("917\\.bimsop\\.com" git-link-commit-gogs)))
 
-;; shell and conf
-(add-to-list 'auto-mode-alist '("\\.[^b][^a][a-zA-Z]*rc$" . conf-mode))
-(add-to-list 'auto-mode-alist '("\\.aspell\\.en\\.pws\\'" . conf-mode))
-(add-to-list 'auto-mode-alist '("\\mimeapps\\.list$" . conf-mode))
-(add-to-list 'auto-mode-alist '("\\.editorconfig$" . conf-mode))
-(add-to-list 'auto-mode-alist '("\\.meta\\'" . conf-mode))
-(add-to-list 'auto-mode-alist '("\\.?muttrc\\'" . conf-mode))
-(add-to-list 'auto-mode-alist '("\\.mailcap\\'" . conf-mode))
-
 (define-key isearch-mode-map (kbd "C-o") 'isearch-occur)
 
 (use-package hl-todo
@@ -646,6 +627,7 @@ _j_  js2      _T_     text   _f_  fundamental
 
 (use-package ivy-xref
   :straight t
+  :defer t
   :init
   (setq xref-prompt-for-identifier '(not xref-find-definitions
                                          xref-find-definitions-other-window
@@ -674,8 +656,7 @@ _j_  js2      _T_     text   _f_  fundamental
      (rjsx-mode . switch-to-js)
      (typescript-mode . run-ts))
    rtog/fallback-repl-fun . projector-switch-to-or-create-project-shell)
-  :config
-  (repl-toggle-mode))
+  :hook ((ruby-mode enh-ruby-mode emacs-lisp-mode) . repl-toggle-mode))
 
 (use-package corral
   :straight t
@@ -701,6 +682,7 @@ _j_  js2      _T_     text   _f_  fundamental
 
 (use-package leetcode
   :straight (:host github :repo "kaiwk/leetcode.el")
+  :disabled
   :custom
   (leetcode-prefer-language "javascript")
   :commands (leetcode)
@@ -714,6 +696,7 @@ _j_  js2      _T_     text   _f_  fundamental
 
 (use-package dash-at-point
   :straight t
+  :defer t
   :bind
   (:map evil-normal-state-map
         ("sa" . dash-at-point))
@@ -723,6 +706,7 @@ _j_  js2      _T_     text   _f_  fundamental
 
 (use-package docker
   :straight t
+  :defer t
   :commands (docker)
   :config
   (evilified-state-evilify docker-container-mode docker-container-mode-map
@@ -757,12 +741,11 @@ _j_  js2      _T_     text   _f_  fundamental
 
 (use-package editorconfig
   :straight t
-  :init
-  (editorconfig-mode 1))
+  :hook (prog-mode . editorconfig-mode))
 
 (use-package imenu-list
   :straight t
-  :commands (imenu-list-smart-toggle)
+  :defer t
   :bind ((:map yq-s-map ("L" . imenu-list-smart-toggle))))
 
 (use-package copy-as-format
