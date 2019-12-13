@@ -243,6 +243,13 @@
   ;;     (read-string "Description: " desc)))
   ;; (setf org-make-link-description-function '+org-link-describe)
 
+  ;; (defun +my-bable-to-buffer ()
+  ;;   "A function to efficiently feed babel code block result to a separate buffer"
+  ;;   (interactive)
+  ;;   (org-open-at-point)
+  ;;   (org-babel-remove-result))
+  ;; (add-hook 'org-babel-after-execute-hook '+my-bable-to-buffer)
+
   ;; ob
   (setq org-babel-load-languages
         (append
@@ -253,7 +260,6 @@
            (restclient . t)
            (js . t))
          org-babel-load-languages)))
-
 
 ;; obs
 (use-feature ob
@@ -301,8 +307,6 @@
                            :jump-to-captured t)
   (spacemacs/set-leader-keys "2" 'org-starter-find-file-by-key))
 
-(evil-define-key 'normal org-mode-map "." #'+org-workflow-hydra/body)
-
 (with-eval-after-load 'org-capture
   (setq org-capture-templates '()))
 
@@ -334,7 +338,6 @@
 (use-package ox-hugo
   :straight t
   :defer t)
-
 
 ;; https://github.com/krisajenkins/ob-mongo/tree/371bf19c7c10eab2f86424f8db8ab685997eb5aa
 (use-package ob-mongo
@@ -372,3 +375,55 @@
   (evil-org-agenda-set-keys)
   (define-key evil-org-mode-map ">" 'evil-org->)
   (define-key evil-org-mode-map "<" 'evil-org-<))
+
+;; add :asc to wrap js block in async func
+(with-eval-after-load 'ob-js
+  ;; set NODE_PATH for ob-js
+  (let ((old-node-path (getenv "NODE_PATH")))
+    (setenv "NODE_PATH"
+            (if old-node-path
+                (concat "~/local/bin/node_modules" ":" old-node-path)
+              "~/local/bin/node_modules")))
+  (defun org-babel-execute:js (body params)
+    "Execute a block of Javascript code with org-babel.
+This function is called by `org-babel-execute-src-block'."
+    (let* ((org-babel-js-cmd (or (cdr (assq :cmd params)) org-babel-js-cmd))
+           (session (cdr (assq :session params)))
+           (result-type (cdr (assq :result-type params)))
+           (full-body (org-babel-expand-body:generic
+                       body params (org-babel-variable-assignments:js params)))
+           (full-body (if (seq-contains params '(:asc))
+                          (format "return (async function() {\n%s\n})()" full-body)
+                        full-body))
+           (result (cond
+                    ;; no session specified, external evaluation
+                    ((string= session "none")
+                     (let ((script-file (org-babel-temp-file "js-script-")))
+                       (with-temp-file script-file
+                         (insert
+                          ;; return the value or the output
+                          (if (string= result-type "value")
+                              (format org-babel-js-function-wrapper full-body)
+                            full-body)))
+                       (org-babel-eval
+                        (format "%s %s" org-babel-js-cmd
+                                (org-babel-process-file-name script-file)) "")))
+                    ;; Indium Node REPL.  Separate case because Indium
+                    ;; REPL is not inherited from Comint mode.
+                    ((string= session "*JS REPL*")
+                     (require 'indium-repl)
+                     (unless (get-buffer session)
+                       (indium-run-node org-babel-js-cmd))
+                     (indium-eval full-body))
+                    ;; session evaluation
+                    (t
+                     (let ((session (org-babel-prep-session:js
+                                     (cdr (assq :session params)) params)))
+                       (nth 1
+                            (org-babel-comint-with-output
+                                (session (format "%S" org-babel-js-eoe) t body)
+                              (dolist (code (list body (format "%S" org-babel-js-eoe)))
+                                (insert (org-babel-chomp code))
+                                (comint-send-input nil t)))))))))
+      (org-babel-result-cond (cdr (assq :result-params params))
+        result (org-babel-js-read result)))))

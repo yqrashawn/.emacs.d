@@ -158,7 +158,7 @@
                       ",gb" 'cider-pop-back
                       ",gc" 'cider-classpath
                       ",ge" 'cider-jump-to-compilation-error
-                      ",gn" 'cider-browse-ns
+                      ",gn" 'cider-find-ns
                       ",gN" 'cider-browse-ns-all
                       ",gr" 'cider-find-resource
                       ",gs" 'cider-browse-spec
@@ -166,6 +166,7 @@
 
                       ",'"  'cider-jack-in
                       ",\"" 'cider-jack-in-clojurescript
+                      ",ja"  'cider-jack-in-clj&cljs
                       ",sb" 'cider-load-buffer
                       ",sB" 'spacemacs/cider-send-buffer-in-repl-and-focus
                       ",sc" (if (eq map 'cider-repl-mode)

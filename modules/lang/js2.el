@@ -146,6 +146,7 @@
   (define-key js2-mode-map (kbd "C-c C-z") #'rtog/toggle-repl)
   (define-key js2-mode-map (kbd "C-c C-l") #'js-comint-clear)
   :config
+  (add-to-list 'js-comint-module-paths (expand-file-name "~/local/bin/node_modules"))
   (define-key js-comint-mode-map (kbd "C-c C-z") #'rtog/toggle-repl)
   (define-key js-comint-mode-map (kbd "C-c C-l") #'js-comint-clear)
   (defun inferior-js-mode-hook-setup ()
@@ -160,3 +161,8 @@
   :after (rjsx-mode)
   :hook (rjsx-mode . eslintd-fix-mode)
   :custom (eslintd-fix-executable "eslint_d"))
+
+(use-package indium
+  :straight t
+  :commands (indium-run-node)
+  :defer t)
