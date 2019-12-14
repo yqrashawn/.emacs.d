@@ -39,8 +39,6 @@
   ;; This regexp matches shebang expressions like `#!/usr/bin/env boot'
   (add-to-list 'magic-mode-alist '("#!.*boot\\s-*$" . clojure-mode))
   :config
-  (require 'clojure-snippets)
-  (require 'clojure-mode-extra-font-locking)
   (defun +setup-company-for-clojure ()
     (setq-local company-idle-delay 0.2)
     (setq-local evil-shift-width 1)
@@ -127,7 +125,6 @@
   (add-hook 'cider-repl-mode-hook #'cider-company-enable-fuzzy-completion)
   (add-hook 'cider-repl-mode-hook '+setup-company-for-clojure)
   :config
-  (require 'cider-eval-sexp-fu)
   (define-key cider-repl-mode-map (kbd "s-k") 'cider-quit)
   (dolist (map (list clojure-mode-map
                      clojurec-mode-map
@@ -347,11 +344,11 @@
 
 (use-package cider-eval-sexp-fu
   :straight t
-  :defer t)
+  :after cider)
 
 (use-package clojure-snippets
   :straight t
-  :defer t)
+  :after clojure-mode)
 
 (use-package flycheck-clojure
   :straight t
@@ -360,7 +357,7 @@
 
 (use-package clojure-mode-extra-font-locking
   :straight t
-  :defer t)
+  :after clojure-mode)
 
 ;; (use-package clojure-cheatsheet
 ;;   :straight t

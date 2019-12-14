@@ -44,19 +44,8 @@
 
 (use-package zenburn-theme
   :straight t
-  :defer t
   :init
-  (setq yq/dark-theme 'zenburn)
-  (defun +set-mic-paren-face ()
-    ;; mic-paren
-    (set-face-foreground 'paren-face-match nil)
-    (set-face-background 'paren-face-match "#506575")
-    (set-face-background 'paren-face-mismatch "#DC8CC3")
-    (set-face-background 'paren-face-no-match "#CC9393"))
-  (add-hook 'spacemacs-post-theme-change-hook
-            (lambda ()
-              (when (and (eq yq/current-theme 'zenburn) (facep 'paren-face-match))
-                (+set-mic-paren-face)))))
+  (setq yq/dark-theme 'zenburn))
 
 (use-package doom-themes
   :straight t
@@ -68,17 +57,7 @@
   :straight t
   :defer t
   :init
-  (setq yq/light-theme 'spacemacs-light)
-  (add-hook 'spacemacs-post-theme-change-hook
-            (lambda ()
-              (when (eq yq/current-theme 'spacemacs-light)
-                ;; mic-paren
-                (set-face-background 'paren-face-match "#dbd9d1")))))
-
-
-;; (load-theme 'yq-default-emacs-theme)
-;; (load-theme 'default-white)
-;; (load-theme 'zenburn)
+  (setq yq/light-theme 'spacemacs-light))
 
 (defvar spacemacs-evil-cursors '(("normal" "DarkGoldenrod2" box)
                                  ("insert" "chartreuse3" (bar . 4))
@@ -127,6 +106,20 @@ For evil states that also need an entry to `spacemacs-evil-cursors' use
 (defvar spacemacs-post-theme-change-hook nil
   "Hook run after theme has changed.")
 
+(defun +set-mic-paren-face ()
+  ;; mic-paren
+  (set-face-foreground 'paren-face-match nil)
+  (set-face-background 'paren-face-match "#506575")
+  (set-face-background 'paren-face-mismatch "#DC8CC3")
+  (set-face-background 'paren-face-no-match "#CC9393"))
+(add-hook 'spacemacs-post-theme-change-hook
+          (lambda ()
+            (cond
+             ((and (eq yq/current-theme 'zenburn) (facep 'paren-face-match))
+              (+set-mic-paren-face))
+             ((eq yq/current-theme yq/light-theme)
+              (set-face-background 'paren-face-match "#dbd9d1")))))
+
 (defadvice load-theme (after spacemacs/load-theme-adv activate)
   "Perform post load processing."
   (let ((theme (ad-get-arg 0)))
@@ -140,8 +133,8 @@ For evil states that also need an entry to `spacemacs-evil-cursors' use
   "Some processing that needs to be done when the current theme
 has been changed to THEME."
   (interactive)
-  (let ((yq/current-theme theme))
-    (run-hooks 'spacemacs-post-theme-change-hook)))
+  (setq yq/current-theme theme)
+  (run-hooks 'spacemacs-post-theme-change-hook))
 
 (cl-loop for (state color shape) in spacemacs-evil-cursors
          do (spacemacs/add-evil-cursor state color shape))
@@ -298,6 +291,7 @@ has been changed to THEME."
 ;; visual feedback for evil-ex command
 (use-package evil-traces
   :straight t
+  :disabled
   :after evil
   :config
   (evil-traces-use-diff-faces) ; if you want to use diff's faces

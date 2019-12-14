@@ -39,9 +39,12 @@
     (load-theme yq/light-theme 'no-confirm)))
 (spacemacs/set-leader-keys "tm" 'yq/toggle-theme)
 
-(cond ((file-exists-p "~/yq.machine.macbook") (yq/macbook))
-      ((file-exists-p "~/yq.machine.home-imac") (yq/home-imac))
-      (t (yq/imac)))
+;; (cond ((file-exists-p "~/yq.machine.macbook") (yq/macbook))
+;;       ((file-exists-p "~/yq.machine.home-imac") (yq/home-imac))
+;;       (t (yq/imac)))
+
+(load-theme yq/dark-theme)
+(spacemacs/set-default-font (yq/font 15))
 
 (provide 'auto-detect-which-machine)
 ;;; auto-detect-which-machine.el ends here

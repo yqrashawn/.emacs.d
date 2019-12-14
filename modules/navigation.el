@@ -63,8 +63,10 @@
   ;; (global-set-key (kbd "C-x C-8 e" ) 'ivy-end-of-buffer)
   ;; (global-set-key (kbd "C-x C-8 u" ) 'ivy-scroll-down-command)
   ;; (global-set-key (kbd "C-x C-8 d" ) 'ivy-scroll-up-command)
+  (ivy-mode 1)
   :config
-  (ivy-set-actions 'counsel-recentf spacemacs--ivy-file-actions)
+  (with-eval-after-load 'counsel
+    (ivy-set-actions 'counsel-recentf spacemacs--ivy-file-actions))
   ;; docs: https://oremacs.com/swiper/#completion-styles
   (setq ivy-re-builders-alist
         '((magit-status . ivy--regex-fuzzy)
@@ -101,7 +103,6 @@
           (spacemacs/search-auto . spacemacs/ivy--regex-plus)
           (t . ivy--regex-plus)))
 
-  (ivy-mode 1)
   (defun yq/ivy-evil-registers ()
     "Show evil registers"
     (interactive)
@@ -114,7 +115,6 @@
                                                           (replace-regexp-in-string "\n" "^J" val))
                                                      ""))))
                 :action #'yq/ivy-insert-evil-register)))
-
   (defun yq/ivy-insert-evil-register (candidate)
     (insert (replace-regexp-in-string "\\^J" "\n"
                                       (substring-no-properties candidate 4))))
