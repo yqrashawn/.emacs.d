@@ -290,7 +290,7 @@ that directory."
                    (buffer-substring-no-properties
                     (region-beginning) (region-end))
                  (thing-at-point 'symbol t))))
-    (counsel-git-grep nil input)))
+    (counsel-git-grep input)))
 
 (defun spacemacs/counsel-search-docs ()
   "Search spacemacs docs using `spacemacs/counsel-search'"
@@ -298,11 +298,12 @@ that directory."
   (spacemacs/counsel-search dotspacemacs-search-tools
                             nil spacemacs-docs-directory))
 
-(defun spacemacs//counsel-occur ()
+(defun spacemacs//counsel-occur (&optional candidates)
   "Generate a custom occur buffer for `counsel-git-grep'."
   (ivy-occur-grep-mode)
   (setq default-directory (ivy-state-directory ivy-last))
-  (let ((cands ivy--old-cands))
+  (let ((cands (or candidates ivy--old-cands))
+        (inhibit-read-only t))
     ;; Need precise number of header lines for `wgrep' to work.
     (insert (format "-*- mode:grep; default-directory: %S -*-\n\n\n"
                     default-directory))
@@ -310,7 +311,7 @@ that directory."
     (ivy--occur-insert-lines
      (mapcar
       (lambda (cand) (concat "./" cand))
-      ivy--old-cands))))
+      cands))))
 
 (defun spacemacs/counsel-up-directory-no-error ()
   "`counsel-up-directory' ignoring errors."
