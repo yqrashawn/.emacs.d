@@ -29,6 +29,13 @@
                                        ("~/workspace/OFFICE/" . 1)))
   (setq magit-blame-echo-style 'margin)
   (setq magit-diff-refine-hunk 'all)
+  (define-key yq-s-map "u" #'magit-dispatch-popup)
+  (spacemacs/set-leader-keys "g" nil)
+  (spacemacs/set-leader-keys "gl" #'magit-dispatch-popup)
+  (spacemacs/set-leader-keys "gc" #'magit-checkout)
+  (spacemacs/set-leader-keys "gf" #'magit-file-dispatch)
+  (spacemacs/set-leader-keys "gg" #'magit-list-repositories)
+  (spacemacs/set-leader-keys "gs" #'magit-status)
   :config
   (magit-wip-mode 1)
   (magit-auto-revert-mode 1)
@@ -70,11 +77,7 @@
   (add-hook 'magit-mode-hook 'turn-off-evil-snipe-mode)
   (add-hook 'git-rebase-mode-hook 'turn-off-evil-snipe-mode)
   (add-hook 'magit-mode-hook 'turn-off-evil-snipe-override-mode)
-  (add-hook 'git-rebase-mode-hook 'turn-off-evil-snipe-override-mode)
-  (spacemacs/set-leader-keys "g" nil)
-  (spacemacs/set-leader-keys "gf" 'magit-file-dispatch)
-  (spacemacs/set-leader-keys "gg" 'magit-list-repositories)
-  (spacemacs/set-leader-keys "gs" 'magit-status))
+  (add-hook 'git-rebase-mode-hook 'turn-off-evil-snipe-override-mode))
 
 (use-package evil-magit :straight t :after magit)
 

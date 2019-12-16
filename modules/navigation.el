@@ -520,19 +520,7 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
         (kill-buffer orig))))
   (evil-define-key 'normal dired-mode-map
     "l" 'dired-find-file
-    "s" 'nil
-    "sk" 'yq/bury-this-buffer
-    "sM" #'counsel-fzf
-    "sm" #'counsel-git
-    ;; "sm" #'projectile-find-file-dwim
-    "sj" #'counsel-recentf
-    "sJ" #'projectile-recentf
-    "sB" #'projectile-switch-to-buffer
-    "sb" #'ivy-switch-buffer
-    (kbd "s SPC") 'counsel-M-x
-    "sf" #'counsel-rg
-    "ss" #'dired-sort-toggle-or-edit
-    "sc" 'yq/delete-window
+    "s" yq-s-map
     "f" #'dired-narrow-fuzzy))
 
 
