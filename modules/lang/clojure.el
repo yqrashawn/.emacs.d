@@ -160,6 +160,10 @@
                       ",gr" 'cider-find-resource
                       ",gs" 'cider-browse-spec
                       ",gS" 'cider-browse-spec-all
+                      ;; find deps function of current function
+                      ",gd" 'cider-xref-fn-deps-select
+                      ;; find current function usage
+                      ",gu" 'cider-xref-fn-refs-select
 
                       ",'"  'cider-jack-in
                       ",\"" 'cider-jack-in-clojurescript
