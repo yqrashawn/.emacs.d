@@ -1828,3 +1828,8 @@ Info-mode:
     (with-temp-file old
       (insert (current-kill 1 t)))
     (diff old new "-u" t)))
+
+(use-feature googlese-search
+  :load-path "modules"
+  :init
+  (spacemacs/set-leader-keys "so" #'googlese-search))
