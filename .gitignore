@@ -23,3 +23,6 @@ eshell
 /transient
 /.extension
 .DS_Store
+/.pullover
+/.lsp-session-v1
+/.vscode

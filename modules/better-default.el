@@ -1833,3 +1833,11 @@ Info-mode:
   :load-path "modules"
   :init
   (spacemacs/set-leader-keys "so" #'googlese-search))
+
+(use-feature pullover
+  :load-path "~/Dropbox/sync/pullover"
+  :defer t
+  :custom (pullover-major-mode #'gfm-mode)
+  :config
+  (define-key pullover-mode-map (kbd "C-c <C-return>") #'pullover-finish)
+  (define-key pullover-mode-map (kbd "C-c C-k") #'pullover-cancel))

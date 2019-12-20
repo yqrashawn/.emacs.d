@@ -614,7 +614,8 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   (defhydra hydra-change-mode (:hint nil :color pink)
     "
 _e_  elisp    _c_  clojure   _t_  typescript
-_j_  js2      _T_     text   _f_  fundamental
+_j_  js2      _T_  text      _f_  fundamental
+_g_  gfm      _m_ markdown
 "
     ("e" emacs-lisp-mode :exit t)
     ("j" js2-mode :exit t)
@@ -622,6 +623,8 @@ _j_  js2      _T_     text   _f_  fundamental
     ("T" text-mode :exit t)
     ("t" typescript-mode :exit t)
     ("f" fundamental-mode :exit t)
+    ("m" markdown-mode :exit t)
+    ("g" gfm-mode :exit t)
     ("q" hydra-keyboard-quit :exit t))
   (define-key yq-s-map (kbd "<RET>") 'hydra-change-mode/body))
 
