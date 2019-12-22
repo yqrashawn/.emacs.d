@@ -337,6 +337,7 @@
 ;; ox
 (use-package ox-hugo
   :straight t
+  :after org
   :defer t)
 
 ;; https://github.com/krisajenkins/ob-mongo/tree/371bf19c7c10eab2f86424f8db8ab685997eb5aa

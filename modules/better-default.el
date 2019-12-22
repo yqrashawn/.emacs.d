@@ -1839,5 +1839,5 @@ Info-mode:
   :defer t
   :custom (pullover-major-mode #'gfm-mode)
   :config
-  (define-key pullover-mode-map (kbd "C-c <C-return>") #'pullover-finish)
+  (define-key pullover-mode-map (kbd "C-c <C-return>") #'pullover-start-or-finish)
   (define-key pullover-mode-map (kbd "C-c C-k") #'pullover-cancel))
