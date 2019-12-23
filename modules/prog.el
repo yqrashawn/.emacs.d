@@ -456,8 +456,8 @@ is not visible. Otherwise delegates to regular Emacs next-error."
       :severity 0
       :overlay-category 'flycheck-info-overlay
       :fringe-bitmap bitmap
-      :fringe-face 'flycheck-fringe-info))
-  (setq flycheck-javascript-eslint-executable "eslint_d"))
+      :fringe-face 'flycheck-fringe-info)))
+  ;; (setq flycheck-javascript-eslint-executable "eslint_d"))
 
 (use-package yasnippet
   :straight t
