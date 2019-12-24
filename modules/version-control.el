@@ -77,7 +77,9 @@
   (add-hook 'magit-mode-hook 'turn-off-evil-snipe-mode)
   (add-hook 'git-rebase-mode-hook 'turn-off-evil-snipe-mode)
   (add-hook 'magit-mode-hook 'turn-off-evil-snipe-override-mode)
-  (add-hook 'git-rebase-mode-hook 'turn-off-evil-snipe-override-mode))
+  (add-hook 'git-rebase-mode-hook 'turn-off-evil-snipe-override-mode)
+  (advice-add 'magit-process-filter :after #'+color-buffer))
+
 
 (use-package evil-magit :straight t :after magit)
 

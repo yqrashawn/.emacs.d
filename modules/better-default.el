@@ -1841,3 +1841,10 @@ Info-mode:
   :config
   (define-key pullover-mode-map (kbd "C-c <C-return>") #'pullover-start-or-finish)
   (define-key pullover-mode-map (kbd "C-c C-k") #'pullover-cancel))
+
+(defun +color-buffer (proc &rest args)
+  (interactive)
+  (with-current-buffer (process-buffer proc)
+    (read-only-mode -1)
+    (ansi-color-apply-on-region (point-min) (point-max))
+    (read-only-mode 1)))
