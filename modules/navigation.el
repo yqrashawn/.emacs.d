@@ -601,7 +601,6 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   (counsel-fzf "" "~/workspace/"))
 
 (spacemacs/set-leader-keys "f1" 'yq/dropbox)
-(spacemacs/set-leader-keys "fw" 'yq/workspace)
 
 (defun yq/open-with-call-alfred-osascript (file)
   (shell-command (concat "osascript -e '" (format "-- Search for the file

@@ -138,7 +138,7 @@
   :defer t)
 (use-package sqlformat
   :straight t
-  :hook (sql-mode . sqlformat-on-save-mode)
+  :defer t
   :custom
   (sqlformat-command 'pgformatter))
 

@@ -492,7 +492,7 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   (setq yas-minor-mode-map (make-sparse-keymap))
   (define-key yas-minor-mode-map (kbd "M-s-/") 'yas-next-field)
   :config
-  (defun +yas-expand-when-inserting-dot ()
+  (defun +yas-expand-when-inserting-dot (&optional args)
     (interactive)
     (if (eq (preceding-char) ?.)
         (if (and (not (delete-char -1 nil)) (yas-expand))
