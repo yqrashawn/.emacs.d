@@ -132,6 +132,8 @@
                      cider-repl-mode-map))
 
     (evil-define-key* 'normal map
+                      ",qr" 'sesman-restart
+                      ",qq" 'sesman-quit
                       ",ha" 'cider-apropos
                       ",hc" 'clojure-cheatsheet
                       ",hg" 'cider-grimoire
