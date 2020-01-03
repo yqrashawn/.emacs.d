@@ -740,7 +740,7 @@ _g_  gfm      _m_ markdown
 ;;             (rjsx-mode "`\\n\\|`[^;]\\|(\\|{\\|\\[" "`;\\|)\\|}\\|\\]" "/[*/]" nil))))
 
 ;; TODO
-(add-to-list 'hs-special-modes-alist '(rjsx-mode "`\\n\\|`[^;]\\|(\\|{\\|\\[" "`;\\|)\\|}\\|\\]" "/[*/]" nil))
+;; (add-to-list 'hs-special-modes-alist '(rjsx-mode "`\\n\\|`[^;]\\|(\\|{\\|\\[" "`;\\|)\\|}\\|\\]" "/[*/]" nil))
 
 (use-package editorconfig
   :straight t
