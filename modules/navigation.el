@@ -151,7 +151,37 @@
   (define-key ivy-minibuffer-map (kbd "C-x C-6 7") (lambda () (interactive) (+ivy-select-index ?j)))
   (define-key ivy-minibuffer-map (kbd "C-x C-6 8") (lambda () (interactive) (+ivy-select-index ?k)))
   (define-key ivy-minibuffer-map (kbd "C-x C-6 9") (lambda () (interactive) (+ivy-select-index ?l)))
-  (define-key ivy-minibuffer-map (kbd "C-x C-6 0") (lambda () (interactive) (+ivy-select-index 59))))
+  (define-key ivy-minibuffer-map (kbd "C-x C-6 0") (lambda () (interactive) (+ivy-select-index 59)))
+
+  (defun prot/counsel-fzf-dir (arg)
+    "Specify root directory for `counsel-fzf'."
+    (+counsel-fzf-rg-files ivy-text
+                               (read-directory-name
+                                (concat (car (split-string counsel-fzf-cmd))
+                                        " in directory: "))))
+
+  (defun prot/counsel-rg-dir (arg)
+    "Specify root directory for `counsel-rg'."
+    (let ((current-prefix-arg '(4)))
+      (counsel-rg ivy-text nil "")))
+
+  ;; Pass functions as appropriate Ivy actions (accessed via M-o)
+  (ivy-add-actions
+   'counsel-fzf
+   '(("r" prot/counsel-fzf-dir "change root directory")
+     ("g" prot/counsel-rg-dir "use ripgrep in root directory")))
+
+  (ivy-add-actions
+   'counsel-rg
+   '(("r" prot/counsel-rg-dir "change root directory")
+     ("z" prot/counsel-fzf-dir "find file with fzf in root directory")))
+
+  (ivy-add-actions
+   'counsel-find-file
+   '(("g" prot/counsel-rg-dir "use ripgrep in root directory")
+     ("z" prot/counsel-fzf-dir "find file with fzf in root directory"))))
+
+
 
 (use-package ivy-hydra
   :straight t
@@ -288,7 +318,25 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   (define-key yq-s-map "l" 'spacemacs/counsel-jump-in-buffer)
   (define-key yq-s-map "j" #'counsel-buffer-or-recentf)
   (global-set-key (kbd "C-x C-r") #'counsel-recentf)
-  (define-key yq-s-map "m" #'counsel-fzf)
+
+  (defun +counsel-fzf-rg-files (&optional input dir)
+    "Run `fzf' in tandem with `ripgrep' to find files in the
+present directory.  If invoked from inside a version-controlled
+repository, then the corresponding root is used instead."
+    (interactive)
+    (let* ((vc (vc-root-dir))
+           (process-environment
+            (if (eq (expand-file-name vc) (expand-file-name "~/"))
+                (cons (concat "FZF_DEFAULT_COMMAND=rg -Sn --color never --files --no-follow --hidden -uu") process-environment)
+              (cons (concat "FZF_DEFAULT_COMMAND=rg -Sn --color never --files --no-follow --hidden")
+                    process-environment))))
+      (if dir
+          (counsel-fzf input dir)
+        (if (eq vc nil)
+            (counsel-fzf input default-directory)
+          (counsel-fzf input vc)))))
+
+  (define-key yq-s-map "m" #'+counsel-fzf-rg-files)
   (spacemacs/set-leader-keys "sm" (lambda () (interactive) (let ((current-prefix-arg '(1))) (call-interactively 'counsel-fzf))))
   (define-key yq-s-map (kbd "SPC") 'counsel-M-x)
   (define-key evil-normal-state-map (kbd "M-y" ) 'counsel-yank-pop)
