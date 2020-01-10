@@ -1,6 +1,7 @@
 ;;; elisp.el --- configs about elisp -*- lexical-binding: t; -*-
 
 (yq/add-toggle parinfer :mode parinfer-mode)
+
 (defun yq/lispy-file-p ()
   (memq
    major-mode
@@ -146,6 +147,9 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
 (use-package lispy
   :straight t
   :diminish lispy " ʪ"
+  :hook ((clojure-mode . lispy-mode)
+         (emacs-lisp-mode . lispy-mode)
+         (lisp-mode . lispy-mode))
   :custom
   (lispy-eval-display-style 'overlay)
   (lispy-visit-method 'projectile)
@@ -157,6 +161,18 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
   :init
   (yq/add-toggle lispy :mode lispy-mode)
   :config
+  (use-package ccc ; for cursor style
+   :straight t
+   :init
+   (defun +lispy-update-cursor-style ()
+     (when (and lispy-mode (evil-insert-state-p))
+       (if (or (lispy-right-p) (lispy-left-p) (region-active-p))
+           (progn (setq-local cursor-type '(bar . 6))
+                  (ccc-set-buffer-local-cursor-color "plum1"))
+         (progn (setq-local cursor-type '(bar . 6))
+                (ccc-set-buffer-local-cursor-color "green")))))
+   :config
+   (add-hook 'post-command-hook '+lispy-update-cursor-style))
   (defun conditionally-enable-lispy ()
     (when (eq this-command 'eval-expression)
       (lispy-mode 1)))
@@ -193,101 +209,109 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
   (define-key evil-normal-state-map (kbd "C-a") 'mwim-beginning-of-code-or-line))
 
 (use-package parinfer
-  :straight (:host github :repo "yqrashawn/parinfer-mode")
-  :after lispy
-  :diminish parinfer-mode
-  :hook ((clojure-mode .  parinfer-mode)
-         (emacs-lisp-mode . parinfer-mode)
-         (lisp-mode . parinfer-mode))
-  :commands (parinfer-mode parinfer-mode-enable parinfer-toggle-mode)
-  :init
-  (defun +parinfer-hs-toggle-folding ()
-    (interactive)
-    (if company-my-keymap
-        (company-select-previous)
-      (if (region-active-p)
-          (lispy-kill)
-        (progn
-          (hs-toggle-hiding)
-          (backward-char)))))
-  (setq parinfer-lighters '(" Par:I" . " Par:P"))
-  (setq parinfer-display-error t)
-  (setq parinfer-indent-mode-confirm nil)
-  (setq parinfer-extensions
-        '(defaults       ; should be included.
-           pretty-parens  ; different paren styles for different modes.
-           evil           ; If you use Evil.
-           lispy          ; If you use Lispy. With this extension, you should install Lispy and do not enable lispy-mode directly.
-           ;; lispyville
-           smart-tab      ; C-b & C-f jump positions and smart shift with tab & S-tab.
-           smart-yank))
-  :config
-  ;; fix conflicts between evil-iedit and parinfer-mode lispy bindings
-  (add-hook
-   'evil-iedit-insert-state-entry-hook
-   (lambda () (when parinfer-mode
-                (parinfer-mode -1))))
-  (add-hook
-   'evil-iedit-insert-state-exit-hook
-   (lambda () (when (and (not parinfer-mode) (yq/lispy-file-p))
-                (parinfer-mode 1))))
-  (add-hook
-   'evil-multiedit-insert-state-entry-hook
-   (lambda () (when parinfer-mode
-                (parinfer-mode -1))))
-  (add-hook
-   'evil-multiedit-insert-state-exit-hook
-   (lambda () (when (and (not parinfer-mode) (yq/lispy-file-p))
-                (parinfer-mode 1))))
+ :straight (:host github :repo "yqrashawn/parinfer-mode")
+ :after lispy
+ :disabled
+ :diminish parinfer-mode
+ :hook ((clojure-mode .  parinfer-mode)
+        (emacs-lisp-mode . parinfer-mode)
+        (lisp-mode . parinfer-mode))
+ :commands (parinfer-mode parinfer-mode-enable parinfer-toggle-mode)
+ :init
+ (defun +parinfer-hs-toggle-folding ()
+   (interactive)
+   (if company-my-keymap
+       (company-select-previous)
+     (if (region-active-p)
+         (lispy-kill)
+       (progn
+         (hs-toggle-hiding)
+         (backward-char)))))
+ (setq parinfer-lighters '(" Par:I" . " Par:P"))
+ (setq parinfer-display-error t)
+ (setq parinfer-indent-mode-confirm nil)
+ (setq parinfer-extensions
+       '(defaults       ; should be included.
+          pretty-parens  ; different paren styles for different modes.
+          evil           ; If you use Evil.
+          lispy          ; If you use Lispy. With this extension, you should install Lispy and do not enable lispy-mode directly.
+          ;; lispyville
+          smart-tab      ; C-b & C-f jump positions and smart shift with tab & S-tab.
+          smart-yank))
+ :config
+ ;; fix conflicts between evil-iedit and parinfer-mode lispy bindings
+ (add-hook
+  'evil-iedit-insert-state-entry-hook
+  (lambda () (when parinfer-mode
+               (parinfer-mode -1))))
+ (add-hook
+  'evil-iedit-insert-state-exit-hook
+  (lambda () (when (and (not parinfer-mode) (yq/lispy-file-p))
+               (parinfer-mode 1))))
+ (add-hook
+  'evil-multiedit-insert-state-entry-hook
+  (lambda () (when parinfer-mode
+               (parinfer-mode -1))))
+ (add-hook
+  'evil-multiedit-insert-state-exit-hook
+  (lambda () (when (and (not parinfer-mode) (yq/lispy-file-p))
+               (parinfer-mode 1))))
 
-  ;; lispy special mode cursor
-  (use-package ccc ; for cursor style
-    :straight t
-    :after (parinfer)
-    :init
-    (defun +lispy-update-cursor-style ()
-      (when (and parinfer-mode (evil-insert-state-p))
-        (if (or (lispy-right-p) (lispy-left-p) (region-active-p))
-            (progn (setq-local cursor-type '(bar . 6))
-                   (ccc-set-buffer-local-cursor-color "plum1"))
-          (progn (setq-local cursor-type '(bar . 6))
-                 (ccc-set-buffer-local-cursor-color "green")))))
-    :config
-    (add-hook 'post-command-hook '+lispy-update-cursor-style))
+ ;; lispy special mode cursor
+ (use-package ccc ; for cursor style
+   :straight t
+   :after (parinfer)
+   :init
+   (defun +lispy-update-cursor-style ()
+     (when (and parinfer-mode (evil-insert-state-p))
+       (if (or (lispy-right-p) (lispy-left-p) (region-active-p))
+           (progn (setq-local cursor-type '(bar . 6))
+                  (ccc-set-buffer-local-cursor-color "plum1"))
+         (progn (setq-local cursor-type '(bar . 6))
+                (ccc-set-buffer-local-cursor-color "green")))))
+   :config
+   (add-hook 'post-command-hook '+lispy-update-cursor-style))
 
-  (define-key parinfer-mode-map (kbd "C-.") #'parinfer-toggle-mode)
-  (evil-define-key 'insert parinfer-mode-map (kbd "C-k") '+parinfer-hs-toggle-folding)
-  (define-key parinfer-mode-map (kbd "C-k") '+parinfer-hs-toggle-folding)
-  (define-key parinfer-mode-map (kbd "C-x C-6 q") #'lispy-describe-inline)
-  (define-key parinfer-mode-map (kbd "C-x C-6 w") #'lispy-arglist-inline)
-  (define-key parinfer-mode-map (kbd "C-x C-6 z") #'lispy-left)
-  (define-key parinfer-mode-map (kbd "C-x C-6 x") #'lispy-right)
-  (define-key parinfer-mode-map (kbd "C-x C-6 c") #'lispy-mark-symbol)
-  (define-key parinfer-mode-map (kbd "y")
-    (lambda (beg end &optional region)
-      (interactive (list
-                    (mark)
-                    (point)
-                    (prefix-numeric-value
-                     current-prefix-arg)))
-      (if (region-active-p)
-          (progn
-            (kill-ring-save beg end region)
-            (lispy-left 1)
-            (keyboard-quit))
-        (self-insert-command 1))))
-  ;; (define-key parinfer-mode-map (kbd "C-k") #'lispy-kill)
-  (define-key parinfer-mode-map (kbd "C-d") #'lispy-delete)
-  (evil-define-key 'insert parinfer-mode-map (kbd "C-d") #'lispy-delete)
-  ;; (evil-define-key 'insert parinfer-mode-map (kbd "C-a") #'lispy-move-beginning-of-line)
-  (evil-define-key 'insert parinfer-mode-map (kbd "C-e") #'lispy-move-end-of-line)
-  ;; (define-key parinfer-mode-map (kbd "C-a") #'lispy-move-beginning-of-line)
-  (define-key parinfer-mode-map (kbd "C-e") #'lispy-move-end-of-line)
-  ;; (evil-define-key 'normal parinfer-mode-map (kbd "C-a") #'lispy-move-beginning-of-line)
-  (evil-define-key 'normal parinfer-mode-map (kbd "C-e") #'lispy-move-end-of-line)
-  ;; (evil-define-key 'insert parinfer-mode-map (kbd "C-a") #'lispy-move-beginning-of-line)
-  (evil-define-key 'insert parinfer-mode-map (kbd "C-e") #'lispy-move-end-of-line)
-  (evil-define-key 'normal parinfer-mode-map "si" #'lispy-mark-symbol))
+ (define-key parinfer-mode-map (kbd "C-.") #'parinfer-toggle-mode)
+ (evil-define-key 'insert parinfer-mode-map (kbd "C-k") '+parinfer-hs-toggle-folding)
+ (define-key parinfer-mode-map (kbd "C-k") '+parinfer-hs-toggle-folding)
+ (define-key parinfer-mode-map (kbd "C-x C-6 q") #'lispy-describe-inline)
+ (define-key parinfer-mode-map (kbd "C-x C-6 w") #'lispy-arglist-inline)
+ (define-key parinfer-mode-map (kbd "C-x C-6 z") #'lispy-left)
+ (define-key parinfer-mode-map (kbd "C-x C-6 x") #'lispy-right)
+ (define-key parinfer-mode-map (kbd "C-x C-6 c") #'lispy-mark-symbol)
+ (define-key parinfer-mode-map (kbd "y")
+   (lambda (beg end &optional region)
+     (interactive (list
+                   (mark)
+                   (point)
+                   (prefix-numeric-value
+                    current-prefix-arg)))
+     (if (region-active-p)
+         (progn
+           (kill-ring-save beg end region)
+           (lispy-left 1)
+           (keyboard-quit))
+       (self-insert-command 1))))
+ ;; (define-key parinfer-mode-map (kbd "C-k") #'lispy-kill)
+ (define-key parinfer-mode-map (kbd "C-d") #'lispy-delete)
+ (evil-define-key 'insert parinfer-mode-map (kbd "C-d") #'lispy-delete)
+ ;; (evil-define-key 'insert parinfer-mode-map (kbd "C-a") #'lispy-move-beginning-of-line)
+ (evil-define-key 'insert parinfer-mode-map (kbd "C-e") #'lispy-move-end-of-line)
+ ;; (define-key parinfer-mode-map (kbd "C-a") #'lispy-move-beginning-of-line)
+ (define-key parinfer-mode-map (kbd "C-e") #'lispy-move-end-of-line)
+ ;; (evil-define-key 'normal parinfer-mode-map (kbd "C-a") #'lispy-move-beginning-of-line)
+ (evil-define-key 'normal parinfer-mode-map (kbd "C-e") #'lispy-move-end-of-line)
+ ;; (evil-define-key 'insert parinfer-mode-map (kbd "C-a") #'lispy-move-beginning-of-line)
+ (evil-define-key 'insert parinfer-mode-map (kbd "C-e") #'lispy-move-end-of-line)
+ (evil-define-key 'normal parinfer-mode-map "si" #'lispy-mark-symbol))
+
+(use-package parinfer-rust-mode
+  :straight (:host github :repo "justinbarclay/parinfer-rust-mode")
+  :hook ((clojure-mode .  parinfer-rust-mode)
+         (emacs-lisp-mode . parinfer-rust-mode)
+         (lisp-mode . parinfer-rust-mode)))
+
 
 (use-package eval-sexp-fu
   :straight t
@@ -506,6 +530,7 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
 (use-package symex
   :straight t
   :after company
+  :disabled
   :bind ("s-'" . symex-mode-interface)
   :config
   (dolist (mode-name symex-lisp-modes)

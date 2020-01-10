@@ -113,21 +113,21 @@
   (lsp-ui-doc-enable nil)
   (lsp-ui-doc-delay 0.5)
   ;; header is useless
-  (lsp-ui-doc-header nil)
+  (lsp-ui-doc-header t)
   ;; same as eldoc
-  (lsp-ui-doc-include-signature nil)
+  (lsp-ui-doc-include-signature t)
   (lsp-ui-flycheck-enable nil)
 
   ;; sideline
-  (lsp-ui-sideline-enable nil)
+  (lsp-ui-sideline-enable t)
   (lsp-ui-sideline-delay 0.5)
   ;; idicating which symbol cursor is on
   (lsp-ui-sideline-show-symbol t)
   ;; wether show hoverd line js info (type info?)
-  (lsp-ui-sideline-show-hover t)
+  (lsp-ui-sideline-show-hover nil)
   ;; the up text show what the codes doing
-  (lsp-ui-sideline-show-code-actions nil)
-  (lsp-ui-sideline-show-diagnostics nil)
+  (lsp-ui-sideline-show-code-actions t)
+  (lsp-ui-sideline-show-diagnostics t)
   (lsp-ui-sideline-ignore-duplicate t)
   (lsp-ui-peek-always-show nil)
   :init
