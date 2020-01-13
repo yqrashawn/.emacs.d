@@ -782,3 +782,11 @@ _g_  gfm      _m_ markdown
 ;;      global-semantic-mru-bookmark-mode
 ;;      global-semantic-idle-local-symbol-highlight-mode))
 ;;   :hook ((emacs-lisp-mode js2-mode rjsx-mode js-mode python-mode java-mode c-mode) . semantic-mode))
+
+(use-package direnv
+  :straight t
+  :hook (after-init . direnv-mode)
+  :custom
+  (direnv-always-show-summary t)
+  (direnv-show-paths-in-summary t)
+  (direnv-use-faces-in-summary t))
