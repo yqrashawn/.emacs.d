@@ -239,6 +239,7 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
           smart-tab      ; C-b & C-f jump positions and smart shift with tab & S-tab.
           smart-yank))
  :config
+
  ;; fix conflicts between evil-iedit and parinfer-mode lispy bindings
  (add-hook
   'evil-iedit-insert-state-entry-hook
@@ -312,59 +313,69 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
          (emacs-lisp-mode . parinfer-rust-mode)
          (lisp-mode . parinfer-rust-mode)))
 
+(use-package lispyville
+ :straight (:host github :repo "noctuid/lispyville")
+ :after (parinfer-rust-mode lispy)
+ :diminish lispyville-mode
+ :commands (lispyville-mode)
+ :hook (lispy-mode . lispyville-mode)
+ :custom
+ (lispyville-motions-put-into-special t)
+ (lispyville-key-theme
+  '(c-w
+    operators
+    prettify
+    text-objects
+    (atom-movement t) ;; bind to WORD
+    additional-movement
+    commentary
+    slurp/barf-lispy
+    wrap                               ;; M-( M-{ M-[
+    (additional-wrap normal visual insert)
+    (additional normal visual insert)  ;; M-j M-k M-J M-k M-s M-S M-r M-t M-v
+    additional-insert
+    escape
+    mark-special
+    mark-toggle))
+ :config
+ ;; (lispyville-set-key-theme)
+ (lispy-define-key lispy-mode-map "v" #'lispyville-toggle-mark-type)
+ (lispy-define-key lispy-mode-map "m" #'lispy-view)
+ (lispyville--define-key 'normal
+  "tR" #'lispyville-raise-list
+  "tr" #'lispy-raise-sexp
+  "tt" #'transpose-sexps
+  "tJ" #'lispy-join
+  "J" #'lispyville-join
+  "t/" #'lispy-splice
+  "ts" #'lispy-split
+  "tC" #'lispy-convolute
+  "txb" (lambda ()
+          (interactive)
+          (if (and (fboundp 'cljr-introduce-let)
+                   (memq major-mode lispy-clojure-modes))
+              (cljr-introduce-let)
+            (lispy-bind-variable)))
+  (kbd "M-RET") #'lispyville-wrap-round
+  (kbd "M-]") #'lispyville-wrap-braces
+  (kbd "M-[") #'lispyville-wrap-brackets
+  "{" #'lispyville-insert-at-beginning-of-list
+  "}" #'lispyville-insert-at-end-of-list
+  "[" #'lispyville-previous-closing
+  "]" #'lispyville-next-opening)
+ (lispyville--define-key 'insert
+   (kbd "M-RET") #'lispyville-wrap-round
+   (kbd "M-]") #'lispyville-wrap-braces
+   (kbd "M-[") #'lispyville-wrap-brackets)
+ (lispyville--define-key 'visual
+   (kbd "(") #'lispyville-wrap-round
+   (kbd "{") #'lispyville-wrap-braces
+   (kbd "[") #'lispyville-wrap-brackets))
 
 (use-package eval-sexp-fu
   :straight t
   :commands (eval-sexp-fu-flash-mode)
   :hook (emacs-lisp-mode . eval-sexp-fu-flash-mode))
-
-(use-package lispyville
-  :straight (:host github :repo "noctuid/lispyville")
-  :disabled
-  :after (parinfer lispy)
-  :diminish lispyville-mode
-  :commands (lispyville-mode)
-  :hook (parinfer-mode . lispyville-mode)
-  :custom
-  (lispyville-key-theme
-   '(c-w
-     (atom-movement t)
-     (additional-movement normal motion)
-     slurp/barf-lispy
-     additional
-     additional-insert
-     (additional-wrap normal visual insert)))
-  :config
-  (lispyville--define-key 'normal
-    "tR" #'lispyville-raise-list
-    "tr" #'lispy-raise-sexp
-    "tt" #'transpose-sexps
-    "tJ" #'lispy-join
-    "J" #'lispyville-join
-    "t/" #'lispy-splice
-    "ts" #'lispy-split
-    "tC" #'lispy-convolute
-    "txb" (lambda ()
-            (interactive)
-            (if (and (fboundp 'cljr-introduce-let)
-                     (memq major-mode lispy-clojure-modes))
-                (cljr-introduce-let)
-              (lispy-bind-variable)))
-    (kbd "M-RET") #'lispyville-wrap-round
-    (kbd "M-]") #'lispyville-wrap-braces
-    (kbd "M-[") #'lispyville-wrap-brackets
-    "{" #'lispyville-insert-at-beginning-of-list
-    "}" #'lispyville-insert-at-end-of-list
-    "[" #'lispyville-previous-closing
-    "]" #'lispyville-next-opening)
-  (lispyville--define-key 'insert
-    (kbd "M-RET") #'lispyville-wrap-round
-    (kbd "M-]") #'lispyville-wrap-braces
-    (kbd "M-[") #'lispyville-wrap-brackets)
-  (lispyville--define-key 'visual
-    (kbd "(") #'lispyville-wrap-round
-    (kbd "{") #'lispyville-wrap-braces
-    (kbd "[") #'lispyville-wrap-brackets))
 
 (use-package highlight-defined
   :straight t
