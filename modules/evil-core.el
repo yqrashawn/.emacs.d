@@ -5,21 +5,21 @@
 (global-set-key (kbd "C-x 1") 'spacemacs/toggle-maximize-buffer)
 
 (use-package undo-tree
-  :straight t
+  ;; :straight t
+  :straight (:host github :repo "emacsorphanage/undo-tree")
   :diminish undo-tree-mode
-  :defer t
+  :diminish global-undo-tree-mode
+  :bind ("s-y" . undo-tree-redo)
+  :hook (after-init . global-undo-tree-mode-hook)
   :custom
   (undo-tree-enable-undo-in-region nil)
   (undo-tree-history-directory-alist '(("." . "~/emacs.d/.cache/undo")))
   (undo-tree-auto-save-history t)
-  :bind ("s-y" . undo-tree-redo)
   :config
   (setq undo-limit 78643200)
   (setq undo-outer-limit 104857600)
-  (setq undo-strong-limit 157286400)
-  ;; (setq undo-tree-history-directory-alist
-  ;;       `((".*" . ,temporary-file-directory)))
-  (global-undo-tree-mode))
+  (setq undo-strong-limit 157286400))
+
 
 (use-package goto-chg
   :straight (:host github :repo "emacs-evil/goto-chg")
