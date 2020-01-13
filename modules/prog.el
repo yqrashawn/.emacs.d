@@ -794,31 +794,54 @@ _g_  gfm      _m_ markdown
   (direnv-use-faces-in-summary t))
 
 (use-package vterm
- :straight t
- :commands (vterm)
- :config
- (setq vterm-keymp-exceptions nil)
+  :straight t
+  :commands (vterm)
+  :init
+  (add-to-list 'evil-insert-state-modes #'vterm-mode)
+  :config
+  (setq vterm-keymp-exceptions nil)
 
- (define-key vterm-mode-map [return] #'vterm-send-return)
- (evil-define-key 'insert vterm-mode-map (kbd "C-e") #'vterm--self-insert)
- (evil-define-key 'insert vterm-mode-map (kbd "C-f") #'vterm--self-insert)
- (evil-define-key 'insert vterm-mode-map (kbd "C-a") #'vterm--self-insert)
- (evil-define-key 'insert vterm-mode-map (kbd "C-v") #'vterm--self-insert)
- (evil-define-key 'insert vterm-mode-map (kbd "C-b") #'vterm--self-insert)
- (evil-define-key 'insert vterm-mode-map (kbd "C-w") #'vterm--self-insert)
- (evil-define-key 'insert vterm-mode-map (kbd "C-u") #'vterm--self-insert)
- (evil-define-key 'insert vterm-mode-map (kbd "C-d") #'vterm--self-insert)
- (evil-define-key 'insert vterm-mode-map (kbd "C-n") #'vterm--self-insert)
- (evil-define-key 'insert vterm-mode-map (kbd "C-m") #'vterm--self-insert)
- (evil-define-key 'insert vterm-mode-map (kbd "C-p") #'vterm--self-insert)
- (evil-define-key 'insert vterm-mode-map (kbd "C-j") #'vterm--self-insert)
- (evil-define-key 'insert vterm-mode-map (kbd "C-k") #'vterm--self-insert)
- (evil-define-key 'insert vterm-mode-map (kbd "C-r") #'vterm--self-insert)
- (evil-define-key 'insert vterm-mode-map (kbd "C-t") #'vterm--self-insert)
- (evil-define-key 'insert vterm-mode-map (kbd "C-g") #'vterm--self-insert)
- (evil-define-key 'insert vterm-mode-map (kbd "C-c") #'vterm--self-insert)
- (evil-define-key 'insert vterm-mode-map (kbd "C-SPC") #'vterm--self-insert)
- (evil-define-key 'normal vterm-mode-map (kbd "C-d") #'vterm--self-insert)
- (evil-define-key 'normal vterm-mode-map (kbd "i") #'evil-insert-resume)
- (evil-define-key 'normal vterm-mode-map (kbd "o") #'evil-insert-resume)
- (evil-define-key 'normal vterm-mode-map (kbd "<return>") #'evil-insert-resume))
+  (defun tonic/maybe-kill-vterm (&rest n)
+    (kill-buffer-and-window))
+
+  (add-hook 'vterm-exit-functions #'tonic/maybe-kill-vterm)
+  (define-key vterm-mode-map [return] #'vterm-send-return)
+  (evil-define-key 'insert vterm-mode-map (kbd "C-e") #'vterm--self-insert)
+  (evil-define-key 'insert vterm-mode-map (kbd "C-f") #'vterm--self-insert)
+  (evil-define-key 'insert vterm-mode-map (kbd "C-a") #'vterm--self-insert)
+  (evil-define-key 'insert vterm-mode-map (kbd "C-v") #'vterm--self-insert)
+  (evil-define-key 'insert vterm-mode-map (kbd "C-b") #'vterm--self-insert)
+  (evil-define-key 'insert vterm-mode-map (kbd "C-w") #'vterm--self-insert)
+  (evil-define-key 'insert vterm-mode-map (kbd "C-u") #'vterm--self-insert)
+  (evil-define-key 'insert vterm-mode-map (kbd "C-d") #'vterm--self-insert)
+  (evil-define-key 'insert vterm-mode-map (kbd "C-n") #'vterm--self-insert)
+  (evil-define-key 'insert vterm-mode-map (kbd "C-m") #'vterm--self-insert)
+  (evil-define-key 'insert vterm-mode-map (kbd "C-p") #'vterm--self-insert)
+  (evil-define-key 'insert vterm-mode-map (kbd "C-j") #'vterm--self-insert)
+  (evil-define-key 'insert vterm-mode-map (kbd "C-k") #'vterm--self-insert)
+  (evil-define-key 'insert vterm-mode-map (kbd "C-r") #'vterm--self-insert)
+  (evil-define-key 'insert vterm-mode-map (kbd "C-t") #'vterm--self-insert)
+  (evil-define-key 'insert vterm-mode-map (kbd "C-g") #'vterm--self-insert)
+  (evil-define-key 'insert vterm-mode-map (kbd "C-c") #'vterm--self-insert)
+  (evil-define-key 'insert vterm-mode-map (kbd "C-SPC") #'vterm--self-insert)
+  (evil-define-key 'normal vterm-mode-map (kbd "C-d") #'vterm--self-insert)
+  (evil-define-key 'normal vterm-mode-map (kbd "i") #'evil-insert-resume)
+  (evil-define-key 'normal vterm-mode-map (kbd "o") #'evil-insert-resume)
+  (evil-define-key 'normal vterm-mode-map (kbd "<return>") #'evil-insert-resume))
+
+(use-package vterm-toggle
+  :straight t
+  :commands (vterm-toggle)
+  :custom
+  (vterm-toggle-fullscreen-p nil)
+  :init
+  (global-set-key (kbd "C-'") #'vterm-toggle)
+  (add-to-list 'display-buffer-alist
+             '("^v?term.*"
+                (display-buffer-reuse-window display-buffer-at-bottom)
+                ;;(display-buffer-reuse-window display-buffer-in-direction)
+                ;;display-buffer-in-direction/direction/dedicated is added in emacs27
+                ;;(direction . bottom)
+                ;;(dedicated . t) ;dedicated is supported in emacs27
+                (reusable-frames . visible)
+                (window-height . 0.3))))

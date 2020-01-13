@@ -211,7 +211,7 @@ SHELL is the SHELL function to use (i.e. when FUNC represents a terminal)."
   (add-hook 'eshell-mode-hook 'spacemacs/init-eshell-xterm-color))
 
 (evil-set-initial-state 'term-mode 'emacs)
-(global-set-key (kbd "C-'") 'spacemacs/default-pop-shell)
+;; (global-set-key (kbd "C-'") 'spacemacs/default-pop-shell)
 
 (use-package better-shell
   :straight t
