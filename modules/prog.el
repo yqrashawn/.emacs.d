@@ -513,24 +513,25 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   :after (yasnippet))
 
 (use-package smartparens
-  :straight t
-  :diminish smartparens-mode
-  :commands (sp-kill-sexp sp-copy-sexp)
-  :init
-  (smartparens-global-mode t)
-  (define-key yq-s-map "d" 'sp-kill-sexp)
-  (define-key yq-s-map "," 'sp-copy-sexp)
-  :config
-  (sp-pair "{" nil :post-handlers '(("||\n[i]" "RET")))
-  ;; (smartparens-global-strict-mode t)
-  (defun yq/setup-sp-keys-for-lispy-modes (map)
-    (evil-define-key 'normal map
-      ;; "H" #'sp-previous-sexp
-      ;; "L" #'sp-next-sexp
-      "H" #'sp-backward-sexp
-      "L" #'sp-forward-sexp
-      "M" #'sp-mark-sexp))
-  (require 'smartparens-config))
+ :straight t
+ :diminish smartparens-mode
+ :commands (sp-kill-sexp sp-copy-sexp)
+ :hook ((js2-mode rjsx-mode typescript-mode) . smartparens-strict-mode)
+ :init
+ (smartparens-global-mode t)
+ (define-key yq-s-map "d" 'sp-kill-sexp)
+ (define-key yq-s-map "," 'sp-copy-sexp)
+ :config
+ (sp-pair "{" nil :post-handlers '(("||\n[i]" "RET")))
+ ;; (smartparens-global-strict-mode t)
+ (defun yq/setup-sp-keys-for-lispy-modes (map)
+   (evil-define-key 'normal map
+    ;; "H" #'sp-previous-sexp
+    ;; "L" #'sp-next-sexp
+    "H" #'sp-backward-sexp
+    "L" #'sp-forward-sexp
+    "M" #'sp-mark-sexp))
+ (require 'smartparens-config))
 
 (use-feature ediff
   :defer t

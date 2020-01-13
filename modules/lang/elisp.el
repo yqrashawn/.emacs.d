@@ -323,7 +323,7 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
  (lispyville-motions-put-into-special t)
  (lispyville-key-theme
   '(c-w
-    operators
+    ;; operators
     prettify
     text-objects
     (atom-movement t) ;; bind to WORD
