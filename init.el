@@ -13,9 +13,6 @@
 (setq debug-on-error t)
 (setq debug-on-quit t)
 
-(setq gc-cons-threshold 134217728)
-(setq gc-cons-percentage 0.6)
-
 (add-to-list 'load-path "~/org-mode/lisp")
 (add-to-list 'load-path "~/org-mode/contrib/lisp")
 

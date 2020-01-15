@@ -1,3 +1,5 @@
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
+(setq gc-cons-threshold 134217728)
+(setq gc-cons-percentage 0.6)
