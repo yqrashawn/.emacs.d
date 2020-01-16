@@ -115,6 +115,7 @@
   (define-key evil-visual-state-map "J" (concat ":m '>+1" (kbd "RET") "gv=gv"))
   (define-key evil-visual-state-map "K" (concat ":m '<-2" (kbd "RET") "gv=gv"))
   (define-key evil-insert-state-map (kbd "C-r") 'evil-shift-left-line)
+  (define-key evil-insert-state-map (kbd "C-t") 'evil-shift-right-line)
   (spacemacs|define-text-object "$" "dollar" "$" "$")
   (spacemacs|define-text-object "*" "star" "*" "*")
   (spacemacs|define-text-object "8" "block-star" "/*" "*/")

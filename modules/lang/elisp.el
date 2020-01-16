@@ -366,11 +366,20 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
  (lispyville--define-key 'insert
    (kbd "M-RET") #'lispyville-wrap-round
    (kbd "M-]") #'lispyville-wrap-braces
-   (kbd "M-[") #'lispyville-wrap-brackets)
+   (kbd "M-[") #'lispyville-wrap-brackets
+   (kbd "C-r") #'evil-shift-left-line)
  (lispyville--define-key 'visual
    (kbd "(") #'lispyville-wrap-round
    (kbd "{") #'lispyville-wrap-braces
-   (kbd "[") #'lispyville-wrap-brackets))
+   (kbd "[") #'lispyville-wrap-brackets)
+
+ (define-key evil-inner-text-objects-map "a" 'evil-inner-arg)
+ (define-key evil-outer-text-objects-map "a" 'evil-outer-arg)
+ (define-key evil-inner-text-objects-map "g" 'evil-inner-buffer)
+ (define-key evil-inner-text-objects-map "P" 'evil-pasted)
+ (define-key evil-inner-text-objects-map "f" 'evil-textobj-anyblock-inner-block)
+ (define-key evil-outer-text-objects-map "f" 'evil-textobj-anyblock-a-block))
+
 
 (use-package eval-sexp-fu
   :straight t
