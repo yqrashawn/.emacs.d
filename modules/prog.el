@@ -845,3 +845,10 @@ _g_  gfm      _m_ markdown
                 ;;(dedicated . t) ;dedicated is supported in emacs27
                 (reusable-frames . visible)
                 (window-height . 0.3))))
+
+
+;; TODO: explore verb
+(use-package verb
+  :straight t
+  :disabled
+  :mode ("\\.verb\\'" . verb-mode))
