@@ -10,6 +10,12 @@
 (use-package magit-popup
   :straight t)
 
+;; (use-package transient
+;;   :straight t
+;;   :defer t
+;;   :custom
+;;   (transient-default-level 1))
+
 (use-package magit
   :straight t
   :custom

@@ -751,8 +751,8 @@ When ARG is non-nil search in junk files."
   :straight t
   :commands (ace-link)
   :init
-  (define-key evil-normal-state-map "go" #'ace-link)
-  (evil-define-key 'normal helpful-mode-map "o" #'ace-link-help)
+  ;; (define-key evil-normal-state-map "go" #'ace-link)
+  ;; (evil-define-key 'normal helpful-mode-map "o" #'ace-link-help)
   (ace-link-setup-default))
 
 (use-package tabbar
