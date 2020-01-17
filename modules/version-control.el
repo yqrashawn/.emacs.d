@@ -24,6 +24,7 @@
                                             (untracked . show)
                                             (staged . show)))
   :init
+  (setq magit-status-margin '(t "%Y-%m-%d %H:%M " magit- log-margin-width t 18))
   ;; (setq magit-bury-buffer-function (lambda (&optional kill-buffer) (magit-restore-window-configuration t)))
   (setq magit-bury-buffer-function #'magit-mode-quit-window)
   ;; (setq magit-display-buffer-function #'magit-display-buffer-fullframe-status-v1)
