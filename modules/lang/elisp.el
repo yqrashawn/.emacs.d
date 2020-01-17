@@ -309,13 +309,14 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
 
 (use-package parinfer-rust-mode
   :straight (:host github :repo "justinbarclay/parinfer-rust-mode")
+  :disabled
   :hook ((clojure-mode .  parinfer-rust-mode)
          (emacs-lisp-mode . parinfer-rust-mode)
          (lisp-mode . parinfer-rust-mode)))
 
 (use-package lispyville
  :straight (:host github :repo "noctuid/lispyville")
- :after (parinfer-rust-mode lispy)
+ :after (lispy)
  :diminish lispyville-mode
  :commands (lispyville-mode)
  :hook (lispy-mode . lispyville-mode)

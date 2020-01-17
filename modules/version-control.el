@@ -89,11 +89,11 @@
   (add-hook 'git-rebase-mode-hook 'turn-off-evil-snipe-override-mode)
   (advice-add 'magit-process-filter :after #'+color-buffer)
 
-  (with-eval-after-load 'ivy
-   (setf (alist-get 'my-magit-command ivy-re-builders-alist) #'ivy--regex-fuzzy))
   (defun my-magit-command (&rest _)
     (interactive)
     (setq this-command #'my-magit-command))
+  (with-eval-after-load 'ivy
+    (setf (alist-get 'my-magit-command ivy-re-builders-alist) #'ivy--regex-fuzzy))
   (add-function :before magit-completing-read-function #'my-magit-command))
 
 

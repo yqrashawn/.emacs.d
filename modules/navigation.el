@@ -68,39 +68,12 @@
   (with-eval-after-load 'counsel
     (ivy-set-actions 'counsel-recentf spacemacs--ivy-file-actions))
   ;; docs: https://oremacs.com/swiper/#completion-styles
-  (setq ivy-re-builders-alist
-      '((magit-status . ivy--regex-fuzzy)
-        (magit-log-read-revs . ivy--regex-fuzzy)
-        (magit-log-other . ivy--regex-fuzzy)
-        (magit-log-current . ivy--regex-fuzzy)
-        (magit-rebase-branch . ivy--regex-fuzzy)
-        (magit-file-checkout . ivy--regex-fuzzy)
-        (magit-checkout . ivy--regex-fuzzy)
-        (forge-create-pullreq . ivy--regex-fuzzy)
-        (magit-reset-index . ivy--regex-fuzzy)
-        (magit-reset-soft . ivy--regex-fuzzy)
-        (magit-reset-hard . ivy--regex-fuzzy)
-        (magit-branch-reset . ivy--regex-fuzzy)
-        (magit-completing-read . ivy--regex-fuzzy)
-        (magit-branch-create . ivy--regex-fuzzy)
-        (magit-branch-checkout . ivy--regex-fuzzy)
-        (magit-branch-or-checkout . ivy--regex-fuzzy)
-        (magit-branch-and-checkout . ivy--regex-fuzzy)
-        (magit-branch-spinoff . ivy--regex-fuzzy)
-        (magit-branch-spinout . ivy--regex-fuzzy)
-        (magit-push-other . ivy--regex-fuzzy)
-        (magit-push-current . ivy--regex-fuzzy)
-        (magit-branch-maybe-adjust-upstream . ivy--regex-fuzzy)
-        (magit-branch-rename . ivy--regex-fuzzy)
-        (magit-branch-shelve . ivy--regex-fuzzy)
-        (magit-branch-unshelve . ivy--regex-fuzzy)
-        (magit-branch-orphan . ivy--regex-fuzzy)
-        (magit-branch-delete . ivy--regex-fuzzy)
-        (counsel-git . ivy--regex-fuzzy)
-        (projector-run-command-buffer-prompt . ivy--regex-fuzzy)
-        (spacemacs/counsel-search . spacemacs/ivy--regex-plus)
-        (spacemacs/search-auto . spacemacs/ivy--regex-plus)
-        (t . ivy--regex-plus)))
+
+  (add-to-list 'ivy-re-builders-alist '(forge-create-pullreq . ivy--regex-fuzzy))
+  (add-to-list 'ivy-re-builders-alist '(counsel-git . ivy--regex-fuzzy))
+  (add-to-list 'ivy-re-builders-alist '(projector-run-command-buffer-prompt . ivy--regex-fuzzy))
+  (add-to-list 'ivy-re-builders-alist '(spacemacs/counsel-search . spacemacs/ivy--regex-plus))
+  (add-to-list 'ivy-re-builders-alist '(spacemacs/search-auto . spacemacs/ivy--regex-plus))
 
   (defun yq/ivy-evil-registers ()
     "Show evil registers"
@@ -155,9 +128,9 @@
   (defun prot/counsel-fzf-dir (arg)
     "Specify root directory for `counsel-fzf'."
     (+counsel-fzf-rg-files ivy-text
-                               (read-directory-name
-                                (concat (car (split-string counsel-fzf-cmd))
-                                        " in directory: "))))
+                           (read-directory-name
+                            (concat (car (split-string counsel-fzf-cmd))
+                                    " in directory: "))))
 
   (defun prot/counsel-rg-dir (arg)
     "Specify root directory for `counsel-rg'."
@@ -178,95 +151,95 @@
   (ivy-add-actions
    'counsel-find-file
    '(("g" prot/counsel-rg-dir "use ripgrep in root directory")
-     ("z" prot/counsel-fzf-dir "find file with fzf in root directory"))))
+     ("z" prot/counsel-fzf-dir "find file with fzf in root directory")))
 
 
 
-(use-package ivy-hydra
-  :straight t
-  :after ivy
-  :defer t
-  :config
-  (defun yq/ivy-call-kill-buffer-action ()
-    "Call the current action without exiting completion."
-    (interactive)
-    (let ((action 'ivy--kill-buffer-action))
-      (when action
-        (let* ((collection (ivy-state-collection ivy-last))
-               (x (cond
-                   ;; Alist type.
-                   ((and (consp collection)
-                         (consp (car collection))
-                         ;; Previously, the cdr of the selected
-                         ;; candidate would be returned.  Now, the
-                         ;; whole candidate is returned.
-                         (let (idx)
-                           (if (setq idx (get-text-property
-                                          0 'idx (ivy-state-current ivy-last)))
-                               (nth idx collection)
-                             (assoc (ivy-state-current ivy-last)
-                                    collection)))))
-                   (ivy--directory
-                    (expand-file-name
-                     (ivy-state-current ivy-last)
-                     ivy--directory))
-                   ((equal (ivy-state-current ivy-last) "")
-                    ivy-text)
-                   (t
-                    (ivy-state-current ivy-last)))))
-          (if (eq action 'identity)
-              (funcall action x)
-            (select-window (ivy--get-window ivy-last))
-            (set-buffer (ivy-state-buffer ivy-last))
-            (prog1 (with-current-buffer (ivy-state-buffer ivy-last)
-                     (unwind-protect (funcall action x)
-                       (ivy-recursive-restore)))
-              (unless (or (eq ivy-exit 'done)
-                          (equal (selected-window)
-                                 (active-minibuffer-window))
-                          (null (active-minibuffer-window)))
-                (select-window (active-minibuffer-window)))))))))
+  (use-package ivy-hydra
+    :straight t
+    :after ivy
+    :defer t
+    :config
+    (defun yq/ivy-call-kill-buffer-action ()
+      "Call the current action without exiting completion."
+      (interactive)
+      (let ((action 'ivy--kill-buffer-action))
+        (when action
+          (let* ((collection (ivy-state-collection ivy-last))
+                 (x (cond
+                     ;; Alist type.
+                     ((and (consp collection)
+                           (consp (car collection))
+                           ;; Previously, the cdr of the selected
+                           ;; candidate would be returned.  Now, the
+                           ;; whole candidate is returned.
+                           (let (idx)
+                             (if (setq idx (get-text-property
+                                            0 'idx (ivy-state-current ivy-last)))
+                                 (nth idx collection)
+                               (assoc (ivy-state-current ivy-last)
+                                      collection)))))
+                     (ivy--directory
+                      (expand-file-name
+                       (ivy-state-current ivy-last)
+                       ivy--directory))
+                     ((equal (ivy-state-current ivy-last) "")
+                      ivy-text)
+                     (t
+                      (ivy-state-current ivy-last)))))
+            (if (eq action 'identity)
+                (funcall action x)
+              (select-window (ivy--get-window ivy-last))
+              (set-buffer (ivy-state-buffer ivy-last))
+              (prog1 (with-current-buffer (ivy-state-buffer ivy-last)
+                       (unwind-protect (funcall action x)
+                         (ivy-recursive-restore)))
+                (unless (or (eq ivy-exit 'done)
+                            (equal (selected-window)
+                                   (active-minibuffer-window))
+                            (null (active-minibuffer-window)))
+                  (select-window (active-minibuffer-window)))))))))
 
-  (defhydra hydra-ivy (:hint nil
-                             :color pink)
-    "
+    (defhydra hydra-ivy (:hint nil
+                               :color pink)
+      "
 ^ ^ ^ ^ ^ ^ | ^Call^      ^ ^  | ^Cancel^ | ^Options^ | Action _w_/_s_/_a_: %-14s(ivy-action-name)
 ^-^-^-^-^-^-+-^-^---------^-^--+-^-^------+-^-^-------+-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^---------------------------
 ^ ^ _k_ ^ ^ | _f_ollow _o_ccur | _i_nsert | _c_: calling %-5s(if ivy-calling \"on\" \"off\") _C_ase-fold: %-10`ivy-case-fold-search
 _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)^^^^^^^^^^^^ _t_runcate: %-11`truncate-lines
 ^ ^ _j_ ^ ^ | _u_p _d_own      |          | _<_/_>_: shrink/grow _q_uit _x_ kill buffer^^ _D_efinition of this menu
 "
-    ;; arrows
-    ("h" spacemacs/counsel-up-directory-no-error)
-    ("j" ivy-next-line)
-    ("k" ivy-previous-line)
-    ("l" ivy-end-of-buffer)
-    ("u" ivy-scroll-down-command)
-    ("d" ivy-scroll-up-command)
-    ;; actions
-    ("C-g" keyboard-escape-quit :exit t)
-    ("i" nil)
-    ("C-o" nil)
-    ("f" ivy-alt-done :exit nil)
-    ("C-j" ivy-alt-done :exit nil)
-    ("g" ivy-beginning-of-buffer)
-    ("G" ivy-end-of-buffer)
-    ("C-m" ivy-done :exit t)
-    ("c" ivy-toggle-calling)
-    ("m" ivy-rotate-preferred-builders)
-    (">" ivy-minibuffer-grow)
-    ("<" ivy-minibuffer-shrink)
-    ("w" ivy-prev-action)
-    ("s" ivy-next-action)
-    ("a" ivy-read-action)
-    ("x" yq/ivy-call-kill-buffer-action)
-    ("t" (setq truncate-lines (not truncate-lines)))
-    ("C" ivy-toggle-case-fold)
-    ("o" ivy-occur :exit t)
-    ("q" (ivy-exit-with-action (lambda (_))) :exit t)
-    ("D" (ivy-exit-with-action
-          (lambda (_) (find-function 'hydra-ivy/body)))
-     :exit t)))
+      ;; arrows
+      ("h" spacemacs/counsel-up-directory-no-error)
+      ("j" ivy-next-line)
+      ("k" ivy-previous-line)
+      ("l" ivy-end-of-buffer)
+      ("u" ivy-scroll-down-command)
+      ("d" ivy-scroll-up-command)
+      ;; actions
+      ("C-g" keyboard-escape-quit :exit t)
+      ("i" nil)
+      ("C-o" nil)
+      ("f" ivy-alt-done :exit nil)
+      ("C-j" ivy-alt-done :exit nil)
+      ("g" ivy-beginning-of-buffer)
+      ("G" ivy-end-of-buffer)
+      ("C-m" ivy-done :exit t)
+      ("c" ivy-toggle-calling)
+      ("m" ivy-rotate-preferred-builders)
+      (">" ivy-minibuffer-grow)
+      ("<" ivy-minibuffer-shrink)
+      ("w" ivy-prev-action)
+      ("s" ivy-next-action)
+      ("a" ivy-read-action)
+      ("x" yq/ivy-call-kill-buffer-action)
+      ("t" (setq truncate-lines (not truncate-lines)))
+      ("C" ivy-toggle-case-fold)
+      ("o" ivy-occur :exit t)
+      ("q" (ivy-exit-with-action (lambda (_))) :exit t)
+      ("D" (ivy-exit-with-action
+            (lambda (_) (find-function 'hydra-ivy/body)))
+       :exit t))))
 
 (use-package swiper
   :straight (:host github :repo "abo-abo/swiper" :branch "master"
