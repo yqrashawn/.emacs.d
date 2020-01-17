@@ -20,6 +20,9 @@
   :straight t
   :custom
   (magit-diff-refine-hunk t)
+  (magit-section-initial-visibility-alist '((stashes . hide)
+                                            (untracked . show)
+                                            (staged . show)))
   :init
   ;; (setq magit-bury-buffer-function (lambda (&optional kill-buffer) (magit-restore-window-configuration t)))
   (setq magit-bury-buffer-function #'magit-mode-quit-window)
@@ -84,7 +87,14 @@
   (add-hook 'git-rebase-mode-hook 'turn-off-evil-snipe-mode)
   (add-hook 'magit-mode-hook 'turn-off-evil-snipe-override-mode)
   (add-hook 'git-rebase-mode-hook 'turn-off-evil-snipe-override-mode)
-  (advice-add 'magit-process-filter :after #'+color-buffer))
+  (advice-add 'magit-process-filter :after #'+color-buffer)
+
+  (with-eval-after-load 'ivy
+   (setf (alist-get 'my-magit-command ivy-re-builders-alist) #'ivy--regex-fuzzy))
+  (defun my-magit-command (&rest _)
+    (interactive)
+    (setq this-command #'my-magit-command))
+  (add-function :before magit-completing-read-function #'my-magit-command))
 
 
 (use-package evil-magit :straight t :after magit)
