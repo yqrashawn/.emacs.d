@@ -165,9 +165,9 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
    (defun +lispy-update-cursor-style ()
      (when (and lispy-mode (evil-insert-state-p))
        (if (or (lispy-right-p) (lispy-left-p) (region-active-p))
-           (progn (setq-local cursor-type '(bar . 6))
+           (progn (setq-local cursor-type '(bar . 3))
                   (ccc-set-buffer-local-cursor-color "plum1"))
-         (progn (setq-local cursor-type '(bar . 6))
+         (progn (setq-local cursor-type '(bar . 3))
                 (ccc-set-buffer-local-cursor-color "green")))))
    :config
    (add-hook 'post-command-hook '+lispy-update-cursor-style))
