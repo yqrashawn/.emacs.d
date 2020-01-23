@@ -147,9 +147,7 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
 (use-package lispy
   :straight t
   :diminish lispy " ʪ"
-  :hook ((clojure-mode . lispy-mode)
-         (emacs-lisp-mode . lispy-mode)
-         (lisp-mode . lispy-mode))
+  :hook ((ielm-mode lisp-mode clojure-mode emacs-lisp-mode cider-repl-mode) . lispy-mode)
   :custom
   (lispy-eval-display-style 'overlay)
   (lispy-visit-method 'projectile)
