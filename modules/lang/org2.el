@@ -341,6 +341,9 @@ See `org-capture-templates' for more information."
                  "\n")))
 
   (add-to-list 'org-capture-templates
+               '("h"                    ;`org-capture' binding + h
+                 "Hugo"))
+  (add-to-list 'org-capture-templates
                '("hp"                    ;`org-capture' binding + h
                  "Hugo post"
                  entry
@@ -351,7 +354,7 @@ See `org-capture-templates' for more information."
                  (function org-hugo-new-subtree-post-capture-template)))
   (add-to-list 'org-capture-templates
                '("hb"                    ;`org-capture' binding + h
-                 "Hugo post"
+                 "Hugo bundle"
                  entry
                  ;; It is assumed that below file is present in `org-directory'
                  ;; and that it has a "Blog Ideas" heading. It can even be a
