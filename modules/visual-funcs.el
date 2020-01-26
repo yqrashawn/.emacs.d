@@ -77,6 +77,7 @@ The return value is nil if no font was found, truthy otherwise."
 (defmacro yq/font (size)
   `'(
      ;; "Hack"
+     ;; "JetBrains Mono"
      "Input Mono Narrow"
      ;; "Iosevka Nerd Font Mono"
      ;; "Menlo"
