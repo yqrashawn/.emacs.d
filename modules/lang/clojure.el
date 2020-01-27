@@ -74,6 +74,7 @@
   (cider-repl-wrap-history t)
   (cider-stacktrace-default-filters '(tooling dup java))
   :init
+  (require 'mode-local)
   (add-hook 'clojure-mode-hook (defl () (setq-mode-local clojure-mode company-idle-delay 0.2)))
   (add-hook 'clojure-mode-hook #'spacemacs//init-jump-handlers-clojure-mode)
   (add-hook 'clojurescript-mode-hook #'spacemacs//init-jump-handlers-clojurescript-mode)
@@ -468,6 +469,11 @@
 (use-package 4clojure
   :straight (:host github :repo "yqrashawn/4clojure.el")
   :defer t)
+
+(use-package hugsql-ghosts
+  :straight (:host github :repo "rkaercher/hugsql-ghosts")
+  :after cider
+  :hook (cider-mode . hugsql-ghosts-install-hook))
 
 (provide 'clojure)
 ;;; clojure.el ends here
