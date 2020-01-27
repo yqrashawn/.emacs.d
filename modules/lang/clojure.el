@@ -67,12 +67,17 @@
   (cider-completion-annotations-include-ns 'always)
   (cider-connection-message-fn 'cider-random-tip)
   (cider-eldoc-display-context-dependent-info t)
-  ;; (cider-print-fn 'fipp)
   (cider-print-fn 'puget)
   (cider-special-mode-truncate-lines nil)
   (cider-debug-display-locals t)
   (cider-repl-wrap-history t)
   (cider-stacktrace-default-filters '(tooling dup java))
+  ;; don't kill the REPL when printing large data structures
+  (cider-print-options
+      '(("length" 80)
+        ("level" 20)
+        ("right-margin" 80)))
+
   :init
   (require 'mode-local)
   (add-hook 'clojure-mode-hook (defl () (setq-mode-local clojure-mode company-idle-delay 0.2)))
@@ -111,8 +116,7 @@
         cider-repl-history-highlight-inserted-item t
         cider-repl-history-file (concat spacemacs-cache-directory "cider-repl-history")
         nrepl-hide-special-buffers t
-        cider-eldoc-display-context-dependent-info t
-        cider-print-fn 'puget)
+        cider-eldoc-display-context-dependent-info t)
   (dolist (x '(spacemacs-jump-handlers-clojure-mode
                spacemacs-jump-handlers-clojurec-mode
                spacemacs-jump-handlers-clojurescript-mode
@@ -126,6 +130,22 @@
   (add-hook 'cider-repl-mode-hook #'cider-company-enable-fuzzy-completion)
   (add-hook 'cider-repl-mode-hook '+setup-company-for-clojure)
   :config
+  (dolist (mode '(clojure-mode clojurescript-mode cider-mode))
+    (eval-after-load mode
+      (font-lock-add-keywords
+       mode '(("(\\(fn\\)[\[[:space:]]"  ; anon funcs 1
+
+               (0 (progn (compose-region (match-beginning 1)
+                                       (match-end 1) "λ")
+                       nil)))
+              ("\\(#\\)("                ; anon funcs 2
+               (0 (progn (compose-region (match-beginning 1)
+                                       (match-end 1) "ƒ")
+                       nil)))
+              ("\\(#\\){"                 ; sets
+               (0 (progn (compose-region (match-beginning 1)
+                                       (match-end 1) "∈")
+                       nil)))))))
   (define-key cider-repl-mode-map (kbd "s-k") 'cider-quit)
   (dolist (map (list clojure-mode-map
                      clojurec-mode-map
@@ -136,7 +156,8 @@
                       ",qr" 'sesman-restart
                       ",qq" 'sesman-quit
                       ",ha" 'cider-apropos
-                      ",hc" 'clojure-cheatsheet
+                      ",hc" 'cider-clojuredocs
+                      ",hw" 'cider-clojuredocs-web
                       ",hg" 'cider-grimoire
                       ",hh" 'cider-doc
                       ",hj" 'cider-javadoc
@@ -192,8 +213,10 @@
                       ",ss" (if (eq map 'cider-repl-mode)
                                 'cider-switch-to-last-clojure-buffer
                               'cider-switch-to-repl-buffer)
-                      ",sx" 'cider-refresh
+                      ",sx" 'cider-ns-refresh
                       ",sX" 'cider-restart
+                      ",rn" 'cider-ns-reload
+                      ",rN" 'cider-ns-reload-all
 
                       ",Te" 'cider-enlighten-mode
                       ",Tf" 'spacemacs/cider-toggle-repl-font-locking
@@ -208,9 +231,13 @@
                       ",tr" 'spacemacs/cider-test-rerun-failed-tests
                       ",tt" 'spacemacs/cider-test-run-focused-test
 
+                      ",tv" 'cider-toggle-trace-var
+                      ",tn" 'cider-toggle-trace-ns
                       ",db" 'cider-debug-defun-at-point
                       ",de" 'spacemacs/cider-display-error-buffer
                       ",dv" 'cider-inspect
+                      ",bs" 'cider-browse-spec
+                      ",bS" 'cider-browse-spec-all
 
                       ;; profile
                       ",p+" 'cider-profile-samples
