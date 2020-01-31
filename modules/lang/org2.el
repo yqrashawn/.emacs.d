@@ -77,10 +77,10 @@
     ",K" 'org-shiftup
 
     ;; Change between TODO sets
-    "C-S-l" 'org-shiftcontrolright
-    "C-S-h" 'org-shiftcontrolleft
-    "C-S-j" 'org-shiftcontroldown
-    "C-S-k" 'org-shiftcontrolup
+    (kbd "C-S-l") 'org-shiftcontrolright
+    (kbd "C-S-h") 'org-shiftcontrolleft
+    (kbd "C-S-j") 'org-shiftcontroldown
+    (kbd "C-S-k") 'org-shiftcontrolup
 
     ;; Subtree editing
     ",sa" 'org-archive-subtree

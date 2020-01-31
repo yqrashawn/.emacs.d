@@ -129,6 +129,10 @@
   (add-hook 'cider-repl-mode-hook #'spacemacs//init-jump-handlers-cider-repl-mode)
   (add-hook 'cider-repl-mode-hook #'cider-company-enable-fuzzy-completion)
   (add-hook 'cider-repl-mode-hook '+setup-company-for-clojure)
+  (add-hook 'clojure-mode-hook (defl (company-flx-mode -1)))
+  (add-hook 'clojurescript-mode-hook (defl (company-flx-mode -1)))
+  (add-hook 'clojurec-mode-hook (defl (company-flx-mode -1)))
+  (add-hook 'cider-repl-mode-hook (defl (company-flx-mode -1)))
   :config
   (dolist (mode '(clojure-mode clojurescript-mode cider-mode))
     (eval-after-load mode
