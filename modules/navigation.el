@@ -271,6 +271,7 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   :init
   (spacemacs/set-leader-keys "<SPC>" #'counsel-M-x)
   (spacemacs/set-leader-keys "ff" #'counsel-find-file)
+  (spacemacs/set-leader-keys "fr" #'counsel-recentf)
   (spacemacs/set-leader-keys "fF" 'find-file-other-window)
   (spacemacs/set-leader-keys "hk" #'counsel-descbinds)
   (spacemacs/set-leader-keys "hf" #'counsel-describe-function)
