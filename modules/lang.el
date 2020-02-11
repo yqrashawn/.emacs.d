@@ -153,3 +153,7 @@
                ("+" . imagex-sticky-maximize)
                ("=" . imagex-sticky-zoom-in)
                ("-" . imagex-sticky-zoom-out))))
+
+(use-package lsp-ivy
+  :straight t
+  :defer t)

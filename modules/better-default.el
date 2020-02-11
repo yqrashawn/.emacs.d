@@ -43,10 +43,12 @@ file stored in the cache directory and `nil' to disable auto-saving.")
   "User home directory (~/).")
 
 (setq user-mail-address "namy.19@gmail.com")
-
 (setq source-directory (concat user-home-directory "emacs"))
+
 (size-indication-mode t)
 (auto-compression-mode t)
+
+(setq read-process-output-max (* 1024 1024))
 
 (use-feature emacs
   :init
