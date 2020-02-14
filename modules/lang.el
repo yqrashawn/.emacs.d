@@ -77,8 +77,9 @@
 
 (use-package lsp-mode
   :straight t
-  :hook ((shell-script-mode web-mode css-mode typescript-mode js2-mode rjsx-mode) . lsp)
+  :hook ((shell-script-mode web-mode css-mode typescript-mode js2-mode rjsx-mode) . lsp-deferred)
   :custom
+  (lsp-prefer-capf t)
   (lsp-links-check-internal (if *imac* 0.1 0.3))
   (lsp-auto-guess-root nil)
   (lsp-restart 'auto-restart)
@@ -106,6 +107,7 @@
 
 (use-package lsp-ui
   :straight t
+  :disabled
   :commands lsp-ui-mode
   :custom
   ;; top right stuff
@@ -143,6 +145,10 @@
   (company-lsp-async t)
   (company-lsp-cache-candidates (if *imac* nil 'auto))
   (company-lsp-enable-recompletion (if *imac* t nil)))
+
+(use-package lsp-ivy
+  :straight t
+  :commands lsp-ivy-workspace-symbol)
 
 (use-package image+
   :straight t

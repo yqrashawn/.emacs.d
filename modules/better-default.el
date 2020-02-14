@@ -329,7 +329,7 @@ file stored in the cache directory and `nil' to disable auto-saving.")
   (:map minibuffer-local-map
         ("<escape>"  . abort-recursive-edit))
   :hook
-  ((org-mode markdown-mode git-commit-mode) . turn-on-auto-fill)
+  ((prog-mode text-mode) . turn-on-auto-fill)
   :config
   ;; https://with-emacs.com/posts/editing/show-matching-lines-when-parentheses-go-off-screen/
   ;; we will call `blink-matching-open` ourselves...
@@ -813,7 +813,7 @@ If the universal prefix argument is used then will the windows too."
 (spacemacs/set-leader-keys "tL" 'yq/toggle-hl-line)
 (spacemacs/set-leader-keys "Ts" 'load-theme)
 
-(setq comment-auto-fill-only-comments nil)
+(add-hook 'prog-mode-hook (defl (setq-local comment-auto-fill-only-comments t)))
 (yq/add-toggle auto-fill :mode auto-fill-mode)
 (spacemacs/set-leader-keys "tF" 'yq/toggle-auto-fill)
 
@@ -1137,8 +1137,6 @@ otherwise it is scaled down."
 
 ;; updated line number every second
 (setq linum-delay t)
-
-(add-hook 'text-mode-hook 'turn-on-auto-fill)
 
 (setq history-delete-duplicates t)
 
