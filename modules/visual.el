@@ -183,7 +183,11 @@ has been changed to THEME."
   (doom-modeline-env-version t)
   (doom-modeline-indent-info t)
   (doom-modeline-irc nil)
-  (doom-modeline-percent-position nil))
+  (doom-modeline-percent-position nil)
+  :config
+  (doom-modeline-def-modeline 'main
+    '(bar workspace-name window-number modals matches buffer-info remote-host word-count parrot selection-info)
+    '(misc-info persp-name grip mu4e debug lsp minor-modes indent-info buffer-encoding major-mode process vcs checker)))
 
 (use-package vim-empty-lines-mode
   :straight (:host github :repo "jmickelin/vim-empty-lines-mode")
