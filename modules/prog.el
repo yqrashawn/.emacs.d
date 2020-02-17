@@ -576,6 +576,10 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   :commands (git-link git-link-commit git-link-homepage)
   :custom
   (git-link-use-commit t)
+  :init
+  (spacemacs/set-leader-keys "kgc" #'git-link-commit)
+  (spacemacs/set-leader-keys "kgh" #'git-link-homepage)
+  (spacemacs/set-leader-keys "kgl" #'git-link)
   :config
   (defun git-link-gogs (hostname dirname filename branch commit start end)
     (format "http://%s/%s/src/%s/%s"

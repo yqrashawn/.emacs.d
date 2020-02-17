@@ -185,6 +185,7 @@
   (spacemacs/set-leader-keys "e" nil)
   (spacemacs/set-leader-keys "b" nil)
   (spacemacs/set-leader-keys "s" nil)
+  (spacemacs/set-leader-keys "k" nil)
   (spacemacs/set-leader-keys "x" nil)
   (spacemacs/set-leader-keys "r" nil)
   (spacemacs/set-leader-keys "i" nil)
