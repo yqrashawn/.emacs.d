@@ -1743,7 +1743,7 @@ Info-mode:
   :init
   (setq +mic-paren-modes '(clojure-mode emacs-lisp-mode))
   (add-hook
-   'prog-mode-hook
+   'buffer-list-update-hook
    (lambda ()
      (if (memq major-mode +mic-paren-modes)
          (paren-activate)
