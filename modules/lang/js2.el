@@ -82,7 +82,7 @@
   :straight t
   :diminish prettier-js-mode
   :commands (prettier-js-mode prettier-js)
-  :hook ((typescript-mode js-mdoe rjsx-mode js2-mode) . prettier-js-mode)
+  ;; :hook ((typescript-mode js-mdoe rjsx-mode js2-mode) . prettier-js-mode)
   :init
   (yq/add-toggle prettier-js :mode prettier-js-mode)
   (dolist (mode '(js2-mode js-mode rjsx-mode typescript-mode))
@@ -158,8 +158,8 @@
 
 (use-package eslintd-fix
   :straight t
-  :after (rjsx-mode)
-  :hook (rjsx-mode . eslintd-fix-mode)
+  :defer t
+  ;; :hook (rjsx-mode . eslintd-fix-mode)
   :custom (eslintd-fix-executable "eslint_d"))
 
 (use-package indium
