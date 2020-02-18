@@ -329,8 +329,8 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
     additional-movement
     commentary
     slurp/barf-lispy
-    wrap                               ;; M-( M-{ M-[
-    (additional-wrap normal visual insert)
+    ;; wrap                               ;; M-( M-{ M-[
+    ;; (additional-wrap normal visual insert)
     (additional normal visual insert)  ;; M-j M-k M-J M-k M-s M-S M-r M-t M-v
     additional-insert
     escape
@@ -356,16 +356,12 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
               (cljr-introduce-let)
             (lispy-bind-variable)))
   (kbd "M-RET") #'lispyville-wrap-round
-  (kbd "M-]") #'lispyville-wrap-braces
-  (kbd "M-[") #'lispyville-wrap-brackets
   "{" #'lispyville-insert-at-beginning-of-list
   "}" #'lispyville-insert-at-end-of-list
   "[" #'lispyville-previous-closing
   "]" #'lispyville-next-opening)
  (lispyville--define-key 'insert
    (kbd "M-RET") #'lispyville-wrap-round
-   (kbd "M-]") #'lispyville-wrap-braces
-   (kbd "M-[") #'lispyville-wrap-brackets
    (kbd "C-r") #'evil-shift-left-line)
  (lispyville--define-key 'visual
    (kbd "(") #'lispyville-wrap-round

@@ -138,6 +138,7 @@
 
 (yq/get-modules "core-display-init.el")
 (yq/get-modules "evil-core.el")
+(yq/get-modules "in-terminal.el")
 (yq/get-modules "better-default.el")
 (yq/get-modules "navigation.el")
 (yq/get-modules "edit.el")
@@ -207,14 +208,6 @@
 
 (setq debug-on-error nil)
 (setq debug-on-quit nil)
-
-;; (when (not (display-graphic-p))
-;;   (use-package osx-clipboard
-;;     :straight t
-;;     :diminish osx-clipboard-mode
-;;     :config
-;;     (osx-clipboard-mode +1)))
-
 
 ;; Tell straight.el about the profiles we are going to be using.
 (setq straight-profiles

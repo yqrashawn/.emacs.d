@@ -407,5 +407,3 @@
 
 (use-package evil-textobj-syntax
   :straight (:host github :repo "laishulu/evil-textobj-syntax"))
-
-(load-file "./terminal-keybindings.el")
