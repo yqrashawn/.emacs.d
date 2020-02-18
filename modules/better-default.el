@@ -243,7 +243,6 @@ file stored in the cache directory and `nil' to disable auto-saving.")
   (if (file-exists-p abbrev-file-name)
       (quietly-read-abbrev-file)))
 
-(setq save-interprogram-paste-before-kill t)
 (setq-default sentence-end-double-space nil)
 (setq window-combination-resize t)
 (setq column-number-mode t)
@@ -550,8 +549,19 @@ If the universal prefix argument is used then kill the buffer too."
   (global-set-key (kbd "C-x 8 w l")  'hydra-move-splitter-right)
   (global-set-key (kbd "C-x 8 w j")  'hydra-move-splitter-down)
   (global-set-key (kbd "C-x 8 w k")  'hydra-move-splitter-up)
-  (global-set-key (kbd "C-x 3") (lambda () (interactive) (split-window-right) (windmove-right)))
-  (global-set-key (kbd "C-x 2") (lambda () (interactive) (split-window-below) (windmove-down))))
+
+  (defun yq/split-window-right ()
+    (interactive)
+    (split-window-right)
+    (windmove-right))
+
+  (defun yq/split-window-below ()
+    (interactive)
+    (split-window-below)
+    (windmove-down))
+
+  (global-set-key (kbd "C-x 3") 'yq/split-window-right)
+  (global-set-key (kbd "C-x 2") 'yq/split-window-below))
 
 (use-package buffer-move
   :straight t
