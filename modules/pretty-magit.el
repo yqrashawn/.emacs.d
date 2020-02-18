@@ -70,7 +70,7 @@
                       :require-match t
                       :sort t
                       :preselect "Add: "))
-    (pretty-magit--add-magit-faces)
+    (when (display-graphic-p) (pretty-magit--add-magit-faces))
     (evil-insert 1)))
 
 ;;;; Enable

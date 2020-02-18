@@ -219,6 +219,6 @@
 (autoload #'straight-x-freeze-versions "straight-x")
 
 (let ((straight-current-profile 'pinned))
-  ;; Pin org-mode version.
-  (add-to-list 'straight-x-pinned-packages
-               '("lsp-mode" . "c8e4b5e3b117271c804222f870d82791ad36ae06")))
+  (setq straight-x-pinned-packages
+        '(("lsp-mode" . "c8e4b5e3b117271c804222f870d82791ad36ae06")
+          ("doom-modeline" . "e6d690bae01cb68e7171857fe07ac914d7a19f4b"))))

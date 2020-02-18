@@ -1,9 +1,15 @@
 (setq terminal-keybinding-fix-prefix "M-+ M-+ ")
 (setq ctrl-keys-to-remap '(?\; ?: ?' ?\" ?. ?> ?, ?< ?/ ?? ?- ?= ?+))
+(setq command-keys-to-remap '(?k))
 
 (dolist (char ctrl-keys-to-remap)
   (let ((from (concat terminal-keybinding-fix-prefix "C " (char-to-string char)))
         (to (concat "C-" (char-to-string char))))
+    (define-key key-translation-map (kbd from) (kbd to))))
+
+(dolist (char command-keys-to-remap)
+  (let ((from (concat terminal-keybinding-fix-prefix "D " (char-to-string char)))
+        (to (concat "s-" (char-to-string char))))
     (define-key key-translation-map (kbd from) (kbd to))))
 
 ;; (add-hook 'evil-insert-state-entry-hook (lambda () (when (not (display-graphic-p)) (send-string-to-terminal "\033[5 q"))))
@@ -39,8 +45,9 @@
   :init
   (when (not (display-graphic-p))
     (defun yq/tmux-command (&rest args)
-          (emamux:check-tmux-running)
-          (apply #'emamux:tmux-run-command nil args))
+      (message "yq/tmux-command")
+      (emamux:check-tmux-running)
+      (apply #'emamux:tmux-run-command nil args))
     (defun yq/tmux-select-pane (dir)
       (if (or (ignore-errors (funcall (intern (concat "windmove-" dir)))) (display-graphic-p)) nil
         (cond ((string= dir "up")
