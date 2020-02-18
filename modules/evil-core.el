@@ -206,6 +206,7 @@
   (spacemacs/set-leader-keys "tD" 'toggle-debug-on-error)
   (spacemacs/set-leader-keys "jD" 'dired-jump-other-window)
   (spacemacs/set-leader-keys "j=" 'yq/indent-region-or-buffer)
+  (spacemacs/set-leader-keys "fev" #'view-lossage)
   (evil-define-minor-mode-key 'motion 'visual-line-mode "j" 'evil-next-visual-line)
   (evil-define-minor-mode-key 'motion 'visual-line-mode "k" 'evil-previous-visual-line)
   (spacemacs/set-leader-keys "fed" (lambda () (interactive) (find-file-existing yq-emacs-dotfile-dir)))
@@ -406,3 +407,5 @@
 
 (use-package evil-textobj-syntax
   :straight (:host github :repo "laishulu/evil-textobj-syntax"))
+
+(load-file "./terminal-keybindings.el")
