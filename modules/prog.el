@@ -646,12 +646,13 @@ _g_  gfm      _m_ markdown
   ;; Use ivy-xref to display `xref.el' results.
   (setq xref-show-xrefs-function #'ivy-xref-show-xrefs))
 
-(use-package flycheck-posframe
-  :straight t
-  :after flycheck
-  :diminish (flycheck-posframe-mode)
-  :hook (flycheck-mode . flycheck-posframe-mode)
-  :config (set-face-attribute 'flycheck-posframe-error-face nil :inherit 'error))
+(when (not (display-graphic-p))
+  (use-package flycheck-posframe
+    :straight t
+    :after flycheck
+    :diminish (flycheck-posframe-mode)
+    :hook (flycheck-mode . flycheck-posframe-mode)
+    :config (set-face-attribute 'flycheck-posframe-error-face nil :inherit 'error)))
 
 (use-package repl-toggle
   :straight t

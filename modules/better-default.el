@@ -1848,3 +1848,7 @@ Info-mode:
     (read-only-mode -1)
     (ansi-color-apply-on-region (point-min) (point-max))
     (read-only-mode 1)))
+
+(use-package ctrlf
+  :straight (:host github :repo "raxod502/ctrlf")
+  :disabled)
