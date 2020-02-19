@@ -646,7 +646,7 @@ _g_  gfm      _m_ markdown
   ;; Use ivy-xref to display `xref.el' results.
   (setq xref-show-xrefs-function #'ivy-xref-show-xrefs))
 
-(when (not (display-graphic-p))
+(when (display-graphic-p)
   (use-package flycheck-posframe
     :straight t
     :after flycheck
