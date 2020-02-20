@@ -297,7 +297,7 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
 present directory.  If invoked from inside a version-controlled
 repository, then the corresponding root is used instead."
     (interactive)
-    (let* ((vc (vc-root-dir))
+    (let* ((vc (or (ignore-errors (vc-root-dir)) default-directory))
            (process-environment
             (if (eq (expand-file-name vc) (expand-file-name "~/"))
                 (cons (concat "FZF_DEFAULT_COMMAND=rg -Sn --color never --files --no-follow --hidden -uu") process-environment)
@@ -305,9 +305,7 @@ repository, then the corresponding root is used instead."
                     process-environment))))
       (if dir
           (counsel-fzf input dir)
-        (if (eq vc nil)
-            (counsel-fzf input default-directory)
-          (counsel-fzf input vc)))))
+        (counsel-fzf input vc))))
 
   (define-key yq-s-map "m" #'+counsel-fzf-rg-files)
   (spacemacs/set-leader-keys "sm" (lambda () (interactive) (let ((current-prefix-arg '(1))) (call-interactively 'counsel-fzf))))
