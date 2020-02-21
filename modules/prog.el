@@ -674,7 +674,6 @@ _g_  gfm      _m_ markdown
   (defun yq-setup-corral-keymap ()
     (evil-define-key 'insert (+major-mode-map) (kbd "M-9") #'corral-parentheses-backward)
     (evil-define-key 'insert (+major-mode-map) (kbd "M-0") #'corral-parentheses-forward)
-    (evil-define-key 'insert (+major-mode-map) (kbd "M-[") #'corral-brackets-backward)
     (evil-define-key 'insert (+major-mode-map) (kbd "M-]") #'corral-brackets-forward)
     (evil-define-key 'insert (+major-mode-map) (kbd "M-{") #'corral-braces-backward)
     (evil-define-key 'insert (+major-mode-map) (kbd "M-}") #'corral-braces-forward)
