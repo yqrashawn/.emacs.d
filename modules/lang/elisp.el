@@ -159,6 +159,9 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
   :init
   (yq/add-toggle lispy :mode lispy-mode)
   :config
+  ;; semantic db recursive load error
+  ;; https://github.com/syl20bnr/spacemacs/issues/12843
+  (require 'semantic/db-file)
   (use-package ccc ; for cursor style
    :straight t
    :init
