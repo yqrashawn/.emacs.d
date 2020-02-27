@@ -161,7 +161,7 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
   :config
   ;; semantic db recursive load error
   ;; https://github.com/syl20bnr/spacemacs/issues/12843
-  (require 'semantic/db-file)
+  ;; (require 'semantic/db-file)
   (use-package ccc ; for cursor style
    :straight t
    :init
