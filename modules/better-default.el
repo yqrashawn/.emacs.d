@@ -1884,3 +1884,8 @@ Info-mode:
 (use-package ctrlf
   :straight (:host github :repo "raxod502/ctrlf")
   :disabled)
+
+(use-package side-notes
+  :straight (:host github :repo "rnkn/side-notes")
+  :bind ("s-j" . side-notes-toggle-notes)
+  :custom (side-notes-file "snotes.org"))
