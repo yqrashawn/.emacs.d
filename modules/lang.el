@@ -79,6 +79,16 @@
   :straight t
   :hook ((shell-script-mode web-mode css-mode typescript-mode js2-mode rjsx-mode) . lsp-deferred)
   :custom
+  ;; http://blog.binchen.org/posts/how-to-speed-up-lsp-mode.html
+  (lsp-log-io nil)
+  (lsp-enable-folding nil)
+  (lsp-enable-snippet nil)
+  ;; (lsp-enable-completion-at-point nil)
+  ;; (lsp-enable-symbol-highlighting nil)
+  (lsp-enable-links nil)
+  (lsp-restart 'auto-restart)
+  ;; no real time syntax check
+  (lsp-diagnostic-package :none)
   (lsp-prefer-capf t)
   (lsp-links-check-internal (if *imac* 0.1 0.3))
   (lsp-auto-guess-root nil)
