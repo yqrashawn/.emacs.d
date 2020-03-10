@@ -13,6 +13,14 @@
 (setq debug-on-error t)
 (setq debug-on-quit t)
 
+;; Remove the built-in version of Org from the load-path
+(require 'cl-seq)
+(setq load-path
+      (cl-remove-if
+       (lambda (x)
+         (string-match-p "org$" x))
+       load-path))
+
 (add-to-list 'load-path "~/org-mode/lisp")
 (add-to-list 'load-path "~/org-mode/contrib/lisp")
 
