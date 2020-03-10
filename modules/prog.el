@@ -860,3 +860,7 @@ _g_  gfm      _m_ markdown
   :straight t
   :disabled
   :mode ("\\.verb\\'" . verb-mode))
+
+(use-package browse-at-remote
+  :straight t
+  :bind ("C-c g g" . browse-at-remote))

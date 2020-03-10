@@ -118,11 +118,12 @@
   ;; (setq mu4e-compose-signature (get-string-from-file "~/signature.txt"))
 
   (add-hook 'mu4e-compose-mode-hook 'flyspell-mode)
-  (evil-define-key 'normal mu4e-view-mode-map (kbd "<RET>") 'mu4e~view-browse-url-from-binding)
-  (evil-define-key 'normal mu4e-main-mode-map "U" 'mu4e-update-index)
-  (evil-define-key 'normal mu4e-main-mode-map "j" 'mu4e~headers-jump-to-maildir)
-  (evil-define-key 'normal mu4e-view-mode-map "o" 'ace-link-mu4e)
-  (evil-define-key 'normal mu4e-view-mode-map "go" 'mu4e-view-open-attachment))
+  (with-eval-after-load 'mu4e-main
+    (evil-define-key 'normal mu4e-view-mode-map (kbd "<RET>") 'mu4e~view-browse-url-from-binding)
+    (evil-define-key 'normal mu4e-main-mode-map "U" 'mu4e-update-index)
+    (evil-define-key 'normal mu4e-main-mode-map "j" 'mu4e~headers-jump-to-maildir)
+    (evil-define-key 'normal mu4e-view-mode-map "o" 'ace-link-mu4e)
+    (evil-define-key 'normal mu4e-view-mode-map "go" 'mu4e-view-open-attachment)))
 ;; (evil-define-key 'normal mu4e-headers-mode-map "q" 'mu4e~headers-quit-buffer)
 ;; ;; (evil-define-key 'normal mu4e-headers-mode-map "q" 'yq/kill-this-buffer)
 ;; (evil-define-key 'normal mu4e-headers-mode-map "gr" 'mu4e-headers-rerun-search)
