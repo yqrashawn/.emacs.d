@@ -458,3 +458,12 @@
 
 (use-package evil-textobj-syntax
   :straight (:host github :repo "laishulu/evil-textobj-syntax"))
+
+(use-package evil-lion
+  :straight t
+  :bind (:map evil-normal-state-map
+         ("gb" . evil-lion-left)
+         ("gB" . evil-lion-right)
+         :map evil-visual-state-map
+         ("gb" . evil-lion-left)
+         ("gB" . evil-lion-right)))
