@@ -501,6 +501,11 @@ repository, then the corresponding root is used instead."
   (add-to-list 'dired-compress-file-suffixes '("\\.zip\\'" ".zip" "unzip"))
   (add-hook 'dired-mode-hook #'hl-line-mode)
   (evil-define-key 'normal dired-mode-map (kbd ";") 'avy-goto-subword-1)
+  (evil-define-key 'normal dired-mode-map (kbd "g") nil)
+  (evil-define-key 'normal dired-mode-map (kbd "gg") #'evil-goto-first-line)
+  (evil-define-key 'normal dired-mode-map (kbd "gr") #'revert-buffer)
+  (evil-define-key 'normal dired-mode-map (kbd "gG") #'dired-do-chgrp)
+  (evil-define-key 'normal dired-mode-map (kbd "G") #'evil-goto-line)
   ;; search file name only when focus is over file
   (setq dired-isearch-filenames 'dwim)
   ;; when there is two dired buffer, Emacs will select another buffer
