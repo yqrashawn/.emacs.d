@@ -112,7 +112,9 @@
                    '(lsp-find-definition :async t))))
   (add-hook
    'lsp-after-open-hook
-   (defl (spacemacs//setup-lsp-jump-handler major-mode))))
+   (defl (spacemacs//setup-lsp-jump-handler major-mode)))
+  (push '("*lsp-help*" :dedicated t :position bottom :stick t :noselect t :height 0.4)
+        popwin:special-display-config))
 
 (use-package lsp-ui
   :straight t
