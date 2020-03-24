@@ -53,8 +53,8 @@
 (load custom-file)
 
 (setq url-proxy-services
-      '(("http" . "127.0.0.1:6152")
-        ("https" . "127.0.0.1:6152")))
+      '(("http" . "127.0.0.1:7890")
+        ("https" . "127.0.0.1:7890")))
 
 ;;; Temporarily disable the file name handler.
 (setq default-file-name-handler-alist file-name-handler-alist)
@@ -158,7 +158,7 @@
 (yq/get-modules "shell.el")
 (yq/get-modules "lang.el")
 (yq/get-modules "comm-funcs.el")
-(yq/get-modules "mail.el")
+;; (yq/get-modules "mail.el")
 (yq/get-modules "visual.el")
 (yq/get-modules "auto-detect-which-machine.el")
 ;; (yq/get-modules "pdf.el")

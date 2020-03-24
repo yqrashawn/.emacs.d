@@ -131,6 +131,7 @@
 
 (use-package js-comint
   :straight t
+  :disabled
   :commands (run-js switch-to-js)
   :init
   (setq js-program-command "node"
@@ -164,5 +165,6 @@
 
 (use-package indium
   :straight t
+  :disabled
   :commands (indium-run-node)
   :defer t)
