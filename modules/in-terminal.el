@@ -19,6 +19,7 @@
 
 (use-package term-cursor
   :straight (:host github :repo "h0d/term-cursor.el")
+  :disabled
   :defer t
   :init
   (add-hook 'buffer-list-update-hook

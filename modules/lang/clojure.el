@@ -236,7 +236,7 @@
                       ",tt" 'spacemacs/cider-test-run-focused-test
 
                       ",tv" 'cider-toggle-trace-var
-                      ",tn" 'cider-toggle-trace-ns
+                      ;; ",tn" 'cider-toggle-trace-ns
                       ",db" 'cider-debug-defun-at-point
                       ",de" 'spacemacs/cider-display-error-buffer
                       ",dv" 'cider-inspect
