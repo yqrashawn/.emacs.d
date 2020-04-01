@@ -1887,5 +1887,5 @@ Info-mode:
 
 (use-package side-notes
   :straight (:host github :repo "rnkn/side-notes")
-  :bind ("s-j" . side-notes-toggle-notes)
-  :custom (side-notes-file "snotes.org"))
+  :bind ("s-i" . side-notes-toggle-notes)
+  :custom (side-notes-file "notes.side.org"))

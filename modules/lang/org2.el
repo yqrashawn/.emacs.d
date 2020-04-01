@@ -485,41 +485,9 @@ This function is called by `org-babel-execute-src-block'."
         result (org-babel-js-read result)))))
 
 (use-package clocker
-  :straight (:host github :repo "roman/clocker.el")
+  :straight (:host github :repo "yqrashawn/clocker.el")
   :custom
-  (clocker-skip-after-save-hook-on-file-name '("COMMIT_EDITMSG" "recentf"))
+  (clocker-skip-after-save-hook-on-mode '(org-mode))
+  :bind ("s-j" . clocker-toggle-worklog)
   :init
-  (clocker-mode 1)
-  :config
-  (defun clocker-find-dominating-org-file ()
-    "Lookup on directory tree for a file with an org extension.
-
-returns nil if it can't find any"
-    (clocker-locate-dominating-file "*.worklog.org"))
-
-  (defun +create-worklog-file (source link header)
-    (with-current-buffer
-      (create-file-buffer source)
-      (insert header)
-      (write-file source)
-      (f-symlink source link)))
-
-  (defun yq-create-project-worklog ()
-    (interactive)
-    (if (projectile-project-p)
-     (let* ((root (projectile-project-root (buffer-file-name)))
-            (name (projectile-project-name root))
-            (folder "~/Dropbox/ORG/worklog/")
-            (worklog-file-path (concat folder name ".worklog.org"))
-            (worklog-symlink-path (concat root name ".worklog.org")))
-       (cond ((and (not (file-exists-p worklog-symlink-path))
-                   (not (file-exists-p worklog-file-path)))
-              (+create-worklog-file worklog-file-path worklog-symlink-path (concat "* " name))
-              ((and (not (file-exists-p worklog-symlink-path))
-                    (file-exists-p worklog-file-path))
-               (f-symlink worklog-file-path worklog-symlink-path))
-              ((and (file-exists-p worklog-symlink-path)
-                    (not (file-exists-p worklog-file-path)))
-               (delete-file worklog-symlink-path)
-               (+create-worklog-file worklog-file-path worklog-symlink-path (concat "* " name))))))
-     (message "Not in a project"))))
+  (clocker-mode 1))
