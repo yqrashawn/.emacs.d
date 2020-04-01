@@ -34,94 +34,94 @@ the current buffer."
   :config (define-key inferior-emacs-lisp-mode-map (kbd "C-c C-z") 'kill-buffer-and-window))
 
 (use-package elisp-mode
- :mode ("\\.el\\'" . emacs-lisp-mode)
- :diminish (emacs-lisp-mode . "EL")
- :commands (emacs-lisp-mode)
- :init
- (spacemacs|define-jump-handlers emacs-lisp-mode)
- (spacemacs|define-jump-handlers lisp-interaction-mode)
- ;; (add-hook 'emacs-lisp-mode-hook
- ;;           (lambda () (setq-local lisp-indent-function #'common-lisp-indent-function)))
- :config
- (yq/setup-sp-keys-for-lispy-modes emacs-lisp-mode-map)
- (add-hook 'emacs-lisp-mode-hook (lambda ()
-                                   (setq-local evil-shift-width 1)
-                                   (setq-local company-idle-delay 0.2)
-                                   (setq mode-name "λ")
-                                   (setq-local company-backends '(company-capf
-                                                                  company-tabnine
-                                                                  (company-dabbrev-code
-                                                                   company-gtags
-                                                                   company-etags
-                                                                   company-keywords)
-                                                                  company-files
-                                                                  company-dabbrev))))
- ;; Idea from http://www.reddit.com/r/emacs/comments/312ge1/i_created_this_function_because_i_was_tired_of/
- (defun spacemacs/eval-current-form ()
-   "Find and evaluate the current def* or set* command.
+  :mode ("\\.el\\'" . emacs-lisp-mode)
+  :diminish (emacs-lisp-mode . "EL")
+  :commands (emacs-lisp-mode)
+  :init
+  (spacemacs|define-jump-handlers emacs-lisp-mode)
+  (spacemacs|define-jump-handlers lisp-interaction-mode)
+  ;; (add-hook 'emacs-lisp-mode-hook
+  ;;           (lambda () (setq-local lisp-indent-function #'common-lisp-indent-function)))
+  :config
+  (yq/setup-sp-keys-for-lispy-modes emacs-lisp-mode-map)
+  (add-hook 'emacs-lisp-mode-hook (lambda ()
+                                    (setq-local evil-shift-width 1)
+                                    (setq-local company-idle-delay 0.2)
+                                    (setq mode-name "λ")
+                                    (setq-local company-backends '(company-capf
+                                                                   company-tabnine
+                                                                   (company-dabbrev-code
+                                                                    company-gtags
+                                                                    company-etags
+                                                                    company-keywords)
+                                                                   company-files
+                                                                   company-dabbrev))))
+  ;; Idea from http://www.reddit.com/r/emacs/comments/312ge1/i_created_this_function_because_i_was_tired_of/
+  (defun spacemacs/eval-current-form ()
+    "Find and evaluate the current def* or set* command.
 Unlike `eval-defun', this does not go to topmost function."
-   (interactive)
-   (save-excursion
-     (search-backward-regexp "(def\\|(set")
-     (forward-list)
-     (call-interactively 'eval-last-sexp)))
+    (interactive)
+    (save-excursion
+      (search-backward-regexp "(def\\|(set")
+      (forward-list)
+      (call-interactively 'eval-last-sexp)))
 
- (defun spacemacs/nav-find-elisp-thing-at-point-other-window ()
-   "Find thing under point and go to it another window."
-   (interactive)
-   (let ((symb (variable-at-point)))
-     (if (and symb
-            (not (equal symb 0))
-            (not (fboundp symb)))
-         (find-variable-other-window symb)
-       (find-function-at-point))))
+  (defun spacemacs/nav-find-elisp-thing-at-point-other-window ()
+    "Find thing under point and go to it another window."
+    (interactive)
+    (let ((symb (variable-at-point)))
+      (if (and symb
+               (not (equal symb 0))
+               (not (fboundp symb)))
+          (find-variable-other-window symb)
+        (find-function-at-point))))
 
- ;; smartparens integration
- (defun spacemacs/eval-current-form-sp (&optional arg)
-   "Call `eval-last-sexp' after moving out of one level of
+  ;; smartparens integration
+  (defun spacemacs/eval-current-form-sp (&optional arg)
+    "Call `eval-last-sexp' after moving out of one level of
 parentheses. Will exit any strings and/or comments first.
 An optional ARG can be used which is passed to `sp-up-sexp' to move out of more
 than one sexp.
 Requires smartparens because all movement is done using `sp-up-sexp'."
-   (interactive "p")
-   (require 'smartparens)
-   (let ((evil-move-beyond-eol t))
-     ;; evil-move-beyond-eol disables the evil advices around eval-last-sexp
-     (save-excursion
-       (let ((max 10))
-         (while (and (> max 0)
-                   (sp-point-in-string-or-comment))
-           (decf max)
-           (sp-up-sexp)))
-       (sp-up-sexp arg)
-       (call-interactively 'eval-last-sexp))))
+    (interactive "p")
+    (require 'smartparens)
+    (let ((evil-move-beyond-eol t))
+      ;; evil-move-beyond-eol disables the evil advices around eval-last-sexp
+      (save-excursion
+        (let ((max 10))
+          (while (and (> max 0)
+                      (sp-point-in-string-or-comment))
+            (decf max)
+            (sp-up-sexp)))
+        (sp-up-sexp arg)
+        (call-interactively 'eval-last-sexp))))
 
- (defun spacemacs/eval-current-symbol-sp ()
-   "Call `eval-last-sexp' on the symbol around point.
+  (defun spacemacs/eval-current-symbol-sp ()
+    "Call `eval-last-sexp' on the symbol around point.
 Requires smartparens because all movement is done using `sp-forward-symbol'."
-   (interactive)
-   (require 'smartparens)
-   (let ((evil-move-beyond-eol t))
-     ;; evil-move-beyond-eol disables the evil advices around eval-last-sexp
-     (save-excursion
-       (sp-forward-symbol)
-       (call-interactively 'eval-last-sexp))))
+    (interactive)
+    (require 'smartparens)
+    (let ((evil-move-beyond-eol t))
+      ;; evil-move-beyond-eol disables the evil advices around eval-last-sexp
+      (save-excursion
+        (sp-forward-symbol)
+        (call-interactively 'eval-last-sexp))))
 
- (define-key emacs-lisp-mode-map (kbd "C-c C-z") #'rtog/toggle-repl)
- (define-key emacs-lisp-mode-map (kbd "C-c C-c") #'eval-defun)
- (define-key emacs-lisp-mode-map (kbd "C-c C-b") #'eval-buffer)
- (evil-define-key 'normal emacs-lisp-mode-map "," nil)
- (evil-define-key 'normal emacs-lisp-mode-map ",ec" 'spacemacs/eval-current-form-sp)
- (evil-define-key 'normal emacs-lisp-mode-map ",es" 'spacemacs/eval-current-symbol-sp)
- (evil-define-key 'normal emacs-lisp-mode-map ",eC" 'spacemacs/eval-current-form)
- (evil-define-key 'normal emacs-lisp-mode-map ",gg" 'spacemacs/nav-find-elisp-thing-at-point-other-window)
- (evil-define-key 'normal emacs-lisp-mode-map ",m" 'yq/toggle-parinfer)
- (evil-define-key 'normal emacs-lisp-mode-map ",cc" 'emacs-lisp-byte-compile)
- (evil-define-key 'normal emacs-lisp-mode-map ",eb" 'eval-buffer)
- (evil-define-key 'normal emacs-lisp-mode-map ",ee" 'eval-last-sexp)
- (evil-define-key 'normal emacs-lisp-mode-map ",ef" 'eval-defun)
- (evil-define-key 'normal emacs-lisp-mode-map ",el" 'lisp-state-eval-sexp-end-of-line)
- (evil-define-key 'visual emacs-lisp-mode-map ",er" 'eval-region))
+  (define-key emacs-lisp-mode-map (kbd "C-c C-z") #'rtog/toggle-repl)
+  (define-key emacs-lisp-mode-map (kbd "C-c C-c") #'eval-defun)
+  (define-key emacs-lisp-mode-map (kbd "C-c C-b") #'eval-buffer)
+  (evil-define-key 'normal emacs-lisp-mode-map "," nil)
+  (evil-define-key 'normal emacs-lisp-mode-map ",ec" 'spacemacs/eval-current-form-sp)
+  (evil-define-key 'normal emacs-lisp-mode-map ",es" 'spacemacs/eval-current-symbol-sp)
+  (evil-define-key 'normal emacs-lisp-mode-map ",eC" 'spacemacs/eval-current-form)
+  (evil-define-key 'normal emacs-lisp-mode-map ",gg" 'spacemacs/nav-find-elisp-thing-at-point-other-window)
+  (evil-define-key 'normal emacs-lisp-mode-map ",m" 'yq/toggle-parinfer)
+  (evil-define-key 'normal emacs-lisp-mode-map ",cc" 'emacs-lisp-byte-compile)
+  (evil-define-key 'normal emacs-lisp-mode-map ",eb" 'eval-buffer)
+  (evil-define-key 'normal emacs-lisp-mode-map ",ee" 'eval-last-sexp)
+  (evil-define-key 'normal emacs-lisp-mode-map ",ef" 'eval-defun)
+  (evil-define-key 'normal emacs-lisp-mode-map ",el" 'lisp-state-eval-sexp-end-of-line)
+  (evil-define-key 'visual emacs-lisp-mode-map ",er" 'eval-region))
 
 (use-package elisp-slime-nav
   :straight t
@@ -159,6 +159,24 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
   :init
   (yq/add-toggle lispy :mode lispy-mode)
   :config
+  (with-eval-after-load 'semantic
+    (defvar-mode-local emacs-lisp-mode semanticdb-find-default-throttle
+      '(project omniscience)
+      "Search project files, then search this omniscience database.
+It is not necessary to do system or recursive searching because of
+the omniscience database.")
+    (setq-mode-local emacs-lisp-mode
+                     semanticdb-find-default-throttle
+                     (default-value 'semanticdb-find-default-throttle))
+
+    ;; https://github.com/syl20bnr/spacemacs/issues/7038#issuecomment-255014767
+    ;; (eval-after-load 'semantic
+    ;;   (add-hook 'semantic-mode-hook
+    ;;             (lambda ()
+    ;;               (dolist (x (default-value 'completion-at-point-functions))
+    ;;                 (when (string-prefix-p "semantic-" (symbol-name x))
+    ;;                   (remove-hook 'completion-at-point-functions x))))))
+    )
   ;; semantic db recursive load error
   ;; https://github.com/syl20bnr/spacemacs/issues/12843
   ;; (require 'semantic/db-file)
