@@ -21,6 +21,7 @@
 
 ;; enter pgp password in emacs
 (setq epa-pinentry-mode 'loopback)
+(setq epa-file-encrypt-to '("namy.19@gmail.com"))
 
 ;; https://emacs.stackexchange.com/questions/3673/how-to-make-vc-and-magit-treat-a-symbolic-link-to-a-real-file-in-git-repo-just
 (setq find-file-visit-truename t)

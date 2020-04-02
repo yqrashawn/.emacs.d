@@ -280,7 +280,12 @@
 
 (use-package org-download
   :straight t
-  :hook (dired-mode . org-download-enable))
+  :after org
+  :hook (dired-mode . org-download-enable)
+  :bind
+  (:map org-mode-map
+        (("s-Y" . org-download-screenshot)
+         ("s-y" . org-download-yank))))
 
 ;; (straight-use-package 'org)
 
@@ -491,3 +496,81 @@ This function is called by `org-babel-execute-src-block'."
   :bind ("s-j" . clocker-toggle-worklog)
   :init
   (clocker-mode 1))
+
+(use-package org-roam
+  :straight t
+  :after org
+  :hook
+  (after-init . org-roam-mode)
+  :custom
+  (org-roam-directory "~/Dropbox/ORG/roam/")
+  (org-roam-link-title-format "R:%s")
+  (org-roam-graph-viewer "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
+  (org-roam-completion-system 'ivy)
+  ;; https://org-roam.readthedocs.io/en/latest/templating/
+  (org-roam-capture-templates
+   '(("d" "default" plain #'org-roam--capture-get-point
+      "%?"
+      :file-name "%<%Y%m%d%H%M%S>-${slug}"
+      :head "#+TITLE: ${title}\n"
+      :unnarrowed t)
+     ("z" "zombie" plain #'org-roam--capture-get-point
+      "%?"
+      :file-name "notes/${slug}"
+      :head "#+TITLE: ${title}\n#+DRAFT: true\n#+DATE: %<%Y-%m-%d>"
+      :unnarrowed t)
+     ("h" "hugo" plain #'org-roam--capture-get-point
+      "%?"
+      :file-name "notes/${slug}"
+      :head "#+title: ${title}\n#+draft: true\n#+date: %<%Y-%m-%d>\n#+hugo_base_dir: ~/site/\n#+hugo_section: notes\n")))
+  (org-roam-templates
+   (list (list "default" (list :file #'org-roam--file-name-title
+                               :content "#+TITLE: ${title}"))))
+  :bind (:map org-roam-mode-map
+              (("C-c n l" . org-roam)
+               ("C-c n c" . org-roam-capture)
+               ("C-c n f" . org-roam-find-file)
+               ("C-c n g" . org-roam-show-graph))
+              :map org-mode-map
+              (("C-c n i" . org-roam-insert)))
+  :config
+  (require 'org-roam-protocol))
+
+(use-package company-org-roam
+  :straight (:host github :repo "jethrokuan/company-org-roam")
+  :after (org-roam company)
+  :config
+  (push 'company-org-roam company-backends))
+
+(use-package deft
+  :after org
+  :bind
+  ("C-c n d" . deft)
+  :custom
+  (deft-recursive t)
+  (deft-use-filter-string-for-filename t)
+  (deft-default-extension "org")
+  (deft-directory "~/Dropbox/ORG/roam/")
+  :config/el-patch
+  (defun deft-parse-title (file contents)
+    "Parse the given FILE and CONTENTS and determine the title.
+If `deft-use-filename-as-title' is nil, the title is taken to
+be the first non-empty line of the FILE.  Else the base name of the FILE is
+used as title."
+    (el-patch-swap (if deft-use-filename-as-title
+                       (deft-base-filename file)
+                     (let ((begin (string-match "^.+$" contents)))
+                       (if begin
+                           (funcall deft-parse-title-function
+                                    (substring contents begin (match-end 0))))))
+                   (org-roam--get-title-or-slug file))))
+
+(use-package org-journal
+  :after org
+  :bind
+  ("C-c n j" . org-journal-new-entry)
+  :custom
+  (org-journal-date-prefix "#+TITLE: ")
+  (org-journal-file-format "%Y-%m-%d.org")
+  (org-journal-dir "~/Dropbox/ORG/roam/")
+  (org-journal-date-format "%A, %d %B %Y"))

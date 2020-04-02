@@ -21,8 +21,8 @@
          (string-match-p "org$" x))
        load-path))
 
-(add-to-list 'load-path "~/org-mode/lisp")
-(add-to-list 'load-path "~/org-mode/contrib/lisp")
+(add-to-list 'load-path "~/org-mode/lisp/")
+(add-to-list 'load-path "~/org-mode/contrib/lisp/")
 
 ;; check package update infos
 (setq straight-vc-git-auto-fast-forward t)
@@ -143,6 +143,14 @@
     (if (file-exists-p elc-file-path)
         (load-file elc-file-path)
       (load-file el-file-path))))
+
+(use-package el-patch
+  :straight (:host github
+                   :repo "raxod502/el-patch"
+                   :branch "develop"))
+
+(eval-when-compile
+  (require 'el-patch))
 
 (yq/get-modules "core-display-init.el")
 (yq/get-modules "evil-core.el")

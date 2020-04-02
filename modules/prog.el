@@ -608,9 +608,9 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   :straight t
   :hook (prog-mode . hl-todo-mode)
   :config
-  (define-key hl-todo-mode-map (kbd "C-c p") 'hl-todo-previous)
-  (define-key hl-todo-mode-map (kbd "C-c n") 'hl-todo-next)
-  (define-key hl-todo-mode-map (kbd "C-c o") 'hl-todo-occur))
+  (define-key hl-todo-mode-map (kbd "C-c C-t p") 'hl-todo-previous)
+  (define-key hl-todo-mode-map (kbd "C-c C-t n") 'hl-todo-next)
+  (define-key hl-todo-mode-map (kbd "C-c C-t o") 'hl-todo-occur))
 
 (use-package rainbow-delimiters
   :straight t
