@@ -241,6 +241,7 @@
   (spacemacs/set-leader-keys "r" nil)
   (spacemacs/set-leader-keys "i" nil)
   (spacemacs/set-leader-keys "f" nil)
+  (spacemacs/set-leader-keys "y" nil)
   (spacemacs/set-leader-keys "fe" nil)
   (spacemacs/set-leader-keys "h" nil)
   (spacemacs/set-leader-keys "hd" nil)

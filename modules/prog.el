@@ -801,7 +801,6 @@ _g_  gfm      _m_ markdown
   (use-package vterm
     :straight t
     :commands (vterm)
-    :disabled t
     :init
     (add-to-list 'evil-insert-state-modes #'vterm-mode)
     :config
@@ -837,7 +836,6 @@ _g_  gfm      _m_ markdown
 
   (use-package vterm-toggle
     :straight t
-    :disabled t
     :commands (vterm-toggle)
     :after (vterm)
     :custom
