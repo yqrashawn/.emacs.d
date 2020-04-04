@@ -512,7 +512,7 @@ This function is called by `org-babel-execute-src-block'."
    '(("d" "default" plain #'org-roam--capture-get-point
       "%?"
       :file-name "%<%Y%m%d%H%M%S>-${slug}"
-      :head "#+TITLE: ${title}\n"
+      :head "#+TITLE: ${title}\n\n- tags :: "
       :unnarrowed t)
      ("z" "zombie" plain #'org-roam--capture-get-point
       "%?"
@@ -525,7 +525,7 @@ This function is called by `org-babel-execute-src-block'."
       :head "#+title: ${title}\n#+draft: true\n#+date: %<%Y-%m-%d>\n#+hugo_base_dir: ~/site/\n#+hugo_section: notes\n")))
   (org-roam-templates
    (list (list "default" (list :file #'org-roam--file-name-title
-                               :content "#+TITLE: ${title}"))))
+                               :content "#+TITLE: ${title}\n\n- tags :: "))))
   :bind (:map org-roam-mode-map
               (("C-c n l" . org-roam)
                ("C-c n c" . org-roam-capture)
@@ -573,4 +573,14 @@ used as title."
   (org-journal-date-prefix "#+TITLE: ")
   (org-journal-file-format "%Y-%m-%d.org")
   (org-journal-dir "~/Dropbox/ORG/roam/")
-  (org-journal-date-format "%A, %d %B %Y"))
+  (org-journal-date-format "%A, %d %B %Y")
+  :init
+  (defun org-journal-find-location ()
+    ;; Open today's journal, but specify a non-nil prefix argument in order to
+    ;; inhibit inserting the heading; org-capture will insert the heading.
+    (org-journal-new-entry t)
+    ;; Position point on the journal's top-level heading so that org-capture
+    ;; will add the new entry as a child entry.
+    (goto-char (point-min)))
+  (add-to-list 'org-capture-templates '("j" "Journal entry" entry #'org-journal-find-location
+                                        "** %(format-time-string org-journal-time-format)%^{Title}\n%i%?")))
