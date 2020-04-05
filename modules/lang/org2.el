@@ -663,3 +663,7 @@ Wehn NO-FOCUS is t, it won't focus to the sidebar."
 
   (org-now-clocker-mode 1)
   (global-set-key (kbd "s-j") '+org-now))
+
+(use-package org-superstar
+  :straight t
+  :hook (org-mode . org-superstar-mode))
