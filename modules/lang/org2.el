@@ -492,11 +492,10 @@ This function is called by `org-babel-execute-src-block'."
 
 (use-package clocker
   :straight (:host github :repo "yqrashawn/clocker.el")
+  :disabled
   :custom
   (clocker-skip-after-save-hook-on-mode '(org-mode))
-  :bind ("s-j" . clocker-toggle-worklog)
-  :init
-  (clocker-mode 1))
+  :bind ("s-j" . clocker-toggle-worklog))
 
 (use-package org-roam
   :straight t
@@ -505,7 +504,6 @@ This function is called by `org-babel-execute-src-block'."
   (after-init . org-roam-mode)
   :custom
   (org-roam-directory "~/Dropbox/ORG/roam/")
-  (org-roam-link-title-format "R:%s")
   (org-roam-graph-viewer "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
   (org-roam-completion-system 'ivy)
   ;; https://org-roam.readthedocs.io/en/latest/templating/
@@ -539,6 +537,7 @@ This function is called by `org-babel-execute-src-block'."
 
 (use-package company-org-roam
   :straight (:host github :repo "jethrokuan/company-org-roam")
+  :disabled
   :after (org-roam company)
   :config
   (push 'company-org-roam company-backends))
@@ -574,13 +573,14 @@ used as title."
 (use-package org-journal
   :straight t
   :after org
+  :commands (org-journal-new-entry)
   :bind
   ("C-c n j" . org-journal-new-entry)
   :custom
-  (org-journal-carryover-items (s-join "|"
-                                         (-map (lambda (status)
-                                                 (s-concat "TODO=\"" (s-upcase (car status)) "\""))
-                                               yq-org-todo-active-statuses)))
+  ;; (org-journal-carryover-items (s-join "|"
+  ;;                                      (-map (lambda (status)
+  ;;                                              (s-concat "TODO=\"" (s-upcase (car status)) "\""))
+  ;;                                            yq-org-todo-active-statuses)))
   (org-journal-enable-agenda-integration t)
   (org-journal-file-header (defl (concat "#+TITLE: " (format-time-string org-journal-date-format))))
   (org-journal-date-prefix "* ")
@@ -589,7 +589,6 @@ used as title."
   ;; Sunday, 2020-04-05
   (org-journal-date-format "%A, %Y-%m-%d")
   :init
-
   (defun org-journal-find-location ()
     ;; Open today's journal, but specify a non-nil prefix argument in order to
     ;; inhibit inserting the heading; org-capture will insert the heading.
@@ -605,9 +604,62 @@ used as title."
 
 (use-package org-now
   :straight (:host github :repo "alphapapa/org-now")
-  :after org
+  :after (org)
+  :commands (org-now)
+  :bind ("s-j" . +org-now)
   :init
+  ;; inspired by clocker.el https://github.com/roman/clocker.el
+  (setq org-now-clocker-skip-after-save-hook-on-file-name '("COMMIT_EDITMSG" "recentf"))
+  (setq org-now-clocker-skip-after-save-hook-on-extensions '("org"))
+  (setq org-now-clocker-skip-after-save-hook-on-modes '())
+  (defun org-now-clocker-should-perform-save-hook? (file-name)
+    "Check if clocker ignores saves on file with extension file-ext"
+    (let ((file-ext (and file-name
+                         (file-name-extension file-name))))
+      (and
+       (not (-contains? org-now-clocker-skip-after-save-hook-on-file-name (file-name-base file-name)))
+       (not (-contains? org-now-clocker-skip-after-save-hook-on-extensions file-ext))
+       (not (-contains? org-now-clocker-skip-after-save-hook-on-modes (symbol-name major-mode))))))
+
   (defun +org-now-location ()
     (let ((path (org-journal-get-entry-path)))
       (list path (format-time-string org-journal-date-format) org-clock-current-task)))
-  (setq org-now-location (+org-now-location)))
+
+  (defun +org-now (&optional stay-open no-focus)
+    "Function used to toggle or open the clocker buffer.
+
+When there's no org clock running It will enforce user open today's org-journal,
+add a new entry.
+When there's org clock running, it will simply toggle the org-now buffer on/off.
+When STAY-OPEN is t, it won't close the sidebar.
+Wehn NO-FOCUS is t, it won't focus to the sidebar."
+    (interactive)
+    (unless (functionp 'org-clocking-p) (require 'org-clock))
+    (let* ((current-wind (get-buffer-window (current-buffer)))
+           (org-now-buf (get-buffer "*org-now*"))
+           (now-wind (or (and org-now-buf (get-buffer-window org-now-buf))
+                         (and (org-clocking-p) (get-buffer-window (org-now-buffer))))))
+      (if (org-clocking-p)
+          (if now-wind
+              (and (not stay-open) (delete-window now-wind))
+            (progn
+              (setq org-now-location (+org-now-location))
+              (org-now)
+              (and no-focus (select-window current-wind))))
+        (when (y-or-n-p "Won't save until you clock in, continue?")
+          (org-journal-new-entry nil)))))
+
+  (defun org-now-clocker-before-save-hook ()
+    (when (org-now-clocker-should-perform-save-hook? (buffer-file-name))
+      (+org-now t t)))
+
+  (define-minor-mode org-now-clocker-mode
+    "Enable clock-in enforce strategies"
+    :lighter " Clocker"
+    :global t
+    (if org-now-clocker-mode
+        (add-hook 'before-save-hook 'org-now-clocker-before-save-hook t)
+      (remove-hook 'before-save-hook 'org-now-clocker-before-save-hook)))
+
+  (org-now-clocker-mode 1)
+  (global-set-key (kbd "s-j") '+org-now))

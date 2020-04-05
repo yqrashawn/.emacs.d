@@ -187,8 +187,8 @@ has been changed to THEME."
   (doom-modeline-percent-position nil)
   :config
   (doom-modeline-def-modeline 'main
-    '(bar modals matches buffer-info remote-host selection-info)
-    '(misc-info persp-name mu4e debug lsp minor-modes indent-info buffer-encoding major-mode vcs checker)))
+    '(bar workspace-name window-number modals matches buffer-info remote-host selection-info)
+    '( misc-info persp-name battery grip irc mu4e gnus github debug lsp minor-modes input-method indent-info buffer-encoding major-mode process vcs checker)))
 
 (use-package vim-empty-lines-mode
   :straight (:host github :repo "jmickelin/vim-empty-lines-mode")
