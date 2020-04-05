@@ -16,6 +16,7 @@
   (setq org-display-inline-images t)
   (setq org-redisplay-inline-images t)
   (setq org-startup-with-inline-images "inlineimages")
+  (setq org-indirect-buffer-display 'current-window)
 
   ;; enable org template
   (add-to-list 'org-modules 'org-tempo)
@@ -543,6 +544,7 @@ This function is called by `org-babel-execute-src-block'."
   (push 'company-org-roam company-backends))
 
 (use-package deft
+  :straight t
   :after org
   :bind
   ("C-c n d" . deft)
@@ -565,22 +567,47 @@ used as title."
                                     (substring contents begin (match-end 0))))))
                    (org-roam--get-title-or-slug file))))
 
+(defvar yq-org-todo-active-statuses
+  '(("TODO" . "t") ("STARTED" . "s") ("BLOCKED" . "b"))
+  "List of pairs of active statuses and transition key.")
+
 (use-package org-journal
+  :straight t
   :after org
   :bind
   ("C-c n j" . org-journal-new-entry)
   :custom
-  (org-journal-date-prefix "#+TITLE: ")
+  (org-journal-carryover-items (s-join "|"
+                                         (-map (lambda (status)
+                                                 (s-concat "TODO=\"" (s-upcase (car status)) "\""))
+                                               yq-org-todo-active-statuses)))
+  (org-journal-enable-agenda-integration t)
+  (org-journal-file-header (defl (concat "#+TITLE: " (format-time-string org-journal-date-format))))
+  (org-journal-date-prefix "* ")
   (org-journal-file-format "%Y-%m-%d.org")
   (org-journal-dir "~/Dropbox/ORG/roam/")
-  (org-journal-date-format "%A, %d %B %Y")
+  ;; Sunday, 2020-04-05
+  (org-journal-date-format "%A, %Y-%m-%d")
   :init
+
   (defun org-journal-find-location ()
     ;; Open today's journal, but specify a non-nil prefix argument in order to
     ;; inhibit inserting the heading; org-capture will insert the heading.
+    (org-reload)
     (org-journal-new-entry t)
     ;; Position point on the journal's top-level heading so that org-capture
     ;; will add the new entry as a child entry.
-    (goto-char (point-min)))
+    (goto-char (point-min))
+    ;; first line is title
+    (forward-line 1))
   (add-to-list 'org-capture-templates '("j" "Journal entry" entry #'org-journal-find-location
                                         "** %(format-time-string org-journal-time-format)%^{Title}\n%i%?")))
+
+(use-package org-now
+  :straight (:host github :repo "alphapapa/org-now")
+  :after org
+  :init
+  (defun +org-now-location ()
+    (let ((path (org-journal-get-entry-path)))
+      (list path (format-time-string org-journal-date-format) org-clock-current-task)))
+  (setq org-now-location (+org-now-location)))
