@@ -318,3 +318,18 @@ has been changed to THEME."
   :straight t
   :disabled
   :init (hes-mode))
+
+;; https://www.manueluberti.eu//emacs/2020/03/16/modus-themes/
+;; (use-package modus-operandi-theme
+;;   :straight t)
+;; (use-package modus-vivendi-theme
+;;   :straight t)
+;; (load-theme 'modus-vivendi t)
+;; (load-theme 'modus-operandi t)
+
+
+(use-package fira-code-mode
+  :straight t
+  :disabled t
+  :custom (fira-code-mode-disabled-ligatures '("[]" "#{" "#(" "#_" "#_(" "x")) ;; List of ligatures to turn off
+  :hook prog-mode)

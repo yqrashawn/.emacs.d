@@ -862,3 +862,9 @@ _g_  gfm      _m_ markdown
 (use-package browse-at-remote
   :straight t
   :bind ("C-c g g" . browse-at-remote))
+
+(use-package separedit
+  :straight t
+  :commands (separedit)
+  :bind (:map prog-mode-map
+              ("C-c '" . separedit)))

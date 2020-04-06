@@ -1782,6 +1782,11 @@ Info-mode:
          (paren-activate)
        (paren-deactivate)))))
 
+;; TODO: face between dark/light theme
+(use-package highlight-sexp
+  :straight t
+  :hook ((emacs-lisp-mode clojure-mode lispy-mode) . highlight-sexp-mode))
+
 (use-package fence-edit
   :straight (:host github :repo "aaronbieber/fence-edit.el")
   :commands (fence-edit-code-at-point fence-edit-dwim)
@@ -1928,3 +1933,11 @@ Version 2017-09-01"
   (indent-according-to-mode)
   (forward-line -1)
   (indent-according-to-mode))
+
+
+(use-package fit-text-scale
+  :straight t
+  :commands (fit-text-scale-max-font-size-fit-buffer
+             fit-text-scale-goto-visible-line-of-max-length-down
+             fit-text-scale-max-font-size-fit-line
+             fit-text-scale-max-font-size-fit-lines))

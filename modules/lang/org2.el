@@ -621,6 +621,15 @@ used as title."
        (not (-contains? org-now-clocker-skip-after-save-hook-on-extensions file-ext))
        (not (-contains? org-now-clocker-skip-after-save-hook-on-modes (symbol-name major-mode))))))
 
+  (defun +org-journal-entry-header-exists-p (&optional buf)
+    "Check if org-journal entry current minute header is exist and edited"
+    (let ((buf (or buf (current-buffer)))
+          (header (concat org-journal-time-prefix (format-time-string org-journal-time-format))))
+      (with-current-buffer buf
+        (goto-char (point-max))
+        (let ((header-point (search-backward header nil t)))
+          (and header-point (not (eq (- (point-max) (length header)) header-point)))))))
+
   (defun +org-now-location ()
     (let ((path (org-journal-get-entry-path)))
       (list path (format-time-string org-journal-date-format) org-clock-current-task)))
@@ -646,8 +655,11 @@ Wehn NO-FOCUS is t, it won't focus to the sidebar."
             (progn
               (org-now)
               (and no-focus (select-window current-wind))))
-        (when (y-or-n-p "Won't save until you clock in, continue?")
-          (org-journal-new-entry nil)))))
+        ;; don't enforce clock in if I just updated org-journal entry at current minute
+        (unless (+org-journal-entry-header-exists-p org-now-buf)
+          (when (y-or-n-p "Won't save until you clock in, continue?")
+            (when now-wind (delete-window now-wind))
+            (org-journal-new-entry nil))))))
 
   (defun org-now-clocker-before-save-hook ()
     (when (org-now-clocker-should-perform-save-hook? (buffer-file-name))
