@@ -635,6 +635,7 @@ When STAY-OPEN is t, it won't close the sidebar.
 Wehn NO-FOCUS is t, it won't focus to the sidebar."
     (interactive)
     (unless (functionp 'org-clocking-p) (require 'org-clock))
+    (when (org-clocking-p) (setq org-now-location (+org-now-location)))
     (let* ((current-wind (get-buffer-window (current-buffer)))
            (org-now-buf (get-buffer "*org-now*"))
            (now-wind (or (and org-now-buf (get-buffer-window org-now-buf))
@@ -643,7 +644,6 @@ Wehn NO-FOCUS is t, it won't focus to the sidebar."
           (if now-wind
               (and (not stay-open) (delete-window now-wind))
             (progn
-              (setq org-now-location (+org-now-location))
               (org-now)
               (and no-focus (select-window current-wind))))
         (when (y-or-n-p "Won't save until you clock in, continue?")
