@@ -168,3 +168,10 @@
   :disabled
   :commands (indium-run-node)
   :defer t)
+
+(with-eval-after-load 'smartparens
+  ;; Don't pair lifetime specifiers
+  (dolist (mode '(js-mode js2-mode rjsx-mode typescript-mode))
+    (sp-local-pair mode "{" nil :post-handlers '((+indent-between-pair "RET")))
+    (sp-local-pair mode "[" nil :post-handlers '((+indent-between-pair "RET")))
+    (sp-local-pair mode "(" nil :post-handlers '((+indent-between-pair "RET")))))

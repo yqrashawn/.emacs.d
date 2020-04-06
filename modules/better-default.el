@@ -1922,3 +1922,9 @@ Version 2017-09-01"
          (message "File path copied: 「%s」" $fpath)
          $fpath )))))
 (spacemacs/set-leader-keys "fyp" 'xah-copy-file-path)
+
+(defun +indent-between-pair (&rest _ignored)
+  (newline)
+  (indent-according-to-mode)
+  (forward-line -1)
+  (indent-according-to-mode))
