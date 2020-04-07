@@ -572,8 +572,6 @@ used as title."
 
 (use-package org-journal
   :straight t
-  :after org
-  :commands (org-journal-new-entry)
   :bind
   ("C-c n j" . org-journal-new-entry)
   :custom
@@ -604,7 +602,7 @@ used as title."
 
 (use-package org-now
   :straight (:host github :repo "alphapapa/org-now")
-  :after (org)
+  :ensure t
   :commands (org-now)
   :bind ("s-j" . +org-now)
   :init
@@ -623,6 +621,7 @@ used as title."
 
   (defun +org-journal-entry-header-exists-p (&optional buf)
     "Check if org-journal entry current minute header is exist and edited"
+    (unless (boundp 'org-journal-time-prefix) (require 'org-journal))
     (let ((buf (or buf (current-buffer)))
           (header (concat org-journal-time-prefix (format-time-string org-journal-time-format))))
       (with-current-buffer buf
@@ -656,7 +655,7 @@ Wehn NO-FOCUS is t, it won't focus to the sidebar."
               (org-now)
               (and no-focus (select-window current-wind))))
         ;; don't enforce clock in if I just updated org-journal entry at current minute
-        (unless (+org-journal-entry-header-exists-p org-now-buf)
+        (unless (and org-now-buf (+org-journal-entry-header-exists-p org-now-buf))
           (when (y-or-n-p "Won't save until you clock in, continue?")
             (when now-wind (delete-window now-wind))
             (org-journal-new-entry nil))))))
