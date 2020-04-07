@@ -311,7 +311,8 @@ file stored in the cache directory and `nil' to disable auto-saving.")
   :custom
   (tramp-default-method "scp")
   (vc-ignore-dir-regexp (format "\\(%s\\)\\|\\(%s\\)" vc-ignore-dir-regexp tramp-file-name-regexp))
-  (tramp-ssh-controlmaster-options "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no")
+  (tramp-ssh-controlmaster-options "-o SendEnv TRAMP=yes -o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no")
+  (tramp-shell-prompt-pattern "\\(?:^\\|\r\\)[^]#$%>\n]*#?[]#$%>].* *\\(^[\\[[0-9;]*[a-zA-Z] *\\)*")
   (tramp-connection-timeout 15)
   (tramp-completion-reread-directory-timeout 900)
   :config
@@ -1140,9 +1141,6 @@ otherwise it is scaled down."
 ;;fast switching between three buffers
 (define-key evil-normal-state-map (kbd "<C-tab>") 'switch-to-second-most-recent-buffer)
 (define-key evil-normal-state-map (kbd "<C-s-tab>") 'switch-to-third-most-recent-buffer)
-
-;; If you tramp is hanging, you can uncomment below line.
-;; (setq tramp-ssh-controlmaster-options "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no")
 
 (use-package keyfreq
   :straight t
