@@ -5,10 +5,10 @@
 (defun yq/macbook ()
   "Load macbook theme and font size."
   (interactive)
+  (spacemacs/set-default-font (yq/font 11))
   (if (yq/day-p)
       (load-theme yq/light-theme 'no-confirm)
-    (load-theme yq/dark-theme 'no-confirm))
-  (spacemacs/set-default-font (yq/font 13)))
+    (load-theme yq/dark-theme 'no-confirm)))
 
 (defun yq/imac ()
   "Load macbook theme and font size."
@@ -16,7 +16,7 @@
   (if (yq/day-p)
       (load-theme yq/light-theme 'no-confirm)
     (load-theme yq/dark-theme 'no-confirm))
-  (spacemacs/set-default-font (yq/font 20)))
+  (spacemacs/set-default-font (yq/font 18)))
 
 (defun yq/day-p ()
   "Return t/nil if it's day or night."
