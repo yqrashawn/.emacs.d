@@ -16,7 +16,7 @@
   (if (yq/day-p)
       (load-theme yq/light-theme 'no-confirm)
     (load-theme yq/dark-theme 'no-confirm))
-  (spacemacs/set-default-font (yq/font 18)))
+  (spacemacs/set-default-font (yq/font 13)))
 
 (defun yq/day-p ()
   "Return t/nil if it's day or night."

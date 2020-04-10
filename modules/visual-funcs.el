@@ -99,7 +99,7 @@ The return value is nil if no font was found, truthy otherwise."
              (spacemacs/set-default-font (yq/font 13)))
     (if (string= yq/default-font-kind "large")
         (progn (setq yq/default-font-kind "small")
-               (spacemacs/set-default-font (yq/font 15))))))
+               (spacemacs/set-default-font (yq/font 11))))))
 
 (defun disable-all-themes ()
   (interactive)
