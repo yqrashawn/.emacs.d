@@ -1783,6 +1783,7 @@ Info-mode:
 ;; TODO: face between dark/light theme
 (use-package highlight-sexp
   :straight t
+  :disabled t
   :hook ((emacs-lisp-mode clojure-mode lispy-mode) . highlight-sexp-mode))
 
 (use-package fence-edit

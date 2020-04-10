@@ -106,6 +106,7 @@ For evil states that also need an entry to `spacemacs-evil-cursors' use
 (defvar spacemacs-post-theme-change-hook nil
   "Hook run after theme has changed.")
 
+(memq yq/current-theme '(zenburn modus-vivendi))
 (defun +set-mic-paren-face ()
   ;; mic-paren
   (set-face-foreground 'paren-face-match nil)
@@ -115,9 +116,9 @@ For evil states that also need an entry to `spacemacs-evil-cursors' use
 (add-hook 'spacemacs-post-theme-change-hook
           (lambda ()
             (cond
-             ((and (eq yq/current-theme 'zenburn) (facep 'paren-face-match))
+             ((and (memq yq/current-theme '(zenburn modus-vivendi)) (facep 'paren-face-match))
               (+set-mic-paren-face))
-             ((eq yq/current-theme yq/light-theme)
+             ((memq yq/current-theme '(modus-operandi spacemacs-light))
               (set-face-background 'paren-face-match "#dbd9d1")))))
 
 (defadvice load-theme (after spacemacs/load-theme-adv activate)
@@ -320,10 +321,12 @@ has been changed to THEME."
   :init (hes-mode))
 
 ;; https://www.manueluberti.eu//emacs/2020/03/16/modus-themes/
-;; (use-package modus-operandi-theme
-;;   :straight t)
-;; (use-package modus-vivendi-theme
-;;   :straight t)
+(use-package modus-operandi-theme
+  :straight t
+  :defer t)
+(use-package modus-vivendi-theme
+  :straight t
+  :defer t)
 ;; (load-theme 'modus-vivendi t)
 ;; (load-theme 'modus-operandi t)
 
