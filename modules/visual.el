@@ -106,7 +106,6 @@ For evil states that also need an entry to `spacemacs-evil-cursors' use
 (defvar spacemacs-post-theme-change-hook nil
   "Hook run after theme has changed.")
 
-(memq yq/current-theme '(zenburn modus-vivendi))
 (defun +set-mic-paren-face ()
   ;; mic-paren
   (set-face-foreground 'paren-face-match nil)
