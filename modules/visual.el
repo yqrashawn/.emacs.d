@@ -168,7 +168,6 @@ has been changed to THEME."
 
 (use-package doom-modeline
   :straight t
-  :hook (after-init . doom-modeline-init)
   :custom
   (doom-modeline-height 15)
   (doom-modeline-buffer-file-name-style 'relative-to-project)
@@ -188,7 +187,8 @@ has been changed to THEME."
   :config
   (doom-modeline-def-modeline 'main
     '(bar workspace-name window-number modals matches buffer-info remote-host selection-info)
-    '( misc-info persp-name battery grip irc mu4e gnus github debug lsp minor-modes input-method indent-info buffer-encoding major-mode process vcs checker)))
+    '(misc-info persp-name battery grip irc mu4e gnus github debug lsp minor-modes input-method indent-info buffer-encoding major-mode process vcs checker))
+  (doom-modeline-init))
 
 (use-package vim-empty-lines-mode
   :straight (:host github :repo "jmickelin/vim-empty-lines-mode")
