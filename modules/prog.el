@@ -837,11 +837,10 @@ _g_  gfm      _m_ markdown
   (use-package vterm-toggle
     :straight t
     :commands (vterm-toggle)
-    :after (vterm)
+    :bind ("C-'" . vterm-toggle)
     :custom
     (vterm-toggle-fullscreen-p nil)
     :init
-    (global-set-key (kbd "C-'") #'vterm-toggle)
     (add-to-list 'display-buffer-alist
                  '("^v?term.*"
                    (display-buffer-reuse-window display-buffer-at-bottom)
