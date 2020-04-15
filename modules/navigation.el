@@ -5,6 +5,8 @@
                          ?A ?S ?D ?F ?G ?H ?J ?K ?L ?Q ?W ?E ?R
                          ?T ?Y ?U ?I ?O ?P ?Z ?X ?C ?V ?B ?N ?M))
 
+(yq/get-modules "counsel-funcs.el")
+
 (use-package ivy
   :straight (:host github :repo "abo-abo/swiper" :branch "master"
                    :files
@@ -402,9 +404,10 @@ repository, then the corresponding root is used instead."
 
 (use-package projectile
   :straight t
-  :hook (after-init . projectile-mode)
+  :defer t
   :diminish projectile-mode
   :init
+  (projectile-mode +1)
   (setq projectile-project-search-path '("~/workspace/" "~/.emacs.d/straight/repos/"))
   (setq projectile-completion-system 'ivy)
   :config
@@ -428,8 +431,7 @@ repository, then the corresponding root is used instead."
 
 (use-package counsel-projectile
   :straight t
-  :hook (projectile-mode . counsel-projectile-mode)
-  :after (counsel projectile)
+  :defer t
   :init
   (counsel-projectile-mode +1)
   (spacemacs/set-leader-keys "p" nil)
@@ -452,7 +454,6 @@ repository, then the corresponding root is used instead."
   ;; (global-set-key (kbd "C-M-S-s-j") '+counsel-projectile-switch-buffer-next-line)
   ;; (global-set-key (kbd "C-M-S-s-k") '+counsel-projectile-switch-buffer-prev-line)
 
-(yq/get-modules "counsel-funcs.el")
 
 (spacemacs/set-leader-keys "sd" 'spacemacs/search-dir-rg)
 (spacemacs/set-leader-keys "sD" 'spacemacs/search-dir-rg-region-or-symbol)
