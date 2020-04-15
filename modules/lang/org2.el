@@ -498,7 +498,8 @@ This function is called by `org-babel-execute-src-block'."
   :bind ("s-j" . clocker-toggle-worklog))
 
 (use-package org-roam
-  :straight t
+  ;; :straight t
+  :straight (:host github :repo "jethrokuan/org-roam")
   :after org
   :hook
   (after-init . org-roam-mode)
@@ -579,10 +580,10 @@ used as title."
   ;;                                      (-map (lambda (status)
   ;;                                              (s-concat "TODO=\"" (s-upcase (car status)) "\""))
   ;;                                            yq-org-todo-active-statuses)))
-  (org-journal-enable-agenda-integration t)
-  (org-journal-file-header (defl (concat "#+TITLE: " (format-time-string org-journal-date-format))))
   (org-journal-date-prefix "* ")
   (org-journal-file-format "%Y-%m-%d.org")
+  (org-journal-enable-agenda-integration t)
+  (org-journal-file-header (lambda (&optional args) (concat "#+TITLE: " (format-time-string org-journal-date-format))))
   (org-journal-dir "~/Dropbox/ORG/roam/")
   ;; Sunday, 2020-04-05
   (org-journal-date-format "%A, %Y-%m-%d")
@@ -649,11 +650,13 @@ Wehn NO-FOCUS is t, it won't focus to the sidebar."
            (now-wind (or (and org-now-buf (get-buffer-window org-now-buf))
                          (and (org-clocking-p) (get-buffer-window (org-now-buffer))))))
       (if (org-clocking-p)
-          (if now-wind
-              (and (not stay-open) (delete-window now-wind))
-            (progn
-              (org-now)
-              (and no-focus (select-window current-wind))))
+          (progn
+            ;; (if now-wind
+            ;;    (and (not stay-open) (delete-window now-wind))
+            ;;  (progn
+            ;;    (org-now)
+            ;;    (and no-focus (select-window current-wind))))
+            )
         ;; don't enforce clock in if I just updated org-journal entry at current minute
         (unless (and org-now-buf (+org-journal-entry-header-exists-p org-now-buf))
           (when (y-or-n-p "Won't save until you clock in, continue?")

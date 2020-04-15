@@ -5,7 +5,7 @@
 (defun yq/macbook ()
   "Load macbook theme and font size."
   (interactive)
-  (spacemacs/set-default-font (yq/font 11))
+  (spacemacs/set-default-font (yq/font 12))
   (if (yq/day-p)
       (load-theme yq/light-theme 'no-confirm)
     (load-theme yq/dark-theme 'no-confirm)))

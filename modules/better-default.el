@@ -1935,6 +1935,7 @@ Version 2017-09-01"
 
 
 (use-package fit-text-scale
+  :disabled t
   :straight t
   :commands (fit-text-scale-max-font-size-fit-buffer
              fit-text-scale-goto-visible-line-of-max-length-down
