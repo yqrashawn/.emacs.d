@@ -1195,7 +1195,6 @@ first."))
   :straight t
   :commands (rg rg-literal rg-dwim rg-project))
 
-
 (use-package bm
   :straight t
   :custom
@@ -1238,3 +1237,7 @@ first."))
   :bind (("C-c b j" . bm-next)
          ("C-c b k" . bm-previous)
          ("C-c b b" . bm-toggle)))
+
+(use-package golden-ratio
+  :straight t
+  :hook (after-init . golden-ratio-mode))
