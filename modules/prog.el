@@ -863,7 +863,7 @@ _g_  gfm      _m_ markdown
   :bind ("C-c g g" . browse-at-remote))
 
 (use-package separedit
-  :straight t
+  :straight (:host github :repo "twlz0ne/separedit.el")
   :commands (separedit)
   :bind (:map prog-mode-map
               ("C-c '" . separedit)))

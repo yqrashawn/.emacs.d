@@ -679,5 +679,5 @@ Wehn NO-FOCUS is t, it won't focus to the sidebar."
   (global-set-key (kbd "s-j") '+org-now))
 
 (use-package org-superstar
-  :straight t
+  :straight (:host github :repo "integral-dw/org-superstar-mode")
   :hook (org-mode . org-superstar-mode))

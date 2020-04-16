@@ -26,3 +26,5 @@ eshell
 /.pullover
 /.lsp-session-v1
 /.vscode
+/bm-repository
+/org-journal.cache
