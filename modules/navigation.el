@@ -74,8 +74,10 @@
   (add-to-list 'ivy-re-builders-alist '(forge-create-pullreq . ivy--regex-fuzzy))
   (add-to-list 'ivy-re-builders-alist '(counsel-git . ivy--regex-fuzzy))
   (add-to-list 'ivy-re-builders-alist '(projector-run-command-buffer-prompt . ivy--regex-fuzzy))
-  (add-to-list 'ivy-re-builders-alist '(spacemacs/counsel-search . spacemacs/ivy--regex-plus))
-  (add-to-list 'ivy-re-builders-alist '(spacemacs/search-auto . spacemacs/ivy--regex-plus))
+  ;; (add-to-list 'ivy-re-builders-alist '(spacemacs/counsel-search . spacemacs/ivy--regex-plus))
+  ;; (add-to-list 'ivy-re-builders-alist '(spacemacs/search-auto . spacemacs/ivy--regex-plus))
+  (add-to-list 'ivy-re-builders-alist '(spacemacs/counsel-search . ivy--regex-plus))
+  (add-to-list 'ivy-re-builders-alist '(spacemacs/search-auto . ivy--regex-plus))
 
   (defun yq/ivy-evil-registers ()
     "Show evil registers"
