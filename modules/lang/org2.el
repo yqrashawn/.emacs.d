@@ -605,6 +605,7 @@ used as title."
   :straight (:host github :repo "alphapapa/org-now")
   :ensure t
   :commands (org-now)
+  :disabled
   :bind ("s-j" . +org-now)
   :init
   ;; inspired by clocker.el https://github.com/roman/clocker.el
