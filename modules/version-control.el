@@ -94,7 +94,8 @@
     (setq this-command #'my-magit-command))
   (with-eval-after-load 'ivy
     (setf (alist-get 'my-magit-command ivy-re-builders-alist) #'ivy--regex-fuzzy))
-  (add-function :before magit-completing-read-function #'my-magit-command))
+  (add-function :before magit-completing-read-function #'my-magit-command)
+  (add-to-list 'ivy-re-builders-alist '(magit-log-other . ivy--regex-fuzzy)))
 
 
 (use-package evil-magit :straight t :after magit)

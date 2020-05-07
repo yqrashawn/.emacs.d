@@ -867,3 +867,10 @@ _g_  gfm      _m_ markdown
   :commands (separedit)
   :bind (:map prog-mode-map
               ("C-c '" . separedit)))
+
+(use-package jq-mode
+  :straight t
+  :mode (("\\.jq$" . jq-mode))
+  :init
+  (with-eval-after-load 'json-mode
+    (define-key json-mode-map (kbd "C-c C-j") #'jq-interactively)))
