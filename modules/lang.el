@@ -104,8 +104,10 @@
    `("node" ,(expand-file-name (car (last
                                      (file-expand-wildcards
                                       "~/.vscode/extensions/dbaeumer.vscode-eslint-*/server/out/eslintServer.js")))) "--stdio"))
+  (lsp-eslint-auto-fix-on-save t)
+  (lsp-eslint-run "onSave")
+  (lsp-eslint-package-manager "yarn")
   :config
-
   ;; temp fix company-lsp
   (defun yq/lsp-adjust-company-backends ()
     (setq-local company-backends (cons 'company-tabnine (cons 'company-lsp (remove 'company-capf (remove 'company-lsp (remove 'company-tabnine company-backends)))))))
