@@ -107,6 +107,8 @@
   (lsp-eslint-auto-fix-on-save t)
   (lsp-eslint-run "onSave")
   (lsp-eslint-package-manager "yarn")
+  (lsp-clojure-server-command '("bash" "-c" "clojure-lsp"))
+  ;; (lsp-enable-indentation nil)
   :config
   ;; temp fix company-lsp
   (defun yq/lsp-adjust-company-backends ()
@@ -121,7 +123,13 @@
    'lsp-after-open-hook
    (defl (spacemacs//setup-lsp-jump-handler major-mode)))
   (push '("*lsp-help*" :dedicated t :position bottom :stick t :noselect t :height 0.4)
-        popwin:special-display-config))
+        popwin:special-display-config)
+  ;; clojure-lsp https://github.com/snoe/clojure-lsp#installation
+  (dolist (m '(clojure-mode
+               clojurec-mode
+               clojurescript-mode
+               clojurex-mode))
+    (add-to-list 'lsp-language-id-configuration `(,m . "clojure"))))
 
 (use-package lsp-ui
   :straight t
