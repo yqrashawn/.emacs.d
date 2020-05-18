@@ -75,35 +75,35 @@
   :straight (:host github :repo "emacs-pe/crontab-mode")
   :defer t)
 
+;; http://blog.binchen.org/posts/how-to-speed-up-lsp-mode.html
+;; no real time syntax check
 (use-package lsp-mode
   :straight t
   :hook ((shell-script-mode web-mode css-mode typescript-mode js2-mode rjsx-mode) . lsp-deferred)
   :custom
-  ;; http://blog.binchen.org/posts/how-to-speed-up-lsp-mode.html
-  (lsp-log-io nil)
-  (lsp-enable-folding nil)
-  (lsp-enable-snippet nil)
-  ;; (lsp-enable-completion-at-point nil)
-  ;; (lsp-enable-symbol-highlighting nil)
-  (lsp-enable-links nil)
+  ;; lsp-mode
+  (lsp-keep-workspace-alive nil)
+  (lsp-semantic-highlighting :immediate)
   (lsp-restart 'auto-restart)
-  ;; no real time syntax check
-  (lsp-diagnostic-package :flycheck)
-  (lsp-prefer-capf nil)
-  (lsp-links-check-internal (if *imac* 0.1 0.3))
-  (lsp-auto-guess-root nil)
-  (lsp-restart 'auto-restart)
-  (lsp-eldoc-render-all t)
-  (lsp-enable-on-type-formatting t)
-  (lsp-prefer-flymake nil)
-  (lsp-lens-check-interval (if *imac* 0.1 0.2))
+  (lsp-eldoc-enable-hover t)
+  (lsp-eldoc-render-all nil)
   (lsp-enable-symbol-highlighting nil)
-  (lsp-document-highlight-delay (if *imac* 0.2 0.5))
-  (lsp-symbol-highlighting-skip-current t)
+  (lsp-enable-on-type-formatting t)
+  (lsp-imenu-sort-methods '(position))
+  (lsp-prefer-capf t)
+  (lsp-symbol-highlighting-skip-current nil)
+  (lsp-idle-delay 0.500)
+  ;; lsp-clients
+  (lsp-bash-explainshell-endpoint t)
+  (lsp-bash-highlight-parsing-errors t)
+  (lsp-bash-glob-pattern t)
+  ;; ts-js
+
   (lsp-eslint-server-command
    `("node" ,(expand-file-name (car (last
                                      (file-expand-wildcards
                                       "~/.vscode/extensions/dbaeumer.vscode-eslint-*/server/out/eslintServer.js")))) "--stdio"))
+  (lsp-eslint-package-manager "yarn")
   (lsp-eslint-auto-fix-on-save t)
   (lsp-eslint-run "onSave")
   (lsp-eslint-package-manager "yarn")
