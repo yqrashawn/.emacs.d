@@ -189,3 +189,7 @@
 (use-package lsp-ivy
   :straight t
   :defer t)
+
+(use-package dockerfile-mode
+  :straight t
+  :mode ("Dockerfile\\'" . dockerfile-mode))
