@@ -1770,6 +1770,7 @@ Info-mode:
 (use-package mic-paren
   :straight t
   :custom
+  (paren-display-message 'only)
   (paren-sexp-mode 'match)
   :init
   (setq +mic-paren-modes '(clojure-mode emacs-lisp-mode))
