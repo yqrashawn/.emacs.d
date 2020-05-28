@@ -874,3 +874,7 @@ _g_  gfm      _m_ markdown
   :init
   (with-eval-after-load 'json-mode
     (define-key json-mode-map (kbd "C-c C-j") #'jq-interactively)))
+
+(use-package company-box
+  :straight t
+  :hook (company-mode . company-box-mode))
