@@ -84,58 +84,8 @@
            (lambda (index)
              (eq index mode-to-remove))
            evil-insert-state-modes)))
+  (evil-mode 1)
   :config
-  ;; TODO: check if this fixed
-  ;;  https://github.com/emacs-evil/evil/issues/1152
-  (evil-define-command evil-visual-paste (count &optional register)
-    "Paste over Visual selection."
-    :suppress-operator t
-    (interactive "*P<x>")
-    (setq count (prefix-numeric-value count))
-    ;; evil-visual-paste is typically called from evil-paste-before or
-    ;; evil-paste-after, but we have to mark that the paste was from
-    ;; visual state
-    (setq this-command 'evil-visual-paste)
-    (let* ((text (if register
-                     (evil-get-register register)
-                   (current-kill 0)))
-           (yank-handler (car-safe (get-text-property
-                                    0 'yank-handler text)))
-           new-kill
-           paste-eob)
-      (evil-with-undo
-        (let* ((kill-ring (list (current-kill 0)))
-               (kill-ring-yank-pointer kill-ring))
-          (when (evil-visual-state-p)
-            (evil-visual-rotate 'upper-left)
-            ;; if we replace the last buffer line that does not end in a
-            ;; newline, we use `evil-paste-after' because `evil-delete'
-            ;; will move point to the line above
-            (when (and (= evil-visual-end (point-max))
-                       (/= (char-before (point-max)) ?\n))
-              (setq paste-eob t))
-            (evil-delete evil-visual-beginning evil-visual-end
-                         (evil-visual-type) ?_)
-            (when (and (eq yank-handler #'evil-yank-line-handler)
-                       (not (eq (evil-visual-type) 'line))
-                       (not (= evil-visual-end (point-max))))
-              (insert "\n"))
-            (evil-normal-state)
-            (setq new-kill (current-kill 0))
-            (current-kill 1))
-          (if paste-eob
-              (evil-paste-after count register)
-            (evil-paste-before count register)))
-        (when evil-kill-on-visual-paste
-          (kill-new new-kill))
-        ;; mark the last paste as visual-paste
-        (setq evil-last-paste
-              (list (nth 0 evil-last-paste)
-                    (nth 1 evil-last-paste)
-                    (nth 2 evil-last-paste)
-                    (nth 3 evil-last-paste)
-                    (nth 4 evil-last-paste)
-                    t)))))
   (define-key evil-ex-completion-map (kbd "C-a") #'move-beginning-of-line)
   (define-key evil-ex-completion-map (kbd "C-b") #'backward-char)
   (define-key evil-normal-state-map (kbd "C-b") 'evil-execute-in-emacs-state)
@@ -264,8 +214,7 @@
   (spacemacs/set-leader-keys "fed" (lambda () (interactive) (find-file-existing yq-emacs-dotfile-dir)))
   (spacemacs/set-leader-keys "fek" (lambda () (interactive) (find-file-existing "~/.config/karabiner.edn")))
   (load-file "~/.emacs.d/straight/repos/straight.el/straight-x.el")
-  (spacemacs/set-leader-keys "feU" #'straight-x-fetch-all)
-  (evil-mode 1))
+  (spacemacs/set-leader-keys "feU" #'straight-x-fetch-all))
 
 (use-package evil-nerd-commenter
   :straight t
@@ -412,7 +361,7 @@
 (use-package evil-matchit
   :straight t
   :init
-  (add-hook 'after-init-hook #'global-evil-matchit-mode)
+  (global-evil-matchit-mode 1)
   :config
   ;; (define-key evil-normal-state-map (kbd "C-;") 'evilmi-select-items)
   (define-key evil-visual-state-map (kbd "C-m") 'evilmi-jump-items)

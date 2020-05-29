@@ -29,5 +29,12 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
+(straight-use-package 'evil)
+(straight-use-package 'evil-matchit)
 (straight-use-package 'js2-mode)
-(straight-use-package 'indium)
+(straight-use-package 'rjsx-mode)
+(straight-use-package 'typescript-mode)
+
+(evil-mode 1)
+(global-evil-matchit-mode 1)
+(find-file (expand-file-name "~/Downloads/test.js"))
