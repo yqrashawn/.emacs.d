@@ -159,6 +159,7 @@
   (define-key evil-normal-state-map "gk" 'evil-previous-line)
   (define-key evil-normal-state-map "zl" 'hs-hide-level)
   (define-key evil-normal-state-map (kbd "C-k") 'evil-toggle-fold)
+  ;; (define-key evil-normal-state-map (kbd "C-k") 'hs-toggle-hiding)
   (define-key evil-normal-state-map "s" 'yq-s-map)
   (define-key evil-normal-state-map "t" 'nil)
   (define-key yq-s-map "k" 'yq/kill-this-buffer)
