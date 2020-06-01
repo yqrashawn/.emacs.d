@@ -338,7 +338,6 @@ has been changed to THEME."
 
 (use-package backline
   :straight t
-  :disabled t
   :after outline
   :config (advice-add 'outline-flag-region :after 'backline-update))
 

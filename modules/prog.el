@@ -877,4 +877,10 @@ _g_  gfm      _m_ markdown
 
 (use-package company-box
   :straight t
+  ;; don't support capf
+  :disabled t
   :hook (company-mode . company-box-mode))
+
+(use-package 0xc
+  :straight t
+  :commands (0xc-convert 0xc-convert-point))
