@@ -1253,13 +1253,18 @@ first."))
 (use-package outshine
   :straight t
   :after outline
-  :hook (prog-mode . outshine-mode)
+  :hook ((prog-mode text-mode) . outshine-mode)
   :custom
+  (outshine-fontify t)
   (outshine-fontify-whole-heading-line t)
   (outshine-use-speed-commands t)
   :config
-  (evil-define-key 'normal outshine-mode-map (kbd "C-y") #'outshine-cycle)
-  (evil-define-key 'normal outshine-mode-map (kbd "C-S-y") #'outshine-cycle-buffer)
+  (add-hook 'org-mode-hook (defl (outshine-mode -1)))
+  (add-hook 'markdown-mode-hook (defl (outshine-mode -1)))
+  (advice-add 'evil-open-folds :after 'outline-show-all)
+  (evil-define-key 'normal outshine-mode-map (kbd "TAB") #'outshine-cycle)
+  ;; (evil-define-key 'normal outshine-mode-map (kbd "C-y") #'outshine-cycle)
+  ;; (evil-define-key 'normal outshine-mode-map (kbd "C-S-y") #'outshine-cycle-buffer)
   (setq outshine-speed-commands-user
         '(
           ("Outline Navigation")

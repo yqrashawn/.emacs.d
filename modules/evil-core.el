@@ -179,7 +179,7 @@
   (define-key evil-insert-state-map (kbd "C-d") 'delete-forward-char)
   (define-key evil-insert-state-map (kbd "C-m") 'newline-and-indent)
   ;; (define-key evil-insert-state-map (kbd "C-j") 'evil-ret-and-indent)
-  (spacemacs/set-leader-keys "TAB" 'spacemacs/alternate-buffer)
+  ;; (spacemacs/set-leader-keys "TAB" 'spacemacs/alternate-buffer)
   (spacemacs/set-leader-keys "w" nil)
   (spacemacs/set-leader-keys "a" nil)
   (spacemacs/set-leader-keys "t" nil)

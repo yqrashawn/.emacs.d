@@ -336,14 +336,13 @@ has been changed to THEME."
   :custom (fira-code-mode-disabled-ligatures '("[]" "#{" "#(" "#_" "#_(" "x")) ;; List of ligatures to turn off
   :hook prog-mode)
 
-(use-package backline
-  :straight t
-  :after outline
-  :config (advice-add 'outline-flag-region :after 'backline-update))
+;; (use-package backline
+;;   :straight t
+;;   :after outshine
+;;   :config (advice-add 'outshine-flag-subtree :after 'backline-update))
 
-(use-package outline-minor-faces
-  :straight t
-  :disabled t
-  :after outline
-  :config (add-hook 'outline-minor-mode-hook
-                    'outline-minor-faces-add-font-lock-keywords))
+;; (use-package outline-minor-faces
+;;   :straight t
+;;   :after outshine
+;;   :config (add-hook 'outshine-mode
+;;                     'outline-minor-faces-add-font-lock-keywords))
