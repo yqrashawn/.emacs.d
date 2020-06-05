@@ -293,7 +293,7 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   (spacemacs/set-leader-keys "fwo" (defl (counsel-find-file "~/workspace/office")))
   (define-key yq-s-map "f" #'counsel-rg)
   (define-key yq-s-map "l" 'spacemacs/counsel-jump-in-buffer)
-  (define-key yq-s-map "j" #'counsel-buffer-or-recentf)
+  (define-key yq-s-map "j" #'counsel-recentf)
   (global-set-key (kbd "C-x C-r") #'counsel-recentf)
 
   (defun +counsel-fzf-rg-files (&optional input dir)
