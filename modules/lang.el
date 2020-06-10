@@ -86,6 +86,7 @@
   :hook ((js2-mode js-mode rjsx-mode) . lsp-eslint-fix-before-save)
   :custom
   ;; lsp-mode
+  (lsp-file-watch-threshold 4000)
   (lsp-keep-workspace-alive nil)
   (lsp-enable-semantic-highlighting t)
   (lsp-restart 'auto-restart)

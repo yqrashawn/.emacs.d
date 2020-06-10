@@ -44,7 +44,7 @@
 (defun pretty-magit-add-leader (word char face-props)
   "Replace sanitized WORD with CHAR having FACE-PROPS and add to prompts."
   (add-to-list 'pretty-magit--alist
-               (list (rx-to-string `(: bow
+               (list (rx-to-string `(: word-start
                                        (group ,word ":")))
                      char face-props))
   (add-to-list 'pretty-magit--prompt
