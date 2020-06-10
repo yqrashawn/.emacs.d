@@ -75,19 +75,23 @@
   :straight (:host github :repo "emacs-pe/crontab-mode")
   :defer t)
 
+(defun lsp-eslint-fix-before-save ()
+  (add-hook 'before-save-hook #'lsp-eslint-apply-all-fixes))
+
 ;; http://blog.binchen.org/posts/how-to-speed-up-lsp-mode.html
 ;; no real time syntax check
 (use-package lsp-mode
   :straight t
-  :hook ((shell-script-mode web-mode css-mode typescript-mode js2-mode rjsx-mode) . lsp-deferred)
+  :hook ((dockerfile-mode shell-script-mode web-mode css-mode typescript-mode js2-mode rjsx-mode) . lsp-deferred)
+  :hook ((js2-mode js-mode rjsx-mode) . lsp-eslint-fix-before-save)
   :custom
   ;; lsp-mode
   (lsp-keep-workspace-alive nil)
-  (lsp-semantic-highlighting :immediate)
+  (lsp-enable-semantic-highlighting t)
   (lsp-restart 'auto-restart)
   (lsp-eldoc-enable-hover t)
   (lsp-eldoc-render-all nil)
-  (lsp-enable-symbol-highlighting nil)
+  (lsp-enable-symbol-highlighting t)
   (lsp-enable-on-type-formatting t)
   (lsp-imenu-sort-methods '(position))
   (lsp-prefer-capf t)
@@ -98,7 +102,6 @@
   (lsp-bash-highlight-parsing-errors t)
   (lsp-bash-glob-pattern t)
   ;; ts-js
-
   (lsp-eslint-server-command
    `("node" ,(expand-file-name (car (last
                                      (file-expand-wildcards
@@ -110,6 +113,10 @@
   (lsp-clojure-server-command '("bash" "-c" "clojure-lsp"))
   ;; (lsp-enable-indentation nil)
   :config
+  (add-hook
+   'lsp-managed-mode-hook
+   (defl (setq-local company-minimum-prefix-length 1)
+     (setq-local company-idle-delay 0.0)))
   ;; temp fix company-lsp
   (defun yq/lsp-adjust-company-backends ()
     (setq-local company-backends (cons 'company-tabnine (cons 'company-lsp (remove 'company-capf (remove 'company-lsp (remove 'company-tabnine company-backends)))))))
@@ -157,14 +164,11 @@
   (lsp-ui-sideline-show-code-actions t)
   (lsp-ui-sideline-show-diagnostics t)
   (lsp-ui-sideline-ignore-duplicate t)
-  (lsp-ui-peek-always-show nil)
-  :init
-  (defun lsp-ui-flycheck-enable (_))
-  :config
-  (defun lsp-ui-flycheck-enable (_)))
+  (lsp-ui-peek-always-show nil))
 
 (use-package company-lsp
   :straight t
+  :disabled t
   :after company
   :commands (company-lsp)
   :custom

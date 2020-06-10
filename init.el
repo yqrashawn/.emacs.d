@@ -145,9 +145,7 @@
       (load-file el-file-path))))
 
 (use-package el-patch
-  :straight (:host github
-                   :repo "raxod502/el-patch"
-                   :branch "develop"))
+  :straight t)
 
 (eval-when-compile
   (require 'el-patch))
