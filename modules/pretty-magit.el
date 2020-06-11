@@ -43,9 +43,13 @@
 
 (defun pretty-magit-add-leader (word char face-props)
   "Replace sanitized WORD with CHAR having FACE-PROPS and add to prompts."
+  ;; (add-to-list 'pretty-magit--alist
+  ;;              (list (rx-to-string `(: word-start
+  ;;                                      (group ,word ":")))
+  ;;                    char face-props))
   (add-to-list 'pretty-magit--alist
                (list (rx-to-string `(: word-start
-                                       (group ,word ":")))
+                                       (group ,word)))
                      char face-props))
   (add-to-list 'pretty-magit--prompt
                (concat word ": ")))
@@ -78,8 +82,8 @@
 ;;;###autoload
 (defun pretty-magit-setup (&optional no-commit-prompts?)
   "Advise the appropriate magit funcs to add pretty-magit faces."
-  (advice-add 'magit-status         :after 'pretty-magit--add-magit-faces)
-  (advice-add 'magit-refresh-buffer :after 'pretty-magit--add-magit-faces)
+  ;; (advice-add 'magit-status         :after 'pretty-magit--add-magit-faces)
+  ;; (advice-add 'magit-refresh-buffer :after 'pretty-magit--add-magit-faces)
 
   (unless no-commit-prompts?
     (remove-hook 'git-commit-setup-hook 'with-editor-usage-message)
