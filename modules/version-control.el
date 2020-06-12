@@ -19,6 +19,8 @@
 (use-package magit
   :straight t
   :custom
+  (magit-log-margin '(t age-abbreviated magit-log-margin-width t 18))
+  ;; (magit-log-margin '(t "%Y-%m-%d %H:%M "  magit-log-margin-width t 18))
   (magit-diff-refine-hunk t)
   (magit-section-initial-visibility-alist '((stashes . hide)
                                             (untracked . show)

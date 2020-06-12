@@ -48,6 +48,7 @@ file stored in the cache directory and `nil' to disable auto-saving.")
 
 (size-indication-mode t)
 (auto-compression-mode t)
+(global-set-key [remap comment-dwim] #'comment-line)
 
 (setq read-process-output-max (* 1024 1024))
 

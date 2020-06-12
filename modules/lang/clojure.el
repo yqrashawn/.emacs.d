@@ -380,6 +380,10 @@
             (evil-define-key 'normal map
               (concat ",r" binding) func)))))))
 
+(use-package cljr-ivy
+  :straight t
+  :bind (:map clojure-mode-map) ("C-c r" . cljr-ivy))
+
 (use-package cider-eval-sexp-fu
   :straight t
   :after cider)
