@@ -47,6 +47,8 @@
   (spacemacs/set-leader-keys "gf" #'magit-file-dispatch)
   (spacemacs/set-leader-keys "gg" #'magit-list-repositories)
   (spacemacs/set-leader-keys "gs" #'magit-status)
+  (spacemacs/set-leader-keys "gS" (defl (setq current-prefix-arg '(1))
+                                    (call-interactively #'magit-status)))
   :config
   (magit-wip-mode 1)
   (magit-auto-revert-mode 1)
