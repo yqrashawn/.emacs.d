@@ -353,7 +353,8 @@ file stored in the cache directory and `nil' to disable auto-saving.")
   (:map minibuffer-local-map
         ("<escape>"  . abort-recursive-edit))
   :hook
-  ((prog-mode text-mode) . turn-on-auto-fill)
+  ((prog-mode org-mode) . turn-on-auto-fill)
+  ((text-mode markdown-mode) . visual-line-mode)
   :config
   ;; https://with-emacs.com/posts/editing/show-matching-lines-when-parentheses-go-off-screen/
   ;; we will call `blink-matching-open` ourselves...
@@ -1944,3 +1945,8 @@ Version 2017-09-01"
              fit-text-scale-goto-visible-line-of-max-length-down
              fit-text-scale-max-font-size-fit-line
              fit-text-scale-max-font-size-fit-lines))
+
+(use-package visual-fill-column
+  :straight (:host github :repo "joostkremers/visual-fill-column")
+  :commands (visual-fill-column-mode)
+  :hook (visual-line-mode . visual-fill-column-mode))
