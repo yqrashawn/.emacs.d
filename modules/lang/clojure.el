@@ -510,5 +510,9 @@
   :after cider
   :hook (cider-mode . hugsql-ghosts-install-hook))
 
+(use-package clojure-essential-ref
+  :straight (:host github :repo "p3r7/clojure-essential-ref")
+  :commands (clojure-essential-ref))
+
 (provide 'clojure)
 ;;; clojure.el ends here
