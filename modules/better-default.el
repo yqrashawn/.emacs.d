@@ -1948,5 +1948,6 @@ Version 2017-09-01"
 
 (use-package visual-fill-column
   :straight (:host github :repo "joostkremers/visual-fill-column")
+  :disabled t
   :commands (visual-fill-column-mode)
   :hook (visual-line-mode . visual-fill-column-mode))
