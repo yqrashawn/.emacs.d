@@ -15,8 +15,8 @@
 
 ;; Remove the built-in version of Org from the load-path
 (require 'cl-seq)
-(setq load-path (remove-if (lambda (x) (string-match-p "org$" x)) load-path))
-(setq load-path (remove-if (lambda (x) (string-match-p "org-20" x)) load-path))
+(setq load-path (cl-remove-if (lambda (x) (string-match-p "org$" x)) load-path))
+(setq load-path (cl-remove-if (lambda (x) (string-match-p "org-20" x)) load-path))
 
 (add-to-list 'load-path "~/org-mode/lisp/")
 (add-to-list 'load-path "~/org-mode/contrib/lisp/")
