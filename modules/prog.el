@@ -168,6 +168,7 @@ Available PROPS:
   "Cancel completion if prefix is in the list `company-mode-completion-cancel-keywords'"
   (unless (member company-prefix company-mode-completion-cancel-keywords)
     candidates))
+
 (use-package company
   :straight t
   :diminish company-mode
@@ -802,7 +803,7 @@ _g_  gfm      _m_ markdown
     :straight t
     :commands (vterm)
     :custom
-    (vterm-kill-buffer-on-exit t)
+    (vterm-kill-buffer-on-exit nil)
     :init
     (add-to-list 'evil-insert-state-modes #'vterm-mode)
     :config/el-patch
@@ -843,22 +844,51 @@ _g_  gfm      _m_ markdown
     (evil-define-key 'normal vterm-mode-map (kbd "o") #'evil-insert-resume)
     (evil-define-key 'normal vterm-mode-map (kbd "<return>") #'evil-insert-resume))
 
+  (use-package multi-vterm
+    :straight t
+    :bind ("C-'" . +vterm-toggle)
+    :config/el-patch
+    (defun multi-vterm-projectile-get-buffer-name ()
+      "Get projectile buffer name."
+      (el-patch-swap (format "*vterm - %s*" (projectile-project-root))
+                     (format "*vterm - %s*" (expand-file-name (projectile-project-root)))))
+    :config
+    (defun +vterm-toggle (&optional args)
+      (interactive "p")
+      (cond
+       ((derived-mode-p 'vterm-mode)
+        (multi-vterm-projectile))
+       ((equal current-prefix-arg 1)
+        (multi-vterm-projectile)
+        (when (projectile-project-p)
+          (setq vterm-toggle--cd-cmd
+                (concat " cd " (shell-quote-argument (expand-file-name (projectile-project-root))))))
+        (vterm-toggle-insert-cd))
+       ((equal current-prefix-arg 2)
+        (vterm-toggle-cd))
+       (t
+        (multi-vterm-projectile))))
+
+    (defun +multi-vterm-projectile-background ()
+      "Create new vterm buffer in the background."
+      (print "+multi-vterm-projectile-background")
+      (when (projectile-project-p)
+          (when (not (buffer-live-p (get-buffer (multi-vterm-projectile-get-buffer-name))))
+            (let* ((vterm-buffer (multi-vterm-get-buffer 'projectile))
+                   (multi-vterm-buffer-list (nconc multi-vterm-buffer-list (list vterm-buffer))))
+              (multi-vterm-internal)))))
+
+    (add-hook 'find-file-hook '+multi-vterm-projectile-background))
+
   (use-package vterm-toggle
     :straight t
     :commands (vterm-toggle vterm-toggle-cd)
-    :bind ("C-'" . vterm-toggle-cd)
+    ;; :bind ("C-'" . vterm-toggle)
     :custom
     (vterm-toggle-fullscreen-p nil)
     :init
-    (add-to-list 'display-buffer-alist
-                 '("^v?term.*"
-                   (display-buffer-reuse-window display-buffer-at-bottom)
-                   ;;(display-buffer-reuse-window display-buffer-in-direction)
-                   ;;display-buffer-in-direction/direction/dedicated is added in emacs27
-                   ;;(direction . bottom)
-                   ;;(dedicated . t) ;dedicated is supported in emacs27
-                   (reusable-frames . visible)
-                   (window-height . 0.3)))))
+    (push '("^\*?v?term.*" :regexp t :dedicated t :position bottom :stick t :height 0.4)
+          popwin:special-display-config)))
 
 
 ;; TODO: explore verb

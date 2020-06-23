@@ -730,7 +730,7 @@ If the universal prefix argument is used then kill the buffer too."
   :config
   (popwin-mode 1)
   (spacemacs/set-leader-keys "bm" 'popwin:messages)
-  (spacemacs/set-leader-keys "bc" 'popwin:close-popup-window)
+  (spacemacs/set-leader-keys "bx" 'popwin:close-popup-window)
   (setq
    popwin:special-display-config
    '(("*cider-error*"                       :dedicated t   :position bottom :stick t    :noselect t   :height 0.4)
