@@ -801,8 +801,17 @@ _g_  gfm      _m_ markdown
   (use-package vterm
     :straight t
     :commands (vterm)
+    :custom
+    (vterm-kill-buffer-on-exit t)
     :init
     (add-to-list 'evil-insert-state-modes #'vterm-mode)
+    :config/el-patch
+    (defun vterm--at-prompt-p ()
+      "Return t if the cursor position is at shell prompt."
+      (el-patch-swap (= (point) (or (vterm--get-prompt-point) 0))
+                     (let ((p (point)))
+                       (or (= p 0)
+                           (< (abs (- (vterm--get-prompt-point) p)) 3)))))
     :config
     (setq vterm-keymp-exceptions nil)
 
@@ -836,8 +845,8 @@ _g_  gfm      _m_ markdown
 
   (use-package vterm-toggle
     :straight t
-    :commands (vterm-toggle)
-    :bind ("C-'" . vterm-toggle)
+    :commands (vterm-toggle vterm-toggle-cd)
+    :bind ("C-'" . vterm-toggle-cd)
     :custom
     (vterm-toggle-fullscreen-p nil)
     :init
