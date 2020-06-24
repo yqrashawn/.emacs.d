@@ -846,6 +846,7 @@ _g_  gfm      _m_ markdown
 
   (use-package multi-vterm
     :straight t
+    :disabled t
     :bind ("C-'" . +vterm-toggle)
     :config/el-patch
     (defun multi-vterm-projectile-get-buffer-name ()
@@ -883,7 +884,7 @@ _g_  gfm      _m_ markdown
   (use-package vterm-toggle
     :straight t
     :commands (vterm-toggle vterm-toggle-cd)
-    ;; :bind ("C-'" . vterm-toggle)
+    :bind ("C-'" . vterm-toggle-cd)
     :custom
     (vterm-toggle-fullscreen-p nil)
     :init

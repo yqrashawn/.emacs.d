@@ -99,7 +99,18 @@
   (with-eval-after-load 'ivy
     (setf (alist-get 'my-magit-command ivy-re-builders-alist) #'ivy--regex-fuzzy))
   (add-function :before magit-completing-read-function #'my-magit-command)
-  (add-to-list 'ivy-re-builders-alist '(magit-log-other . ivy--regex-fuzzy)))
+  (add-to-list 'ivy-re-builders-alist '(magit-log-other . ivy--regex-fuzzy))
+
+  ;; magit-cz
+  (setq +magit-cz-found-cz-hook nil)
+  (defun +magit-handle-cz-cli (proc s)
+    (make-local-variable '+magit-cz-found-cz-hook)
+    (when (or (s-contains? "cz-cli" s t) (s-contains? "cz-conventional-changelog" s t))
+      (setq +magit-cz-found-cz-hook t))
+    (when (and +magit-cz-found-cz-hook (s-contains? "move up and down to reveal" s t))
+      (setq +magit-cz-found-cz-hook nil)
+      (progn (process-send-string proc "") t)))
+  (add-to-list 'magit-process-prompt-functions '+magit-handle-cz-cli))
 
 
 (use-package evil-magit :straight t :after magit)
