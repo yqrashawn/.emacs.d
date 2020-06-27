@@ -43,7 +43,7 @@
   :after company
   :init
   (spacemacs|add-company-backends
-    :backends (company-tabnine company-anaconda)
+    :backends (company-lsp company-anaconda)
     :modes python-mode
     :after-hook t))
 

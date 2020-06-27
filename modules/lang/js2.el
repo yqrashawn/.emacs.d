@@ -65,7 +65,7 @@
   :after tern
   :init
   (spacemacs|add-company-backends
-    :backends (company-tabnine company-tern)
+    :backends (company-lsp company-tern)
     :modes (js-mode js2-mode rjsx-mode)
     :after-hook t))
 

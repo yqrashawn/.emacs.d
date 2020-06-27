@@ -277,6 +277,7 @@ Available PROPS:
 (use-package company-tabnine
   :straight t
   :after company
+  :disabled
   :custom
   (company-tabnine-binaries-folder "~/.TabNine/binaries/")
   :init
@@ -361,6 +362,7 @@ If the error list is visible, hide it.  Otherwise, show it."
   :straight t
   :defer t
   :diminish flycheck-mode
+  :hook (prog-mode . global-flycheck-mode)
   :custom
   (flycheck-check-syntax-automatically '(save idle-buffer-switch mode-enabled))
   (flycheck-standard-error-navigation nil)
@@ -417,7 +419,6 @@ is not visible. Otherwise delegates to regular Emacs next-error."
     "ex" 'flycheck-explain-error-at-point
     "en" 'spacemacs/next-error
     "ep" 'spacemacs/previous-error)
-  (global-flycheck-mode 1)
   :config
   (define-key flycheck-error-list-mode-map "j" 'next-line)
   (define-key flycheck-error-list-mode-map "k" 'previous-line)
@@ -564,8 +565,9 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   ;; the time of writing it is the only default jump handler. (gtags remains
   ;; mode-local)
   (add-to-list 'spacemacs-default-jump-handlers 'dumb-jump-go 'append)
-  :config
-  (add-to-list 'dumb-jump-project-denoters ".tabnine_root"))
+  ;; :config
+  ;; (add-to-list 'dumb-jump-project-denoters ".tabnine_root")
+  )
 
 (use-package eldoc
   :diminish eldoc-mode

@@ -49,7 +49,6 @@ the current buffer."
                                     (setq-local company-idle-delay 0.2)
                                     (setq mode-name "λ")
                                     (setq-local company-backends '(company-capf
-                                                                   company-tabnine
                                                                    (company-dabbrev-code
                                                                     company-gtags
                                                                     company-etags

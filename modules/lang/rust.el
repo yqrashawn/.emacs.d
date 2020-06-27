@@ -10,7 +10,7 @@
   :defer t
   :init
   (spacemacs|add-company-backends
-    :backends (company-tabnine company-capf)
+    :backends (company-lsp company-capf)
     :modes rust-mode
     :variables company-tooltip-align-annotations t
     :after-hook t)

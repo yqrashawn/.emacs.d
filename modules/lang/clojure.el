@@ -43,7 +43,6 @@
     (setq-local company-idle-delay 0.2)
     (setq-local evil-shift-width 1)
     (setq-local company-backends '(company-capf
-                                   company-tabnine
                                    (company-dabbrev-code
                                     company-gtags
                                     company-etags

@@ -56,10 +56,10 @@ and 'typescript-formatter .")
   ;;              '(tide-jump-to-definition :async t))
   (add-to-list 'spacemacs-jump-handlers-typescript-mode
                '(tide-jump-to-definition :async t))
-  (flycheck-add-mode 'typescript-tslint 'typescript-mode)
+  ;; (flycheck-add-mode 'typescript-tslint 'typescript-mode)
   (spacemacs/enable-flycheck 'typescript-mode)
   (spacemacs|add-company-backends
-    :backends (company-tabnine company-tide)
+    :backends (company-lsp company-tide)
     :modes typescript-mode ;; web-mode js2-mode
     :after-hook t)
   :config
