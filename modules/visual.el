@@ -222,16 +222,11 @@ has been changed to THEME."
 
 (use-package pretty-magit
   :load-path "~/.emacs.d/modules"
+  :disabled t
   :after magit
   :config
   (pretty-magit-setup)
   (pretty-magit-add-leaders
-   ;; '(("Add" ? (:foreground "#375E97" :height 1.2))
-   ;;   ("feat" ? (:foreground "slate gray" :height 1.2))
-   ;;   ("fix" ? (:foreground "#FB6542" :height 1.2))
-   ;;   ("refactor" ? (:foreground "#FFBB00" :height 1.2))
-   ;;   ("docs" ? (:foreground "#3F681C" :height 1.2))
-   ;;   ("test" ?T (:foreground "#3F681C" :height 1.2)))
    '(("feat" ?✨ (:foreground "slate gray" :height 1.2))
      ("fix" ?🐛 (:foreground "#FB6542" :height 1.2))
      ("chore" ?📦 (:foreground "#3F681C" :height 1.2))
@@ -243,18 +238,6 @@ has been changed to THEME."
      ("refactor" ?🔨 (:foreground "#FFBB00" :height 1.2))
      ("revert" ?♻ (:foreground "#FFBB00" :height 1.2))
      ("style" ?💄 (:foreground "#FFBB00" :height 1.2))
-
-     ;; ("feat()" ?✨ (:foreground "slate gray" :height 1.2))
-     ;; ("fix()" ?🐛 (:foreground "#FB6542" :height 1.2))
-     ;; ("chore()" ?📦 (:foreground "#3F681C" :height 1.2))
-     ;; ("test()" ?🚨 (:foreground "#3F681C" :height 1.2))
-     ;; ("ci()" ?🐳 (:foreground "#375E97" :height 1.2))
-     ;; ("docs()" ?📓 (:foreground "#3F681C" :height 1.2))
-     ;; ("build()" ?👷 (:foreground "#375E97" :height 1.2))
-     ;; ("pref()" ?🐎 (:foreground "#FB6542" :height 1.2))
-     ;; ("refactor()" ?🔨 (:foreground "#FFBB00" :height 1.2))
-     ;; ("revert()" ?♻ (:foreground "#FFBB00" :height 1.2))
-     ;; ("style()" ?💄 (:foreground "#FFBB00" :height 1.2))
      )))
 
 (use-package pretty-fonts

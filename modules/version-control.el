@@ -99,46 +99,14 @@
   (with-eval-after-load 'ivy
     (setf (alist-get 'my-magit-command ivy-re-builders-alist) #'ivy--regex-fuzzy))
   (add-function :before magit-completing-read-function #'my-magit-command)
-  (add-to-list 'ivy-re-builders-alist '(magit-log-other . ivy--regex-fuzzy))
-
-  ;; magit-cz
-  (setq +magit-cz-found-cz-hook nil)
-  (defun +magit-handle-cz-cli (proc s)
-    (make-local-variable '+magit-cz-found-cz-hook)
-    (when (or (s-contains? "cz-cli" s t) (s-contains? "cz-conventional-changelog" s t))
-      (setq +magit-cz-found-cz-hook t))
-    (when (and +magit-cz-found-cz-hook (s-contains? "move up and down to reveal" s t))
-      (let* ((type (alist-get
-                   (print (read-char-choice (format (propertize
-                                                     "\
-Choose commit type:
-  [c]hore
-  [f]ix
-  [C]i "
-                                                     'face
-                                                     'minibuffer-prompt))
-                                            '(?c ?f ?q)))
-                   '((?f . "fix")
-                     (?c . "chore")
-                     (?C . "ci"))))
-            (scope (read-string "Commit scope: "))
-            (breaking-change-p (y-or-n-p "Is this a breaking change?"))
-            (breaking-change-s (if breaking-change-p "y" "n"))
-            (breaking-change-body (and breaking-change-p (concat (read-string "Breaking Change Body: ") "")))
-            (breaking-change-des (and breaking-change-p (concat (read-string "Breaking Change Description: ") "")))
-            (issue-p (y-or-n-p "Is there a linking issue?"))
-            (issue-s (if issue-p "y" "n"))
-            (issue-ref (and issue-p (concat "resolve #" (read-string "Issue Ref Number: ") "")))
-            (res (concat ;; type
-                  "" scope "" "_____" "" breaking-change-s breaking-change-body breaking-change-des issue-s issue-ref)))
-        (setq +magit-cz-found-cz-hook nil)
-        (print res)
-        (process-send-string proc res))
-      t))
-  (add-to-list 'magit-process-prompt-functions '+magit-handle-cz-cli))
+  (add-to-list 'ivy-re-builders-alist '(magit-log-other . ivy--regex-fuzzy)))
 
 
 (use-package evil-magit :straight t :after magit)
+
+(use-package magit-cz
+  :load-path "~/.emacs.d/modules"
+  :after (magit-process git-commit))
 
 (use-package with-editor
   :straight t
@@ -159,6 +127,7 @@ Choose commit type:
          (:map forge-pullreq-section-map
                ("C-c C-v" . forge-browse-topic)))
   :config
+  (add-to-list 'forge-owned-accounts '("yqrashawn" . (remote-name "own")))
   (add-to-list 'forge-alist '("917.bimsop.com" "917.bimsop.com/api/v1" "917.bimsop.com" forge-gogs-repository)))
 
 (use-package diff-hl
