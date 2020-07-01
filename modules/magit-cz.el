@@ -33,8 +33,8 @@
 
 (defcustom magit-cz-types
   '((?c "chore" "Other changes that don't modify src or test files" "Chores")
-    (?f "feat" "New Feature" "Features")
-    (?b "bugfix" "A bug fix" "Bug Fixes")
+    (?F "feat" "New Feature" "Features")
+    (?f "fix" "A bug fix" "Bug Fixes")
     (?t "test" "Adding missing tests or correcting existing tests" "Tests")
     (?d "docs" "Documentation only changes" "Documentation")
     (?s "style" "Changes that do not affect the meaning of the code (white-space formatting missing semi-colons etc)" "Styles")
@@ -108,6 +108,21 @@
 (transient-append-suffix 'magit-commit "c" '("c" "CZ Commit"  magit-cz-commit))
 (transient-append-suffix 'magit-commit "c" '("v" "Magit Commit"  magit-commit-create))
 (transient-append-suffix 'magit-commit "v" '("B" "CZ Breaking Change Commit"  magit-cz-breaking-change-commit))
+
+;;; handle husky, skip husky if there's --no-verify arg
+(defun magit-cz--maybe-disable-husky (&rest args)
+  (when (alist-get "--no-verify" args)
+    (setenv "HUSKY_SKIP_HOOKS" "1")))
+
+(defun magit-cz--maybe-enable-husky (&rest args)
+  (when (alist-get "--no-verify" args)
+    (setenv "HUSKY_SKIP_HOOKS")))
+
+(advice-add 'magit-run-git-sequencer :before 'magit-cz--maybe-disable-husky)
+(advice-add 'magit-run-git-sequencer :after 'magit-cz--maybe-enable-husky)
+
+;; (advice-remove 'magit-run-git-sequencer 'magit-cz--maybe-enable-husky)
+;; (advice-remove 'magit-run-git-sequencer 'magit-cz--maybe-disable-husky)
 
 (provide 'magit-cz)
 ;;; magit-cz.el ends here

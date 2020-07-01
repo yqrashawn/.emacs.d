@@ -106,7 +106,7 @@
 
 (use-package magit-cz
   :load-path "~/.emacs.d/modules"
-  :after (magit-process git-commit))
+  :after (magit git-commit transient))
 
 (use-package with-editor
   :straight t
