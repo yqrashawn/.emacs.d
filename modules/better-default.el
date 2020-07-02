@@ -638,33 +638,32 @@ If the universal prefix argument is used then kill the buffer too."
 
 ;; recentf
 (use-feature recentf
+  :custom
+  (recentf-keep '(tramp-tramp-file-p file-remote-p file-readable-p))
+  (recentf-save-file (concat user-emacs-directory "recentf"))
+  (recentf-max-saved-items 2000)
+  (recentf-auto-cleanup 'never)
+  (recentf-auto-save-timer (run-with-idle-timer 300 t
+                                                'recentf-save-list))
   :init
-  (setq recentf-keep '(file-remote-p file-readable-p))
-  (setq recentf-save-file (concat user-emacs-directory "recentf")
-        recentf-max-saved-items 100
-        recentf-auto-cleanup 'never
-        recentf-auto-save-timer (run-with-idle-timer 300 t
-                                                     'recentf-save-list))
   (add-hook 'delete-terminal-functions 'recentf-save-list)
   (recentf-mode 1)
   :config
-  (setq recentf-max-saved-items 1000)
-  (with-eval-after-load 'recentf
-    (run-at-time nil (* 5 60) 'recentf-save-list)
-    ;; (add-to-list 'recentf-exclude
-    ;;              (file-truename spacemacs-cache-directory))
-    (add-to-list 'recentf-exclude "COMMIT_EDITMSG\\'")
-    (add-to-list 'recentf-exclude "/private/var/folders/")
-    (add-to-list 'recentf-exclude "/usr/local/Cellar/emacs")
-    ;; (add-to-list 'recentf-exclude (concat user-home-directory "Dropbox/ORG"))
-    ;; (add-to-list 'recentf-exclude (concat user-home-directory "Dropbox/Books"))
-    (add-to-list 'recentf-exclude (expand-file-name (concat user-emacs-directory "straight/build")))
-    (add-to-list 'recentf-exclude (expand-file-name (concat user-emacs-directory "persp-confs/")))
-    (add-to-list 'recentf-exclude "/var/folders/")
-    (add-to-list 'recentf-exclude "/var/tmp/")
-    (add-to-list 'recentf-exclude (expand-file-name (concat user-emacs-directory "recentf")))
-    (add-to-list 'recentf-exclude "/tmp/")
-    (add-to-list 'recentf-exclude "\\indium-eval-.*")))
+  ;; (run-at-time nil (* 5 60) 'recentf-save-list)
+  ;; (add-to-list 'recentf-exclude
+  ;;              (file-truename spacemacs-cache-directory))
+  (add-to-list 'recentf-exclude "COMMIT_EDITMSG\\'")
+  (add-to-list 'recentf-exclude "/private/var/folders/")
+  (add-to-list 'recentf-exclude "/usr/local/Cellar/emacs")
+  ;; (add-to-list 'recentf-exclude (concat user-home-directory "Dropbox/ORG"))
+  ;; (add-to-list 'recentf-exclude (concat user-home-directory "Dropbox/Books"))
+  (add-to-list 'recentf-exclude (expand-file-name (concat user-emacs-directory "straight/build")))
+  (add-to-list 'recentf-exclude (expand-file-name (concat user-emacs-directory "persp-confs/")))
+  (add-to-list 'recentf-exclude "/var/folders/")
+  (add-to-list 'recentf-exclude "/var/tmp/")
+  (add-to-list 'recentf-exclude (expand-file-name (concat user-emacs-directory "recentf")))
+  (add-to-list 'recentf-exclude "/tmp/")
+  (add-to-list 'recentf-exclude "\\indium-eval-.*"))
 
 ;; saveplace remembers your location in a file when saving files
 (use-feature saveplace
