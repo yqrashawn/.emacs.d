@@ -121,7 +121,7 @@
   ;; temp fix company-lsp
   (defun yq/lsp-adjust-company-backends ()
     ;; (setq-local company-backends (cons 'company-tabnine (cons 'company-lsp (remove 'company-capf (remove 'company-lsp (remove 'company-tabnine company-backends))))))
-    (setq-local company-backends (cons 'company-lsp (remove 'company-capf (remove 'company-lsp (remove 'company-tabnine company-backends))))))
+    (setq-local company-backends (cons 'company-lsp (remove 'company-capf (remove 'company-lsp company-backends)))))
   (add-hook 'lsp-after-open-hook 'yq/lsp-adjust-company-backends)
   (defun spacemacs//setup-lsp-jump-handler (&rest modes)
     "Set jump handler for LSP with the given MODE."

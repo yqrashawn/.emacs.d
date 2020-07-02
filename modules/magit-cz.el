@@ -25,6 +25,7 @@
 
 ;;; Code:
 (require 'transient)
+(require 'dash)
 
 (defgroup magit-cz nil
   "Commitizen support for magit")
@@ -109,13 +110,18 @@
 (transient-append-suffix 'magit-commit "c" '("v" "Magit Commit"  magit-commit-create))
 (transient-append-suffix 'magit-commit "v" '("B" "CZ Breaking Change Commit"  magit-cz-breaking-change-commit))
 
+(defvar magit-cz--debug nil)
+
 ;;; handle husky, skip husky if there's --no-verify arg
 (defun magit-cz--maybe-disable-husky (&rest args)
-  (when (alist-get "--no-verify" args)
+  (print args)
+  (when (-contains? (-flatten args) "--no-verify")
+    (and magit-cz--debug (message "husky 1"))
     (setenv "HUSKY_SKIP_HOOKS" "1")))
 
 (defun magit-cz--maybe-enable-husky (&rest args)
-  (when (alist-get "--no-verify" args)
+  (when (-contains? (-flatten args) "--no-verify")
+    (and magit-cz--debug (message "husky 0"))
     (setenv "HUSKY_SKIP_HOOKS")))
 
 (advice-add 'magit-run-git-sequencer :before 'magit-cz--maybe-disable-husky)
