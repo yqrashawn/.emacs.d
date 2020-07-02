@@ -175,3 +175,76 @@
     (sp-local-pair mode "{" nil :post-handlers '((+indent-between-pair "RET")))
     (sp-local-pair mode "[" nil :post-handlers '((+indent-between-pair "RET")))
     (sp-local-pair mode "(" nil :post-handlers '((+indent-between-pair "RET")))))
+
+(use-package npm-mode
+  :straight t
+  :hook ((js-mode rjsx-mode js2-mode typescript-mode) . npm-mode)
+  :config
+  ;; npm -> yarn
+  (defun npm-mode-npm-list ()
+    "Run the 'yarn list' command."
+    (interactive)
+    (el-patch-swap (npm-mode--exec-process "npm list --depth=0")
+                   (npm-mode--exec-process "yarn list --depth=0")))
+  (defun npm-mode-npm-install ()
+    "Run the 'yarn' command."
+    (interactive)
+    (el-patch-swap (npm-mode--exec-process "npm install")
+                   (npm-mode--exec-process "yarn")))
+  (defun npm-mode-npm-install-save (dep)
+    "Run the 'yarn add' command for DEP."
+    (interactive "sEnter package name: ")
+    (el-patch-swap (npm-mode--exec-process (format "npm install %s --save" dep))
+                   (npm-mode--exec-process (format "yarn add %s" dep))))
+  (defun npm-mode--get-project-property (prop)
+    "Get the given PROP from the current project file."
+    (let* ((project-file (npm-mode--project-file))
+           (json-object-type 'hash-table)
+           (json-contents (with-temp-buffer
+                            (insert-file-contents project-file)
+                            (buffer-string)))
+           (json-hash (json-read-from-string json-contents))
+           (value (gethash prop json-hash))
+           (commands (list)))
+      (cond ((hash-table-p value)
+             (maphash (lambda (key value)
+                        (setq commands
+                              (append commands
+                                      (list (list key (el-patch-swap (format "%s %s" "npm" key)
+                                                                     (format "%s %s" "yarn" key)))))))
+                      value)
+             commands)
+            (t value))))
+  (defun npm-mode-npm-init ()
+    "Run the yarn init command."
+    (interactive)
+    (el-patch-swap (npm-mode--exec-process "npm init")
+                   (npm-mode--exec-process "yarn init")))
+  (defun npm-mode-npm-install-save-dev (dep)
+    "Run the 'yarn add --dev' command for DEP."
+    (interactive "sEnter package name: ")
+    (el-patch-swap (npm-mode--exec-process (format "npm install %s --save-dev" dep))
+                   (npm-mode--exec-process (format "yarn add --dev %s" dep))))
+  (defun npm-mode-npm-uninstall ()
+    "Run the 'yarn remove' command."
+    (interactive)
+    (let ((dep (completing-read "Uninstall dependency: " (npm-mode--get-project-dependencies))))
+      (npm-mode--exec-process (el-patch-swap (format "npm uninstall %s" dep)
+                                             (format "yarn remove %s" dep)))))
+  (defun npm-mode-npm-run (script &optional comint)
+    "Run the 'npm run' command on a project script."
+    (interactive
+     (list (npm-run--read-command)
+           (consp current-prefix-arg)))
+    (npm-mode--exec-process (el-patch-swap (format "npm run %s" script)
+                                           (format "yarn run %s" script)) comint))
+  (defun npm-mode--exec-process (cmd &optional comint)
+    "Execute a process running CMD."
+    (let ((compilation-buffer-name-function
+           (lambda (mode)
+             (el-patch-swap (format "*npm:%s - %s*"
+                                    (npm-mode--get-project-property "name") cmd)
+                            (format "*yarn:%s - %s*"
+                                    (npm-mode--get-project-property "name") cmd)))))
+      (message (concat "Running " cmd))
+      (compile cmd comint))))
