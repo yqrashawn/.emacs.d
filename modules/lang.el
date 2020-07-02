@@ -113,6 +113,7 @@
   (lsp-eslint-package-manager "yarn")
   (lsp-clojure-server-command '("bash" "-c" "clojure-lsp"))
   ;; (lsp-enable-indentation nil)
+  (lsp-disabled-clients '(javascript-typescript-langserver))
   :config
   (add-hook
    'lsp-managed-mode-hook
