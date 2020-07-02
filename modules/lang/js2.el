@@ -179,7 +179,10 @@
 (use-package npm-mode
   :straight t
   :hook ((js-mode rjsx-mode js2-mode typescript-mode) . npm-mode)
-  :config
+  :init
+  (push '("^\*yarn:.*" :regexp t :dedicated t :position bottom :stick t :height 0.4)
+          popwin:special-display-config)
+  :config/el-patch
   ;; npm -> yarn
   (defun npm-mode-npm-list ()
     "Run the 'yarn list' command."
