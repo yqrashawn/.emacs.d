@@ -114,18 +114,19 @@
 
 ;;; handle husky, skip husky if there's --no-verify arg
 (defun magit-cz--maybe-disable-husky (&rest args)
-  (print args)
-  (when (-contains? (-flatten args) "--no-verify")
+  (when (or (-contains? (-flatten args) "cherry-pick") (-contains? (-flatten args) "--no-verify"))
     (and magit-cz--debug (message "husky 1"))
     (setenv "HUSKY_SKIP_HOOKS" "1")))
 
 (defun magit-cz--maybe-enable-husky (&rest args)
-  (when (-contains? (-flatten args) "--no-verify")
+  (when (or (-contains? (-flatten args) "cherry-pick") (-contains? (-flatten args) "--no-verify"))
     (and magit-cz--debug (message "husky 0"))
     (setenv "HUSKY_SKIP_HOOKS")))
 
 (advice-add 'magit-run-git-sequencer :before 'magit-cz--maybe-disable-husky)
 (advice-add 'magit-run-git-sequencer :after 'magit-cz--maybe-enable-husky)
+(advice-add 'magit--cherry-pick :before 'magit-cz--maybe-disable-husky)
+(advice-add 'magit--cherry-pick :after 'magit-cz--maybe-enable-husky)
 
 ;; (advice-remove 'magit-run-git-sequencer 'magit-cz--maybe-enable-husky)
 ;; (advice-remove 'magit-run-git-sequencer 'magit-cz--maybe-disable-husky)
