@@ -78,10 +78,18 @@
 (add-hook 'git-commit-setup-hook 'magit-cz-git-commit-message-setup-function)
 
 (defun magit-cz-functions-detect-and-cancel-cz (proc s)
-    (when (or (string-match-p "cz-cli" s)
-              (string-match-p "cz-conventional-changelog" s))
-      (process-send-string proc "")
-      t))
+  (when (or (string-match-p "cz-cli" s)
+            (string-match-p "cz-conventional-changelog" s))
+    (setq magit-cz--found-cz t))
+  (when (and magit-cz--found-cz (string-match-p "up and down" s))
+    (process-send-string proc "")
+    (setq magit-cz--found-cz nil)
+    t)
+  ;; (when (and magit-cz--found-cz (string-match-p "issue" s))
+  ;;   (setq magit-cz--found-cz nil)
+  ;;   (continue-process proc)
+  ;;   t)
+  )
 
 (add-to-list 'magit-process-prompt-functions 'magit-cz-functions-detect-and-cancel-cz)
 
