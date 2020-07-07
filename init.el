@@ -165,6 +165,7 @@
 (yq/get-modules "visual.el")
 (yq/get-modules "auto-detect-which-machine.el")
 ;; (yq/get-modules "pdf.el")
+(yq/get-modules "slack.el")
 
 (use-package server
   :init
