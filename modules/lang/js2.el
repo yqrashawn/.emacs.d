@@ -82,7 +82,7 @@
   :straight t
   :diminish prettier-js-mode
   :commands (prettier-js-mode prettier-js)
-  ;; :hook ((typescript-mode js-mdoe rjsx-mode js2-mode) . prettier-js-mode)
+  :hook ((typescript-mode js-mdoe rjsx-mode js2-mode) . prettier-js-mode)
   :init
   (yq/add-toggle prettier-js :mode prettier-js-mode)
   (dolist (mode '(js2-mode js-mode rjsx-mode typescript-mode))

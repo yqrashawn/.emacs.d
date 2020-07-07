@@ -32,6 +32,8 @@
 
 (defvar magit-cz--messge nil)
 
+(defvar magit-cz--found-cz nil)
+
 (defcustom magit-cz-types
   '((?c "chore" "Other changes that don't modify src or test files" "Chores")
     (?F "feat" "New Feature" "Features")
