@@ -1952,3 +1952,20 @@ Version 2017-09-01"
   :disabled t
   :commands (visual-fill-column-mode)
   :hook (visual-line-mode . visual-fill-column-mode))
+
+;; px->rem
+(defvar px->rem-base-px nil)
+
+(defun px->rem-get-base-px ()
+  (if (not px->rem-base-px)
+      (user-error "px->rem-base-px not defined")
+    px->rem-base-px))
+
+(defun px->rem ()
+  (interactive)
+  (with-current-buffer (current-buffer)
+    (while (re-search-forward (rx (+ digit) "px") (point-max))
+      (let* ((px (string-to-number (string-remove-suffix "px" (match-string 0))))
+             (rem (/ px (px->rem-get-base-px))))
+        (print (concat (number-to-string rem) "rem"))
+        (replace-match (concat (number-to-string rem) "rem"))))))
