@@ -1957,15 +1957,22 @@ Version 2017-09-01"
 (defvar px->rem-base-px nil)
 
 (defun px->rem-get-base-px ()
-  (if (not px->rem-base-px)
-      (user-error "px->rem-base-px not defined")
-    px->rem-base-px))
+  (or px->rem-base-px
+      (progn (setq-local px->rem-base-px (read-number "The base font-size: "))
+             px->rem-base-px)))
+
+(defun px->rem-num-to-rem (num)
+  (concat (string-trim-right (format "%.4f" num) (rx (? ".") (* "0") line-end)) "rem"))
 
 (defun px->rem ()
   (interactive)
-  (with-current-buffer (current-buffer)
-    (while (re-search-forward (rx (+ digit) "px") (point-max))
-      (let* ((px (string-to-number (string-remove-suffix "px" (match-string 0))))
-             (rem (/ px (px->rem-get-base-px))))
-        (print (concat (number-to-string rem) "rem"))
-        (replace-match (concat (number-to-string rem) "rem"))))))
+  (save-excursion
+    (goto-char (point-min))
+    (while (re-search-forward (rx (? (group (* digit) (any "."))) (+ digit) "px") (point-max) t)
+      (let ((str (match-string 0))
+            (start (match-beginning 0))
+            (end (match-end 0)))
+        (when (y-or-n-p "Change the px here? ")
+          (let* ((px (string-to-number (string-remove-suffix "px" str)))
+                 (rem (/ px (px->rem-get-base-px))))
+            (replace-region-contents start end (lambda () (px->rem-num-to-rem rem)))))))))
