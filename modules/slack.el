@@ -25,21 +25,13 @@
            :host "conflux-world.slack.com"
            :login "yuxiao@conflux-chain.org")
    :subscribed-channels '((react-ui sirius conflux-portal design-system new-efficient-tool wearefamily tech-share jenkins general random)))
-  (+slack-change-current-team "Conflux")
-  (+slack-change-current-team "10i.cc")
-  ;; (slack-register-team
-  ;;  :name "Conflux Global"
-  ;;  :token (auth-source-pick-first-password
-  ;;          :host "confluxchain.slack.com"
-  ;;          :login "yuxiao@conflux-chain.org")
-  ;;  :subscribed-channels '((react-ui)))
-
   (slack-register-team
    :name "10i.cc"
    :token (auth-source-pick-first-password
            :host "10icc.slack.com"
            :login "namy.19@gmail.com")
    :subscribed-channels '((general random)))
+  (+slack-change-current-team "Conflux")
 
   (evil-define-key 'insert lui-mode-map
     (kbd "RET") #'lui-send-input
@@ -51,6 +43,8 @@
     (kbd "C-c C-u") #'lui-kill-to-beginning-of-line
     (kbd "C-c C-i") #'lui-fool-toggle-display)
 
+  (spacemacs/set-leader-keys "i" nil)
+  (spacemacs/set-leader-keys "ir" #'slack-select-rooms)
   (evil-define-key 'normal slack-info-mode-map
     ",u" 'slack-room-update-messages)
 

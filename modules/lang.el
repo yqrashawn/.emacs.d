@@ -115,6 +115,14 @@
   ;; (lsp-enable-indentation nil)
   (lsp-disabled-clients '(javascript-typescript-langserver))
   :config
+  (defun +lsp-workspace-folders-add (workspace)
+    (interactive
+     (list (read-directory-name "Select folder to add: "
+                                (or (lsp--suggest-project-root) default-directory) nil t)))
+    (let* ((dir (expand-file-name workspace))
+           (files (nthcdr 2 (directory-files dir)))
+           (projects (seq-filter (lambda (file) (file-directory-p (concat dir file))) files)))
+      (mapcar (lambda (project) (lsp-workspace-folders-add (concat dir project))) projects)))
   (add-hook
    'lsp-managed-mode-hook
    (defl (setq-local company-minimum-prefix-length 1)

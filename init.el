@@ -175,7 +175,6 @@
   :disabled
   :straight (:host github :repo "akirak/emacs-playground"))
 
-
 ;; (toggle-frame-maximized)
 
 (use-package suggest
