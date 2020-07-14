@@ -569,6 +569,10 @@ repository, then the corresponding root is used instead."
   :straight (:host github :repo "yqrashawn/fd-dired")
   :commands (fd-dired)
   :init
+  (defun +fd-dired-advice (dir args)
+    (when (string= (expand-file-name "~/") (expand-file-name (projectile-project-root dir)))
+      (setq-local fd-dired-pre-fd-args (concat fd-dired-pre-fd-args " -uuu "))))
+  (advice-add 'fd-dired :before '+fd-dired-advice)
   (evil-define-key 'normal dired-mode-map "F" 'fd-dired)
   (define-key yq-s-map "8" 'fd-dired))
 (use-feature dired-x
