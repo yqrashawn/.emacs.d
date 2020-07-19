@@ -67,6 +67,7 @@
   ;; (global-set-key (kbd "C-x C-8 d" ) 'ivy-scroll-up-command)
   (ivy-mode 1)
   :config
+  (setenv "FZF_DEFAULT_COMMAND" "rg --files --no-ignore --hidden --follow -g \"!{.git,node_modules}/*\" 2> /dev/null")
   (with-eval-after-load 'counsel
     (ivy-set-actions 'counsel-recentf spacemacs--ivy-file-actions))
   ;; docs: https://oremacs.com/swiper/#completion-styles
@@ -311,7 +312,7 @@ repository, then the corresponding root is used instead."
           (counsel-fzf input dir)
         (counsel-fzf input vc))))
 
-  (define-key yq-s-map "m" #'+counsel-fzf-rg-files)
+  ;; (define-key yq-s-map "m" #'+counsel-fzf-rg-files)
   (spacemacs/set-leader-keys "sm" (lambda () (interactive) (let ((current-prefix-arg '(1))) (call-interactively 'counsel-fzf))))
   (define-key yq-s-map (kbd "SPC") 'counsel-M-x)
   (define-key evil-normal-state-map (kbd "M-y" ) 'counsel-yank-pop)
@@ -1396,3 +1397,11 @@ first."))
           ("o" . outshine-open-at-point)
           ;; [X]
           ("?" . outshine-speed-command-help))))
+
+(use-package find-file-in-project
+  :straight t
+  :custom
+  (ffip-use-rust-fd t)
+  :bind ((:map yq-s-map ("m" . ffip)))
+  :init
+  (spacemacs/set-leader-keys "krp" #'ffip-find-relative-path))
