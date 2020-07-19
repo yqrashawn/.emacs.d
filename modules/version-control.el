@@ -82,7 +82,11 @@
                 (string-match "github.com" (magit-get "remote" remote "url"))
                 (magit-git-string "config" "--add" (format "remote.%s.fetch" remote) pr-refs)))))
 
-  (add-hook 'magit-mode-hook 'marsam/add-pull-request-refs)
+  (defun +marsam/add-pull-request-refs ()
+    (dolist (remote (magit-list-remotes))
+            (marsam/add-pull-request-refs remote)))
+  ;; (add-hook 'magit-mode-hook 'marsam/add-pull-request-refs)
+  (add-hook 'magit-mode-hook '+marsam/add-pull-request-refs)
   (let ((maps (list magit-status-mode-map magit-log-mode-map magit-reflog-mode-map magit-diff-mode-map)))
     (dolist (map maps)
       (evil-define-key 'normal map "j" 'magit-next-line)
