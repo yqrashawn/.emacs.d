@@ -12,7 +12,7 @@
 (yq/get-modules "lang/elisp.el")
 (yq/get-modules "lang/js2.el")
 (yq/get-modules "lang/typescript.el")
-;; (yq/get-modules "lang/rust.el")
+(yq/get-modules "lang/rust.el")
 ;; (yq/get-modules "lang/c.el")
 (yq/get-modules "lang/vue.el")
 ;; (yq/get-modules "lang/python.el")
@@ -82,7 +82,7 @@
 ;; no real time syntax check
 (use-package lsp-mode
   :straight t
-  :hook ((dockerfile-mode shell-script-mode web-mode css-mode typescript-mode js2-mode rjsx-mode) . lsp-deferred)
+  :hook ((rustic-mode dockerfile-mode shell-script-mode web-mode css-mode typescript-mode js2-mode rjsx-mode) . lsp-deferred)
   :hook ((js2-mode js-mode rjsx-mode) . lsp-eslint-fix-before-save)
   :custom
   ;; lsp-mode
@@ -151,26 +151,26 @@
 
 (use-package lsp-ui
   :straight t
-  :disabled
+  ;; :disabled
   :commands lsp-ui-mode
   :custom
-  ;; top right stuff
+  ;; lsp ui doc
   ;; disable for now
-  (lsp-ui-doc-enable nil)
-  (lsp-ui-doc-delay 0.5)
+  (lsp-ui-doc-enable t)
+  (lsp-ui-doc-delay 1)
   ;; header is useless
   (lsp-ui-doc-header t)
   ;; same as eldoc
+  (lsp-ui-doc-position 'top)
   (lsp-ui-doc-include-signature t)
-  (lsp-ui-flycheck-enable nil)
 
   ;; sideline
   (lsp-ui-sideline-enable t)
-  (lsp-ui-sideline-delay 0.5)
+  (lsp-ui-sideline-delay 1)
   ;; idicating which symbol cursor is on
   (lsp-ui-sideline-show-symbol t)
   ;; wether show hoverd line js info (type info?)
-  (lsp-ui-sideline-show-hover nil)
+  (lsp-ui-sideline-show-hover t)
   ;; the up text show what the codes doing
   (lsp-ui-sideline-show-code-actions t)
   (lsp-ui-sideline-show-diagnostics t)
