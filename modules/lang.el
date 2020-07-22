@@ -157,7 +157,7 @@
   ;; lsp ui doc
   ;; disable for now
   (lsp-ui-doc-enable t)
-  (lsp-ui-doc-delay 1)
+  (lsp-ui-doc-delay 2)
   ;; header is useless
   (lsp-ui-doc-header t)
   ;; same as eldoc
@@ -166,7 +166,7 @@
 
   ;; sideline
   (lsp-ui-sideline-enable t)
-  (lsp-ui-sideline-delay 1)
+  (lsp-ui-sideline-delay 2)
   ;; idicating which symbol cursor is on
   (lsp-ui-sideline-show-symbol t)
   ;; wether show hoverd line js info (type info?)
