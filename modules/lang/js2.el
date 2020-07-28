@@ -80,6 +80,7 @@
 ;; (bound-and-true-p prettier-js-mode)
 (use-package prettier-js
   :straight t
+  :disabled t
   :diminish prettier-js-mode
   :commands (prettier-js-mode prettier-js)
   :hook ((typescript-mode js-mdoe rjsx-mode js2-mode) . prettier-js-mode)
@@ -108,6 +109,18 @@
           (delete-char sgml-basic-offset))))
   (evil-define-key 'insert rjsx-mode-map (kbd "C-d") 'rjsx-delete-creates-full-tag)
   (spacemacs/set-leader-keys-for-major-mode 'rjsx-mode "m" 'js2-mode))
+
+(use-package prettier
+  :straight (:host github :repo "jscheid/prettier.el" :branch "release")
+  :hook (after-init . global-prettier-mode)
+  :init
+  (yq/add-toggle prettier :mode prettier-mode)
+  (with-eval-after-load 'js2-mode
+    (evil-define-key 'normal js2-mode-map (kbd ",=") #'prettier-prettify)
+    (evil-define-key 'normal js2-mode-map ",tp" 'yq/toggle-prettier))
+  (with-eval-after-load 'rjsx-mode
+    (evil-define-key 'normal rjsx-mode-map (kbd ",=") #'prettier-prettify)
+    (evil-define-key 'normal rjsx-mode-map ",tp" 'yq/toggle-prettier)))
 
 (use-package js2-refactor
   :straight t
