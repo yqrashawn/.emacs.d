@@ -95,7 +95,7 @@
   (lsp-enable-symbol-highlighting t)
   (lsp-enable-on-type-formatting t)
   (lsp-imenu-sort-methods '(position))
-  (lsp-prefer-capf t)
+  (lsp-completion-provider :capf)
   (lsp-symbol-highlighting-skip-current nil)
   (lsp-idle-delay 0.500)
   ;; lsp-clients
@@ -128,10 +128,10 @@
    (defl (setq-local company-minimum-prefix-length 1)
      (setq-local company-idle-delay 0.0)))
   ;; temp fix company-lsp
-  (defun yq/lsp-adjust-company-backends ()
-    ;; (setq-local company-backends (cons 'company-tabnine (cons 'company-lsp (remove 'company-capf (remove 'company-lsp (remove 'company-tabnine company-backends))))))
-    (setq-local company-backends (cons 'company-lsp (remove 'company-capf (remove 'company-lsp company-backends)))))
-  (add-hook 'lsp-after-open-hook 'yq/lsp-adjust-company-backends)
+  ;; (defun yq/lsp-adjust-company-backends ()
+  ;;   ;; (setq-local company-backends (cons 'company-tabnine (cons 'company-lsp (remove 'company-capf (remove 'company-lsp (remove 'company-tabnine company-backends))))))
+  ;;   (setq-local company-backends (cons 'company-lsp (remove 'company-capf (remove 'company-lsp company-backends)))))
+  ;; (add-hook 'lsp-after-open-hook 'yq/lsp-adjust-company-backends)
   (defun spacemacs//setup-lsp-jump-handler (&rest modes)
     "Set jump handler for LSP with the given MODE."
     (dolist (m modes)
