@@ -277,7 +277,6 @@ Available PROPS:
 (use-package company-tabnine
   :straight t
   :after company
-  :disabled
   :custom
   (company-tabnine-binaries-folder "~/.TabNine/binaries/")
   :init
@@ -565,9 +564,8 @@ is not visible. Otherwise delegates to regular Emacs next-error."
   ;; the time of writing it is the only default jump handler. (gtags remains
   ;; mode-local)
   (add-to-list 'spacemacs-default-jump-handlers 'dumb-jump-go 'append)
-  ;; :config
-  ;; (add-to-list 'dumb-jump-project-denoters ".tabnine_root")
-  )
+  :config
+  (add-to-list 'dumb-jump-project-denoters ".tabnine_root"))
 
 (use-package eldoc
   :diminish eldoc-mode

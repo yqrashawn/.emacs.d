@@ -128,10 +128,11 @@
    (defl (setq-local company-minimum-prefix-length 1)
      (setq-local company-idle-delay 0.0)))
   ;; temp fix company-lsp
-  ;; (defun yq/lsp-adjust-company-backends ()
-  ;;   ;; (setq-local company-backends (cons 'company-tabnine (cons 'company-lsp (remove 'company-capf (remove 'company-lsp (remove 'company-tabnine company-backends))))))
-  ;;   (setq-local company-backends (cons 'company-lsp (remove 'company-capf (remove 'company-lsp company-backends)))))
-  ;; (add-hook 'lsp-after-open-hook 'yq/lsp-adjust-company-backends)
+  (defun yq/lsp-adjust-company-backends ()
+    (setq-local company-backends (cons 'company-tabnine (cons 'company-capf (remove 'company-capf (remove 'company-tabnine company-backends)))))
+    ;; (setq-local company-backends (cons 'company-lsp (remove 'company-capf (remove 'company-lsp company-backends))))
+    )
+  (add-hook 'lsp-after-open-hook 'yq/lsp-adjust-company-backends)
   (defun spacemacs//setup-lsp-jump-handler (&rest modes)
     "Set jump handler for LSP with the given MODE."
     (dolist (m modes)
@@ -176,16 +177,6 @@
   (lsp-ui-sideline-show-diagnostics t)
   (lsp-ui-sideline-ignore-duplicate t)
   (lsp-ui-peek-always-show nil))
-
-(use-package company-lsp
-  :straight t
-  :disabled t
-  :after company
-  :commands (company-lsp)
-  :custom
-  (company-lsp-async t)
-  (company-lsp-cache-candidates (if *imac* nil 'auto))
-  (company-lsp-enable-recompletion (if *imac* t nil)))
 
 (use-package lsp-ivy
   :straight t

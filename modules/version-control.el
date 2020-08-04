@@ -50,6 +50,17 @@
   (spacemacs/set-leader-keys "gS" (defl (setq current-prefix-arg '(1))
                                     (call-interactively #'magit-status)))
   :config
+  (transient-define-argument magit-merge:--strategy-option ()
+    :description "Strategy Option"
+    :class 'transient-option
+    ;; key for merge and rebase: "-s"
+    ;; key for cherry-pick and revert: "=s"
+    ;; shortarg for merge and rebase: "-s"
+    ;; shortarg for cherry-pick and revert: none
+    :key "-X"
+    :argument "--strategy-option="
+    :choices '("ours" "theirs" "patience" "subtree" "renormalize" "no-renormalize" "no-renames" "diff-algorithim=patience" "diff-algorithim=minimal" "diff-algorithim=histogram" "diff-algorithim=myers"))
+  (transient-append-suffix 'magit-rebase "-s" '("-X" magit-merge:--strategy-option))
   (magit-wip-mode 1)
   (magit-auto-revert-mode 1)
   (add-to-list 'magit-no-confirm 'stage-all-changes)
