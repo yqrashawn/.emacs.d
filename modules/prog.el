@@ -924,3 +924,7 @@ _g_  gfm      _m_ markdown
 (use-package 0xc
   :straight t
   :commands (0xc-convert 0xc-convert-point))
+
+(use-package jenkinsfile-mode
+  :straight t
+  :mode ("\\Jenkinsfile\\'" . jenkinsfile-mode))
