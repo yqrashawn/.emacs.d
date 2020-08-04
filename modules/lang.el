@@ -78,12 +78,16 @@
 (defun lsp-eslint-fix-before-save ()
   (add-hook 'before-save-hook #'lsp-eslint-apply-all-fixes))
 
+(defun +lsp-organize-imports ()
+  (add-hook 'before-save-hook #'lsp-organize-imports))
+
 ;; http://blog.binchen.org/posts/how-to-speed-up-lsp-mode.html
 ;; no real time syntax check
 (use-package lsp-mode
   :straight t
   :hook ((rustic-mode dockerfile-mode shell-script-mode web-mode css-mode typescript-mode js2-mode rjsx-mode) . lsp-deferred)
-  :hook ((js2-mode js-mode rjsx-mode) . lsp-eslint-fix-before-save)
+  :hook ((js2-mode js-mode rjsx-mode) . (+lsp-organize-imports lsp-eslint-fix-before-save))
+  :hook (lsp-mode . lsp-headerline-breadcrumb-mode)
   :custom
   ;; lsp-mode
   (lsp-file-watch-threshold 4000)
@@ -115,6 +119,10 @@
   ;; (lsp-enable-indentation nil)
   (lsp-disabled-clients '(javascript-typescript-langserver))
   :config
+  (add-to-list #'lsp-file-watch-ignored "[/\\\\]conflux-portal[/\\\]builds$")
+  (add-to-list #'lsp-file-watch-ignored "[/\\\\]conflux-portal[/\\\]dist$")
+  (add-to-list #'lsp-file-watch-ignored "[/\\\\]coverage$")
+  (add-to-list #'lsp-file-watch-ignored "[/\\\\]node_modules$")
   (defun +lsp-workspace-folders-add (workspace)
     (interactive
      (list (read-directory-name "Select folder to add: "
