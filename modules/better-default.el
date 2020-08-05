@@ -1960,7 +1960,7 @@ Version 2017-09-01"
 (defvar px->rem-base-px nil)
 
 (defun px->rem-get-base-px ()
-  (or (float px->rem-base-px)
+  (or (and px->rem-base-px (float px->rem-base-px))
       (progn (setq-local px->rem-base-px (read-number "The base font-size: "))
              (float px->rem-base-px))))
 
