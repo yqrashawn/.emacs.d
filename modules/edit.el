@@ -385,7 +385,32 @@ Don't mark when at certain Org objects."
   (evil-multiedit-store-in-search-history t)
   :config
   (define-key evil-iedit-state-map "V" nil)
-  (define-key evil-iedit-state-map "m" 'iedit-show/hide-unmatched-lines))
+  (define-key evil-iedit-state-map "m" 'iedit-show/hide-unmatched-lines)
+  :config/el-patch
+  (defun iedit-done ()
+    "Exit Iedit mode.
+Save the current occurrence string locally and globally.  Save
+the initial string globally."
+    (when iedit-buffering
+      (iedit-stop-buffering))
+    (setq iedit-last-occurrence-local (iedit-current-occurrence-string))
+    (setq iedit-last-occurrence-global iedit-last-occurrence-local)
+    (setq iedit-last-initial-string-global iedit-initial-string-local)
+    ;; this is the hack
+    ;; (if iedit-last-occurrence-local
+    ;; (kill-new iedit-last-occurrence-local)) ; Make occurrence the latest kill in the kill ring.
+    (setq iedit-num-lines-to-expand-up 0)
+    (setq iedit-num-lines-to-expand-down 0)
+    (el-patch-swap
+      (iedit-cleanup)
+      (iedit-lib-cleanup))
+    (setq iedit-initial-string-local nil)
+    (setq iedit-mode nil)
+    (force-mode-line-update)
+    (remove-hook 'kbd-macro-termination-hook 'iedit-done t)
+    (remove-hook 'change-major-mode-hook 'iedit-done t)
+    (remove-hook 'iedit-aborting-hook 'iedit-done t)
+    (run-hooks 'iedit-mode-end-hook)))
 
 (global-set-key (kbd "M-/") 'hippie-expand)
 
