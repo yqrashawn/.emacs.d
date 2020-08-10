@@ -342,15 +342,7 @@
     (clojure/fancify-symbols 'cider-repl-mode)
     (clojure/fancify-symbols 'cider-clojure-interaction-mode))
 
-  (defadvice cider-jump-to-var (before add-evil-jump activate) (evil-set-jump))
-  (cider-register-cljs-repl-type 're-frame-template
-                                 "(do (require 'figwheel-sidecar.repl-api)
-                                      (figwheel-sidecar.repl-api/start-figwheel!)
-                                      (figwheel-sidecar.repl-api/cljs-repl))")
-  (cider-register-cljs-repl-type 'luminus-template-re-frame
-                                 "(do (require 'figwheel-sidecar.repl-api)
-                                      (figwheel-sidecar.repl-api/start-figwheel!)
-                                      (figwheel-sidecar.repl-api/cljs-repl))"))
+  (defadvice cider-jump-to-var (before add-evil-jump activate) (evil-set-jump)))
 
 (use-package clj-refactor
   :straight t
