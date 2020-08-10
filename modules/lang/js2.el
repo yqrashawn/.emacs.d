@@ -264,3 +264,12 @@
                                     (npm-mode--get-project-property "name") cmd)))))
       (message (concat "Running " cmd))
       (compile cmd comint))))
+
+
+(use-package jest
+  :straight t
+  :hook ((rjsx-mode typescript-mode js2-mode) . jest-minor-mode)
+  :config
+  (push '("^\*jest\*<.*>$" :regexp t   :dedicated t   :position bottom             :noselect t) popwin:special-display-config)
+  (evil-define-key 'normal typescript-mode-map ",jj" #'jest-popup)
+  (evil-define-key 'normal js2-mode-map ",jj" #'jest-popup))
