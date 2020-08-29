@@ -342,7 +342,24 @@
     (clojure/fancify-symbols 'cider-repl-mode)
     (clojure/fancify-symbols 'cider-clojure-interaction-mode))
 
-  (defadvice cider-jump-to-var (before add-evil-jump activate) (evil-set-jump)))
+  (defadvice cider-jump-to-var (before add-evil-jump activate) (evil-set-jump))
+  :config/el-patch
+  ;; fix cljs company-capf args out of range error
+  (defun cider-completion--parse-candidate-map (candidate-map)
+    "Get \"candidate\" from CANDIDATE-MAP.
+Put type and ns properties on the candidate"
+    (let ((candidate (nrepl-dict-get candidate-map "candidate"))
+          (type (nrepl-dict-get candidate-map "type"))
+          (ns (nrepl-dict-get candidate-map "ns")))
+      (el-patch-swap
+        (put-text-property 0 1 'type type candidate)
+        (when (not (= (length candidate) 0))
+          (put-text-property 0 1 'type type candidate)))
+      (el-patch-swap
+        (put-text-property 0 1 'ns ns candidate)
+        (when (not (= (length candidate) 0))
+          (put-text-property 0 1 'ns ns candidate)))
+      candidate)))
 
 (use-package clj-refactor
   :straight t
