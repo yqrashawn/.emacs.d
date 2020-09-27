@@ -19,9 +19,7 @@
 (setq kmacro-ring-max 30)
 (setq save-silently t)
 
-;; enter pgp password in emacs
-(setq epa-pinentry-mode 'loopback)
-(setq epa-file-encrypt-to '("namy.19@gmail.com"))
+
 
 ;; https://emacs.stackexchange.com/questions/3673/how-to-make-vc-and-magit-treat-a-symbolic-link-to-a-real-file-in-git-repo-just
 (setq find-file-visit-truename t)
@@ -1539,6 +1537,13 @@ Info-mode:
   (setq send-mail-function 'async-smtpmail-send-it
         message-send-mail-function 'async-smtpmail-send-it))
 
+;; enter pgp password in emacs
+(setq epa-pinentry-mode 'loopback)
+(setq epa-file-encrypt-to '("namy.19@gmail.com"))
+(use-feature epa-file
+  :commands (epa-file-enable)
+  :init (epa-file-enable))
+
 (use-feature auth-source
   :defer t
   :custom
@@ -1693,10 +1698,9 @@ Info-mode:
   (global-set-key (kbd "M-h") #'aya-create)
   (global-set-key (kbd "M-l") #'aya-expand))
 
-(use-package so-long
-  :straight (:repo "https://git.savannah.nongnu.org/git/so-long.git")
+(use-feature so-long
   :init
-  (so-long-enable)
+  (global-so-long-mode)
   (add-hook 'find-file-hook
             (defun my-find-file-care-about-long-lines ()
               (save-excursion

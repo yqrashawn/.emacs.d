@@ -102,33 +102,35 @@
   (evil-set-initial-state 'ivy-occur-grep-mode 'normal)
   (evil-make-overriding-map ivy-occur-mode-map 'normal)
   (ido-mode -1)
-  (defun yq-ivy-format-function (cands)
-    "Transform CANDS into a string for minibuffer."
-    (let ((cands (--map-indexed (format "%s %s" (char-to-string (elt yq-quick-keys it-index)) it) cands)))
-      (ivy--format-function-generic
-       (lambda (str)
-         (ivy--add-face str 'ivy-current-match))
-       #'identity
-       cands
-       "\n")))
-  (setq ivy-format-functions-alist '((t . yq-ivy-format-function)))
-  (setq ivy-format-function 'yq-ivy-format-function)
-  (defun +ivy-select-index (&optional key)
-    (interactive)
-    (let ((key (or key (read-char "key: " t))))
-      (ivy-next-line (seq-position yq-quick-keys key))
-      (ivy--exhibit)
-      (ivy-alt-done)))
-  (define-key ivy-minibuffer-map (kbd "C-x C-6 1") (lambda () (interactive) (+ivy-select-index ?a)))
-  (define-key ivy-minibuffer-map (kbd "C-x C-6 2") (lambda () (interactive) (+ivy-select-index ?s)))
-  (define-key ivy-minibuffer-map (kbd "C-x C-6 3") (lambda () (interactive) (+ivy-select-index ?d)))
-  (define-key ivy-minibuffer-map (kbd "C-x C-6 4") (lambda () (interactive) (+ivy-select-index ?f)))
-  (define-key ivy-minibuffer-map (kbd "C-x C-6 5") (lambda () (interactive) (+ivy-select-index ?g)))
-  (define-key ivy-minibuffer-map (kbd "C-x C-6 6") (lambda () (interactive) (+ivy-select-index ?h)))
-  (define-key ivy-minibuffer-map (kbd "C-x C-6 7") (lambda () (interactive) (+ivy-select-index ?j)))
-  (define-key ivy-minibuffer-map (kbd "C-x C-6 8") (lambda () (interactive) (+ivy-select-index ?k)))
-  (define-key ivy-minibuffer-map (kbd "C-x C-6 9") (lambda () (interactive) (+ivy-select-index ?l)))
-  (define-key ivy-minibuffer-map (kbd "C-x C-6 0") (lambda () (interactive) (+ivy-select-index 59)))
+
+  ;; (defun yq-ivy-format-function (cands)
+  ;;   "Transform CANDS into a string for minibuffer."
+  ;;   (print cands)
+  ;;   (let ((cands (--map-indexed (format "%s %s" (char-to-string (elt yq-quick-keys it-index)) it) cands)))
+  ;;     (ivy--format-function-generic
+  ;;      (lambda (str)
+  ;;        (ivy--add-face str 'ivy-current-match))
+  ;;      #'identity
+  ;;      cands
+  ;;      "\n")))
+  ;; (setq ivy-format-functions-alist '((t . yq-ivy-format-function)))
+  ;; (setq ivy-format-function 'yq-ivy-format-function)
+  ;; (defun +ivy-select-index (&optional key)
+  ;;   (interactive)
+  ;;   (let ((key (or key (read-char "key: " t))))
+  ;;     (ivy-next-line (seq-position yq-quick-keys key))
+  ;;     (ivy--exhibit)
+  ;;     (ivy-alt-done)))
+  ;; (define-key ivy-minibuffer-map (kbd "C-x C-6 1") (lambda () (interactive) (+ivy-select-index ?a)))
+  ;; (define-key ivy-minibuffer-map (kbd "C-x C-6 2") (lambda () (interactive) (+ivy-select-index ?s)))
+  ;; (define-key ivy-minibuffer-map (kbd "C-x C-6 3") (lambda () (interactive) (+ivy-select-index ?d)))
+  ;; (define-key ivy-minibuffer-map (kbd "C-x C-6 4") (lambda () (interactive) (+ivy-select-index ?f)))
+  ;; (define-key ivy-minibuffer-map (kbd "C-x C-6 5") (lambda () (interactive) (+ivy-select-index ?g)))
+  ;; (define-key ivy-minibuffer-map (kbd "C-x C-6 6") (lambda () (interactive) (+ivy-select-index ?h)))
+  ;; (define-key ivy-minibuffer-map (kbd "C-x C-6 7") (lambda () (interactive) (+ivy-select-index ?j)))
+  ;; (define-key ivy-minibuffer-map (kbd "C-x C-6 8") (lambda () (interactive) (+ivy-select-index ?k)))
+  ;; (define-key ivy-minibuffer-map (kbd "C-x C-6 9") (lambda () (interactive) (+ivy-select-index ?l)))
+  ;; (define-key ivy-minibuffer-map (kbd "C-x C-6 0") (lambda () (interactive) (+ivy-select-index 59)))
 
   (defun prot/counsel-fzf-dir (arg)
     "Specify root directory for `counsel-fzf'."
