@@ -107,10 +107,7 @@
   (lsp-bash-highlight-parsing-errors t)
   (lsp-bash-glob-pattern t)
   ;; ts-js
-  (lsp-eslint-server-command
-   `("node" ,(expand-file-name (car (last
-                                     (file-expand-wildcards
-                                      (concat (expand-file-name "~/") ".vscode/extensions/dbaeumer.vscode-eslint-*/server/out/eslintServer.js"))))) "--stdio"))
+  (lsp-eslint-server-command `("node" ,(expand-file-name (car (last (file-expand-wildcards "~/.vscode/extensions/dbaeumer.vscode-eslint-*/server/out/eslintServer.js")))) "--stdio"))
   (lsp-eslint-package-manager "yarn")
   (lsp-eslint-auto-fix-on-save t)
   (lsp-eslint-run "onSave")
