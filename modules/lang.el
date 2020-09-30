@@ -204,3 +204,9 @@
 (use-package dockerfile-mode
   :straight t
   :mode ("Dockerfile\\'" . dockerfile-mode))
+
+(use-package langtool
+  :straight t
+  :commands (langtool-check)
+  :custom
+  (langtool-bin "languagetool"))

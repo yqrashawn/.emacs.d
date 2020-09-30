@@ -1116,14 +1116,16 @@ first."))
 
 (use-package flyspell-correct
   :straight t
-  :defer t)
+  :after flyspell
+  :bind (:map flyspell-mode-map ("C-;" . flyspell-correct-wrapper)))
 
-(use-package flyspell-correct-ivy
+;; (use-package flyspell-correct-ivy
+;;   :straight t
+;;   :after flyspell-correct)
+
+(use-package flyspell-correct-avy-menu
   :straight t
-  :defer t
-  :bind ("C-;" . flyspell-correct-at-point)
-  :init
-  (setq flyspell-correct-interface #'flyspell-correct-wrapper))
+  :after flyspell-correct)
 
 (use-package helm
   :straight t
