@@ -50,6 +50,11 @@ file stored in the cache directory and `nil' to disable auto-saving.")
 
 (setq read-process-output-max (* 1024 1024))
 
+;; https://200ok.ch/posts/2020-09-29_comprehensive_guide_on_handling_long_lines_in_emacs.html
+(setq-default bidi-paragraph-direction 'left-to-right)
+(if (version<= "27.1" emacs-version)
+    (setq bidi-inhibit-bpa t))
+
 (use-feature emacs
   :init
   (setq-default
@@ -1700,7 +1705,7 @@ Info-mode:
 
 (use-feature so-long
   :init
-  (global-so-long-mode)
+  (global-so-long-mode 1)
   (add-hook 'find-file-hook
             (defun my-find-file-care-about-long-lines ()
               (save-excursion
