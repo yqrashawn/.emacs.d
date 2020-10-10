@@ -49,9 +49,9 @@
 (setq custom-file (concat yq-emacs-cache-dir ".custom-settings"))
 (load custom-file)
 
-(setq url-proxy-services
-      '(("http" . "127.0.0.1:8888")
-        ("https" . "127.0.0.1:8889")))
+;; (setq url-proxy-services
+;;       '(("http" . "127.0.0.1:8888")
+;;         ("https" . "127.0.0.1:8889")))
 
 ;;; Temporarily disable the file name handler.
 (setq default-file-name-handler-alist file-name-handler-alist)
