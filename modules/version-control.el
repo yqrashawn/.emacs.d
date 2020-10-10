@@ -123,6 +123,11 @@
   :load-path "~/.emacs.d/modules"
   :after (magit git-commit transient))
 
+(use-package abridge-diff
+  :straight t
+  :after magit
+  :init (abridge-diff-mode 1))
+
 (use-package with-editor
   :straight t
   :commands (with-editor-mode shell-command-with-editor-mode)
