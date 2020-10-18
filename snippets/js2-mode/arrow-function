@@ -2,6 +2,6 @@
 # name: define-arrow-function
 # key: af
 # --
-const $1 = ($2) => {
+($1) => {
   $3
 }

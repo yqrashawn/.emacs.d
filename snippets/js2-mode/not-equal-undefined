@@ -1,5 +1,5 @@
 # -*- mode: snippet -*-
 # name: not-equal-undefined
-# key: ;nu
+# key: nu
 # --
-!== undefined
+ !== undefined

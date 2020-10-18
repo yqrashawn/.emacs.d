@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: protractor-wait-visibility
-# key: pwait
-# --
-await browser.wait(EC.visibilityOf($1), 5000);

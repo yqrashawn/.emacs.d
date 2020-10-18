@@ -3,7 +3,5 @@
 # key: cl
 # --
 class ${1: class name} {
-  counstructor(${2:args}) {
-    ${3}
-  }
+  $2
 }

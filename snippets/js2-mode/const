@@ -2,4 +2,4 @@
 # name: const
 # key: c
 # --
-const ${1}
+const ${1} =

@@ -1,5 +1,0 @@
-# -*- mode: snippet -*-
-# name: protractor-xpath
-# key: xpa
-# --
-element(by.xpath('$1'))

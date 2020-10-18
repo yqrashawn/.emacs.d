@@ -1,7 +1,7 @@
 # -*- mode: snippet -*-
-# name: promise
-# key: promise
+# name: new-promise
+# key: npro
 # --
 new Promise((resolve, reject) => {
   $1
-});
+})
