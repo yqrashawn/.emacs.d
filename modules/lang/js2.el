@@ -78,23 +78,6 @@
         ("\\.tern-project\\'" . json-mode)))
 
 ;; (bound-and-true-p prettier-js-mode)
-(use-package prettier-js
-  :straight t
-  :disabled t
-  :diminish prettier-js-mode
-  :commands (prettier-js-mode prettier-js)
-  :hook ((typescript-mode js-mdoe rjsx-mode js2-mode) . prettier-js-mode)
-  :init
-  (yq/add-toggle prettier-js :mode prettier-js-mode)
-  (dolist (mode '(js2-mode js-mode rjsx-mode typescript-mode))
-    (spacemacs/set-leader-keys-for-major-mode mode "=" 'prettier-js))
-  (with-eval-after-load 'js2-mode
-    (evil-define-key 'normal js2-mode-map (kbd ",=") #'prettier-js)
-    (evil-define-key 'normal js2-mode-map ",tp" 'yq/toggle-prettier-js))
-  (with-eval-after-load 'rjsx-mode
-    (evil-define-key 'normal rjsx-mode-map (kbd ",=") #'prettier-js)
-    (evil-define-key 'normal rjsx-mode-map ",tp" 'yq/toggle-prettier-js)))
-
 (use-package rjsx-mode
   :straight t
   :defer t
@@ -113,6 +96,7 @@
 (use-package prettier
   :straight (:host github :repo "jscheid/prettier.el" :branch "release")
   :hook (after-init . global-prettier-mode)
+  :custom (prettier-editorconfig-flag nil)
   :init
   (yq/add-toggle prettier :mode prettier-mode)
   (with-eval-after-load 'js2-mode
