@@ -96,7 +96,8 @@
 (use-package prettier
   :straight t
   :hook (after-init . global-prettier-mode)
-  :custom (prettier-editorconfig-flag nil)
+  :custom
+  (prettier-editorconfig-flag t)
   :init
   (yq/add-toggle prettier :mode prettier-mode)
   (with-eval-after-load 'js2-mode
