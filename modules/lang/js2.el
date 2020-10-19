@@ -94,7 +94,7 @@
   (spacemacs/set-leader-keys-for-major-mode 'rjsx-mode "m" 'js2-mode))
 
 (use-package prettier
-  :straight (:host github :repo "jscheid/prettier.el" :branch "release")
+  :straight t
   :hook (after-init . global-prettier-mode)
   :custom (prettier-editorconfig-flag nil)
   :init
