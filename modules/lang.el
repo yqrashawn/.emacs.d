@@ -157,7 +157,7 @@
 
 (use-package lsp-ui
   :straight t
-  ;; :disabled
+  :disabled
   :commands lsp-ui-mode
   :custom
   ;; lsp ui doc
