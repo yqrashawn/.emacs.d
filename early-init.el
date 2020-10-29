@@ -3,3 +3,4 @@
 (scroll-bar-mode -1)
 (setq gc-cons-threshold 134217728)
 (setq gc-cons-percentage 0.6)
+(setq comp-speed 2)

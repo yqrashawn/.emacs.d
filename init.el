@@ -128,11 +128,11 @@
     (dolist (dir
              (list
               (expand-file-name "~/local/bin")
+              (expand-file-name "/Applications/Emacs.app/Contents/MacOS/bin")
               (expand-file-name "~/.fnm/current/bin")))
       (when (and (file-exists-p dir) (not (member dir exec-path)))
         (setenv "PATH" (concat dir ":" (getenv "PATH")))
-        (setq exec-path (append (list dir) exec-path))))
-    ))
+        (setq exec-path (append (list dir) exec-path))))))
 
 (defun yq/get-modules (module-dir)
   (let* ((el-file-path (concat user-emacs-directory "modules/" module-dir))

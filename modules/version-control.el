@@ -132,7 +132,7 @@
   :straight t
   :commands (with-editor-mode shell-command-with-editor-mode)
   :init
-  (setq with-editor-emacsclient-executable "/usr/local/bin/emacsclient")
+  (setq with-editor-emacsclient-executable "/Applications/Emacs.app/Contents/MacOS/bin/emacsclient")
   (shell-command-with-editor-mode)
   (add-hook 'with-editor-mode-hook 'evil-insert-state))
 
