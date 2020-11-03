@@ -649,6 +649,7 @@ _g_  gfm      _m_ markdown
 
 (when (display-graphic-p)
   (use-package flycheck-posframe
+    :disabled t
     :straight t
     :after flycheck
     :diminish (flycheck-posframe-mode)
