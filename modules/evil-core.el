@@ -215,7 +215,14 @@
   (spacemacs/set-leader-keys "fed" (lambda () (interactive) (find-file-existing yq-emacs-dotfile-dir)))
   (spacemacs/set-leader-keys "fek" (lambda () (interactive) (find-file-existing "~/.config/karabiner.edn")))
   (load-file "~/.emacs.d/straight/repos/straight.el/straight-x.el")
-  (spacemacs/set-leader-keys "feU" #'straight-x-fetch-all))
+  (spacemacs/set-leader-keys "feU" #'straight-x-fetch-all)
+
+  (evil-define-operator evil-narrow-operator (beg end type)
+    "Indirectly narrow the region from BEG to END."
+    (interactive "<R>")
+    (deactivate-mark)
+    (narrow-to-region beg end))
+  (define-key evil-motion-state-map "gm" #'evil-narrow-operator))
 
 (use-package evil-nerd-commenter
   :straight t
