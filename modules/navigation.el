@@ -264,7 +264,7 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   (global-set-key (kbd "C-s") #'swiper-isearch)
   (global-set-key (kbd "C-S-SPC") 'spacemacs/swiper-region-or-symbol)
   (define-key evil-normal-state-map "gN" 'spacemacs/swiper-region-or-symbol)
-  (spacemacs/set-leader-keys "fes" (lambda () (interactive) (find-file-existing "~/.ssh/config") (swiper))))
+  (spacemacs/set-leader-keys "fes" (lambda () (interactive) (find-file-existing "~/.ssh/config.gpg") (swiper))))
 
 (use-package counsel
   :straight (:host github :repo "abo-abo/swiper" :branch "master"
