@@ -7,6 +7,43 @@
 (defun yq/scratch-buffer-p ()
   (string= (buffer-name (current-buffer)) "*scratch*"))
 
+(defun yq/js-timestamp-to-str ()
+  (interactive)
+  (let* ((timestamp (number-at-point))
+         (timestr (format-time-string "%F %T" (seconds-to-time (/ timestamp 1000.000)))))
+    (message timestr)
+    (kill-new timestr)))
+
+;; px->rem
+(defvar px->rem-base-px nil)
+
+(defun px->rem-get-base-px ()
+  (or (and px->rem-base-px (float px->rem-base-px))
+      (progn (setq-local px->rem-base-px (read-number "The base font-size: "))
+             (float px->rem-base-px))))
+
+(defun px->rem-num-to-rem (num)
+  (concat (string-trim-right (format "%.4f" num) (rx (? ".") (* "0") line-end)) "rem"))
+
+(defun px->rem ()
+  (interactive)
+  (save-excursion
+    (goto-char (point-min))
+    (while (re-search-forward (rx (? (group (* digit) (any "."))) (+ digit) "px") (point-max) t)
+      (let ((str (match-string 0))
+            (start (match-beginning 0))
+            (end (match-end 0)))
+        (when (y-or-n-p (format "base font-size is %spx. Change the px here? " (px->rem-get-base-px)))
+          (let* ((px (string-to-number (string-remove-suffix "px" str)))
+                 (rem (/ px (px->rem-get-base-px))))
+            (print (px->rem-num-to-rem rem))
+            (replace-region-contents start end (lambda () (px->rem-num-to-rem rem)))))))))
+
+(use-package ts
+  :straight t
+  :disabled
+  :commands (ts-now ts-unix ts-format))
+
 (use-package sx
   :straight t
   :disabled
