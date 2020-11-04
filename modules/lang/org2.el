@@ -435,8 +435,9 @@ See `org-capture-templates' for more information."
   :config
   (require 'evil-org-agenda)
   (evil-org-agenda-set-keys)
-  (define-key evil-org-mode-map ">" 'evil-org->)
-  (define-key evil-org-mode-map "<" 'evil-org-<))
+  (evil-define-key 'normal org-mode-map
+    ">" #'evil-org->
+    "<" #'evil-org-<))
 
 ;; add :asc to wrap js block in async func
 (with-eval-after-load 'ob-js
