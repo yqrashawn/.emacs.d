@@ -52,8 +52,20 @@
              (define-key evil-motion-state-map prefixed nil)
              (define-key evil-insert-state-map prefixed nil))))))))
 
+(use-package undo-fu
+  :straight t
+  :defer t)
+
+(require 'seq)
+(defun yq/update-evil-insert-state-modes (mode-to-remove)
+    "remove MODE-TO-REMOVE from evil-emacs-state-modes"
+    (setq evil-insert-state-modes
+          (seq-remove (lambda (index) (eq index mode-to-remove)) evil-insert-state-modes)))
+
 (use-package evil
   :straight t
+  :custom
+  (evil-undo-system 'undo-fu)
   :init
   (customize-set-variable 'evil-intercept-maps nil)
   (customize-set-variable 'evil-move-cursor-back nil)
@@ -77,13 +89,6 @@
              (eq index mode-to-remove))
            evil-emacs-state-modes)))
 
-  (defun yq/update-evil-insert-state-modes (mode-to-remove)
-    "remove MODE-TO-REMOVE from evil-emacs-state-modes"
-    (setq evil-insert-state-modes
-          (seq-remove
-           (lambda (index)
-             (eq index mode-to-remove))
-           evil-insert-state-modes)))
   (evil-mode 1)
   :config
   (define-key evil-ex-completion-map (kbd "C-a") #'move-beginning-of-line)

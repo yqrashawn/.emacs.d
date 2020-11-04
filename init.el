@@ -119,12 +119,8 @@
 
 (use-package exec-path-from-shell
   :straight t
-  ;; :custom
-  ;; (exec-path-from-shell-arguments '("-l"))
-  :config
-  (when (memq window-system '(mac ns x))
-    (exec-path-from-shell-initialize)
-    (exec-path-from-shell-copy-env "JAVA_HOME")
+  :init
+  (defun yq/update-path ()
     (dolist (dir
              (list
               (expand-file-name "~/local/bin")
@@ -132,7 +128,18 @@
               (expand-file-name "~/.fnm/current/bin")))
       (when (and (file-exists-p dir) (not (member dir exec-path)))
         (setenv "PATH" (concat dir ":" (getenv "PATH")))
-        (setq exec-path (append (list dir) exec-path))))))
+        (setq exec-path (append (list dir) exec-path)))))
+  :config
+  (when (memq window-system '(mac ns x))
+    (exec-path-from-shell-initialize)
+    (exec-path-from-shell-copy-env "JAVA_HOME")
+    (yq/update-path)))
+
+(use-package el-patch
+  :straight t)
+
+(eval-when-compile
+  (require 'el-patch))
 
 (defun yq/get-modules (module-dir)
   (let* ((el-file-path (concat user-emacs-directory "modules/" module-dir))
@@ -140,12 +147,6 @@
     (if (file-exists-p elc-file-path)
         (load-file elc-file-path)
       (load-file el-file-path))))
-
-(use-package el-patch
-  :straight t)
-
-(eval-when-compile
-  (require 'el-patch))
 
 (yq/get-modules "core-display-init.el")
 (yq/get-modules "evil-core.el")
