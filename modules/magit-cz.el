@@ -72,7 +72,7 @@
    'minibuffer-prompt))
 
 (defun magit-cz-git-commit-message-setup-function ()
-  (insert (or magit-cz--message ""))
+  (insert (if (boundp 'magit-cz--message) (or magit-cz--message "") ""))
   (goto-char (point-min))
   (end-of-line)
   (setq magit-cz--message nil))
