@@ -170,7 +170,7 @@ has been changed to THEME."
   :straight t
   :custom
   (doom-modeline-height 15)
-  (doom-modeline-buffer-file-name-style 'relative-to-project)
+  (doom-modeline-buffer-file-name-style 'auto)
   (doom-modeline-icon (display-graphic-p))
   (doom-modeline-mu4e t)
   (doom-modeline-major-mode-icon t)
@@ -183,11 +183,13 @@ has been changed to THEME."
   (doom-modeline-indent-info t)
   (doom-modeline-irc nil)
   (doom-modeline-word-count t)
-  (doom-modeline-percent-position nil)
+  (doom-modeline-percent-position t)
   :config
-  (doom-modeline-def-modeline 'main
-    '(bar workspace-name window-number modals matches buffer-info remote-host selection-info)
-    '(misc-info persp-name battery grip irc mu4e gnus github debug lsp minor-modes input-method indent-info buffer-encoding major-mode process vcs checker))
+  ;; (doom-modeline-def-modeline 'main
+  ;;   '(bar workspace-name window-number modals matches buffer-info remote-host selection-info)
+  ;;   '(misc-info persp-name battery grip irc mu4e gnus github debug lsp minor-modes input-method indent-info buffer-encoding major-mode process vcs checker))
+  ;; https://github.com/seagle0128/doom-modeline#faq
+  (setq inhibit-compacting-font-caches t)
   (doom-modeline-init))
 
 (use-package vim-empty-lines-mode
