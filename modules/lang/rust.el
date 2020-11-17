@@ -10,6 +10,7 @@
   :mode (("\\.rs$" . rustic-mode))
   :commands (rustic-run-cargo-command rustic-cargo-outdated)
   :custom
+  (lsp-rust-analyzer-server-command '("~/local/bin/rust-analyzer"))
   (rustic-indent-method-chain t)
   (rustic-format-trigger 'on-save)
   :init

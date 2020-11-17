@@ -121,6 +121,7 @@
   :straight t
   :init
   (defun yq/update-path ()
+    (interactive)
     (dolist (dir
              (list
               (expand-file-name "~/local/bin")
