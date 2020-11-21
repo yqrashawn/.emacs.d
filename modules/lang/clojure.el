@@ -26,6 +26,9 @@
 ;;; Code:
 (yq/get-modules "lang/clojure-funcs.el")
 
+(dolist (mode '(clojure-mode clojurescript-mode clojurec-mode))
+    (spacemacs/enable-flycheck mode))
+
 (use-package clojure-mode
   :straight t
   :diminish (clojurescript-mode clojure-mode)
