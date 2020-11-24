@@ -7,17 +7,16 @@
 (use-package undo-tree
   :straight (:host github :repo "emacsorphanage/undo-tree")
   :diminish undo-tree-mode
-  :defer t
+  :hook (after-init . global-undo-tree-mode)
   :custom
   (undo-tree-enable-undo-in-region nil)
   (undo-tree-history-directory-alist '(("." . "~/emacs.d/.cache/undo")))
   (undo-tree-auto-save-history t)
   :bind ("s-y" . undo-tree-redo)
-  :config
+  :init
   (setq undo-limit 78643200)
   (setq undo-outer-limit 104857600)
-  (setq undo-strong-limit 157286400)
-  (global-undo-tree-mode))
+  (setq undo-strong-limit 157286400))
 
 (use-package goto-chg
   :straight (:host github :repo "emacs-evil/goto-chg")
@@ -65,7 +64,7 @@
 (use-package evil
   :straight t
   :custom
-  (evil-undo-system 'undo-fu)
+  (evil-undo-system 'undo-tree)
   :init
   (customize-set-variable 'evil-intercept-maps nil)
   (customize-set-variable 'evil-move-cursor-back nil)
