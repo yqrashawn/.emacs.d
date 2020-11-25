@@ -16,7 +16,7 @@
       (parinfer-mode -1)
     (parinfer-mode 1)))
 
-(defun crux-start-or-switch-to (function buffer-name)
+(defun crux-start-or-switch-to #'buffer-name
   "Invoke FUNCTION if there is no buffer with BUFFER-NAME.
 Otherwise switch to the buffer named BUFFER-NAME.  Don't clobber
 the current buffer."
@@ -146,7 +146,7 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
 (use-package lispy
   :straight t
   :diminish lispy " ʪ"
-  :hook ((ielm-mode lisp-mode clojure-mode emacs-lisp-mode cider-repl-mode) . lispy-mode)
+  :hook ((ielm-mode lisp-mode clojure-mode emacs-lisp-mode cider-repl-mode clojurescript-mode) . lispy-mode)
   :custom
   (lispy-eval-display-style 'overlay)
   (lispy-visit-method 'projectile)
@@ -154,7 +154,6 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
   (lispy-safe-delete t)
   (lispy-safe-paste t)
   (lispy-safe-actions-no-pull-delimiters-into-comments t)
-  ;; :hook ((lisp-mode emacs-lisp-mode ielm-mode clojure-mode clojurescript-mode) . lispy-mode)
   :init
   (yq/add-toggle lispy :mode lispy-mode)
   :config
@@ -179,18 +178,18 @@ the omniscience database.")
   ;; semantic db recursive load error
   ;; https://github.com/syl20bnr/spacemacs/issues/12843
   ;; (require 'semantic/db-file)
-  (use-package ccc ; for cursor style
-   :straight t
-   :init
-   (defun +lispy-update-cursor-style ()
-     (when (and lispy-mode (evil-insert-state-p))
-       (if (or (lispy-right-p) (lispy-left-p) (region-active-p))
-           (progn (setq-local cursor-type '(bar . 3))
-                  (ccc-set-buffer-local-cursor-color "plum1"))
-         (progn (setq-local cursor-type '(bar . 3))
-                (ccc-set-buffer-local-cursor-color "green")))))
-   :config
-   (add-hook 'post-command-hook '+lispy-update-cursor-style))
+  (use-package ccc                      ; for cursor style
+    :straight t
+    :init
+    (defun +lispy-update-cursor-style ()
+      (when (and lispy-mode (evil-insert-state-p))
+        (if (or (lispy-right-p) (lispy-left-p) (region-active-p))
+            (progn (setq-local cursor-type '(bar . 3))
+                   (ccc-set-buffer-local-cursor-color "plum1"))
+          (progn (setq-local cursor-type '(bar . 3))
+                 (ccc-set-buffer-local-cursor-color "green")))))
+    :config
+    (add-hook 'post-command-hook '+lispy-update-cursor-style))
   (defun conditionally-enable-lispy ()
     (when (eq this-command 'eval-expression)
       (lispy-mode 1)))
@@ -224,177 +223,179 @@ the omniscience database.")
     (evil-define-key 'normal emacs-lisp-mode-map "sl" 'lispy-goto))
   ;; (evil-define-key 'normal lispy-mode-map "b" 'sp-previous-sexp)
   ;; (evil-define-key 'normal lispy-mode-map "e" 'sp-next-sexp)
-  (push '("*lispy-message*" :dedicated t :position bottom :stick t :noselect t   :height 0.4) popwin:special-display-config)
+  (push '("*lispy-message*" :dedicated t :position bottom :stick t :noselect t :height 0.4) popwin:special-display-config)
   (define-key evil-normal-state-map (kbd "C-a") 'mwim-beginning-of-code-or-line))
 
 (use-package parinfer
- :straight (:host github :repo "yqrashawn/parinfer-mode")
- :after lispy
- :disabled
- :diminish parinfer-mode
- :hook ((clojure-mode .  parinfer-mode)
-        (emacs-lisp-mode . parinfer-mode)
-        (lisp-mode . parinfer-mode))
- :commands (parinfer-mode parinfer-mode-enable parinfer-toggle-mode)
- :init
- (defun +parinfer-hs-toggle-folding ()
-   (interactive)
-   (if company-my-keymap
-       (company-select-previous)
-     (if (region-active-p)
-         (lispy-kill)
-       (progn
-         (hs-toggle-hiding)
-         (backward-char)))))
- (setq parinfer-lighters '(" Par:I" . " Par:P"))
- (setq parinfer-display-error t)
- (setq parinfer-indent-mode-confirm nil)
- (setq parinfer-extensions
-       '(defaults       ; should be included.
-          pretty-parens  ; different paren styles for different modes.
-          evil           ; If you use Evil.
-          lispy          ; If you use Lispy. With this extension, you should install Lispy and do not enable lispy-mode directly.
-          ;; lispyville
-          smart-tab      ; C-b & C-f jump positions and smart shift with tab & S-tab.
-          smart-yank))
- :config
+  :straight (:host github :repo "yqrashawn/parinfer-mode")
+  :after lispy
+  :disabled
+  :diminish parinfer-mode
+  :hook ((clojure-mode . parinfer-mode)
+         (emacs-lisp-mode . parinfer-mode)
+         (lisp-mode . parinfer-mode))
+  :commands (parinfer-mode parinfer-mode-enable parinfer-toggle-mode)
+  :init
+  (defun +parinfer-hs-toggle-folding ()
+    (interactive)
+    (if company-my-keymap
+        (company-select-previous)
+      (if (region-active-p)
+          (lispy-kill)
+        (progn
+          (hs-toggle-hiding)
+          (backward-char)))))
+  (setq parinfer-lighters '(" Par:I" . " Par:P"))
+  (setq parinfer-display-error t)
+  (setq parinfer-indent-mode-confirm nil)
+  (setq parinfer-extensions
+        '(defaults                 ; should be included.
+           pretty-parens           ; different paren styles for different modes.
+           evil                    ; If you use Evil.
+           lispy ; If you use Lispy. With this extension, you should install Lispy and do not enable lispy-mode directly.
+           ;; lispyville
+           smart-tab ; C-b & C-f jump positions and smart shift with tab & S-tab.
+           smart-yank))
+  :config
 
- ;; fix conflicts between evil-iedit and parinfer-mode lispy bindings
- (add-hook
-  'evil-iedit-insert-state-entry-hook
-  (lambda () (when parinfer-mode
-               (parinfer-mode -1))))
- (add-hook
-  'evil-iedit-insert-state-exit-hook
-  (lambda () (when (and (not parinfer-mode) (yq/lispy-file-p))
-               (parinfer-mode 1))))
- (add-hook
-  'evil-multiedit-insert-state-entry-hook
-  (lambda () (when parinfer-mode
-               (parinfer-mode -1))))
- (add-hook
-  'evil-multiedit-insert-state-exit-hook
-  (lambda () (when (and (not parinfer-mode) (yq/lispy-file-p))
-               (parinfer-mode 1))))
+  ;; fix conflicts between evil-iedit and parinfer-mode lispy bindings
+  (add-hook
+   'evil-iedit-insert-state-entry-hook
+   (lambda () (when parinfer-mode
+                (parinfer-mode -1))))
+  (add-hook
+   'evil-iedit-insert-state-exit-hook
+   (lambda () (when (and (not parinfer-mode) (yq/lispy-file-p))
+                (parinfer-mode 1))))
+  (add-hook
+   'evil-multiedit-insert-state-entry-hook
+   (lambda () (when parinfer-mode
+                (parinfer-mode -1))))
+  (add-hook
+   'evil-multiedit-insert-state-exit-hook
+   (lambda () (when (and (not parinfer-mode) (yq/lispy-file-p))
+                (parinfer-mode 1))))
 
- ;; lispy special mode cursor
- (use-package ccc ; for cursor style
-   :straight t
-   :after (parinfer)
-   :init
-   (defun +lispy-update-cursor-style ()
-     (when (and parinfer-mode (evil-insert-state-p))
-       (if (or (lispy-right-p) (lispy-left-p) (region-active-p))
-           (progn (setq-local cursor-type '(bar . 6))
-                  (ccc-set-buffer-local-cursor-color "plum1"))
-         (progn (setq-local cursor-type '(bar . 6))
-                (ccc-set-buffer-local-cursor-color "green")))))
-   :config
-   (add-hook 'post-command-hook '+lispy-update-cursor-style))
+  ;; lispy special mode cursor
+  (use-package ccc                      ; for cursor style
+    :straight t
+    :after (parinfer)
+    :init
+    (defun +lispy-update-cursor-style ()
+      (when (and parinfer-mode (evil-insert-state-p))
+        (if (or (lispy-right-p) (lispy-left-p) (region-active-p))
+            (progn (setq-local cursor-type '(bar . 6))
+                   (ccc-set-buffer-local-cursor-color "plum1"))
+          (progn (setq-local cursor-type '(bar . 6))
+                 (ccc-set-buffer-local-cursor-color "green")))))
+    :config
+    (add-hook 'post-command-hook '+lispy-update-cursor-style))
 
- (define-key parinfer-mode-map (kbd "C-.") #'parinfer-toggle-mode)
- (evil-define-key 'insert parinfer-mode-map (kbd "C-k") '+parinfer-hs-toggle-folding)
- (define-key parinfer-mode-map (kbd "C-k") '+parinfer-hs-toggle-folding)
- (define-key parinfer-mode-map (kbd "C-x C-6 q") #'lispy-describe-inline)
- (define-key parinfer-mode-map (kbd "C-x C-6 w") #'lispy-arglist-inline)
- (define-key parinfer-mode-map (kbd "C-x C-6 z") #'lispy-left)
- (define-key parinfer-mode-map (kbd "C-x C-6 x") #'lispy-right)
- (define-key parinfer-mode-map (kbd "C-x C-6 c") #'lispy-mark-symbol)
- (define-key parinfer-mode-map (kbd "y")
-   (lambda (beg end &optional region)
-     (interactive (list
-                   (mark)
-                   (point)
-                   (prefix-numeric-value
-                    current-prefix-arg)))
-     (if (region-active-p)
-         (progn
-           (kill-ring-save beg end region)
-           (lispy-left 1)
-           (keyboard-quit))
-       (self-insert-command 1))))
- ;; (define-key parinfer-mode-map (kbd "C-k") #'lispy-kill)
- (define-key parinfer-mode-map (kbd "C-d") #'lispy-delete)
- (evil-define-key 'insert parinfer-mode-map (kbd "C-d") #'lispy-delete)
- ;; (evil-define-key 'insert parinfer-mode-map (kbd "C-a") #'lispy-move-beginning-of-line)
- (evil-define-key 'insert parinfer-mode-map (kbd "C-e") #'lispy-move-end-of-line)
- ;; (define-key parinfer-mode-map (kbd "C-a") #'lispy-move-beginning-of-line)
- (define-key parinfer-mode-map (kbd "C-e") #'lispy-move-end-of-line)
- ;; (evil-define-key 'normal parinfer-mode-map (kbd "C-a") #'lispy-move-beginning-of-line)
- (evil-define-key 'normal parinfer-mode-map (kbd "C-e") #'lispy-move-end-of-line)
- ;; (evil-define-key 'insert parinfer-mode-map (kbd "C-a") #'lispy-move-beginning-of-line)
- (evil-define-key 'insert parinfer-mode-map (kbd "C-e") #'lispy-move-end-of-line)
- (evil-define-key 'normal parinfer-mode-map "si" #'lispy-mark-symbol))
+  (define-key parinfer-mode-map (kbd "C-.") #'parinfer-toggle-mode)
+  (evil-define-key 'insert parinfer-mode-map (kbd "C-k") '+parinfer-hs-toggle-folding)
+  (define-key parinfer-mode-map (kbd "C-k") '+parinfer-hs-toggle-folding)
+  (define-key parinfer-mode-map (kbd "C-x C-6 q") #'lispy-describe-inline)
+  (define-key parinfer-mode-map (kbd "C-x C-6 w") #'lispy-arglist-inline)
+  (define-key parinfer-mode-map (kbd "C-x C-6 z") #'lispy-left)
+  (define-key parinfer-mode-map (kbd "C-x C-6 x") #'lispy-right)
+  (define-key parinfer-mode-map (kbd "C-x C-6 c") #'lispy-mark-symbol)
+  (define-key parinfer-mode-map (kbd "y")
+    (lambda (beg end &optional region)
+      (interactive (list
+                    (mark)
+                    (point)
+                    (prefix-numeric-value
+                     current-prefix-arg)))
+      (if (region-active-p)
+          (progn
+            (kill-ring-save beg end region)
+            (lispy-left 1)
+            (keyboard-quit))
+        (self-insert-command 1))))
+  ;; (define-key parinfer-mode-map (kbd "C-k") #'lispy-kill)
+  (define-key parinfer-mode-map (kbd "C-d") #'lispy-delete)
+  (evil-define-key 'insert parinfer-mode-map (kbd "C-d") #'lispy-delete)
+  ;; (evil-define-key 'insert parinfer-mode-map (kbd "C-a") #'lispy-move-beginning-of-line)
+  (evil-define-key 'insert parinfer-mode-map (kbd "C-e") #'lispy-move-end-of-line)
+  ;; (define-key parinfer-mode-map (kbd "C-a") #'lispy-move-beginning-of-line)
+  (define-key parinfer-mode-map (kbd "C-e") #'lispy-move-end-of-line)
+  ;; (evil-define-key 'normal parinfer-mode-map (kbd "C-a") #'lispy-move-beginning-of-line)
+  (evil-define-key 'normal parinfer-mode-map (kbd "C-e") #'lispy-move-end-of-line)
+  ;; (evil-define-key 'insert parinfer-mode-map (kbd "C-a") #'lispy-move-beginning-of-line)
+  (evil-define-key 'insert parinfer-mode-map (kbd "C-e") #'lispy-move-end-of-line)
+  (evil-define-key 'normal parinfer-mode-map "si" #'lispy-mark-symbol))
 
 (use-package parinfer-rust-mode
   :straight (:host github :repo "justinbarclay/parinfer-rust-mode")
   :disabled
-  :hook ((clojure-mode .  parinfer-rust-mode)
+  :hook ((clojure-mode . parinfer-rust-mode)
          (emacs-lisp-mode . parinfer-rust-mode)
          (lisp-mode . parinfer-rust-mode)))
 
 (use-package lispyville
- :straight (:host github :repo "noctuid/lispyville")
- :after (lispy)
- :diminish lispyville-mode
- :commands (lispyville-mode)
- :hook (lispy-mode . lispyville-mode)
- :custom
- (lispyville-motions-put-into-special t)
- (lispyville-key-theme
-  '(c-w
-    ;; operators
-    prettify
-    text-objects
-    (atom-movement t) ;; bind to WORD
-    additional-movement
-    commentary
-    slurp/barf-lispy
-    ;; wrap                               ;; M-( M-{ M-[
-    ;; (additional-wrap normal visual insert)
-    (additional normal visual insert)  ;; M-j M-k M-J M-k M-s M-S M-r M-t M-v
-    additional-insert
-    escape
-    mark-special
-    mark-toggle))
- :config
- ;; (lispyville-set-key-theme)
- (lispy-define-key lispy-mode-map "v" #'lispyville-toggle-mark-type)
- (lispy-define-key lispy-mode-map "m" #'lispy-view)
- (lispyville--define-key 'normal
-  "tR" #'lispyville-raise-list
-  "tr" #'lispy-raise-sexp
-  "tt" #'transpose-sexps
-  "tJ" #'lispy-join
-  "J" #'lispyville-join
-  "t/" #'lispy-splice
-  "ts" #'lispy-split
-  "tC" #'lispy-convolute
-  "txb" (lambda ()
-          (interactive)
-          (if (and (fboundp 'cljr-introduce-let)
-                   (memq major-mode lispy-clojure-modes))
-              (cljr-introduce-let)
-            (lispy-bind-variable)))
-  (kbd "M-RET") #'lispyville-wrap-round
-  "{" #'lispyville-insert-at-beginning-of-list
-  "}" #'lispyville-insert-at-end-of-list
-  "[" #'lispyville-previous-closing
-  "]" #'lispyville-next-opening)
- (lispyville--define-key 'insert
-   (kbd "M-RET") #'lispyville-wrap-round
-   (kbd "C-r") #'evil-shift-left-line)
- (lispyville--define-key 'visual
-   (kbd "(") #'lispyville-wrap-round
-   (kbd "{") #'lispyville-wrap-braces
-   (kbd "[") #'lispyville-wrap-brackets)
+  :straight (:host github :repo "noctuid/lispyville")
+  :after (lispy)
+  :diminish lispyville-mode
+  :commands (lispyville-mode)
+  :hook (lispy-mode . lispyville-mode)
+  :custom
+  (lispyville-motions-put-into-special t)
+  (lispyville-key-theme
+   '(c-w
+     operators
+     prettify
+     text-objects
+     (atom-movement t) ;; bind to WORD
+     additional-movement
+     commentary
+     slurp/barf-lispy
+     ;; wrap                               ;; M-( M-{ M-[
+     ;; (additional-wrap normal visual insert)
+     (additional normal visual insert) ;; M-j M-k M-J M-k M-s M-S M-r M-t M-v
+     additional-insert
+     escape
+     mark-special
+     mark-toggle))
+  :config
+  ;; (lispyville-set-key-theme)
+  (lispy-define-key lispy-mode-map "v" #'lispyville-toggle-mark-type)
+  (lispy-define-key lispy-mode-map "m" #'lispy-view)
+  (lispyville--define-key 'normal
+    ";" (defl (lispy-comment) (evil-next-visual-line))
+    "ti" #'lispyville-backward-up-list
+    "ta" (defl (lispyville-up-list) (lispy-newline-and-indent))
+    "tR" #'lispyville-raise-list
+    "tr" #'lispy-raise-sexp
+    "tt" (defl (lispyville-backward-up-list) (lispy-parens 1))
+    "td" #'transpose-sexps
+    "tw" #'lispy-move-up
+    "tJ" #'lispy-join
+    "t/" #'lispy-splice
+    "ts" #'lispy-split
+    "tC" #'lispy-convolute
+    "txb" (lambda ()
+            (interactive)
+            (if (and (fboundp 'cljr-introduce-let)
+                     (memq major-mode lispy-clojure-modes))
+                (cljr-introduce-let)
+              (lispy-bind-variable)))
+    (kbd "M-RET") #'lispyville-wrap-round
+    "{" (defl (lispyville-insert-at-beginning-of-list 1) (insert " ") (backward-char))
+    "}" (defl (lispyville-insert-at-end-of-list) (insert "")))
+  (lispyville--define-key 'insert
+    (kbd "M-RET") #'lispyville-wrap-round
+    (kbd "C-r") #'lispyville-backward-up-list)
+  (lispyville--define-key 'visual
+    (kbd "(") #'lispyville-wrap-round
+    (kbd "{") #'lispyville-wrap-braces
+    (kbd "[") #'lispyville-wrap-brackets)
 
- (define-key evil-inner-text-objects-map "a" 'evil-inner-arg)
- (define-key evil-outer-text-objects-map "a" 'evil-outer-arg)
- (define-key evil-inner-text-objects-map "g" 'evil-inner-buffer)
- (define-key evil-inner-text-objects-map "P" 'evil-pasted)
- (define-key evil-inner-text-objects-map "f" 'evil-textobj-anyblock-inner-block)
- (define-key evil-outer-text-objects-map "f" 'evil-textobj-anyblock-a-block))
+  (define-key evil-inner-text-objects-map "a" 'evil-inner-arg)
+  (define-key evil-outer-text-objects-map "a" 'evil-outer-arg)
+  (define-key evil-inner-text-objects-map "g" 'evil-inner-buffer)
+  (define-key evil-inner-text-objects-map "P" 'evil-pasted)
+  (define-key evil-inner-text-objects-map "f" 'evil-textobj-anyblock-inner-block)
+  (define-key evil-outer-text-objects-map "f" 'evil-textobj-anyblock-a-block))
 
 
 (use-package eval-sexp-fu
