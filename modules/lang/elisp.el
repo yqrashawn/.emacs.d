@@ -490,9 +490,13 @@ the omniscience database.")
     "S" #'edebug-next-mode)
   (advice-add 'edebug-mode :after 'spacemacs//edebug-mode))
 
+(use-package lisp-extra-font-lock
+  :straight (:host github :repo "Lindydancer/lisp-extra-font-lock")
+  :hook ((emacs-lisp-mode clojure-mode clojurescript-mode) . lisp-extra-font-lock-mode))
+
 (use-package highlight-function-calls
   :straight t
-  :hook (emacs-lisp-mode . highlight-function-calls-mode))
+  :hook ((emacs-lisp-mode clojure-mode clojurescript-mode) . highlight-function-calls-mode))
 
 (use-package highlight-stages
   :straight t

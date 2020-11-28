@@ -1783,25 +1783,11 @@ Info-mode:
   (global-whitespace-cleanup-mode)
   (add-hook 'markdown-mode-hook (lambda () (whitespace-cleanup-mode -1))))
 
-(use-package mic-paren
-  :straight t
-  :custom
-  (paren-display-message 'only)
-  (paren-sexp-mode 'match)
-  :init
-  (setq +mic-paren-modes '(clojure-mode emacs-lisp-mode))
-  (add-hook
-   'buffer-list-update-hook
-   (lambda ()
-     (if (memq major-mode +mic-paren-modes)
-         (paren-activate)
-       (paren-deactivate)))))
-
 ;; TODO: face between dark/light theme
 (use-package highlight-sexp
-  :straight t
+  ;; :straight t
   :disabled t
-  :hook ((emacs-lisp-mode clojure-mode lispy-mode) . highlight-sexp-mode))
+  :hook ((emacs-lisp-mode clojure-mode clojurescript-mode lispy-mode) . highlight-sexp-mode))
 
 (use-package fence-edit
   :straight (:host github :repo "aaronbieber/fence-edit.el")
@@ -1964,3 +1950,8 @@ Version 2017-09-01"
   :disabled t
   :commands (visual-fill-column-mode)
   :hook (visual-line-mode . visual-fill-column-mode))
+
+(use-package spell-fu
+  :straight t
+  :disabled t
+  :hook (after-init . global-spell-fu-mode))

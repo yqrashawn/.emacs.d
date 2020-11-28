@@ -1,3 +1,4 @@
+;;; visual
 (yq/get-modules "visual-funcs.el")
 (spacemacs/set-leader-keys "tf" 'yq/toggle-default-font)
 
@@ -106,19 +107,36 @@ For evil states that also need an entry to `spacemacs-evil-cursors' use
 (defvar spacemacs-post-theme-change-hook nil
   "Hook run after theme has changed.")
 
-(defun +set-mic-paren-face ()
-  ;; mic-paren
-  (set-face-foreground 'paren-face-match nil)
-  (set-face-background 'paren-face-match "#506575")
-  (set-face-background 'paren-face-mismatch "#DC8CC3")
-  (set-face-background 'paren-face-no-match "#CC9393"))
+(use-package mic-paren
+  :straight t
+  :custom
+  (paren-display-message 'only)
+  (paren-sexp-mode 'match)
+  :init
+  (setq +mic-paren-modes '(clojure-mode clojurescript-mode emacs-lisp-mode))
+  (add-hook 'buffer-list-update-hook
+            (lambda ()
+              (if (memq major-mode +mic-paren-modes)
+                  (paren-activate)
+                (paren-deactivate))))
+
+  (defun +set-mic-paren-face-for-dark-bg ()
+    ;; mic-paren
+    (set-face-bold 'paren-face-match nil)
+    (set-face-foreground 'paren-face-match nil)
+    (set-face-background 'paren-face-match "#506575")
+    (set-face-background 'paren-face-mismatch "#DC8CC3")
+    (set-face-background 'paren-face-no-match "#CC9393"))
+  (defun +set-mic-paren-face-for-light-bg ()
+    (set-face-background 'paren-face-match "#dbd9d1")))
+
 (add-hook 'spacemacs-post-theme-change-hook
           (lambda ()
             (cond
              ((and (memq yq/current-theme '(zenburn modus-vivendi)) (facep 'paren-face-match))
-              (+set-mic-paren-face))
+              (+set-mic-paren-face-for-dark-bg))
              ((memq yq/current-theme '(modus-operandi spacemacs-light))
-              (set-face-background 'paren-face-match "#dbd9d1")))))
+              (+set-mic-paren-face-for-light-bg)))))
 
 (defadvice load-theme (after spacemacs/load-theme-adv activate)
   "Perform post load processing."
@@ -243,7 +261,7 @@ has been changed to THEME."
      )))
 
 (use-package pretty-fonts
-  :disabled
+  :disabled t
   :load-path "~/.emacs.d/modules"
   :config
   ;; !! This is required to avoid segfault when using emacs as daemon !!
@@ -324,17 +342,42 @@ has been changed to THEME."
   :init (solaire-global-mode))
 
 (use-package highlight-escape-sequences
-  :straight t
-  :disabled
-  :init (hes-mode))
+  :straight (:host github :repo "hlissner/highlight-escape-sequences")
+  :hook (after-init . highlight-escape-sequences-mode))
 
 ;; https://www.manueluberti.eu//emacs/2020/03/16/modus-themes/
 (use-package modus-operandi-theme
   :straight t
-  :defer t)
+  :defer t
+  :custom
+  (modus-operandi-theme-slanted-constructs t)
+  (modus-operandi-theme-bold-constructs t)
+  (modus-operandi-theme-proportional-fonts t)
+  (modus-operandi-theme-variable-pitch-headings t)
+  (modus-operandi-theme-section-headings t)
+  (modus-operandi-theme-scale-headings t)
+  (modus-operandi-theme-visible-fringes t)
+  (modus-operandi-theme-fringes 'subtle)
+  (modus-operandi-theme-distinct-org-blocks t)
+  (modus-operandi-theme-org-blocks 'grayscale)
+  (modus-operandi-theme-mode-line '3d)
+  (modus-operandi-theme-syntax 'alt-syntax))
 (use-package modus-vivendi-theme
   :straight t
-  :defer t)
+  :defer t
+  :custom
+  (modus-vivendi-theme-slanted-constructs t)
+  (modus-vivendi-theme-bold-constructs t)
+  (modus-vivendi-theme-proportional-fonts t)
+  (modus-vivendi-theme-variable-pitch-headings t)
+  (modus-vivendi-theme-section-headings t)
+  (modus-vivendi-theme-scale-headings t)
+  (modus-vivendi-theme-visible-fringes t)
+  (modus-vivendi-theme-fringes 'subtle)
+  (modus-vivendi-theme-distinct-org-blocks t)
+  (modus-vivendi-theme-org-blocks 'grayscale)
+  (modus-vivendi-theme-mode-line '3d)
+  (modus-vivendi-theme-syntax 'alt-syntax))
 ;; (load-theme 'modus-vivendi t)
 ;; (load-theme 'modus-operandi t)
 
@@ -358,4 +401,41 @@ has been changed to THEME."
 
 (use-package emojify
   :straight t
-  :hook (after-init . global-emojify-mode))
+  :commands (emojify-mode))
+
+(use-package ligature
+  :straight (:host github :repo "mickeynp/ligature.el")
+  ;; :disabled t
+  :hook (after-init . global-ligature-mode)
+  :config
+  (ligature-set-ligatures t '("[ERROR]" "[DEBUG]" "[INFO]" "[WARN]" "[WARNING]"
+                              "[ERR]" "[FATAL]" "[TRACE]" "[FIXME]" "[TODO]"
+                              "[BUG]" "[NOTE]" "[HACK]" "[MARK]"
+                              "# ERROR" "# DEBUG" "# INFO" "# WARN" "# WARNING"
+                              "# ERR" "# FATAL" "# TRACE" "# FIXME" "# TODO"
+                              "# BUG" "# NOTE" "# HACK" "# MARK"
+                              "// ERROR" "// DEBUG" "// INFO" "// WARN" "// WARNING"
+                              "// ERR" "// FATAL" "// TRACE" "// FIXME" "// TODO"
+                              "// BUG" "// NOTE" "// HACK" "// MARK"
+                              "!!" "!=" "!==" "!!!" "!≡" "!≡≡" "!>" "!=<" "#("
+                              "#_" "#{" "#?" "#>" "##" "#_(" "%=" "%>" "%>%" "%<%"
+                              "&%" "&&" "&*" "&+" "&-" "&/" "&=" "&&&" "&>" "$>"
+                              "***" "*=" "*/" "*>" "++" "+++" "+=" "+>" "++=" "--"
+                              "-<" "-<<" "-=" "->" "->>" "---" "-->" "-+-" "-\\/"
+                              "-|>" "-<|" ".." "..." "..<" ".>" ".~" ".=" "/*" "//"
+                              "/>" "/=" "/==" "///" "/**" ":::" "::" ":=" ":≡" ":>"
+                              ":=>" ":(" ":-(" ":)" ":-)" ":/" ":\\" ":3" ":D" ":P"
+                              ":>:" ":<:" "<$>" "<*" "<*>" "<+>" "<-" "<<" "<<<" "<<="
+                              "<=" "<=>" "<>" "<|>" "<<-" "<|" "<=<" "<~" "<~~" "<<~"
+                              "<$" "<+" "<!>" "<@>" "<#>" "<%>" "<^>" "<&>" "<?>" "<.>"
+                              "</>" "<\\>" "<\">" "<:>" "<~>" "<**>" "<<^" "<!" "<@"
+                              "<#" "<%" "<^" "<&" "<?" "<." "</" "<\\" "<\"" "<:" "<->"
+                              "<!--" "<--" "<~<" "<==>" "<|-" "<<|" "<-<" "<-->" "<<=="
+                              "<==" "=<<" "==" "===" "==>" "=>" "=~" "=>>" "=/=" "=~="
+                              "==>>" "≡≡" "≡≡≡" "≡:≡" ">-" ">=" ">>" ">>-" ">>=" ">>>"
+                              ">=>" ">>^" ">>|" ">!=" ">->" "??" "?~" "?=" "?>" "???"
+                              "?." "^=" "^." "^?" "^.." "^<<" "^>>" "^>" "\\\\" "\\>"
+                              "\\/-" "@>" "|=" "||" "|>" "|||" "|+|" "|->" "|-->" "|=>"
+                              "|==>" "|>-" "|<<" "||>" "|>>" "|-" "||-" "~=" "~>" "~~>"
+                              "~>>" "[[" "]]" "\">" "_|_"))
+  (global-ligature-mode t))
