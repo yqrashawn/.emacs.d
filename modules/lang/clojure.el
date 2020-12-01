@@ -55,11 +55,11 @@
 
   (add-hook 'clojure-mode-hook '+setup-company-for-clojure)
   (dolist (map (list clojure-mode-map clojurec-mode-map clojurescript-mode-map))
-    (evil-define-key* 'normal map
-                      ",fl" 'clojure-align))
+    (evil-define-key* 'normal map ",fl" 'clojure-align))
   (when clojure-enable-fancify-symbols
     (dolist (m '(clojure-mode clojurescript-mode clojurec-mode))
-      (clojure/fancify-symbols m))))
+      (clojure/fancify-symbols m)
+      (spacemacs/enable-flycheck m))))
 
 (use-package cider
   ;; :straight (:host github :repo "clojure-emacs/cider")

@@ -85,9 +85,10 @@
 ;; no real time syntax check
 (use-package lsp-mode
   :straight t
-  :hook ((dockerfile-mode shell-script-mode web-mode css-mode typescript-mode js2-mode rjsx-mode) . lsp-deferred)
+  :hook ((dockerfile-mode shell-script-mode web-mode css-mode typescript-mode js2-mode rjsx-mode clojure-mode clojurescript-mode) . lsp-deferred)
   :hook ((js2-mode js-mode rjsx-mode) . (+lsp-organize-imports lsp-eslint-fix-before-save))
   :hook (lsp-mode . lsp-headerline-breadcrumb-mode)
+  :hook (lsp-mode . lsp-lens-mode)
   :custom
   ;; lsp-mode
   (lsp-file-watch-threshold 4000)

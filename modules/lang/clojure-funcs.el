@@ -6,7 +6,7 @@
 (spacemacs|define-jump-handlers clojurex-mode)
 (spacemacs|define-jump-handlers cider-repl-mode)
 
-(defvar clojure-enable-fancify-symbols nil
+(defvar clojure-enable-fancify-symbols t
   "If non nil the `fancify-symbols' function is enabled.")
 
 (defun clojure/fancify-symbols (mode)
