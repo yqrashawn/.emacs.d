@@ -439,3 +439,44 @@ has been changed to THEME."
                               "|==>" "|>-" "|<<" "||>" "|>>" "|-" "||-" "~=" "~>" "~~>"
                               "~>>" "[[" "]]" "\">" "_|_"))
   (global-ligature-mode t))
+
+;; try prot-fonts https://protesilaos.com/dotemacs/#h:e03b6415-a18f-4058-b9b0-5721d38c6c50
+(use-package prot-fonts
+  :load-path "~/.emacs.d/modules"
+  ;; :after (modus-vivendi-theme modus-operandi-theme)
+  :init
+  (setq prot-fonts-typeface-sets-alist
+        '((laptop . (105 "PragmataPro Mono Liga" "DejaVu Sans"))
+          (desktop . (110 "PragmataPro Mono Liga" "Inter"))
+          (reader . (150 "PragmataPro Mono Liga" ;; "Iosevka"
+                     "FiraGO"))
+          (presentation . (190 "PragmataPro Mono Liga" ;; "Iosevka"
+                           "FiraGO"))))
+  (setq prot-fonts-monospaced-list
+        '("PragmataPro Mono Liga" "DejaVu Sans Mono" "Iosevka" "Source Code Pro"
+          "Ubuntu Mono" "Fantasque Sans Mono" "Fira Code" "Monoid"))
+  (setq prot-fonts-heights-list
+        '(100 105 110 120 130 140 150 160))
+  (setq prot-fonts-line-spacing-alist
+        '(("Source Code Pro" . 1)
+          ("Ubuntu Mono" . 2)))
+  (setq prot-fonts-laptop-desktop-keys-list '(laptop desktop))
+  (setq prot-fonts-max-small-resolution-width 1366)
+  (setq  prot-fonts-bold-weight-alist
+         '(("Iosevka" . semibold)
+           ("Source Code Pro" . semibold)))
+  :config
+  ;; This is defined in Emacs' C code, though I feel this is a good
+  ;; place to put it.
+  (setq x-underline-at-descent-line t)
+  ;; And this just sets the right font depending on whether my laptop is
+  ;; connected to an external monitor or not.
+  (prot-fonts-fonts-per-monitor)
+  :hook ((prot-fonts-set-typeface-hook . prot-fonts-line-spacing)
+         (prot-fonts-set-typeface-hook . prot-fonts-bold-face)
+         ;; See theme section for this hook
+         ;; (modus-themes-after-load-theme-hook . prot-fonts-bold-face)
+         )
+  ;; Awkward key because I do not need it very often.  Maybe once a day.
+  ;; The "C-c f" is used elsewhere.
+  :bind ("C-c F" . prot-fonts-set-fonts-dwim))
