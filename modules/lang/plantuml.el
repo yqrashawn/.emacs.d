@@ -3,6 +3,7 @@
   :mode ("\\\.puml\\'" "\\\.iuml\\'" "\\\.plantuml\\\'")
   :custom
   (plantuml-default-exec-mode 'executable)
+  (org-plantuml-executable-path "/usr/local/bin/plantuml")
   :init
   (with-eval-after-load 'ob
     (add-hook 'org-babel-after-execute-hook
@@ -11,7 +12,6 @@
                   (org-redisplay-inline-images))))
 
     (add-to-list 'org-babel-load-languages '(plantuml . t))
-    (setq org-plantuml-jar-path "/usr/local/Cellar/plantuml/1.2019.12/libexec/plantuml.jar")
     (add-to-list 'org-src-lang-modes '("plantuml" . plantuml))
 
     ;; TODO check documents for ob-plantuml, see if there's any other way to delete the image first
