@@ -41,6 +41,9 @@
   (add-to-list 'auto-mode-alist '("\\.boot\\'" . clojure-mode))
   ;; This regexp matches shebang expressions like `#!/usr/bin/env boot'
   (add-to-list 'magic-mode-alist '("#!.*boot\\s-*$" . clojure-mode))
+  (when (boundp 'outshine-fontify)
+    (add-hook 'clojurescript-mode-hook (defl (setq-local outshine-normalized-outline-regexp-base "[;]\\\{1,8\\\}")))
+    (add-hook 'clojure-mode-hook (defl (setq-local outshine-normalized-outline-regexp-base "[;]\\\{1,8\\\}"))))
   :config
   (defun +setup-company-for-clojure ()
     (setq-local company-idle-delay 0.2)
