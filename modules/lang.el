@@ -1,3 +1,4 @@
+;;; packages for variables config files and lsp
 (use-feature sh-script
   :mode
   ("\\.*zshrc" . sh-mode)
@@ -9,6 +10,7 @@
   (setq-default sh-indentation 2
                 sh-basic-offset 2))
 
+;;;; load modes for languages
 (yq/get-modules "lang/elisp.el")
 (yq/get-modules "lang/js2.el")
 (yq/get-modules "lang/typescript.el")
@@ -91,6 +93,7 @@
   :hook (lsp-mode . lsp-lens-mode)
   :custom
   ;; lsp-mode
+  (lsp-eslint-enable t)
   (lsp-file-watch-threshold 4000)
   (lsp-keep-workspace-alive nil)
   (lsp-enable-semantic-highlighting t)
@@ -108,7 +111,6 @@
   (lsp-bash-highlight-parsing-errors t)
   (lsp-bash-glob-pattern t)
   ;; ts-js
-  (lsp-eslint-server-command `("node" ,(expand-file-name (car (last (file-expand-wildcards "~/.vscode/extensions/dbaeumer.vscode-eslint-*/server/out/eslintServer.js")))) "--stdio"))
   (lsp-eslint-package-manager "yarn")
   (lsp-eslint-auto-fix-on-save t)
   (lsp-eslint-run "onSave")
