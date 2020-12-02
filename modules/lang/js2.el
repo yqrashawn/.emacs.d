@@ -259,3 +259,15 @@
   (push '("^\*jest\*<.*>$" :regexp t   :dedicated t   :position bottom             :noselect t) popwin:special-display-config)
   (evil-define-key 'normal typescript-mode-map ",jj" #'jest-popup)
   (evil-define-key 'normal js2-mode-map ",jj" #'jest-popup))
+
+(dolist (hook '(js-mode-hook js2-mode-hook rjsx-mode-hook typescript-mode-hook))
+  (add-hook
+   hook
+   (defl (push '("function" . ?ƒ) prettify-symbols-alist)
+     (push '("async" . ?⊳) prettify-symbols-alist)
+     (push '("await" . ?⊲) prettify-symbols-alist)
+     (push '("throw" . ?ƭ) prettify-symbols-alist)
+     (push '("this" . ?Ƭ) prettify-symbols-alist)
+     (push '("import" . ?⬳) prettify-symbols-alist)
+     (push '("from" . ?⬿) prettify-symbols-alist)
+     (push '("const" . ?Ƈ) prettify-symbols-alist))))

@@ -482,3 +482,7 @@ has been changed to THEME."
          ;; See theme section for this hook
          ;; (modus-themes-after-load-theme-hook . prot-fonts-bold-face)
          ))
+
+(use-feature prog-mode
+  :defer t
+  :hook (after-init . global-prettify-symbols-mode))
