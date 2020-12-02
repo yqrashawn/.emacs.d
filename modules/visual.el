@@ -449,8 +449,8 @@ has been changed to THEME."
   ;; :after (modus-vivendi-theme modus-operandi-theme)
   :init
   (setq prot-fonts-typeface-sets-alist
-        '((laptop . (115 "PragmataPro Mono Liga" "DejaVu Sans"))
-          (desktop . (130 "PragmataPro Mono Liga" "Inter"))
+        '((laptop . (120 "PragmataPro Mono Liga" "DejaVu Sans"))
+          (desktop . (135 "PragmataPro Mono Liga" "Inter"))
           (reader . (150 "PragmataPro Mono Liga" ;; "Iosevka"
                      "FiraGO"))
           (presentation . (190 "PragmataPro Mono Liga" ;; "Iosevka"
