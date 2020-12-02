@@ -5,6 +5,7 @@
 (spacemacs|define-jump-handlers typescript-mode)
 (spacemacs|define-jump-handlers js-mode)
 (spacemacs|define-jump-handlers rjsx-mode)
+(spacemacs|define-jump-handlers json-mode)
 (setq js-indent-level 2)
 (use-package js2-mode
   :straight t
