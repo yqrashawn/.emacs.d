@@ -90,6 +90,8 @@
 
   (evil-mode 1)
   :config
+  ;; https://emacs.stackexchange.com/a/221/14357
+  (define-key input-decode-map [?\C-i] [C-i])
   (define-key evil-normal-state-map [C-i] 'evil-jump-forward)
   (define-key evil-ex-completion-map (kbd "C-a") #'move-beginning-of-line)
   (define-key evil-ex-completion-map (kbd "C-b") #'backward-char)
