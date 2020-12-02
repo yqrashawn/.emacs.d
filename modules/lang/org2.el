@@ -1,6 +1,12 @@
 ;;; org2.el ---  org packages -*- lexical-binding: t; -*-
 
 (with-eval-after-load 'org
+  (with-eval-after-load 'prettify-utils
+    (prettify-utils-add-hook org-mode
+                             ("[-]" "❍")
+                             ("[X]" "☑")
+                             ("[ ]" "☐")))
+
   ;; global keybindings
   (define-key global-map "\C-cl" 'org-store-link)
   (define-key global-map "\C-ca" 'org-agenda)

@@ -270,4 +270,5 @@
      (push '("this" . ?Ƭ) prettify-symbols-alist)
      (push '("import" . ?⬳) prettify-symbols-alist)
      (push '("from" . ?⬿) prettify-symbols-alist)
-     (push '("const" . ?Ƈ) prettify-symbols-alist))))
+     (push '("const" . ?Ƈ) prettify-symbols-alist)
+     (push '("Promise" . ?Ṗ) prettify-symbols-alist))))

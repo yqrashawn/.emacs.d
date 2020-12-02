@@ -381,7 +381,7 @@ has been changed to THEME."
   (modus-vivendi-theme-syntax 'alt-syntax)
   :init
   (setq yq/dark-theme 'modus-vivendi))
-;; (load-theme 'modus-vivendi t)
+(load-theme 'modus-vivendi t)
 ;; (load-theme 'modus-operandi t)
 
 
@@ -483,6 +483,21 @@ has been changed to THEME."
          ;; (modus-themes-after-load-theme-hook . prot-fonts-bold-face)
          ))
 
+(use-package prettify-utils
+  :straight (:host github :repo "Ilazki/prettify-utils.el"))
+
 (use-feature prog-mode
-  :defer t
+  :init
+  (prettify-utils-add-hook org-mode
+                           ("TODO:" "# TODO")
+                           ("ERR:" "# ERR")
+                           ("TRACE:" "# TRACE")
+                           ("FATAL:" "# FATAL")
+                           ("WARN:" "# WARN")
+                           ("HACK:" "# HACK")
+                           ("NOTE:" "# NOTE")
+                           ("WARNING:" "# WARNING")
+                           ("INFO:" "# INFO")
+                           ("MARK:" "# MARK")
+                           ("FIXME:" "# FIXME"))
   :hook (after-init . global-prettify-symbols-mode))
