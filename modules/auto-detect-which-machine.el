@@ -36,11 +36,9 @@
 (defun yq/imac-p () (file-exists-p "~/yq.machine.home-imac"))
 (defun yq/macbook-p () (file-exists-p "~/yq.machine.macbook"))
 
-(cond ((yq/macbook-p) (yq/macbook))
-      ((yq/imac-p) (yq/imac))
-      (t (yq/imac)))
-
-(load-theme yq/dark-theme)
+;; (cond ((yq/macbook-p) (yq/macbook))
+;;       ((yq/imac-p) (yq/imac))
+;;       (t (yq/imac)))
 
 (provide 'auto-detect-which-machine)
 ;;; auto-detect-which-machine.el ends here

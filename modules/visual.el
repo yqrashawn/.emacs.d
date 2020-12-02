@@ -1,6 +1,6 @@
 ;;; visual
 (yq/get-modules "visual-funcs.el")
-(spacemacs/set-leader-keys "tf" 'yq/toggle-default-font)
+;; (spacemacs/set-leader-keys "tf" 'yq/toggle-default-font)
 
 (use-package ivy-rich
   :straight t
@@ -449,8 +449,8 @@ has been changed to THEME."
   ;; :after (modus-vivendi-theme modus-operandi-theme)
   :init
   (setq prot-fonts-typeface-sets-alist
-        '((laptop . (105 "PragmataPro Mono Liga" "DejaVu Sans"))
-          (desktop . (110 "PragmataPro Mono Liga" "Inter"))
+        '((laptop . (115 "PragmataPro Mono Liga" "DejaVu Sans"))
+          (desktop . (130 "PragmataPro Mono Liga" "Inter"))
           (reader . (150 "PragmataPro Mono Liga" ;; "Iosevka"
                      "FiraGO"))
           (presentation . (190 "PragmataPro Mono Liga" ;; "Iosevka"
@@ -464,10 +464,11 @@ has been changed to THEME."
         '(("Source Code Pro" . 1)
           ("Ubuntu Mono" . 2)))
   (setq prot-fonts-laptop-desktop-keys-list '(laptop desktop))
-  (setq prot-fonts-max-small-resolution-width 1366)
+  (setq prot-fonts-max-small-resolution-width 2048)
   (setq  prot-fonts-bold-weight-alist
          '(("Iosevka" . semibold)
            ("Source Code Pro" . semibold)))
+  (spacemacs/set-leader-keys "tf" #'prot-fonts-set-fonts-dwim)
   :config
   ;; This is defined in Emacs' C code, though I feel this is a good
   ;; place to put it.
@@ -477,9 +478,7 @@ has been changed to THEME."
   (prot-fonts-fonts-per-monitor)
   :hook ((prot-fonts-set-typeface-hook . prot-fonts-line-spacing)
          (prot-fonts-set-typeface-hook . prot-fonts-bold-face)
+         (after-init . prot-fonts-fonts-per-monitor)
          ;; See theme section for this hook
          ;; (modus-themes-after-load-theme-hook . prot-fonts-bold-face)
-         )
-  ;; Awkward key because I do not need it very often.  Maybe once a day.
-  ;; The "C-c f" is used elsewhere.
-  :bind ("C-c F" . prot-fonts-set-fonts-dwim))
+         ))
