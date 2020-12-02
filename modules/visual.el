@@ -46,17 +46,17 @@
 (use-package zenburn-theme
   :straight t
   :init
-  (setq yq/dark-theme 'zenburn))
+  (setq yq/dark-theme 'modus-vivendi))
 
 (use-package doom-themes
   :straight t
   :disabled
-  :defer t
-  :init (setq yq/light-theme 'doom-nord-light))
+  :defer t)
 
 (use-package spacemacs-theme
   :straight t
   :defer t
+  :disabled t
   :init
   (setq yq/light-theme 'spacemacs-light))
 
@@ -123,19 +123,18 @@ For evil states that also need an entry to `spacemacs-evil-cursors' use
   (defun +set-mic-paren-face-for-dark-bg ()
     ;; mic-paren
     (set-face-bold 'paren-face-match nil)
-    (set-face-foreground 'paren-face-match nil)
-    (set-face-background 'paren-face-match "#506575")
+    (set-face-background 'paren-face-match "#2E4353")
     (set-face-background 'paren-face-mismatch "#DC8CC3")
     (set-face-background 'paren-face-no-match "#CC9393"))
   (defun +set-mic-paren-face-for-light-bg ()
-    (set-face-background 'paren-face-match "#dbd9d1")))
+    (set-face-background 'paren-face-match "#eceae2")))
 
 (add-hook 'spacemacs-post-theme-change-hook
           (lambda ()
             (cond
              ((and (memq yq/current-theme '(zenburn modus-vivendi)) (facep 'paren-face-match))
               (+set-mic-paren-face-for-dark-bg))
-             ((memq yq/current-theme '(modus-operandi spacemacs-light))
+             ((memq yq/current-theme '(modus-operandi))
               (+set-mic-paren-face-for-light-bg)))))
 
 (defadvice load-theme (after spacemacs/load-theme-adv activate)
@@ -361,7 +360,9 @@ has been changed to THEME."
   (modus-operandi-theme-distinct-org-blocks t)
   (modus-operandi-theme-org-blocks 'grayscale)
   (modus-operandi-theme-mode-line '3d)
-  (modus-operandi-theme-syntax 'alt-syntax))
+  (modus-operandi-theme-syntax 'alt-syntax)
+  :init
+  (setq yq/light-theme 'modus-operandi))
 (use-package modus-vivendi-theme
   :straight t
   :defer t
@@ -377,7 +378,9 @@ has been changed to THEME."
   (modus-vivendi-theme-distinct-org-blocks t)
   (modus-vivendi-theme-org-blocks 'grayscale)
   (modus-vivendi-theme-mode-line '3d)
-  (modus-vivendi-theme-syntax 'alt-syntax))
+  (modus-vivendi-theme-syntax 'alt-syntax)
+  :init
+  (setq yq/dark-theme 'modus-vivendi))
 ;; (load-theme 'modus-vivendi t)
 ;; (load-theme 'modus-operandi t)
 
