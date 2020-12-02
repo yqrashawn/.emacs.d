@@ -1280,8 +1280,6 @@ first."))
   (add-hook 'markdown-mode-hook (defl (outshine-mode -1)))
   (advice-add 'evil-open-folds :after 'outline-show-all)
   (evil-define-key 'normal outshine-mode-map (kbd "TAB") #'outshine-cycle)
-  ;; (evil-define-key 'normal outshine-mode-map (kbd "C-y") #'outshine-cycle)
-  ;; (evil-define-key 'normal outshine-mode-map (kbd "C-S-y") #'outshine-cycle-buffer)
   (setq outshine-speed-commands-user
         '(
           ("Outline Navigation")

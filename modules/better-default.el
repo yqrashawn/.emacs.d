@@ -1955,3 +1955,7 @@ Version 2017-09-01"
   :straight t
   :disabled t
   :hook (after-init . global-spell-fu-mode))
+
+;; https://emacs.stackexchange.com/a/221/14357
+(define-key input-decode-map [?\C-i] [C-i])
+(define-key input-decode-map [?\C-I] [C-I])
