@@ -77,46 +77,38 @@
   :straight (:host github :repo "emacs-pe/crontab-mode")
   :defer t)
 
-(defun lsp-eslint-fix-before-save ()
-  (add-hook 'before-save-hook #'lsp-eslint-apply-all-fixes))
-
-(defun +lsp-organize-imports ()
-  (add-hook 'before-save-hook #'lsp-organize-imports))
-
 ;; http://blog.binchen.org/posts/how-to-speed-up-lsp-mode.html
 ;; no real time syntax check
 (use-package lsp-mode
   :straight t
-  :hook ((json-mode dockerfile-mode shell-script-mode web-mode css-mode typescript-mode js2-mode rjsx-mode clojure-mode clojurescript-mode) . lsp-deferred)
-  :hook ((typescript-mode js2-mode js-mode rjsx-mode) . (+lsp-organize-imports lsp-eslint-fix-before-save))
-  :hook (lsp-mode . lsp-headerline-breadcrumb-mode)
-  :hook (lsp-mode . lsp-lens-mode)
+  :init
+  (defun lsp-eslint-fix-before-save ()
+    (add-hook 'before-save-hook #'lsp-eslint-fix-all nil 'make-it-local))
+  (defun +lsp-organize-imports ()
+    (add-hook 'before-save-hook #'lsp-organize-imports nil 'make-it-local))
+  :hook (((json-mode dockerfile-mode shell-script-mode web-mode css-mode typescript-mode js2-mode rjsx-mode clojure-mode clojurescript-mode) . lsp-deferred)
+         ((typescript-mode js2-mode js-mode rjsx-mode) . +lsp-organize-imports)
+         ((typescript-mode js2-mode js-mode rjsx-mode) . lsp-eslint-fix-before-save))
   :custom
   ;; lsp-mode
+  (lsp-before-save-edits nil)
+  (lsp-headerline-breadcrumb-enable t)
   (lsp-eslint-enable t)
   (lsp-file-watch-threshold 4000)
   (lsp-keep-workspace-alive nil)
   (lsp-enable-semantic-highlighting t)
   (lsp-restart 'auto-restart)
-  (lsp-eldoc-enable-hover t)
-  (lsp-eldoc-render-all nil)
-  (lsp-enable-symbol-highlighting t)
-  (lsp-enable-on-type-formatting t)
   (lsp-imenu-sort-methods '(position))
-  (lsp-completion-provider :capf)
   (lsp-symbol-highlighting-skip-current nil)
-  (lsp-idle-delay 0.500)
+  (lsp-lens-enable t)
+  (lsp-idle-delay 0.5)
   ;; lsp-clients
-  (lsp-bash-explainshell-endpoint t)
   (lsp-bash-highlight-parsing-errors t)
-  (lsp-bash-glob-pattern t)
   ;; ts-js
   (lsp-eslint-package-manager "yarn")
   (lsp-eslint-auto-fix-on-save t)
   (lsp-eslint-run "onSave")
-  (lsp-eslint-package-manager "yarn")
-  (lsp-clojure-server-command '("bash" "-c" "clojure-lsp"))
-  ;; (lsp-enable-indentation nil)
+  (lsp-enable-on-type-formatting nil)
   (lsp-disabled-clients '(javascript-typescript-langserver))
   :config
   (add-to-list #'lsp-file-watch-ignored "[/\\\\]conflux-portal[/\\\]builds$")
