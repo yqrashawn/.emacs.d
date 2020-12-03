@@ -100,7 +100,6 @@
   (lsp-restart 'auto-restart)
   (lsp-imenu-sort-methods '(position))
   (lsp-symbol-highlighting-skip-current nil)
-  (lsp-lens-enable t)
   (lsp-idle-delay 0.5)
   ;; lsp-clients
   (lsp-bash-highlight-parsing-errors t)

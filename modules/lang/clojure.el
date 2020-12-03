@@ -194,7 +194,8 @@
                       ",gs" 'cider-browse-spec
                       ",gS" 'cider-browse-spec-all
                       ;; find deps function of current function
-                      ",gd" 'cider-xref-fn-deps-select
+                      ",gd" 'cider-find-dwim
+                      ;; ",gd" 'cider-xref-fn-deps-select
                       ;; find current function usage
                       ",gu" 'cider-xref-fn-refs-select
 
