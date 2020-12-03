@@ -487,17 +487,4 @@ has been changed to THEME."
   :straight (:host github :repo "Ilazki/prettify-utils.el"))
 
 (use-feature prog-mode
-  :init
-  (prettify-utils-add-hook org-mode
-                           ("TODO:" "# TODO")
-                           ("ERR:" "# ERR")
-                           ("TRACE:" "# TRACE")
-                           ("FATAL:" "# FATAL")
-                           ("WARN:" "# WARN")
-                           ("HACK:" "# HACK")
-                           ("NOTE:" "# NOTE")
-                           ("WARNING:" "# WARNING")
-                           ("INFO:" "# INFO")
-                           ("MARK:" "# MARK")
-                           ("FIXME:" "# FIXME"))
   :hook (after-init . global-prettify-symbols-mode))

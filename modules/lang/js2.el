@@ -251,7 +251,6 @@
       (message (concat "Running " cmd))
       (compile cmd comint))))
 
-
 (use-package jest
   :straight t
   :hook ((rjsx-mode typescript-mode js2-mode) . jest-minor-mode)
@@ -260,10 +259,26 @@
   (evil-define-key 'normal typescript-mode-map ",jj" #'jest-popup)
   (evil-define-key 'normal js2-mode-map ",jj" #'jest-popup))
 
+;; prettify symbols inside comments https://emacs.stackexchange.com/questions/47706/how-to-prettify-symbols-inside-comments
+(defun +js2-prettify-symbols-default-compose-p (start end _match)
+                     "Return true iff the symbol MATCH should be composed.
+The symbol starts at position START and ends at position END.
+This is the default for `prettify-symbols-compose-predicate'
+which is suitable for most programming languages such as C or Lisp."
+                     ;; Check that the chars should really be composed into a symbol.
+                     (let* ((syntaxes-beg (if (memq (char-syntax (char-after start)) '(?w ?_))
+                                              '(?w ?_) '(?. ?\\)))
+                            (syntaxes-end (if (memq (char-syntax (char-before end)) '(?w ?_))
+                                              '(?w ?_) '(?. ?\\))))
+                       (not (or (memq (char-syntax (or (char-before start) ?\s)) syntaxes-beg)
+                                (memq (char-syntax (or (char-after end) ?\s)) syntaxes-end)
+                                (nth 3 (syntax-ppss))))))
+
 (dolist (hook '(js-mode-hook js2-mode-hook rjsx-mode-hook typescript-mode-hook))
   (add-hook
    hook
-   (defl (push '("function" . ?ƒ) prettify-symbols-alist)
+   (defl (setq-local prettify-symbols-compose-predicate '+js2-prettify-symbols-default-compose-p)
+     (push '("function" . ?ƒ) prettify-symbols-alist)
      (push '("async" . ?⊳) prettify-symbols-alist)
      (push '("await" . ?⊲) prettify-symbols-alist)
      (push '("throw" . ?ƭ) prettify-symbols-alist)
