@@ -3,8 +3,9 @@
   :mode ("\\\.puml\\'" "\\\.iuml\\'" "\\\.plantuml\\\'")
   :custom
   (plantuml-default-exec-mode 'executable)
+  (org-plantuml-exec-mode 'plantuml)
+  (plantuml-default-exec-mode 'server)
   (org-plantuml-executable-path "/usr/local/bin/plantuml")
-  (org-plantuml-jar-path "/usr/local/Cellar/plantuml/1.2020.22/libexec/plantuml.jar")
   :init
   (with-eval-after-load 'ob
     (add-hook 'org-babel-after-execute-hook
