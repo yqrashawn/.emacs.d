@@ -87,13 +87,14 @@
   (defun +lsp-organize-imports ()
     (add-hook 'before-save-hook #'lsp-organize-imports nil 'make-it-local))
   :hook (((json-mode dockerfile-mode shell-script-mode web-mode css-mode typescript-mode js2-mode rjsx-mode clojure-mode clojurescript-mode) . lsp-deferred)
-         ((typescript-mode js2-mode js-mode rjsx-mode) . +lsp-organize-imports)
-         ((typescript-mode js2-mode js-mode rjsx-mode) . lsp-eslint-fix-before-save))
+         ;; ((typescript-mode js2-mode js-mode rjsx-mode) . +lsp-organize-imports)
+         ;; ((typescript-mode js2-mode js-mode rjsx-mode) . lsp-eslint-fix-before-save)
+         )
   :custom
   ;; lsp-mode
   (lsp-before-save-edits nil)
-  (lsp-headerline-breadcrumb-enable t)
-  (lsp-eslint-enable t)
+  (lsp-headerline-breadcrumb-enable nil)
+  (lsp-eslint-enable nil)
   (lsp-file-watch-threshold 4000)
   (lsp-keep-workspace-alive nil)
   (lsp-enable-semantic-highlighting t)
