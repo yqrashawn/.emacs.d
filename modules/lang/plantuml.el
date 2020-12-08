@@ -4,7 +4,8 @@
   :custom
   (plantuml-default-exec-mode 'executable)
   (org-plantuml-exec-mode 'plantuml)
-  (plantuml-default-exec-mode 'server)
+  ;; (plantuml-server-url "http://localhost:8909")
+  ;; (plantuml-default-exec-mode 'server)
   (org-plantuml-executable-path "/usr/local/bin/plantuml")
   :init
   (with-eval-after-load 'ob
@@ -15,8 +16,6 @@
 
     (add-to-list 'org-babel-load-languages '(plantuml . t))
     (add-to-list 'org-src-lang-modes '("plantuml" . plantuml))))
-
-
 
 (use-package flycheck-plantuml
   :straight t
