@@ -484,7 +484,8 @@ has been changed to THEME."
          ))
 
 (use-package prettify-utils
-  :straight (:host github :repo "Ilazki/prettify-utils.el"))
+  :straight (:host github :repo "Ilazki/prettify-utils.el")
+  :defer t)
 
 (use-feature prog-mode
   :hook (after-init . global-prettify-symbols-mode))
