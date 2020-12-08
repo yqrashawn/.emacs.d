@@ -1955,3 +1955,27 @@ Version 2017-09-01"
   :straight t
   :disabled t
   :hook (after-init . global-spell-fu-mode))
+
+(use-feature image-mode
+  :defer t
+  :config
+  (defun +image-scale (arg)
+    (interactive "P")
+    (image-transform-set-scale arg))
+  (defun +image-scale-up ()
+    (interactive)
+    (if (not (numberp image-transform-resize))
+        (progn (setq-local image-transform-resize 1)))
+    (image-transform-set-scale (+ image-transform-resize 0.1)))
+  (defun +image-scale-down ()
+    (interactive)
+    (if (not (numberp image-transform-resize))
+        (progn (setq-local image-transform-resize 1)))
+    (image-transform-set-scale (- image-transform-resize 0.1)))
+  (define-key image-mode-map (kbd "s-=") '+image-scale-up)
+  (define-key image-mode-map (kbd "s--") '+image-scale-down)
+  (evil-define-key* 'normal image-mode-map
+                    ",f1" #'image-transform-fit-to-width
+                    ",f2" #'image-transform-fit-to-height
+                    ",f3" #'image-transform-fit-both
+                    "q" #'yq/kill-buffer-and-window))
