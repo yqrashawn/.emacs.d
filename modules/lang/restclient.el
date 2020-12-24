@@ -1,6 +1,6 @@
 ;;; restclient.el ---  config of restclient package -*- lexical-binding: t; -*-
 
-;; Copyright © 2018, Rashawn Zhang, all rights reserved.
+;; Copyright © 2020, Rashawn Zhang, all rights reserved.
 
 ;; Author: Rashawn Zhang <namy.19@gmail.com>
 ;; Created: 28 May 2018

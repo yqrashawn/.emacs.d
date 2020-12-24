@@ -1,6 +1,6 @@
 ;;; sql.el ---   -*- lexical-binding: t; -*-
 
-;; Copyright © 2019, Rashawn Zhang, all rights reserved.
+;; Copyright © 2020, Rashawn Zhang, all rights reserved.
 
 ;; Author: Rashawn Zhang <hi@yqrashawn.com>
 ;; Created: 24 April 2019

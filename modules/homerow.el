@@ -1,6 +1,6 @@
 ;;; homerow.el --- Selet things with homerow  -*- lexical-binding: t; -*-
 
-;; Copyright © 2019, Rashawn Zhang
+;; Copyright © 2020, Rashawn Zhang
 
 ;; Author: Rashawn Zhang <hi@yqrashawn.com>
 ;; Created: 16 April 2019
