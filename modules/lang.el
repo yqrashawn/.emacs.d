@@ -206,3 +206,7 @@
   :commands (langtool-check)
   :custom
   (langtool-bin "languagetool"))
+
+(use-package bazel-mode
+  :straight t
+  :commands (bazelrc-mode bazel-mode bazel-build-mode))
