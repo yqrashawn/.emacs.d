@@ -159,7 +159,11 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
   :config
   (defun +lispy-eval (func &rest args)
     (if (memq major-mode '(clojure-mode clojurescript-mode cider-repl-mode))
-        (call-interactively 'cider-eval-last-sexp)
+        (if (and lispy-mode (lispy-left-p))
+            (save-excursion
+              (call-interactively 'lispy-different)
+              (call-interactively 'cider-eval-last-sexp))
+            (call-interactively 'cider-eval-last-sexp))
       (apply func args)))
   (advice-add #'lispy-eval :around '+lispy-eval)
   (defun +lispy-eval-and-insert (func &rest args)

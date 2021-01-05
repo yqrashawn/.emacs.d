@@ -72,7 +72,7 @@
   (cider-completion-annotations-include-ns 'always)
   (cider-connection-message-fn 'cider-random-tip)
   (cider-eldoc-display-context-dependent-info t)
-  (cider-print-fn 'puget)
+  (cider-print-fn 'fipp)
   (cider-special-mode-truncate-lines nil)
   (cider-debug-display-locals t)
   (cider-repl-wrap-history t)
@@ -326,6 +326,9 @@
   (add-hook 'cider-inspector-mode-hook 'visual-line-mode)
 
   (evilified-state-evilify cider-inspector-mode cider-inspector-mode-map
+    (kbd "b") 'evil-backward-word-begin
+    (kbd "e") 'evil-forward-word-end
+    (kbd "w") 'evil-forward-word-begin
     (kbd "S") 'cider-inspector-set-page-size
     (kbd "d") 'cider-inspector-def-current-val
     (kbd "n") 'cider-inspector-next-inspectable-object
@@ -417,10 +420,10 @@ Put type and ns properties on the candidate"
   :straight t
   :after clojure-mode)
 
-(use-package flycheck-clojure
-  :straight t
-  :after (flycheck cider)
-  :hook (clojure-mode . flycheck-clojure-setup))
+;; (use-package flycheck-clojure
+;;   :straight t
+;;   :after (flycheck cider)
+;;   :hook (clojure-mode . flycheck-clojure-setup))
 
 (use-package clojure-mode-extra-font-locking
   :straight t
