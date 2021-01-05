@@ -321,12 +321,19 @@
     (kbd "ds") 'cider-docview-source)
 
   (add-hook 'cider-inspector-mode-hook 'visual-line-mode)
+
   (evilified-state-evilify cider-inspector-mode cider-inspector-mode-map
+    (kbd "S") 'cider-inspector-set-page-size
+    (kbd "d") 'cider-inspector-def-current-val
+    (kbd "n") 'cider-inspector-next-inspectable-object
+    (kbd "N") 'cider-inspector-previous-inspectable-object
+    (kbd "p") 'cider-inspector-previous-inspectable-object
     (kbd "M") 'evilmi-jump-items
-    (kbd "L") 'cider-inspector-pop
-    (kbd "n") 'cider-inspector-next-page
-    (kbd "N") 'cider-inspector-prev-page
-    (kbd "p") 'cider-inspector-prev-page
+    (kbd "B") 'cider-inspector-pop
+    (kbd "C-o") 'cider-inspector-pop
+    (kbd "o") 'ace-link-cider-inspector
+    (kbd "J") 'cider-inspector-next-page
+    (kbd "K") 'cider-inspector-prev-page
     (kbd "r") 'cider-inspector-refresh)
 
   (evilified-state-evilify cider-test-report-mode cider-test-report-mode-map
