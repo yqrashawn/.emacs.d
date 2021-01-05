@@ -157,6 +157,18 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
   :init
   (yq/add-toggle lispy :mode lispy-mode)
   :config
+  (defun +lispy-eval (func &rest args)
+    (if (memq major-mode '(clojure-mode clojurescript-mode cider-repl-mode))
+        (call-interactively 'cider-eval-last-sexp)
+      (apply func args)))
+  (advice-add #'lispy-eval :around '+lispy-eval)
+  (defun +lispy-eval-and-insert (func &rest args)
+    (if (memq major-mode '(clojure-mode clojurescript-mode cider-repl-mode))
+        (progn
+          ;; (setq current-prefix-arg '(1))
+          (call-interactively 'cider-pprint-eval-last-sexp))
+      (apply func args)))
+  (advice-add #'lispy-eval-and-insert :around '+lispy-eval-and-insert)
   (with-eval-after-load 'semantic
     (defvar-mode-local emacs-lisp-mode semanticdb-find-default-throttle
       '(project omniscience)

@@ -246,6 +246,9 @@
                       ",db" 'cider-debug-defun-at-point
                       ",de" 'spacemacs/cider-display-error-buffer
                       ",dv" 'cider-inspect
+                      ",il" 'cider-inspect-last-result
+                      ",is" 'cider-inspect-last-sexp
+                      ",iD" 'cider-inspect-defun-at-point
                       ",bs" 'cider-browse-spec
                       ",bS" 'cider-browse-spec-all
 
