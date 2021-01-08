@@ -337,10 +337,11 @@ Available PROPS:
 (defun spacemacs/enable-flycheck (mode)
   "Use flycheck in MODE by default, if `syntax-checking-enable-by-default' is
 true."
-  (when (and syntax-checking-enable-by-default
-             (listp flycheck-global-modes)
-             (not (eq 'not (car flycheck-global-modes))))
-    (add-to-list 'flycheck-global-modes mode)))
+  ;; (when (and syntax-checking-enable-by-default
+  ;;            (listp flycheck-global-modes)
+  ;;            (not (eq 'not (car flycheck-global-modes))))
+  ;;   (add-to-list 'flycheck-global-modes mode))
+  )
 
 (defun spacemacs/toggle-flycheck-error-list ()
   "Toggle flycheck's error list window.
@@ -365,7 +366,7 @@ If the error list is visible, hide it.  Otherwise, show it."
   :custom
   (flycheck-check-syntax-automatically '(save idle-buffer-switch mode-enabled))
   (flycheck-standard-error-navigation nil)
-  (flycheck-global-modes '(js2-mode rjsx-mode typescript-mode web-mode css-mode scss-mode json-mode))
+  ;; (flycheck-global-modes '(js2-mode rjsx-mode typescript-mode web-mode css-mode scss-mode json-mode))
   :init
   (yq/add-toggle syntax-checking :mode flycheck-mode)
   (spacemacs/set-leader-keys "ts" 'yq/toggle-syntax-checking)
