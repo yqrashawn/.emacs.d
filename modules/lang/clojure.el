@@ -102,7 +102,8 @@
   (spacemacs/register-repl 'cider 'cider-jack-in "cider")
   (evil-define-key 'normal clojure-mode-map ",c" 'cider-cheatsheet)
 
-  (setq cider-font-lock-dynamically '(macro core function var deprecated))
+  (setq cider-font-lock-dynamically '(macro core function var))
+  (setq cider-font-lock-dynamically nil)
   (setq cider-stacktrace-default-filters '(tooling dup)
         cider-repl-pop-to-buffer-on-connect nil
         cider-repl-display-in-current-window t
@@ -427,6 +428,7 @@ Put type and ns properties on the candidate"
 
 (use-package clojure-mode-extra-font-locking
   :straight t
+  :disabled
   :after clojure-mode)
 
 ;; (use-package clojure-cheatsheet
