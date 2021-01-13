@@ -387,9 +387,85 @@ Put type and ns properties on the candidate"
   :diminish clj-refactor-mode
   :after (clojure-mode)
   :hook (clojure-mode . clj-refactor-mode)
+  :custom
+  (cljr-hotload-dependencies t)
   :init
   (evil-define-key 'normal clojure-mode-map (kbd ", ESC") 'hydra-cljr-help-menu/body)
   :config
+  (defhydra hydra-cljr-ns-menu (:color pink :hint nil :exit t)
+    "
+ Ns related refactorings
+------------------------------------------------------------------------------------------------------------------------------------------------------
+_ai_: Add import to ns                             _am_: Add missing libspec                          _ap_: Add project dependency
+_ar_: Add require to ns                            _au_: Add use to ns                                _cn_: Clean ns
+_rm_: Require a macro into the ns                  _sr_: Stop referring
+_b_: Back to previous Hydra
+"
+    ("ai" cljr-add-import-to-ns) ("am" cljr-add-missing-libspec)
+    ("ap" cljr-add-project-dependency) ("ar" cljr-add-require-to-ns)
+    ("au" cljr-add-use-to-ns) ("cn" cljr-clean-ns)
+    ("rm" cljr-require-macro) ("sr" cljr-stop-referring)
+    ("b" hydra-cljr-help-menu/body :exit t)
+    ("q" nil "quit"))
+  (defhydra hydra-cljr-code-menu (:color pink :hint nil :exit t)
+    "
+ Code related refactorings
+------------------------------------------------------------------------------------------------------------------------------------------------------
+_ci_: Cycle if                                     _ct_: Cycle thread
+_dk_: Destructure keys                             _el_: Expand let                                   _fu_: Find usages
+_il_: Introduce let                                _is_: Inline symbol                                _ml_: Move to let
+_pf_: Promote function                             _rl_: Remove let                                   _rs_: Rename symbol
+_tf_: Thread first all                             _th_: Thread                                       _tl_: Thread last all
+_ua_: Unwind all                                   _uw_: Unwind
+_b_: Back to previous Hydra
+"
+    ("ci" clojure-cycle-if) ("ct" cljr-cycle-thread)
+    ("dk" cljr-destructure-keys) ("el" cljr-expand-let)
+    ("fu" cljr-find-usages) ("il" cljr-introduce-let)
+    ("is" cljr-inline-symbol) ("ml" cljr-move-to-let)
+    ("pf" cljr-promote-function) ("rl" cljr-remove-let)
+    ("rs" cljr-rename-symbol) ("tf" clojure-thread-first-all)
+    ("th" clojure-thread) ("tl" clojure-thread-last-all)
+    ("ua" clojure-unwind-all) ("uw" clojure-unwind)
+    ("b" hydra-cljr-help-menu/body :exit t)
+    ("q" nil "quit"))
+  (defhydra hydra-cljr-project-menu (:color pink :hint nil :exit t)
+    "
+ Project related refactorings
+------------------------------------------------------------------------------------------------------------------------------------------------------
+_ap_: Add project dependency                       _cs_: Change function signature                    _fu_: Find usages
+_hd_: Hotload dependency                           _is_: Inline symbol                                _mf_: Move form
+_pc_: Project clean                                _rf_: Rename file-or-dir _rs_: Rename symbol       _sp_: Sort project dependencies
+_up_: Update project dependencies
+_b_: Back to previous Hydra
+"
+    ("ap" cljr-add-project-dependency) ("cs" cljr-change-function-signature)
+    ("fu" cljr-find-usages) ("hd" cljr-hotload-dependency)
+    ("is" cljr-inline-symbol) ("mf" cljr-move-form)
+    ("pc" cljr-project-clean) ("rf" cljr-rename-file-or-dir)
+    ("rs" cljr-rename-symbol) ("sp" cljr-sort-project-dependencies)
+    ("up" cljr-update-project-dependencies)
+    ("b" hydra-cljr-help-menu/body :exit t)
+    ("q" nil "quit"))
+  (defhydra hydra-cljr-toplevel-form-menu (:color pink :hint nil :exit t)
+    "
+ Toplevel form related refactorings
+------------------------------------------------------------------------------------------------------------------------------------------------------
+_as_: Add stubs for the interface/protocol at point_cp_: Cycle privacy                                _cs_: Change function signature
+_ec_: Extract constant                             _ed_: Extract form as def                          _ef_: Extract function
+_fe_: Create function from example                 _is_: Inline symbol                                _mf_: Move form
+_pf_: Promote function                             _rf_: Rename file-or-dir                           _ad_: Add declaration
+_b_: Back to previous Hydra
+"
+    ("as" cljr-add-stubs) ("cp" clojure-cycle-privacy)
+    ("cs" cljr-change-function-signature) ("ec" cljr-extract-constant)
+    ("ed" cljr-extract-def) ("ef" cljr-extract-function)
+    ("fe" cljr-create-fn-from-example) ("is" cljr-inline-symbol)
+    ("mf" cljr-move-form) ("pf" cljr-promote-function)
+    ("rf" cljr-rename-file-or-dir) ("ad" cljr-add-declaration)
+    ("b" hydra-cljr-help-menu/body :exit t)
+    ("q" nil "quit"))
+
   (cljr-add-keybindings-with-prefix "C-c j")
 
   ;; Usually we do not set keybindings in :config, however this must be done

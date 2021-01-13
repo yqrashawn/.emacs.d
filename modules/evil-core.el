@@ -7,7 +7,7 @@
 (use-package undo-tree
   :straight (:host github :repo "emacsorphanage/undo-tree")
   :diminish undo-tree-mode
-  :hook (after-init . global-undo-tree-mode)
+  :defer t
   :custom
   (undo-tree-enable-undo-in-region nil)
   (undo-tree-history-directory-alist '(("." . "~/emacs.d/.cache/undo")))
@@ -26,6 +26,7 @@
 
 (use-package evil-leader
   :straight t
+  :after evil
   :custom
   (evil-leader/in-all-states t)
   :init
@@ -53,6 +54,7 @@
 
 (use-package undo-fu
   :straight t
+  :disabled
   :defer t)
 
 (require 'seq)
@@ -61,11 +63,20 @@
     (setq evil-insert-state-modes
           (seq-remove (lambda (index) (eq index mode-to-remove)) evil-insert-state-modes)))
 
+(define-prefix-command 'yq-s-map)
+(defun yq/update-evil-emacs-state-modes (mode-to-remove)
+  "remove MODE-TO-REMOVE from evil-emacs-state-modes"
+  (setq evil-emacs-state-modes
+        (seq-remove
+          (lambda (index)
+            (eq index mode-to-remove))
+          evil-emacs-state-modes)))
+
 (use-package evil
   :straight t
-  :custom
-  (evil-undo-system 'undo-tree)
   :init
+  (require 'undo-tree)
+  (global-undo-tree-mode 1)
   (customize-set-variable 'evil-intercept-maps nil)
   (customize-set-variable 'evil-move-cursor-back nil)
   (customize-set-variable 'evil-want-C-u-scroll t)
@@ -76,18 +87,10 @@
   (customize-set-variable 'evil-shift-width 2)
   (customize-set-variable 'evil-show-paren-range 1)
   (customize-set-variable 'evil-ex-substitute-global t)
-  (define-prefix-command 'yq-s-map)
+  (customize-set-variable 'evil-undo-system 'undo-tree)
   (setq local-function-key-map (delq '(kp-tab . [9]) local-function-key-map))
   (setq evil-want-find-undo t)
   (setq evil-insert-state-cursor '(box "green"))
-  (defun yq/update-evil-emacs-state-modes (mode-to-remove)
-    "remove MODE-TO-REMOVE from evil-emacs-state-modes"
-    (setq evil-emacs-state-modes
-          (seq-remove
-           (lambda (index)
-             (eq index mode-to-remove))
-           evil-emacs-state-modes)))
-
   (evil-mode 1)
   :config
   ;; https://emacs.stackexchange.com/a/221/14357

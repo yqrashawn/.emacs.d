@@ -710,8 +710,7 @@ _g_  gfm      _m_ markdown
   :straight t
   :defer t
   :bind
-  (:map evil-normal-state-map
-        ("sa" . dash-at-point))
+  (:map yq-s-map ("a" . dash-at-point))
   :init
   (assq-delete-all 'clojure-mode dash-at-point-mode-alist)
   (add-to-list 'dash-at-point-mode-alist '(clojure-mode . "ClojureDocs")))
