@@ -114,7 +114,33 @@
   (with-eval-after-load 'ivy
     (setf (alist-get 'my-magit-command ivy-re-builders-alist) #'ivy--regex-fuzzy))
   (add-function :before magit-completing-read-function #'my-magit-command)
-  (add-to-list 'ivy-re-builders-alist '(magit-log-other . ivy--regex-fuzzy)))
+  (add-to-list 'ivy-re-builders-alist '(magit-log-other . ivy--regex-fuzzy))
+  :config/el-patch
+  ;; s in magit-stats buffer to yq-s-map when there's nothing interesting
+  (defun magit-stage-file (file)
+    "Stage all changes to FILE.
+With a prefix argument or when there is no file at point ask for
+the file to be staged.  Otherwise stage the file at point without
+requiring confirmation."
+    (interactive
+     (let* ((atpoint (magit-section-value-if 'file))
+            (current (magit-file-relative-name))
+            (choices (nconc (magit-unstaged-files)
+                            (magit-untracked-files)))
+            (default (car (member (or atpoint current) choices))))
+       (list (if (or current-prefix-arg (not default))
+                 (el-patch-swap
+                   (magit-completing-read "Stage file" choices
+                                      nil t nil nil default)
+                   (progn (set-transient-map yq-s-map) nil))
+             default))))
+    (el-patch-swap
+      (magit-with-toplevel
+        (magit-stage-1 nil (list file)))
+      (if (and (eq (length (list file)) 1) (eq (car (list file)) nil))
+         nil
+       (magit-with-toplevel
+         (magit-stage-1 nil (list file)))))))
 
 
 (use-package evil-magit :straight t :after magit)
