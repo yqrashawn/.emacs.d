@@ -416,6 +416,14 @@ repository, then the corresponding root is used instead."
   (setq projectile-project-search-path '("~/workspace/" "~/.emacs.d/straight/repos/"))
   (setq projectile-completion-system 'ivy)
   :config
+  (defun yank-file-relative-path ()
+    (interactive)
+    (let ((p (file-relative-name (buffer-file-name) (projectile-project-root))))
+      (if p
+          (progn (kill-new p)
+                 (message "\"%s\" into kill ring" p))
+        (message "not in a project"))))
+  (spacemacs/set-leader-keys "kf" 'yank-file-relative-path)
   ;; (define-key yq-s-map "m" #'projectile-find-file-dwim)
   (when (executable-find "fd")
     (setq projectile-git-command "fd . -t f -0"
