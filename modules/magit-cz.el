@@ -95,11 +95,12 @@
 
 (add-to-list 'magit-process-prompt-functions 'magit-cz-functions-detect-and-cancel-cz)
 
-(defun magit-cz-git-commit-setup-function (bc?)
+(defun magit-cz-git-commit-setup-function (bc? with-scope?)
   (let* ((type (car (alist-get (read-char-choice (magit-cz--types-message) (mapcar 'car magit-cz-types)) magit-cz-types)))
          (type? (not (or (string= type " quit") (string= type "quit")))))
     (when type?
-      (let* ((scope (read-string "Commit scope: "))
+      (let* ((scope (if with-scope? (read-string "Commit scope: ") ""))
+             (scope "")
              (scope? (not (eq (length scope) 0)))
              (bc-body (and bc? (read-string "Breaking Change Body: ")))
              (msg (if scope? (format "%s(%s): " type scope) (concat type ": ")))
@@ -108,17 +109,23 @@
 
 (defun magit-cz-commit (&optional args)
   (interactive)
-  (setq magit-cz--message (magit-cz-git-commit-setup-function nil))
+  (setq magit-cz--message (magit-cz-git-commit-setup-function nil nil))
   (magit-commit-create args))
 
 (defun magit-cz-breaking-change-commit (&optional args)
   (interactive)
-  (setq magit-cz--message (magit-cz-git-commit-setup-function t))
+  (setq magit-cz--message (magit-cz-git-commit-setup-function t nil))
+  (magit-commit-create args))
+
+(defun magit-cz-with-scope-commit (&optional args)
+  (interactive)
+  (setq magit-cz--message (magit-cz-git-commit-setup-function nil t))
   (magit-commit-create args))
 
 (transient-append-suffix 'magit-commit "c" '("c" "CZ Commit"  magit-cz-commit))
 (transient-append-suffix 'magit-commit "c" '("v" "Magit Commit"  magit-commit-create))
 (transient-append-suffix 'magit-commit "v" '("B" "CZ Breaking Change Commit"  magit-cz-breaking-change-commit))
+(transient-append-suffix 'magit-commit "v" '("S" "CZ Commit With Scope"  magit-cz-with-scope-commit))
 
 (defvar magit-cz--debug nil)
 
