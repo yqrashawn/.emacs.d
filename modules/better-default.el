@@ -237,7 +237,8 @@ file stored in the cache directory and `nil' to disable auto-saving.")
 ;; (setq completion-styles '(basic partial-completion emacs22))
 (xterm-mouse-mode 1)
 (setq initial-major-mode 'text-mode)
-(setq-default fill-column 80)
+(setq-default fill-column 80
+              comment-fill-column 80)
 (use-feature abbrev
   :diminish abbrev-mode
   :custom
@@ -662,6 +663,7 @@ If the universal prefix argument is used then kill the buffer too."
   (add-hook 'delete-terminal-functions 'recentf-save-list)
   (recentf-mode 1)
   :config
+  (add-to-list 'recentf-filename-handlers 'abbreviate-file-name)
   ;; (run-at-time nil (* 5 60) 'recentf-save-list)
   ;; (add-to-list 'recentf-exclude
   ;;              (file-truename spacemacs-cache-directory))
@@ -680,11 +682,8 @@ If the universal prefix argument is used then kill the buffer too."
 
 ;; saveplace remembers your location in a file when saving files
 (use-feature saveplace
+  :hook (after-init . save-place-mode)
   :init
-  (if (fboundp 'save-place-mode)
-      ;; Emacs 25 has a proper mode for `save-place'
-      (save-place-mode)
-    (setq save-place t))
   ;; Save point position between sessions
   (setq save-place-file (concat spacemacs-cache-directory "places")))
 
@@ -850,6 +849,8 @@ If the universal prefix argument is used then will the windows too."
 (setq require-final-newline nil)
 (setq mode-require-final-newline nil)
 
+(setq visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
+
 (use-package restart-emacs
   :straight t
   :commands (restart-emacs)
@@ -861,9 +862,7 @@ If the universal prefix argument is used then will the windows too."
 (spacemacs/set-leader-keys "tL" 'yq/toggle-hl-line)
 (spacemacs/set-leader-keys "Ts" 'load-theme)
 
-(add-hook 'prog-mode-hook (defl
-                              (setq-local comment-auto-fill-only-comments t)
-                            (auto-fill-mode 1)))
+(add-hook 'prog-mode-hook (defl (setq-local comment-auto-fill-only-comments t) (auto-fill-mode 1)))
 (yq/add-toggle auto-fill :mode auto-fill-mode)
 (spacemacs/set-leader-keys "tF" 'yq/toggle-auto-fill)
 
@@ -1534,7 +1533,7 @@ Info-mode:
   ;; rename after killing uniquified
   (setq uniquify-after-kill-buffer-p t)
   ;; don't muck with special buffers
-  (setq uniquify-ignore-buffers-re "^\\*"))
+  (setq uniquify-ignore-buffers-re "^\\\*"))
 
 (use-package async
   :straight t
@@ -2006,3 +2005,11 @@ Version 2017-09-01"
     (make-local-variable 'outline-regexp)
     (setq outline-regexp (concat +outline-regexp-body (+outline-chomp comment-end))))
   (add-hook 'outline-minor-mode-hook '+outline-minor-mode-setup-regexp))
+
+(use-feature hl-line
+  :defer t
+  :hook (after-init . global-hl-line-mode))
+
+(setq-default mouse-avoidance-mode 'animate)
+(setq-default cursor-in-non-selected-windows nil)
+(setq truncate-string-ellipsis "…")
