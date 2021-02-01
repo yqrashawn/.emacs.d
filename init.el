@@ -218,6 +218,8 @@
       jit-lock-stealth-time 0.25
       jit-lock-stealth-load 300)
 
+;; (setq font-lock-maximum-decoration nil)
+
 (defvar gc-timer nil)
 (defun maybe-gc ()
   (let ((original gc-cons-threshold))

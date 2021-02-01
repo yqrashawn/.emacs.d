@@ -23,10 +23,11 @@
 ;; https://emacs.stackexchange.com/questions/3673/how-to-make-vc-and-magit-treat-a-symbolic-link-to-a-real-file-in-git-repo-just
 (setq find-file-visit-truename t)
 
-(defvar dotspacemacs-auto-save-file-location 'nil
+(defvar dotspacemacs-auto-save-file-location 'original
   "Location where to auto-save files. Possible values are `original' to
 auto-save the file in-place, `cache' to auto-save the file to another
 file stored in the cache directory and `nil' to disable auto-saving.")
+
 (defconst spacemacs-auto-save-directory
   (expand-file-name (concat yq-emacs-cache-dir "auto-save/"))
   "Spacemacs auto-save directory")
@@ -60,7 +61,7 @@ file stored in the cache directory and `nil' to disable auto-saving.")
    echo-keystrokes 1e-6 ;; echo keystrokes quicker
    ns-use-native-fullscreen nil
    delete-by-moving-to-trash t
-   create-lockfiles nil ;; no .# file
+   create-lockfiles t                   ;; create .#foo.txt file
    disabled-command-function nil
    ad-redefinition-action 'accept
    custom-safe-themes t ;; treat all theme safe
@@ -266,7 +267,12 @@ file stored in the cache directory and `nil' to disable auto-saving.")
 
 (use-feature files
   :custom
-  (make-backup-files nil)
+  (backup-by-copying t)
+  (backup-by-copying-when-mismatch t)
+  (backup-by-copying-when-privileged-mismatch t)
+  (backup-by-copying-when-linked t)
+  (delete-old-versions t)
+  (make-backup-files t)
   (confirm-kill-processes nil)
   (confirm-kill-emacs nil)
   (enable-local-variables t)
@@ -360,6 +366,7 @@ file stored in the cache directory and `nil' to disable auto-saving.")
   (:map minibuffer-local-map
         ("<escape>" . abort-recursive-edit))
   :hook
+  (after-init . auto-save-mode)
   ((prog-mode org-mode) . turn-on-auto-fill)
   ((text-mode markdown-mode) . visual-line-mode)
   :config
