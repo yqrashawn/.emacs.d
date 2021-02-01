@@ -1261,160 +1261,12 @@ first."))
   :straight t
   :hook (after-init . golden-ratio-mode))
 
-;; (use-package bicycle
-;;   :straight t
-;;   :after outline
-;;   :bind (:map outline-minor-mode-map
-;;               ([tab] . bicycle-cycle)))
-
-(use-package outshine
+(use-package bicycle
   :straight t
   :after outline
-  :hook ((prog-mode text-mode) . outshine-mode)
-  :custom
-  (outshine-fontify t)
-  (outshine-fontify-whole-heading-line t)
-  (outshine-use-speed-commands t)
-  :config
-  (set-face-italic-p 'outshine-level-1 t)
-  (set-face-italic-p 'outshine-level-2 t)
-  (set-face-italic-p 'outshine-level-3 t)
-  (set-face-italic-p 'outshine-level-4 t)
-  (set-face-italic-p 'outshine-level-5 t)
-  (set-face-italic-p 'outshine-level-6 t)
-  (set-face-italic-p 'outshine-level-7 t)
-  (set-face-italic-p 'outshine-level-8 t)
-  (add-hook 'org-mode-hook (defl (outshine-mode -1)))
-  (add-hook 'markdown-mode-hook (defl (outshine-mode -1)))
-  (advice-add 'evil-open-folds :after 'outline-show-all)
-  (evil-define-key 'normal outshine-mode-map (kbd "TAB") #'outshine-cycle)
-  (setq outshine-speed-commands-user
-        '(
-          ("Outline Navigation")
-          ;; [X]
-          ("j" . (outshine-speed-move-safe
-                  'outline-next-visible-heading))
-          ;; [X]
-          ("k" . (outshine-speed-move-safe
-                  'outline-previous-visible-heading))
-          ;; [X]
-          ("n" . (outshine-speed-move-safe
-                  'outline-forward-same-level))
-          ;; [X]
-          ("u" . (outshine-speed-move-safe
-                  'outline-up-heading))
-          ;; [X]
-          ("p" . (outshine-speed-move-safe
-                  'outline-backward-same-level))
-          ;; [X] similar semantics
-          ("N" . outshine-next-block)
-          ;; [X] similar semantics
-          ("P" . outshine-previous-block)
-          ;; [X] similar semantics org-goto
-          ("f" . outshine-navi)
-          ;; [X] similar semantics org-goto
-          ("F" . outshine-imenu)
-          ;; [X] similar semantics (org-refile t)
-          ;; ("g" . outshine-refile)
-          ("g" . outshine-imenu)
-          ("Outline Visibility")
-          ;; [X]
-          ("c" . outshine-cycle)
-          ;; [X]
-          ("C" . outshine-cycle-buffer)
-          ;; [X]
-          (" " . (outshine-use-outorg
-                  'org-display-outline-path
-                  'WHOLE-BUFFER-P))
-          ;; [X]
-          ("r" . outshine-narrow-to-subtree)
-          ;; [X]
-          ("w" . widen)
-          ;; ;; [ ]
-          ;; ("=" . outshine-columns)
-          ("Outline Structure Editing")
-          ;; [X] FIXME error with oldschool elisp headers
-          ("U" . outline-move-subtree-up)
-          ;; [X] FIXME error with oldschool elisp headers
-          ("D" . outline-move-subtree-down)
-          ;; [X]
-          ("+" . outline-demote)
-          ;; [X]
-          ("-" . outline-promote)
-          ;; [X]
-          ("i" . outshine-insert-heading)
-          ;; [X] FIXME handle markers, special cases
-          ("^" . outshine-sort-entries)
-          ;; ;; [ ]
-          ;; ("a" . (outshine-use-outorg
-          ;;      'org-archive-subtree-default-with-confirmation))
-          ;; [X]
-          ("m" . outline-mark-subtree)
-          ;; [X]
-          ("#" . outshine-toggle-comment)
-          ("Clock Commands")
-          ;; FIXME need improvements!
-          ;; [X]
-          ("I" . outshine-clock-in)
-          ;; [X]
-          ("O" . outshine-clock-out)
-          ("Date & Time Commands")
-          ;; [X]
-          ("." . outshine-time-stamp)
-          ;; [X]
-          ("!" . outshine-time-stamp-inactive)
-          ;; [X] TODO add up/down(day)
-          ("d" . outshine-deadline)
-          ;; [X]
-          ("s" . outshine-schedule)
-          ("Exporting")
-          ;; [X]
-          ("x" . outshine-export-dispatch)
-          ("Meta Data Editing")
-          ;; [X]
-          ("t" . outshine-todo)
-          ;; [X]
-          ("," . outshine-priority)
-          ;; [X]
-          ("0" . (outshine-use-outorg
-                  (lambda () (interactive) (org-priority ?\ ))))
-          ;; [X]
-          ("1" . (outshine-use-outorg
-                  (lambda () (interactive) (org-priority ?A))))
-          ;; [X]
-          ("2" . (outshine-use-outorg
-                  (lambda () (interactive) (org-priority ?B))))
-          ;; [X]
-          ("3" . (outshine-use-outorg
-                  (lambda () (interactive) (org-priority ?C))))
-          ;; [X]
-          (":" . outshine-set-tags-command)
-          ;; ;; [ ]
-          ;; ("W" . (lambda(m) (interactive "sMinutes before warning: ")
-          ;;       (outshine-entry-put (point) "APPT_WARNTIME" m)))
-          ("Properties and Effort")
-          ;; [X]
-          ("y" . outshine-set-property)
-          ;; [X]
-          ("Y" . outshine-set-property-and-value)
-          ;; [X]
-          ("e" . outshine-set-effort)
-          ;; [X]
-          ("E" . outshine-inc-effort)
-          ;; ("Agenda Views etc")
-          ;; [X]
-          ("v" . outshine-agenda)
-          ;; [X]
-          ("<" . (outshine-agenda-set-restriction-lock))
-          ;; [X]
-          (">" . (outshine-agenda-remove-restriction-lock))
-          ;; ;; CANCELLED makes no sense
-          ;; ("/" . outshine-sparse-tree)
-          ("Misc")
-          ;; [X]
-          ("o" . outshine-open-at-point)
-          ;; [X]
-          ("?" . outshine-speed-command-help))))
+  :bind (:map outline-minor-mode-map
+              ([tab] . bicycle-cycle)
+              ([S-tab] . bicycle-cycle-global)))
 
 (use-package find-file-in-project
   :straight t
@@ -1423,3 +1275,13 @@ first."))
   :bind ((:map yq-s-map ("m" . ffip)))
   :init
   (spacemacs/set-leader-keys "krp" #'ffip-find-relative-path))
+
+(use-package prot-outline
+  :disabled t
+  :straight (:host gitlab :repo "protesilaos/dotfiles" :branch "master"
+                   :files ("emacs/.emacs.d/prot-lisp/prot-common.el"
+                           "emacs/.emacs.d/prot-lisp/prot-outline.el"))
+  :hook (prog-mode . prot-outline-minor-mode-safe)
+  :config
+  (with-eval-after-load 'outline-minor-faces
+    (add-hook 'prot-outline-minor-mode-enter-hook #'outline-minor-faces-add-font-lock-keywords)))

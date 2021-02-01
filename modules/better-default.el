@@ -13,6 +13,7 @@
                    (*linux* nil)
                    (t nil)))
 
+(require 'mode-local)
 (customize-set-variable 'inhibit-startup-screen t)
 (customize-set-variable 'inhibit-startup-message t)
 (customize-set-variable 'inhibit-startup-echo-area-message t)
@@ -448,6 +449,7 @@ file stored in the cache directory and `nil' to disable auto-saving.")
 (add-hook 'server-visit-hook 'server-remove-kill-buffer-hook)
 
 (add-hook 'prog-mode-hook #'hs-minor-mode)
+(add-hook 'prog-mode-hook #'outline-minor-mode)
 (add-hook 'org-mode-hook #'hs-minor-mode)
 
 
@@ -1979,3 +1981,23 @@ Version 2017-09-01"
                     ",f2" #'image-transform-fit-to-height
                     ",f3" #'image-transform-fit-both
                     "q" #'yq/kill-buffer-and-window))
+
+(use-feature outline
+  :init
+  (defun +outline-chomp (str)
+    "Chomp leading and trailing whitespace from STR."
+    (save-excursion
+      (save-match-data
+        (while (string-match
+                "\\`\n+\\|^\\s-+\\|\\s-+$\\|\n+\\'"
+                str)
+          (setq str (replace-match "" t t str)))
+        str)))
+  :config
+  (defun +outline-minor-mode-setup-regexp ()
+    (when (not (local-variable-p 'outline-regexp)))
+    (setq-local +outline-regexp-start (+outline-chomp comment-start))
+    (setq-local +outline-regexp-body (concat +outline-regexp-start " " outline-regexp))
+    (make-local-variable 'outline-regexp)
+    (setq outline-regexp (concat +outline-regexp-body (+outline-chomp comment-end))))
+  (add-hook 'outline-minor-mode-hook '+outline-minor-mode-setup-regexp))

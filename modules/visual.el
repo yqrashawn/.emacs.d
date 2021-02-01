@@ -330,7 +330,7 @@ has been changed to THEME."
 
 (use-package foldit
   :load-path "./foldit.el"
-  :disabled
+  :disabled t
   :after (hideshow)
   :config
   (foldit-global-mode))
@@ -391,16 +391,16 @@ has been changed to THEME."
   :custom (fira-code-mode-disabled-ligatures '("[]" "#{" "#(" "#_" "#_(" "x")) ;; List of ligatures to turn off
   :hook prog-mode)
 
-;; (use-package backline
-;;   :straight t
-;;   :after outshine
-;;   :config (advice-add 'outshine-flag-subtree :after 'backline-update))
+(use-package backline
+  :straight t
+  :after outline
+  :config (advice-add 'outline-flag-region :after 'backline-update))
 
-;; (use-package outline-minor-faces
-;;   :straight t
-;;   :after outshine
-;;   :config (add-hook 'outshine-mode
-;;                     'outline-minor-faces-add-font-lock-keywords))
+(use-package outline-minor-faces
+  :straight t
+  :after outline
+  :config (add-hook 'outline-minor-mode-hook
+                    'outline-minor-faces-add-font-lock-keywords))
 
 (use-package emojify
   :straight t
@@ -488,4 +488,5 @@ has been changed to THEME."
   :defer t)
 
 (use-feature prog-mode
-  :hook (after-init . global-prettify-symbols-mode))
+  :hook
+  (after-init . global-prettify-symbols-mode))
