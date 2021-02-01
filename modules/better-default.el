@@ -20,8 +20,6 @@
 (setq kmacro-ring-max 30)
 (setq save-silently t)
 
-
-
 ;; https://emacs.stackexchange.com/questions/3673/how-to-make-vc-and-magit-treat-a-symbolic-link-to-a-real-file-in-git-repo-just
 (setq find-file-visit-truename t)
 

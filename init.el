@@ -202,11 +202,22 @@
 (defun my-minibuffer-setup-hook ()
   (setq gc-cons-threshold most-positive-fixnum))
 (defun my-minibuffer-exit-hook ()
-  (setq gc-cons-threshold (* 128 1024 1024)))
+  (setq gc-cons-threshold (* 8 (expt 10 8))))
 (add-hook 'minibuffer-setup-hook #'my-minibuffer-setup-hook)
 (add-hook 'minibuffer-exit-hook #'my-minibuffer-exit-hook)
 
-(setq gc-cons-percentage 0.1)
+(setq gc-cons-percentage 0.6)
+(setq gc-cons-threshold (* 8 (expt 10 8)))
+
+(setq jit-lock-contextually 'syntax-driven
+      jit-lock-context-time 2.0
+      jit-lock-stealth-nice 0.25
+      jit-lock-antiblink-grace 1
+      jit-lock-chunk-size 1000
+      jit-lock-defer-time 0.25
+      jit-lock-stealth-time 0.25
+      jit-lock-stealth-load 300)
+
 (defvar gc-timer nil)
 (defun maybe-gc ()
   (let ((original gc-cons-threshold))
