@@ -137,22 +137,21 @@
   (add-hook 'clojurec-mode-hook (defl (company-flx-mode -1)))
   (add-hook 'cider-repl-mode-hook (defl (company-flx-mode -1)))
   :config
-  (dolist (mode '(clojure-mode clojurescript-mode cider-mode))
-    (eval-after-load mode
-      (font-lock-add-keywords
-       mode '(("(\\(fn\\)[\[[:space:]]"  ; anon funcs 1
-
-               (0 (progn (compose-region (match-beginning 1)
-                                       (match-end 1) "λ")
-                       nil)))
-              ("\\(#\\)("                ; anon funcs 2
-               (0 (progn (compose-region (match-beginning 1)
-                                       (match-end 1) "ƒ")
-                       nil)))
-              ("\\(#\\){"                 ; sets
-               (0 (progn (compose-region (match-beginning 1)
-                                       (match-end 1) "∈")
-                       nil)))))))
+  ;; (dolist (mode '(clojure-mode clojurescript-mode cider-mode))
+  ;;   (eval-after-load mode
+  ;;     (font-lock-add-keywords
+  ;;      mode '(("(\\(fn\\)[\[[:space:]]"  ; anon funcs 1
+  ;;              (0 (progn (compose-region (match-beginning 1)
+  ;;                                      (match-end 1) "λ")
+  ;;                      nil)))
+  ;;             ("\\(#\\)("                ; anon funcs 2
+  ;;              (0 (progn (compose-region (match-beginning 1)
+  ;;                                      (match-end 1) "ƒ")
+  ;;                      nil)))
+  ;;             ("\\(#\\){"                 ; sets
+  ;;              (0 (progn (compose-region (match-beginning 1)
+  ;;                                      (match-end 1) "∈")
+  ;;                      nil)))))))
   (define-key cider-repl-mode-map (kbd "s-k") 'cider-quit)
   (dolist (map (list clojure-mode-map
                      clojurec-mode-map
