@@ -117,6 +117,7 @@
      :straight nil
      ,@args))
 
+(setq-default comp-async-report-warnings-errors nil)
 (use-package exec-path-from-shell
   :straight t
   :init
@@ -136,8 +137,7 @@
     (exec-path-from-shell-copy-env "JAVA_HOME")
     (yq/update-path)))
 
-(use-package el-patch
-  :straight t)
+(use-package el-patch :straight t)
 
 (eval-when-compile
   (require 'el-patch))
