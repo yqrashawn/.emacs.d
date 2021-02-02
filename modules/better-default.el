@@ -2006,10 +2006,6 @@ Version 2017-09-01"
     (setq outline-regexp (concat +outline-regexp-body (+outline-chomp comment-end))))
   (add-hook 'outline-minor-mode-hook '+outline-minor-mode-setup-regexp))
 
-(use-feature hl-line
-  :defer t
-  :hook (after-init . global-hl-line-mode))
-
 (setq-default mouse-avoidance-mode 'animate)
 (setq-default cursor-in-non-selected-windows nil)
 (setq truncate-string-ellipsis "…")
