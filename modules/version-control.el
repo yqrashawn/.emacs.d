@@ -205,10 +205,10 @@ requiring confirmation."
 (use-package magit-todos
   :straight t
   :after (magit)
-  :custom
-  (magit-todos-show-branch-list nil)
   :config
+  (magit-todos-mode)
   (define-key magit-todos-section-map "j" nil)
+  (define-key magit-todos-item-section-map "j" nil)
   (define-key magit-todos-item-section-map (kbd "M-RET") #'magit-todos-peek-at-item))
 
 (use-package vc-msg
