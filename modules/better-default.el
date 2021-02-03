@@ -656,22 +656,16 @@ If the universal prefix argument is used then kill the buffer too."
   (recentf-keep '(tramp-tramp-file-p file-remote-p file-readable-p))
   (recentf-save-file (concat user-emacs-directory "recentf"))
   (recentf-max-saved-items 2000)
-  (recentf-auto-cleanup 'never)
-  (recentf-auto-save-timer (run-with-idle-timer 300 t
-                                                'recentf-save-list))
+  (recentf-auto-cleanup 300)
   :init
   (add-hook 'delete-terminal-functions 'recentf-save-list)
   (recentf-mode 1)
   :config
+  (run-with-idle-timer 300 t 'recentf-save-list)
   (add-to-list 'recentf-filename-handlers 'abbreviate-file-name)
-  ;; (run-at-time nil (* 5 60) 'recentf-save-list)
-  ;; (add-to-list 'recentf-exclude
-  ;;              (file-truename spacemacs-cache-directory))
   (add-to-list 'recentf-exclude "COMMIT_EDITMSG\\'")
   (add-to-list 'recentf-exclude "/private/var/folders/")
   (add-to-list 'recentf-exclude "/usr/local/Cellar/emacs")
-  ;; (add-to-list 'recentf-exclude (concat user-home-directory "Dropbox/ORG"))
-  ;; (add-to-list 'recentf-exclude (concat user-home-directory "Dropbox/Books"))
   (add-to-list 'recentf-exclude (expand-file-name (concat user-emacs-directory "straight/build")))
   (add-to-list 'recentf-exclude (expand-file-name (concat user-emacs-directory "persp-confs/")))
   (add-to-list 'recentf-exclude "/var/folders/")
