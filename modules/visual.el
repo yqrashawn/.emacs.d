@@ -491,12 +491,3 @@ has been changed to THEME."
 (use-feature prog-mode
   :hook
   (after-init . global-prettify-symbols-mode))
-
-(use-feature pulse
-  :commands (pulse-momentary-highlight-one-line
-             pulse-momentary-highlight-region
-             pulse-momentary-highlight-overlay)
-  :config
-  (setq pulse-command-advice-flag t)
-  (add-hook 'org-babel-pre-tangle-hook #'pulse-line-hook-function)
-  (add-hook 'org-babel-after-execute-hook #'pulse-line-hook-function))

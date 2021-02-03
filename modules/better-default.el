@@ -849,8 +849,6 @@ If the universal prefix argument is used then will the windows too."
 (setq require-final-newline nil)
 (setq mode-require-final-newline nil)
 
-(setq visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
-
 (use-package restart-emacs
   :straight t
   :commands (restart-emacs)
