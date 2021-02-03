@@ -661,7 +661,7 @@ If the universal prefix argument is used then kill the buffer too."
   (add-hook 'delete-terminal-functions 'recentf-save-list)
   (recentf-mode 1)
   :config
-  (run-with-idle-timer 300 t 'recentf-save-list)
+  (run-with-idle-timer 60 t 'recentf-save-list)
   (add-to-list 'recentf-filename-handlers 'abbreviate-file-name)
   (add-to-list 'recentf-exclude "COMMIT_EDITMSG\\'")
   (add-to-list 'recentf-exclude "/private/var/folders/")
