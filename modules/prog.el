@@ -804,7 +804,7 @@ _g_  gfm      _m_ markdown
     :straight t
     :commands (vterm)
     :custom
-    (vterm-kill-buffer-on-exit nil)
+    (vterm-kill-buffer-on-exit t)
     :init
     (add-to-list 'evil-insert-state-modes #'vterm-mode)
     :config/el-patch
@@ -816,11 +816,6 @@ _g_  gfm      _m_ markdown
                            (< (abs (- (vterm--get-prompt-point) p)) 3)))))
     :config
     (setq vterm-keymp-exceptions nil)
-
-    (defun tonic/maybe-kill-vterm (&rest n)
-      (kill-buffer-and-window))
-
-    (add-hook 'vterm-exit-functions #'tonic/maybe-kill-vterm)
     (define-key vterm-mode-map [return] #'vterm-send-return)
     (evil-define-key 'insert vterm-mode-map (kbd "C-e") #'vterm--self-insert)
     (evil-define-key 'insert vterm-mode-map (kbd "C-f") #'vterm--self-insert)
@@ -875,10 +870,10 @@ _g_  gfm      _m_ markdown
       "Create new vterm buffer in the background."
       (print "+multi-vterm-projectile-background")
       (when (projectile-project-p)
-          (when (not (buffer-live-p (get-buffer (multi-vterm-projectile-get-buffer-name))))
-            (let* ((vterm-buffer (multi-vterm-get-buffer 'projectile))
-                   (multi-vterm-buffer-list (nconc multi-vterm-buffer-list (list vterm-buffer))))
-              (multi-vterm-internal)))))
+        (when (not (buffer-live-p (get-buffer (multi-vterm-projectile-get-buffer-name))))
+          (let* ((vterm-buffer (multi-vterm-get-buffer 'projectile))
+                 (multi-vterm-buffer-list (nconc multi-vterm-buffer-list (list vterm-buffer))))
+            (multi-vterm-internal)))))
 
     (add-hook 'find-file-hook '+multi-vterm-projectile-background))
 
