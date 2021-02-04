@@ -118,24 +118,32 @@
      ,@args))
 
 (setq-default comp-async-report-warnings-errors nil)
+
+(setq explicit-shell-file-name "/usr/local/bin/zsh")
+(setq shell-file-name "/usr/local/bin/zsh")
+
+(defun yq/get-shell-env ()
+  (split-string (replace-regexp-in-string "\n$" "" (shell-command-to-string "awk 'BEGIN{for(v in ENVIRON) print v}'")) "\n"))
+
 (use-package exec-path-from-shell
   :straight t
+  :commands (exec-path-from-shell-initialize)
+  :custom
+  (exec-path-from-shell-arguments '("-l" "-i"))
+  (exec-path-from-shell-variables '("GOPATH" "FNM_NODE_DIST_MIRROR" "NODE_REPL_MODE" "HOMEBREW_REPOSITORY" "COLORTERM" "FZF_DEFAULT_COMMAND" "STARSHIP_SHELL" "NODE_REPL_HISTORY_SIZE" "GIT_EDITOR" "LOGNAME" "GREP_COLOR" "EMAIL" "LSCOLORS" "ANDROID_HOME" "FZF_CTRL_T_COMMAND" "FNM_DIR" "HOMEBREW_PREFIX" "MANPAGER" "FNM_LOGLEVEL" "XPC_SERVICE_NAME" "JAVA_HOME" "JABBA_HOME" "USER" "PYTHONIOENCODING" "JAVA_HOME_BEFORE_JABBA" "LANG" "PATH" "ANDROID_SDK_ROOT" "TERM" "TMPDIR" "LC_ALL" "HOMEBREW_CELLAR" "HOME" "SSH_KEY_PATH" "ROAMER_EDITOR" "LESS" "LS_COLORS" "PYENV_ROOT" "NODE_REPL_HISTORY" "SHELL" "USE_EDITOR" "FNM_MULTISHELL_PATH" "GEM_PATH" "LC_CTYPE" "YQ_MACHINE" "XDG_CONFIG_HOME" "RUBY_CONFIGURE_OPTS" "RBENV_SHELL" "GOROOT" "BROWSER" "GEM_HOME" "EDITOR" "SSH_AUTH_SOCK" "PAGER" "GOBIN" "VISUAL"))
   :init
+  (exec-path-from-shell-initialize)
   (defun yq/update-path ()
     (interactive)
     (dolist (dir
              (list
               (expand-file-name "~/local/bin")
-              (expand-file-name "/Applications/Emacs.app/Contents/MacOS/bin")
-              (expand-file-name "~/.fnm/current/bin")))
+              (expand-file-name "/Applications/Emacs.app/Contents/MacOS/bin")))
       (when (and (file-exists-p dir) (not (member dir exec-path)))
         (setenv "PATH" (concat dir ":" (getenv "PATH")))
         (setq exec-path (append (list dir) exec-path)))))
-  :config
   (when (memq window-system '(mac ns x))
-    (exec-path-from-shell-initialize)
-    (exec-path-from-shell-copy-env "JAVA_HOME")
-    (yq/update-path)))
+    (run-with-idle-timer 60 t (defl (exec-path-from-shell-initialize)))))
 
 (use-package el-patch :straight t)
 
