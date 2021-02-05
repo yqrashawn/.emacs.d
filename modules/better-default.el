@@ -672,6 +672,8 @@ If the universal prefix argument is used then kill the buffer too."
   (add-to-list 'recentf-exclude "/var/tmp/")
   (add-to-list 'recentf-exclude (expand-file-name (concat user-emacs-directory "recentf")))
   (add-to-list 'recentf-exclude "/tmp/")
+  (add-to-list 'recentf-exclude "^\.#")
+  (add-to-list 'recentf-exclude "^#.*#$")
   (add-to-list 'recentf-exclude "\\indium-eval-.*"))
 
 ;; saveplace remembers your location in a file when saving files

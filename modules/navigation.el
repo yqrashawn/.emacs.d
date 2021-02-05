@@ -592,10 +592,7 @@ repository, then the corresponding root is used instead."
              dired-jump-other-window
              dired-omit-mode)
   :custom
-  (dired-omit-files "^\\.?#\\|^\\.$\\|^\\.\\.$")
-  :config
-  (setq dired-omit-files
-        (concat dired-omit-files "\\|^\\.DS_Store$\\|^__MACOSX$\\|^\\.localized$")))
+  (dired-omit-files "^\\.?#\\|^\\.$\\|^\\.\\.$|^\.DS_Store$\\|^__MACOSX$\\|^\\.localized$"))
 (use-package dired+
   :straight (:host github :repo "emacsmirror/dired-plus")
   :defer t
@@ -613,17 +610,36 @@ repository, then the corresponding root is used instead."
   :config
   (add-hook 'dired-mode-hook '(lambda () (dired-hide-details-mode 0))))
 (use-package dired-filter
+  ;; :straight (dired-filter :type git :host github :repo "Fuco1/dired-hacks" :files ("dired-filter.el"))
   :straight t
-  :hook (dired-mode . dired-filter-mode)
+  :hook
+  (dired-mode . dired-filter-mode)
+  (dired-mode . dired-filter-group-mode)
   :custom
-  (dired-filter-group-saved-groups
-   '(("default"
-      ("JavaScript" (extension "js" "json"))
-      ("emacs" (extension "el" "eld"))
-      ("binary" (extension "elc" "bin"))
-      ("MarkUp" (extension "md" "org"))
-      ("Archives" (extension "zip" "rar" "gz" "bz2" "tar"))
-      ("Images" (extension "png" "gif" "jpeg" "jpg"))))))
+  (dired-filter-stack nil)
+  (setq dired-filter-group-saved-groups
+        '(("default"
+           ("Git" . ((regexp . "^.git")))
+           ("Directories" (((not (git-ignored)) (not (regexp . "^.git")) (directory))))
+           ("Docker" . ((or (regexp . "^Dockerfile.*") (name . ".dockerignore"))))
+           ("Configs" (((not (git-ignored)) (configs))))
+           ("Emacs" (extension "el" "eld"))
+           ("MarkUp" (extension "md" "org" "txt"))
+           ("Archives" (((not (git-ignored)) (extension "zip" "rar" "gz" "bz2" "tar"))))
+           ("Images" (((not (git-ignored)) (extension "png" "gif" "jpeg" "jpg"))))
+           ("binary" (((not (git-ignored)) (extension "elc" "bin"))))
+           ("Ignored" . ((git-ignored))))))
+  :config
+  (define-key dired-mode-map "N" dired-filter-map)
+  (dired-filter-define git-ignored "git ignore without remove"
+    (:description "git-ignored" :qualifier-description nil)
+    (--any? (f-same? file-name it) qualifier))
+
+  (dired-filter-define configs "config files"
+    (:description "config files")
+    (or (string-match-p "^\..*\\(lint\\|conf\\|ignore\\).*" file-name)
+        (string-match-p "^\..*\\(lock\\|conf\\|toml\\|yaml\\|yml\\|node-version\\)rc$" file-name))))
+
 (use-package dired-git-info
   :straight (:host github :repo "clemera/dired-git-info")
   :commands (dired-git-info-mode)
