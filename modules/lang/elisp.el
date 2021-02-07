@@ -154,6 +154,7 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
   (lispy-safe-delete t)
   (lispy-safe-paste t)
   (lispy-safe-actions-no-pull-delimiters-into-comments t)
+  (lispy-outline "^;;\\(;+\\|[^#]\\|\\*+\\)")
   :init
   (yq/add-toggle lispy :mode lispy-mode)
   :config
@@ -240,7 +241,17 @@ the omniscience database.")
   ;; (evil-define-key 'normal lispy-mode-map "b" 'sp-previous-sexp)
   ;; (evil-define-key 'normal lispy-mode-map "e" 'sp-next-sexp)
   (push '("*lispy-message*" :dedicated t :position bottom :stick t :noselect t :height 0.4) popwin:special-display-config)
-  (define-key evil-normal-state-map (kbd "C-a") 'mwim-beginning-of-code-or-line))
+  (define-key evil-normal-state-map (kbd "C-a") 'mwim-beginning-of-code-or-line)
+  :config/el-patch
+  (defun lispy-outline-level ()
+    "Compute the outline level of the heading at point."
+    (save-excursion
+      (save-match-data
+        (end-of-line)
+        (if (re-search-backward lispy-outline nil t)
+            (max (el-patch-swap (cl-count ?* (match-string 0))
+                                (- (cl-count ?\; (match-string 0)) 2)) 1)
+          0)))))
 
 (use-package parinfer
   :straight (:host github :repo "yqrashawn/parinfer-mode")
