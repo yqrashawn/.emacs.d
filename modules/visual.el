@@ -491,3 +491,7 @@ has been changed to THEME."
 (use-feature prog-mode
   :hook
   (after-init . global-prettify-symbols-mode))
+
+(use-package org-superstar
+  :straight t
+  :hook (org-mode . org-superstar-mode))

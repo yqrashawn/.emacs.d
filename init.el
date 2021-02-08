@@ -18,8 +18,9 @@
 (setq load-path (cl-remove-if (lambda (x) (string-match-p "org$" x)) load-path))
 (setq load-path (cl-remove-if (lambda (x) (string-match-p "org-20" x)) load-path))
 
-(add-to-list 'load-path "~/org-mode/lisp/")
-(add-to-list 'load-path "~/org-mode/contrib/lisp/")
+(add-to-list 'load-path "/usr/local/share/emacs/site-lisp/org") ;; with elc
+;; (add-to-list 'load-path "~/org-mode/lisp/")
+;; (add-to-list 'load-path "~/org-mode/contrib/lisp/")
 
 ;; check package update infos
 (setq straight-vc-git-auto-fast-forward t)

@@ -626,11 +626,6 @@ Inserted by installing org-mode or when a release is made."
     (kbd "gr") 'org-agenda-redo
     (kbd "M-RET") 'org-agenda-show-and-scroll-up))
 
-(use-package org-bullets
-  :straight t
-  :after org
-  :hook (org-mode . org-bullets-mode))
-
 (use-package org-projectile
   :straight t
   :commands (org-projectile-capture-for-current-project)

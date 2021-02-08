@@ -294,8 +294,6 @@
         (("s-Y" . org-download-screenshot)
          ("s-y" . org-download-yank))))
 
-;; (straight-use-package 'org)
-
 (use-package org-starter
   :straight t
   :config
@@ -376,27 +374,7 @@ See `org-capture-templates' for more information."
 
 (use-package org-web-tools
   :straight t
-  :disabled
-  :init
-  (defun mkm-org-capture/link ()
-    "Make a TODO entry with a link in clipboard. Page title is used as task heading."
-    (let* ((url-string (s-trim (x-get-clipboard)))
-           (pdf (string-suffix-p "pdf" url-string)))
-      (unless pdf
-        (let ((page-title (org-web-tools--html-title (org-web-tools--get-url url-string))))
-          (concat "* "
-                  page-title " %^G"
-                  "\n\t:PROPERTIES:\n\t:URL: "
-                  url-string
-                  "\n\t:CREATED: %U"
-                  "\n\t:END:\n\s\s%?")))))
-
-  (with-eval-after-load 'org-capture
-    (add-to-list
-     'org-capture-templates
-     '("l" "Capture a link from clipboard" entry
-       (file+olp org-default-inbox-file "Inbox")
-       #'mkm-org-capture/link))))
+  :disabled)
 
 ;; ox
 (use-package ox-hugo
@@ -430,14 +408,14 @@ See `org-capture-templates' for more information."
   ;; agenda (org-agenda-open-link "[[file:~/.emacs.d/straight/repos/evil-org-mode/README.org::*Agenda][Agenda]]")
   :straight t
   :diminish evil-org-mode
+  :commands (evil-org-set-key-theme)
   :hook
   (org-mode . evil-org-mode)
+  (evil-org-mode . evil-org-set-key-theme)
   :custom
   (evil-org-key-theme '(textobjects insert navigation additional shift todo heading))
   :init
-  (add-hook 'evil-org-mode-hook
-            (lambda ()
-              (evil-org-set-key-theme)))
+  (add-hook 'evil-org-mode-hook #'evil-org-set-key-theme)
   :config
   (require 'evil-org-agenda)
   (evil-org-agenda-set-keys)
@@ -505,9 +483,7 @@ This function is called by `org-babel-execute-src-block'."
   :bind ("s-j" . clocker-toggle-worklog))
 
 (use-package org-roam
-  ;; :straight t
-  :straight (:host github :repo "jethrokuan/org-roam")
-  :after org
+  :straight t
   :hook
   (after-init . org-roam-mode)
   :custom
@@ -583,10 +559,6 @@ used as title."
   :bind
   ("C-c n j" . org-journal-new-entry)
   :custom
-  ;; (org-journal-carryover-items (s-join "|"
-  ;;                                      (-map (lambda (status)
-  ;;                                              (s-concat "TODO=\"" (s-upcase (car status)) "\""))
-  ;;                                            yq-org-todo-active-statuses)))
   (org-journal-date-prefix "* ")
   (org-journal-file-format "%Y-%m-%d.org")
   (org-journal-enable-agenda-integration t)
@@ -686,6 +658,6 @@ Wehn NO-FOCUS is t, it won't focus to the sidebar."
   (org-now-clocker-mode 1)
   (global-set-key (kbd "s-j") '+org-now))
 
-(use-package org-superstar
-  :straight (:host github :repo "integral-dw/org-superstar-mode")
-  :hook (org-mode . org-superstar-mode))
+(use-package toc-org
+  :straight t
+  :hook (org-mode . toc-org-mode))
