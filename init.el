@@ -208,15 +208,18 @@
 
 (global-set-key (kbd "M-0") 'delete-frame)
 
+(defun +setup-gc ()
+  (setq gc-cons-percentage 0.6)
+  (setq gc-cons-threshold (* 8 (expt 10 8))))
+(+setup-gc)
+
 (defun my-minibuffer-setup-hook ()
   (setq gc-cons-threshold most-positive-fixnum))
 (defun my-minibuffer-exit-hook ()
-  (setq gc-cons-threshold (* 8 (expt 10 8))))
+  (+setup-gc))
 (add-hook 'minibuffer-setup-hook #'my-minibuffer-setup-hook)
 (add-hook 'minibuffer-exit-hook #'my-minibuffer-exit-hook)
 
-(setq gc-cons-percentage 0.6)
-(setq gc-cons-threshold (* 8 (expt 10 8)))
 
 (setq jit-lock-contextually 'syntax-driven
       jit-lock-context-time 2.0
@@ -230,11 +233,11 @@
 ;; (setq font-lock-maximum-decoration nil)
 
 (defvar gc-timer nil)
+
 (defun maybe-gc ()
   (let ((original gc-cons-threshold))
-    (setq gc-cons-threshold 800000)
-    (setq gc-cons-threshold original
-          gc-timer (run-with-timer 2 nil #'schedule-maybe-gc))))
+    (+setup-gc)
+    (setq gc-timer (run-with-timer 2 nil #'schedule-maybe-gc))))
 
 (defun schedule-maybe-gc ()
   (setq gc-timer (run-with-idle-timer 2 nil #'maybe-gc)))

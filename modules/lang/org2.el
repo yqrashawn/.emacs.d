@@ -559,6 +559,11 @@ used as title."
   :bind
   ("C-c n j" . org-journal-new-entry)
   :custom
+  (org-journal-carryover-items (s-join "|"
+                                       (-map (lambda (status)
+                                               (s-concat "TODO=\"" (s-upcase (car status)) "\""))
+                                             yq-org-todo-active-statuses)))
+
   (org-journal-date-prefix "* ")
   (org-journal-file-format "%Y-%m-%d.org")
   (org-journal-enable-agenda-integration t)

@@ -32,7 +32,15 @@
   :straight t
   :diminish highlight-parentheses-mode
   :defer t
-  :hook (prog-mode . highlight-parentheses-mode))
+  :hook (prog-mode . highlight-parentheses-mode)
+  :config
+  (defface highlight-parentheses-highlight
+    '((t :strike-through t
+         :weight bold))
+    "Face used for highlighting parentheses.
+Color attributes might be overriden by `highlight-parentheses-colors' and
+`highlight-parentheses-background-colors'."
+    :group 'highlight-parentheses))
 
 (use-package leuven-theme
   :straight t
@@ -110,6 +118,7 @@ For evil states that also need an entry to `spacemacs-evil-cursors' use
 
 (use-package mic-paren
   :straight t
+  :disabled t
   :custom
   (paren-display-message 'only)
   (paren-sexp-mode 'match)
