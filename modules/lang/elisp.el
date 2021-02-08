@@ -519,11 +519,11 @@ the omniscience database.")
 
 (use-package lisp-extra-font-lock
   :straight (:host github :repo "Lindydancer/lisp-extra-font-lock")
-  :hook ((emacs-lisp-mode clojure-mode clojurescript-mode) . lisp-extra-font-lock-mode))
+  :hook ((emacs-lisp-mode) . lisp-extra-font-lock-mode))
 
 (use-package highlight-function-calls
   :straight t
-  :hook ((emacs-lisp-mode clojure-mode clojurescript-mode) . highlight-function-calls-mode))
+  :hook ((emacs-lisp-mode) . highlight-function-calls-mode))
 
 (use-package highlight-stages
   :straight t
@@ -592,6 +592,7 @@ the omniscience database.")
 ;;   (advice-add 'helpful-update :after #'elisp-demos-advice-helpful-update))
 
 (use-package easy-escape
+  ;; make elisp regexp more readable
   :straight t
   :hook (emacs-lisp-mode . easy-escape-minor-mode))
 
