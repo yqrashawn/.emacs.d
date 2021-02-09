@@ -1,7 +1,6 @@
 ;;; visual
 (yq/get-modules "visual-funcs.el")
 ;; (spacemacs/set-leader-keys "tf" 'yq/toggle-default-font)
-(setq-default indicate-buffer-boundaries 'left)
 
 (use-package ivy-rich
   :straight t
