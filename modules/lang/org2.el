@@ -1,6 +1,7 @@
 ;;; org2.el ---  org packages -*- lexical-binding: t; -*-
 
 (with-eval-after-load 'org
+  (setq org-version (org-version))
   (with-eval-after-load 'prettify-utils
     (prettify-utils-add-hook org-mode
                              ("[-]" "❍")
@@ -565,13 +566,14 @@ used as title."
                                              yq-org-todo-active-statuses)))
 
   (org-journal-date-prefix "* ")
-  (org-journal-file-format "%Y-%m-%d.org")
+  (org-journal-file-format "%Y-%m-%d-%a.org")
   (org-journal-enable-agenda-integration t)
-  (org-journal-file-header (lambda (&optional args) (concat "#+TITLE: " (format-time-string org-journal-date-format))))
-  (org-journal-dir "~/Dropbox/ORG/roam/")
   ;; Sunday, 2020-04-05
   (org-journal-date-format "%A, %Y-%m-%d")
+  (org-journal-file-header (lambda (&optional args) (concat "#+TITLE: " (format-time-string org-journal-date-format))))
+  (org-journal-dir "~/Dropbox/ORG/")
   :init
+  ;; (string-match "\/Dropbox\/ORG\/\d{4}-\d{2}-\d{2}-\w{3}\.org$" "/Users/yqrashawn/Dropbox/ORG/2021-02-09-Tue.org")
   (defun org-journal-find-location ()
     ;; Open today's journal, but specify a non-nil prefix argument in order to
     ;; inhibit inserting the heading; org-capture will insert the heading.
