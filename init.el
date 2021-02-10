@@ -19,12 +19,12 @@
 (setq load-path (cl-remove-if (lambda (x) (string-match-p "org-20" x)) load-path))
 
 ;; (add-to-list 'load-path "/usr/local/share/emacs/site-lisp/org") ;; with elc
-(add-to-list 'load-path "~/org-mode/lisp/")
+(add-to-list 'load-path (expand-file-name "~/org-mode/lisp/"))
 ;; (add-to-list 'load-path "~/org-mode/contrib/lisp/")
 
 ;; check package update infos
 (setq straight-vc-git-auto-fast-forward t)
-;; (setq straight-fix-org t)
+(setq straight-fix-org t)
 ;; (package-initialize)
 (setq scroll-bar-background nil)
 (menu-bar-mode -1)
@@ -87,7 +87,15 @@
 ;; Allow navigation between use-package stanzas with iMenu.
 (setq-default use-package-enable-imenu-support t)
 (straight-use-package 'use-package)
+
+(use-package org
+  :straight (:local-repo "~/org-mode/" :no-build t :files "lisp/*")
+  :init
+  (load-file "~/org-mode/lisp/org-version.el")
+  (setq org-version (org-version)))
+
 (straight-use-package 'use-package-ensure-system-package)
+
 (use-package benchmark-init
   :straight t
   :disabled
