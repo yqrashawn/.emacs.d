@@ -90,9 +90,7 @@
 
 (use-package org
   :straight (:local-repo "~/org-mode/" :no-build t :files "lisp/*")
-  :init
-  (load-file "~/org-mode/lisp/org-version.el")
-  (setq org-version (org-version)))
+  :defer t)
 
 (straight-use-package 'use-package-ensure-system-package)
 
@@ -286,3 +284,5 @@
         (setq loads (cdr loads)
               load-elt (and loads (car loads)))))
     load-elt))
+
+(setq org-version "9.4.4")

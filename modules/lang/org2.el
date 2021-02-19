@@ -1,7 +1,6 @@
 ;;; org2.el ---  org packages -*- lexical-binding: t; -*-
 
 (with-eval-after-load 'org
-  (add-hook 'org-mode-hook (lambda () (when (string= org-version "N/A") (setq org-version (org-version)))))
   (with-eval-after-load 'prettify-utils
     (prettify-utils-add-hook org-mode
                              ("[-]" "❍")
