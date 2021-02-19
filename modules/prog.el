@@ -268,17 +268,20 @@ Available PROPS:
 
 (use-package company-statistics
   :straight t
-  :hook ((clojure-mode emacs-lisp-mode ) . company-statistics-mode))
+  :hook ((clojure-mode clojurescript-mode  emacs-lisp-mode) . company-statistics-mode))
 
 (use-package company-flx
   :straight t
-  :hook ((clojure-mode emacs-lisp-mode) . company-flx-mode))
+  :hook ((clojure-mode clojurescript-mode emacs-lisp-mode) . company-flx-mode))
 
 (use-package company-tabnine
   :straight t
   :after company
   :custom
   (company-tabnine-binaries-folder "~/.TabNine/binaries/")
+  (company-tabnine-context-radius 6000)
+  (company-tabnine-context-radius-after 6000)
+  (company-tabnine-log-file-path "~/Downloads/tabnine.log")
   :init
   ;; Use the tab-and-go frontend.
   ;; Allows TAB to select and complete at the same time.
