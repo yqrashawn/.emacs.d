@@ -487,7 +487,7 @@ This function is called by `org-babel-execute-src-block'."
   :hook
   (after-init . org-roam-mode)
   :custom
-  (org-roam-directory "~/Dropbox/ORG/roam/")
+  (org-roam-directory "~/Dropbox/ORG/")
   (org-roam-graph-viewer "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
   (org-roam-completion-system 'ivy)
   ;; https://org-roam.readthedocs.io/en/latest/templating/
@@ -535,7 +535,7 @@ This function is called by `org-babel-execute-src-block'."
   (deft-recursive t)
   (deft-use-filter-string-for-filename t)
   (deft-default-extension "org")
-  (deft-directory "~/Dropbox/ORG/roam/")
+  (deft-directory "~/Dropbox/ORG/")
   :config/el-patch
   (defun deft-parse-title (file contents)
     "Parse the given FILE and CONTENTS and determine the title.
