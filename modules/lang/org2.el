@@ -62,7 +62,7 @@
     ",Co" 'org-clock-out
     ",Cr" 'org-resolve-clocks
     ",dd" 'org-deadline
-    ",ds" 'org-schedule
+    ;; ",ds" 'org-schedule
     ",dt" 'org-time-stamp
     ",dT" 'org-time-stamp-inactive
     ",ee" 'org-export-dispatch
@@ -298,24 +298,14 @@
   :straight t
   :config
   (org-starter-define-directory "~/Dropbox/ORG/"
+    :add-to-path t
+    :agenda t
     :files
-    '(("inbox.org"
-       :key "i"
-       :agenda t
-       :required t
-       :refile (:maxlevel . 1)
-       :capture (("c"
-                  "Inbox Entry"
-                  entry
-                  (file org-default-inbox-file)
-                  "* %? %^G\n:PROPERTIES:\n:CREATED: %U\n:END:\n\n%i")))
-      ("someday.org" :key "S" :agenda t :required t :refile (:maxlevel . 1))
-      ("tasks.org" :key "t" :agenda t :required t :refile (:maxlevel . 1))
-      ("media.org" :key "m" :required t :refile (:maxlevel . 1))
-      ("diary.org" :key "A" :required t :refile (:maxlevel . 1))))
-  (org-starter-def-capture "c" "Inbox" entry (file "inbox.org")
-                           "* TODO %? %^G\n:PROPERTIES:\n:CREATED: %U\n:END:\n\n%i"
-                           :jump-to-captured t)
+    '(("snippets.org" :key "s" :agenda nil :required nil)))
+  (setq org-starter-extra-find-file-map '(("j" org-journal-open-current-journal-file "Today")))
+  ;; (org-starter-def-capture "c" "Inbox" entry (file "inbox.org")
+  ;;                          "* TODO %? %^G\n:PROPERTIES:\n:CREATED: %U\n:END:\n\n%i"
+  ;;                          :jump-to-captured t)
   (spacemacs/set-leader-keys "2" 'org-starter-find-file-by-key))
 
 (with-eval-after-load 'org-capture
@@ -374,7 +364,10 @@ See `org-capture-templates' for more information."
 
 (use-package org-web-tools
   :straight t
-  :disabled)
+  :commands (org-web-tools-insert-link-for-url)
+  :after org
+  :config
+  (evil-define-key 'normal org-mode-map ",iL" #'org-web-tools-insert-link-for-url))
 
 ;; ox
 (use-package ox-hugo
@@ -495,7 +488,7 @@ This function is called by `org-babel-execute-src-block'."
    '(("d" "default" plain #'org-roam--capture-get-point
       "%?"
       :file-name "%<%Y%m%d%H%M%S>-${slug}"
-      :head "#+TITLE: ${title}\n\n- tags :: "
+      :head "#+TITLE: ${title}\n\n#+roam-tags: "
       :unnarrowed t)
      ("z" "zombie" plain #'org-roam--capture-get-point
       "%?"
@@ -508,7 +501,7 @@ This function is called by `org-babel-execute-src-block'."
       :head "#+title: ${title}\n#+draft: true\n#+date: %<%Y-%m-%d>\n#+hugo_base_dir: ~/site/\n#+hugo_section: notes\n")))
   (org-roam-templates
    (list (list "default" (list :file #'org-roam--file-name-title
-                               :content "#+TITLE: ${title}\n\n- tags :: "))))
+                               :content "#+TITLE: ${title}\n\n#+roam-tags: "))))
   :bind (:map org-roam-mode-map
               (("C-c n l" . org-roam)
                ("C-c n c" . org-roam-capture)
@@ -667,3 +660,25 @@ Wehn NO-FOCUS is t, it won't focus to the sidebar."
 (use-package toc-org
   :straight t
   :hook (org-mode . toc-org-mode))
+
+(use-package org-fancy-priorities
+  :straight t
+  :hook
+  (org-mode . org-fancy-priorities-mode)
+  :config
+  (setq org-fancy-priorities-list '("⚡" "⬆" "⬇" "☕")))
+
+(use-package orgbox
+  :straight t
+  :commands (orgbox)
+  :after org
+  :custom
+  (orgbox-start-time-of-day "9:30")
+  (orgbox-start-time-of-weekends "11:00")
+  (orgbox-start-time-of-evening "20:00")
+  :config
+  (evil-define-key 'normal org-mode-map ",ds" #'orgbox-schedule))
+
+(use-package org-sticky-header
+  :straight t
+  :hook (org-mode . org-sticky-header-mode))
