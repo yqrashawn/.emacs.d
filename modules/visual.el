@@ -408,8 +408,7 @@ has been changed to THEME."
 (use-package outline-minor-faces
   :straight t
   :after outline
-  :config (add-hook 'outline-minor-mode-hook
-                    'outline-minor-faces-add-font-lock-keywords))
+  :config (add-hook 'outline-minor-mode-hook 'outline-minor-faces-add-font-lock-keywords))
 
 (use-package emojify
   :straight t

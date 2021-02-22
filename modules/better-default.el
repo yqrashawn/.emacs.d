@@ -1982,7 +1982,7 @@ Version 2017-09-01"
 
 (use-feature outline
   :custom
-  (outline-regexp "\s?\\(#+\\|;+\\|\*+\\)")
+  (outline-regexp "\s?\\(#\\|;\\|\*\\)+")
   :init
   (defun +outline-chomp (str)
     "Chomp leading and trailing whitespace from STR."
@@ -1996,9 +1996,9 @@ Version 2017-09-01"
   :config
   (defun +outline-minor-mode-setup-regexp ()
     (setq-local +outline-regexp-start (+outline-chomp comment-start))
-    (setq-local +outline-regexp-body (concat +outline-regexp-start "\s?" "\\(#\\|;\\|\*\\)+"))
+    (setq-local +outline-regexp-body (concat "\s?" "\\(#\\|;\\|\*\\)+"))
     (make-local-variable 'outline-regexp)
-    (setq outline-regexp (concat +outline-regexp-body (+outline-chomp comment-end))))
+    (setq outline-regexp (concat (if (string= comment-start ";") "" comment-start) +outline-regexp-body (+outline-chomp comment-end))))
   (add-hook 'outline-minor-mode-hook '+outline-minor-mode-setup-regexp))
 
 (setq-default mouse-avoidance-mode 'animate)
