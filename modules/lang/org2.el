@@ -306,7 +306,11 @@
   ;; (org-starter-def-capture "c" "Inbox" entry (file "inbox.org")
   ;;                          "* TODO %? %^G\n:PROPERTIES:\n:CREATED: %U\n:END:\n\n%i"
   ;;                          :jump-to-captured t)
-  (spacemacs/set-leader-keys "2" 'org-starter-find-file-by-key))
+  ;; (spacemacs/set-leader-keys "2" 'org-starter-find-file-by-key)
+  (spacemacs/set-leader-keys "2" nil)
+  (spacemacs/set-leader-keys "2s" (defl (find-file "~/Dropbox/ORG/snippets.org")))
+  (spacemacs/set-leader-keys "2j" #'org-journal-open-current-journal-file)
+  )
 
 (with-eval-after-load 'org-capture
   (setq org-capture-templates '())
