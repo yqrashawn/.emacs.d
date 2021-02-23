@@ -111,6 +111,10 @@
   (lsp-eslint-run "onSave")
   (lsp-enable-on-type-formatting nil)
   (lsp-disabled-clients '(javascript-typescript-langserver))
+  (lsp-clients-typescript-plugins (vector
+                                   (list
+                                    :name "@vsintellicode/typescript-intellicode-plugin"
+                                    :location "~/.vscode/extensions/visualstudioexptteam. vscodeintellicode-1.2.11/")))
   :config
   (add-to-list #'lsp-file-watch-ignored "[/\\\\]conflux-portal[/\\\]builds$")
   (add-to-list #'lsp-file-watch-ignored "[/\\\\]conflux-portal[/\\\]dist$")
