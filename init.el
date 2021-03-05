@@ -89,7 +89,7 @@
 (straight-use-package 'use-package)
 
 (use-package org
-  :straight (:local-repo "~/org-mode/" :no-build t :files "lisp/*")
+  :straight (:local-repo "~/org-mode/" :no-build t)
   :defer t)
 
 (straight-use-package 'use-package-ensure-system-package)
