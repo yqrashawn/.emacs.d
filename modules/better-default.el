@@ -61,7 +61,7 @@ file stored in the cache directory and `nil' to disable auto-saving.")
    echo-keystrokes 1e-6 ;; echo keystrokes quicker
    ns-use-native-fullscreen nil
    delete-by-moving-to-trash t
-   create-lockfiles t                   ;; create .#foo.txt file
+   create-lockfiles nil                   ;; create .#foo.txt file
    disabled-command-function nil
    ad-redefinition-action 'accept
    custom-safe-themes t ;; treat all theme safe
@@ -264,14 +264,16 @@ file stored in the cache directory and `nil' to disable auto-saving.")
 
 (fset 'yes-or-no-p 'y-or-n-p)
 
-
-
 (use-feature files
   :custom
+  (backup-directory-alist `(("." . "~/.emacs.d/.cache/.backups")))
+  (version-control t)
   (backup-by-copying t)
   (backup-by-copying-when-mismatch t)
   (backup-by-copying-when-privileged-mismatch t)
   (backup-by-copying-when-linked t)
+  (kept-new-versions 10)
+  (kept-old-versions 0)
   (delete-old-versions t)
   (make-backup-files t)
   (confirm-kill-processes nil)
