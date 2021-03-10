@@ -254,10 +254,22 @@
 (use-package jest
   :straight t
   :hook ((rjsx-mode typescript-mode js2-mode) . jest-minor-mode)
+  :custom
+  (jest-executable "yarn test")
   :config
-  (push '("^\*jest\*<.*>$" :regexp t   :dedicated t   :position bottom             :noselect t) popwin:special-display-config)
-  (evil-define-key 'normal typescript-mode-map ",jj" #'jest-popup)
-  (evil-define-key 'normal js2-mode-map ",jj" #'jest-popup))
+  (push '("^\*jest\*<.*>$" :regexp t :dedicated t :position bottom :noselect t) popwin:special-display-config)
+  (defun +jest-popup-debug ()
+    (interactive)
+    (setq-local jest-executable "ndb yarn test")
+    (jest-popup))
+  (defun +jest-popup ()
+    (interactive)
+    (setq-local jest-executable "yarn test")
+    (jest-popup))
+  (evil-define-key 'normal typescript-mode-map ",jj" '+jest-popup)
+  (evil-define-key 'normal js2-mode-map ",jj" '+jest-popup)
+  (evil-define-key 'normal typescript-mode-map ",jd" #'+jest-popup-debug)
+  (evil-define-key 'normal js2-mode-map ",jd" #'+jest-popup-debug))
 
 ;; prettify symbols inside comments https://emacs.stackexchange.com/questions/47706/how-to-prettify-symbols-inside-comments
 (defun +js2-prettify-symbols-default-compose-p (start end _match)
