@@ -679,7 +679,7 @@ Wehn NO-FOCUS is t, it won't focus to the sidebar."
   (orgbox-start-time-of-day "9:30")
   (orgbox-start-time-of-weekends "11:00")
   (orgbox-start-time-of-evening "20:00")
-  :config
+  :init
   (with-eval-after-load 'org
     (evil-define-key 'normal org-mode-map ",ds" #'orgbox-schedule)))
 
