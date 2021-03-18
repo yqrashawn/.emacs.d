@@ -253,10 +253,11 @@
 
 (use-package jest
   :straight t
-  :hook ((rjsx-mode typescript-mode js2-mode) . jest-minor-mode)
+  ;; :hook ((rjsx-mode typescript-mode js2-mode) . jest-minor-mode)
+  :commands (jest-popup)
   :custom
   (jest-executable "yarn test")
-  :config
+  :init
   (push '("^\*jest\*<.*>$" :regexp t :dedicated t :position bottom :noselect t) popwin:special-display-config)
   (defun +jest-popup-debug ()
     (interactive)

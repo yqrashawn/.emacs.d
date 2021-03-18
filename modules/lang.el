@@ -95,7 +95,6 @@
   ;; lsp-mode
   (lsp-before-save-edits nil)
   (lsp-headerline-breadcrumb-enable nil)
-  (lsp-eslint-enable nil)
   (lsp-file-watch-threshold 4000)
   (lsp-keep-workspace-alive nil)
   (lsp-enable-semantic-highlighting t)
@@ -106,6 +105,7 @@
   ;; lsp-clients
   (lsp-bash-highlight-parsing-errors t)
   ;; ts-js
+  (lsp-eslint-enable t)
   (lsp-eslint-package-manager "yarn")
   (lsp-eslint-auto-fix-on-save t)
   (lsp-eslint-run "onSave")

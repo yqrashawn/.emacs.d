@@ -32,3 +32,4 @@ eshell
 /org-roam.db
 /eln-cache
 /flycheck_init.el
+/.lsp-eslint-choices

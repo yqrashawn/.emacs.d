@@ -138,13 +138,13 @@ For evil states that also need an entry to `spacemacs-evil-cursors' use
   (defun +set-mic-paren-face-for-light-bg ()
     (set-face-background 'paren-face-match "#eceae2")))
 
-(add-hook 'spacemacs-post-theme-change-hook
-          (lambda ()
-            (cond
-             ((and (memq yq/current-theme '(zenburn modus-vivendi)) (facep 'paren-face-match))
-              (+set-mic-paren-face-for-dark-bg))
-             ((memq yq/current-theme '(modus-operandi))
-              (+set-mic-paren-face-for-light-bg)))))
+;; (add-hook 'spacemacs-post-theme-change-hook
+;;           (lambda ()
+;;             (cond
+;;              ((and (memq yq/current-theme '(zenburn modus-vivendi)) (facep 'paren-face-match))
+;;               (+set-mic-paren-face-for-dark-bg))
+;;              ((memq yq/current-theme '(modus-operandi))
+;;               (+set-mic-paren-face-for-light-bg)))))
 
 (defadvice load-theme (after spacemacs/load-theme-adv activate)
   "Perform post load processing."
