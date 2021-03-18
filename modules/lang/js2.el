@@ -258,7 +258,7 @@
   :custom
   (jest-executable "yarn test")
   :init
-  (push '("^\*jest\*<.*>$" :regexp t :dedicated t :position bottom :noselect t) popwin:special-display-config)
+  (push '("^\*jest.*<.*>$" :regexp t :dedicated t :stick t :position bottom :noselect t :kill t) popwin:special-display-config)
   (defun +jest-popup-debug ()
     (interactive)
     (setq-local jest-executable "ndb yarn test")
