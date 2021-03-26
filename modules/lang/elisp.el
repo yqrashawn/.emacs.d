@@ -611,11 +611,14 @@ the omniscience database.")
 
 (use-package symex
   :straight t
-  :after company
   :disabled
   :bind ("s-'" . symex-mode-interface)
+  :custom
+  (symex-modal-backend 'evil)
   :config
-  (dolist (mode-name symex-lisp-modes)
-    (let ((mode-hook (intern (concat (symbol-name mode-name)
-                                     "-hook"))))
-      (add-hook mode-hook 'symex-mode))))
+  (symex-initialize)
+  ;; (dolist (mode-name symex-lisp-modes)
+  ;;   (let ((mode-hook (intern (concat (symbol-name mode-name)
+  ;;                                    "-hook"))))
+  ;;     (add-hook mode-hook 'symex-mode)))
+  )

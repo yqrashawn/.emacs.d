@@ -86,7 +86,7 @@
     (add-hook 'before-save-hook #'lsp-eslint-fix-all nil 'make-it-local))
   (defun +lsp-organize-imports ()
     (add-hook 'before-save-hook #'lsp-organize-imports nil 'make-it-local))
-  :hook (((json-mode dockerfile-mode shell-script-mode web-mode css-mode typescript-mode js2-mode rjsx-mode ;; clojure-mode clojurescript-mode
+  :hook (((json-mode dockerfile-mode shell-script-mode web-mode css-mode typescript-mode js2-mode rjsx-mode ;; clojure-mode clojurec-mode clojurescript-mode
                      ) . lsp-deferred)
          ;; ((typescript-mode js2-mode js-mode rjsx-mode) . +lsp-organize-imports)
          ;; ((typescript-mode js2-mode js-mode rjsx-mode) . lsp-eslint-fix-before-save)
@@ -105,7 +105,7 @@
   ;; lsp-clients
   (lsp-bash-highlight-parsing-errors t)
   ;; ts-js
-  (lsp-eslint-enable t)
+  (lsp-eslint-enable nil)
   (lsp-eslint-package-manager "yarn")
   (lsp-eslint-auto-fix-on-save t)
   (lsp-eslint-run "onSave")
