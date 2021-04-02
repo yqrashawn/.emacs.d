@@ -159,7 +159,7 @@
 (use-package eslintd-fix
   :straight t
   :defer t
-  ;; :hook (rjsx-mode . eslintd-fix-mode)
+  :hook (rjsx-mode . eslintd-fix-mode)
   :custom (eslintd-fix-executable "eslint_d"))
 
 (use-package indium

@@ -93,6 +93,7 @@
          )
   :custom
   ;; lsp-mode
+  (lsp-diagnostics-provider :flymake)
   (lsp-before-save-edits nil)
   (lsp-headerline-breadcrumb-enable nil)
   (lsp-file-watch-threshold 4000)

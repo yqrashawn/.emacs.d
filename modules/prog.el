@@ -368,6 +368,7 @@ If the error list is visible, hide it.  Otherwise, show it."
   :hook (prog-mode . global-flycheck-mode)
   :custom
   (flycheck-check-syntax-automatically '(save idle-buffer-switch mode-enabled))
+  (flycheck-disable-checker '(javascript-jshint lsp))
   (flycheck-standard-error-navigation nil)
   ;; (flycheck-global-modes '(js2-mode rjsx-mode typescript-mode web-mode css-mode scss-mode json-mode))
   :init
