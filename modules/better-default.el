@@ -747,7 +747,8 @@ If the universal prefix argument is used then kill the buffer too."
   (spacemacs/set-leader-keys "bx" 'popwin:close-popup-window)
   (setq
    popwin:special-display-config
-   '(("*cider-error*"                       :dedicated t   :position bottom :stick t    :noselect t   :height 0.4)
+   '(("*Flymake\sdiagnostics\sfor\s.**$"                       :dedicated t   :position bottom :stick t    :noselect t   :height 0.4)
+     ("*cider-error*"                       :dedicated t   :position bottom :stick t    :noselect t   :height 0.4)
      ("*PLANTUML Preview*"                  :dedicated t   :position bottom :stick t    :noselect t   :height 0.4)
      ("\*rg-scan-async\*.*"      :regexp t  :dedicated t   :position bottom :stick nil  :noselect t   :height 0.1)
      ("*Contents*"                          :dedicated t   :position bottom :stick t    :noselect t   :height 0.4)
