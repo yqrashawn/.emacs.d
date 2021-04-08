@@ -928,3 +928,24 @@ _g_  gfm      _m_ markdown
 (use-package jenkinsfile-mode
   :straight t
   :mode ("\\Jenkinsfile\\'" . jenkinsfile-mode))
+
+(use-package cov
+  :straight t
+  :commands (cov-mode)
+  :defer t
+  :init
+  (defun +maybe-enable-cov-mode ()
+    (interactive)
+    (when (and (buffer-file-name) (projectile-current-project-buffer-p))
+      (let ((clover-file (f-join (projectile-project-root) "coverage" "clover.xml"))
+            (coverall-file (f-join (projectile-project-root) "coverage" "coverage-final.json")))
+        (require 'cov)
+        (make-local-variable 'cov-coverage-file-paths)
+        (setq cov-coverage-file-paths '())
+        (when (file-exists-p coverall-file) (add-to-list 'cov-coverage-file-paths (lambda (a b) (cons coverall-file 'coveralls))))
+        (when (file-exists-p clover-file) (add-to-list 'cov-coverage-file-paths (lambda (a b) (cons clover-file 'clover))))
+        (when (> (length cov-coverage-file-paths) 0)
+          (if cov-mode
+              (cov-update)
+              (cov-mode +1))))))
+  :hook (prog-mode . +maybe-enable-cov-mode))
