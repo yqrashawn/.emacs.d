@@ -1718,11 +1718,13 @@ Info-mode:
             (defun my-find-file-care-about-long-lines ()
               (save-excursion
                 (goto-char (point-min))
-                (when (and (not (eq major-mode 'image-mode))
-                           (search-forward-regexp ".\\{2000\\}" 50000 t)
-                           (y-or-n-p
-                            "Very long lines detected - enable so-long-mode? "))
-                  (so-long-mode))))))
+                (if (string-match-p "\.custom-settings" (buffer-file-name))
+                    (so-long-mode)
+                    (when (and (not (eq major-mode 'image-mode))
+                               (search-forward-regexp ".\\{2000\\}" 50000 t)
+                               (y-or-n-p
+                                "Very long lines detected - enable so-long-mode? "))
+                      (so-long-mode)))))))
 
 (use-package pcre2el
   :straight t
