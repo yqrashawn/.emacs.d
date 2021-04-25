@@ -353,43 +353,30 @@ has been changed to THEME."
   :straight (:host github :repo "hlissner/highlight-escape-sequences")
   :hook (after-init . highlight-escape-sequences-mode))
 
-;; https://www.manueluberti.eu//emacs/2020/03/16/modus-themes/
-(use-package modus-operandi-theme
+(use-package modus-themes
   :straight t
   :defer t
   :custom
-  (modus-operandi-theme-slanted-constructs t)
-  (modus-operandi-theme-bold-constructs t)
-  (modus-operandi-theme-proportional-fonts t)
-  (modus-operandi-theme-variable-pitch-headings t)
-  (modus-operandi-theme-section-headings t)
-  (modus-operandi-theme-scale-headings t)
-  (modus-operandi-theme-visible-fringes t)
-  (modus-operandi-theme-fringes 'subtle)
-  (modus-operandi-theme-distinct-org-blocks t)
-  (modus-operandi-theme-org-blocks 'grayscale)
-  (modus-operandi-theme-mode-line '3d)
-  (modus-operandi-theme-syntax 'alt-syntax)
+  (modus-themes-slanted-constructs t)
+  (modus-themes-bold-constructs t)
+  (modus-themes-variable-pitch-headings t)
+  (modus-themes-variable-pitch-ui t)
+  (modus-themes-fringes 'intense)
+  (modus-themes-lang-checkers 'subtle-foreground)
+  (modus-themes-org-blocks 'grayscale)
+  (modus-themes-mode-line 'borderless)
+  (modus-themes-diffs 'desaturated)
+  (modus-themes-completions 'opinionated)
+  (modus-themes-prompts 'intense-accented)
+  (modus-themes-subtle-line-numbers t)
+  (modus-themes-paren-match 'intense-bold)
+  (modus-themes-syntax 'alt-syntax)
+  (modus-themes-links 'faint-neutral-underline)
+  (modus-themes-region 'accent-no-extend)
   :init
+  (setq yq/dark-theme 'modus-vivendi)
   (setq yq/light-theme 'modus-operandi))
-(use-package modus-vivendi-theme
-  :straight t
-  :defer t
-  :custom
-  (modus-vivendi-theme-slanted-constructs t)
-  (modus-vivendi-theme-bold-constructs t)
-  (modus-vivendi-theme-proportional-fonts t)
-  (modus-vivendi-theme-variable-pitch-headings t)
-  (modus-vivendi-theme-section-headings t)
-  (modus-vivendi-theme-scale-headings t)
-  (modus-vivendi-theme-visible-fringes t)
-  (modus-vivendi-theme-fringes 'subtle)
-  (modus-vivendi-theme-distinct-org-blocks t)
-  (modus-vivendi-theme-org-blocks 'grayscale)
-  (modus-vivendi-theme-mode-line '3d)
-  (modus-vivendi-theme-syntax 'alt-syntax)
-  :init
-  (setq yq/dark-theme 'modus-vivendi))
+
 (load-theme 'modus-vivendi t)
 ;; (load-theme 'modus-operandi t)
 
