@@ -1,14 +1,10 @@
 (setq
  user-mail-address "namy.19@gmail.com"
- ;; user-mail-address "hi@yqrashawn.com"
  smtpmail-starttls-credentials '(("smtp.gmail.com" "587" nil nil))
- ;; smtpmail-starttls-credentials '(("smtp.zoho.com" "587" nil nil))
  smtpmail-auth-credentials (expand-file-name "~/.authinfo.gpg")
  smtpmail-stream-type 'starttls
  smtpmail-default-smtp-server "smtp.gmail.com"
  smtpmail-smtp-server "smtp.gmail.com"
- ;; smtpmail-default-smtp-server "smtp.zoho.com"
- ;; smtpmail-smtp-server "smtp.zoho.com"
  smtpmail-smtp-service 587
  smtpmail-debug-info t
  starttls-extra-arguments nil
@@ -16,7 +12,7 @@
  starttls-extra-arguments nil
  starttls-use-gnutls t)
 
-(defconst mu4e-mu-version "1.2.0"
+(defconst mu4e-mu-version "1.5.12"
   "Required mu binary version; mu4e's version must agree with this.")
 
 (defconst mu4e-builddir "/usr/local/opt/mu"
@@ -162,6 +158,9 @@
 ;;   :config
 ;;   (global-mu4e-conversation-mode))
 
-(use-package evil-mu4e
+(use-package evil-collection
   :straight t
-  :after mu4e)
+  :defer t
+  :commands (evil-collection-init)
+  :init
+  (evil-collection-init 'mu4e))

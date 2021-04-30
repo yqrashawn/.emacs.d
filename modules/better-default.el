@@ -2015,3 +2015,4 @@ Version 2017-09-01"
 (setq-default mouse-avoidance-mode 'animate)
 (setq-default cursor-in-non-selected-windows nil)
 (setq truncate-string-ellipsis "…")
+(global-set-key (kbd "C-x @ @ u") #'revert-buffer)
