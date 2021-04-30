@@ -332,6 +332,7 @@ the omniscience database.")
     (add-hook 'post-command-hook '+lispy-update-cursor-style))
 
   (define-key parinfer-mode-map (kbd "C-.") #'parinfer-toggle-mode)
+  (define-key parinfer-mode-map (kbd "C-x @ C-x .") #'parinfer-toggle-mode)
   (evil-define-key 'insert parinfer-mode-map (kbd "C-k") '+parinfer-hs-toggle-folding)
   (define-key parinfer-mode-map (kbd "C-k") '+parinfer-hs-toggle-folding)
   (define-key parinfer-mode-map (kbd "C-x C-6 q") #'lispy-describe-inline)

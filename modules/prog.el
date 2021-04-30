@@ -327,7 +327,7 @@ Available PROPS:
   :straight t
   :after company
   :defer t
-  :bind ((:map evil-insert-state-map) ("C-;" . company-try-hard)))
+  :bind ((:map evil-insert-state-map) ("C-x @ C-x ;" . company-try-hard)))
 
 (use-package company-prescient
   :straight t

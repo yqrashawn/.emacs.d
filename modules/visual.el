@@ -178,8 +178,7 @@ has been changed to THEME."
   (set-face-attribute 'evil-search-highlight-persist-highlight-face nil
                       :inherit 'lazy-highlight
                       :background nil
-                      :foreground nil)
-  )
+                      :foreground nil))
 (spacemacs//adaptive-evil-highlight-persist-face)
 (add-hook 'spacemacs-post-theme-change-hook 'spacemacs//adaptive-evil-highlight-persist-face)
 
@@ -357,23 +356,20 @@ has been changed to THEME."
 (use-package modus-themes
   :straight t
   :defer t
-  :custom
-  (modus-themes-slanted-constructs t)
-  (modus-themes-bold-constructs t)
-  (modus-themes-variable-pitch-headings t)
-  (modus-themes-variable-pitch-ui t)
-  (modus-themes-fringes 'intense)
-  (modus-themes-lang-checkers 'subtle-foreground)
-  (modus-themes-org-blocks 'grayscale)
-  (modus-themes-mode-line 'borderless)
-  (modus-themes-diffs 'desaturated)
-  (modus-themes-completions 'opinionated)
-  (modus-themes-prompts 'intense-accented)
-  (modus-themes-subtle-line-numbers t)
-  (modus-themes-paren-match 'intense-bold)
-  (modus-themes-syntax 'alt-syntax)
-  (modus-themes-links 'faint-neutral-underline)
-  (modus-themes-region 'accent-no-extend)
+  ;; :custom
+  ;; (modus-themes-slanted-constructs t)
+  ;; (modus-themes-bold-constructs t)
+  ;; (modus-themes-variable-pitch-headings t)
+  ;; (modus-themes-variable-pitch-ui t)
+  ;; (modus-themes-fringes 'intense)
+  ;; (modus-themes-lang-checkers 'subtle-foreground)
+  ;; (modus-themes-org-blocks 'grayscale)
+  ;; (modus-themes-mode-line 'borderless)
+  ;; (modus-themes-diffs 'desaturated)
+  ;; (modus-themes-completions 'opinionated)
+  ;; (modus-themes-prompts 'intense-accented)
+  ;; (modus-themes-subtle-line-numbers t)
+  ;; (modus-themes-paren-match 'intense-bo)
   :init
   (setq yq/dark-theme 'modus-vivendi)
   (setq yq/light-theme 'modus-operandi))

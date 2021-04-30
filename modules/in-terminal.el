@@ -83,3 +83,5 @@
     (global-set-key [remap yq/split-window-right] 'yq/split-window-right-tmux)
     (global-set-key [remap yq/split-window-below] 'yq/split-window-below-tmux)
     (global-set-key [remap spacemacs/toggle-maximize-buffer] 'yq/toggle-maximize-buffer-tmux)))
+
+(global-set-key (kbd "C-x @ @ v") (kbd "C-y"))

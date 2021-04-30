@@ -440,3 +440,12 @@
          :map evil-visual-state-map
          ("gb" . evil-lion-left)
          ("gB" . evil-lion-right)))
+
+(use-package evil-terminal-cursor-changer
+  :straight t
+  :defer t
+  :after evil
+  :init
+  (unless (display-graphic-p)
+    (require 'evil-terminal-cursor-changer)
+    (evil-terminal-cursor-changer-activate)))

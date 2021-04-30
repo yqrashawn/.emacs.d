@@ -512,6 +512,7 @@ If the universal prefix argument is used then kill also the window."
           (yq/delete-window))
       (bury-buffer))))
 
+(global-set-key (kbd "C-x @ @ k") 'yq/kill-this-buffer)
 (global-set-key (kbd "s-k") 'yq/kill-this-buffer)
 (global-set-key (kbd "C-x k") 'yq/kill-this-buffer)
 
