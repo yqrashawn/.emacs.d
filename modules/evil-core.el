@@ -351,18 +351,23 @@
   (define-key evil-inner-text-objects-map "a" 'evil-inner-arg)
   (define-key evil-outer-text-objects-map "a" 'evil-outer-arg))
 
+
+;; used by highlight
+(require 'facemenu)
+
 (use-package evil-search-highlight-persist
   :straight t
+  :after evil
   :diminish global-highlight-parentheses-mode
-  :init (setq evil-search-highlight-persist-all-windows t)
+  :custom
+  (evil-search-highlight-string-min-len 1)
+  (evil-search-highlight-persist-all-windows t)
   :config
   (set-face-attribute 'evil-search-highlight-persist-highlight-face nil
                       :inherit 'lazy-highlight
                       :background nil
                       :foreground nil)
-  (global-evil-search-highlight-persist t)
-  (setq evil-search-highlight-string-min-len 1)
-  evil-search-highlight-persist-all-windows t)
+  (global-evil-search-highlight-persist t))
 
 (use-package evil-textobj-anyblock
   :straight t
