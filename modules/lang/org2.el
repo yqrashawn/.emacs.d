@@ -377,7 +377,6 @@ See `org-capture-templates' for more information."
 (use-package ox-hugo
   :straight t
   :after org
-  :defer t
   :custom
   (org-hugo-use-code-for-kbd t)
   (org-hugo-auto-set-lastmod t))

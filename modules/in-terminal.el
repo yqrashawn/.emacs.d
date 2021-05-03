@@ -85,3 +85,6 @@
     (global-set-key [remap spacemacs/toggle-maximize-buffer] 'yq/toggle-maximize-buffer-tmux)))
 
 (global-set-key (kbd "C-x @ @ v") (kbd "C-y"))
+
+(with-eval-after-load 'org
+  (evil-define-key 'normal org-mode-map (kbd "TAB") #'org-cycle))
