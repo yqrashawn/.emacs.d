@@ -143,7 +143,7 @@ requiring confirmation."
          (magit-stage-1 nil (list file)))))))
 
 
-(use-package evil-magit :straight t :after magit)
+(use-package evil-magit :straight t :after magit :disabled t)
 
 (use-package magit-cz
   :load-path "~/.emacs.d/modules"

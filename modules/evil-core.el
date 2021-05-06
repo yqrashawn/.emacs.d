@@ -449,3 +449,12 @@
   (unless (display-graphic-p)
     (require 'evil-terminal-cursor-changer)
     (evil-terminal-cursor-changer-activate)))
+
+(use-package evil-collection
+  :straight t
+  :defer t
+  :commands (evil-collection-init)
+  :after evil
+  :init
+  (setq evil-want-keybinding nil)
+  (evil-collection-init 'magit))

@@ -157,10 +157,3 @@
 ;;   :after mu4e
 ;;   :config
 ;;   (global-mu4e-conversation-mode))
-
-(use-package evil-collection
-  :straight t
-  :defer t
-  :commands (evil-collection-init)
-  :init
-  (evil-collection-init 'mu4e))
