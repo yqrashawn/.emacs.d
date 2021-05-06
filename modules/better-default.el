@@ -370,7 +370,6 @@ file stored in the cache directory and `nil' to disable auto-saving.")
   (show-paren-when-point-in-periphery t)
   :bind
   ;; ("C-`" . list-processes)
-  ([remap goto-line] . goto-line-with-linum-mode)
   (:map minibuffer-local-map
         ("<escape>" . abort-recursive-edit))
   :hook
@@ -432,14 +431,6 @@ file stored in the cache directory and `nil' to disable auto-saving.")
   ;;          (blink-matching-open))))))
 
 
-  (defun goto-line-with-linum-mode ()
-    (interactive)
-    (let ((linum-not-enabled (eq nil linum-mode)))
-      (linum-mode 1)
-      (unwind-protect
-          (call-interactively #'goto-line)
-        (when linum-not-enabled
-          (linum-mode -1)))))
   (defun pop-to-process-list-buffer ()
     (pop-to-buffer "*Process List*"))
   (advice-add 'list-processes :after #'pop-to-process-list-buffer))
