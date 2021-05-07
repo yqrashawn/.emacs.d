@@ -90,6 +90,14 @@ file stored in the cache directory and `nil' to disable auto-saving.")
   :bind
   ("s-;" . transform-symbol-at-point)
   :config
+  (defun +s-dashed-selected-words (start end)
+    (interactive "r")
+    (when (use-region-p)
+      (let* ((text (buffer-substring start end))
+             (sub (s-dashed-words text)))
+        (delete-active-region)
+        (insert sub))))
+
   (defun transform-symbol-at-point ()
     (interactive)
     (put 'quit 'error-message "")
