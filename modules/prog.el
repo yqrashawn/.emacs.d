@@ -232,7 +232,8 @@ Available PROPS:
 
   :config
   ;; Number the candidates (use M-1, M-2 etc to select completions).
-  (company-tng-configure-default)
+  (company-tng-mode +1)
+  ;; (setq company-frontends '(company-echo-strip-common-frontend))
   (setq company-active-map
         (let ((keymap (make-sparse-keymap)))
           (define-key keymap "\e\e\e" 'company-abort)

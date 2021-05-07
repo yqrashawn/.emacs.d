@@ -188,6 +188,7 @@
   (define-key evil-insert-state-map (kbd "C-p") 'previous-line)
   (define-key evil-insert-state-map (kbd "C-d") 'delete-forward-char)
   (define-key evil-insert-state-map (kbd "C-m") 'newline-and-indent)
+  (define-key evil-motion-state-map (kbd "TAB") nil)
   ;; (define-key evil-insert-state-map (kbd "C-j") 'evil-ret-and-indent)
   ;; (spacemacs/set-leader-keys "TAB" 'spacemacs/alternate-buffer)
   (spacemacs/set-leader-keys "w" nil)
@@ -232,7 +233,20 @@
     (interactive "<R>")
     (deactivate-mark)
     (narrow-to-region beg end))
-  (define-key evil-motion-state-map "gm" #'evil-narrow-operator))
+  (define-key evil-motion-state-map "gm" #'evil-narrow-operator)
+  (unless (display-graphic-p)
+    (defvar +keybindings-to-remap
+      (string-to-list
+       "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-={}{};'\\:\"|,./<>?~+[]"))
+    (dolist (key +keybindings-to-remap)
+      (let ((s (char-to-string key)))
+        (define-key input-decode-map (vector ? ?@ ?@ key) (kbd (format "s-%s" s)))))
+
+    (dolist (key +keybindings-to-remap)
+      (let ((s (char-to-string key)))
+        (define-key input-decode-map (vector ? ?@ ? key) (kbd (format "C-%s" s)))))
+
+    (define-key input-decode-map (vector ? ?@ ? ?i) [\C-i])))
 
 (use-package evil-nerd-commenter
   :straight t

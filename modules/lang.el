@@ -116,7 +116,10 @@
                                    (list
                                     :name "@vsintellicode/typescript-intellicode-plugin"
                                     :location "~/.vscode/extensions/visualstudioexptteam. vscodeintellicode-1.2.11/")))
+  (lsp-signature-auto-activate t)
+  (lsp-signature-doc-lines 1)
   :config
+  (advice-add #'lsp-lv-message :around (defl (func message) (when (not (string= message "any")) (apply func message))))
   (add-to-list #'lsp-file-watch-ignored "[/\\\\]conflux-portal[/\\\]builds$")
   (add-to-list #'lsp-file-watch-ignored "[/\\\\]conflux-portal[/\\\]dist$")
   (add-to-list #'lsp-file-watch-ignored "[/\\\\]coverage$")

@@ -87,15 +87,3 @@
 
 (with-eval-after-load 'org
   (evil-define-key 'normal org-mode-map (kbd "TAB") #'org-cycle))
-
-(defvar +keybindings-to-remap
-  (string-to-list
-   "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-={}{};'\\:\"|,./<>?~+[]"))
-
-(dolist (key +keybindings-to-remap)
-  (let ((s (char-to-string key)))
-    (define-key input-decode-map (vector ? ?@ ?@ key) (kbd (format "s-%s" s)))))
-
-(dolist (key +keybindings-to-remap)
-  (let ((s (char-to-string key)))
-    (define-key input-decode-map (vector ? ?@ ? key) (kbd (format "C-%s" s)))))
