@@ -934,6 +934,7 @@ _g_  gfm      _m_ markdown
 (use-package cov
   :straight t
   :commands (cov-mode)
+  :disabled t
   :defer t
   :init
   (defun +maybe-enable-cov-mode ()
