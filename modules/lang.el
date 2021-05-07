@@ -119,7 +119,9 @@
   (lsp-signature-auto-activate t)
   (lsp-signature-doc-lines 1)
   :config
-  (advice-add #'lsp-lv-message :around (defl (func message) (when (not (string= message "any")) (apply func message))))
+  ;; (defun +trucate-lsp-lv-message (func  &rest args)
+  ;;   (when (and (car args) (not (string= (car args) "any"))) (apply func args)))
+  ;; (advice-add #'lsp-lv-message :around '+trucate-lsp-lv-message)
   (add-to-list #'lsp-file-watch-ignored "[/\\\\]conflux-portal[/\\\]builds$")
   (add-to-list #'lsp-file-watch-ignored "[/\\\\]conflux-portal[/\\\]dist$")
   (add-to-list #'lsp-file-watch-ignored "[/\\\\]coverage$")
