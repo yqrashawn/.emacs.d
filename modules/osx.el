@@ -24,7 +24,8 @@
 
 (use-package pbcopy
   :straight t
-  :if (and (spacemacs/system-is-mac) (not (display-graphic-p)))
+  :disabled t
+  :if (and (spacemacs/system-is-mac) (in-terminal-p))
   :init (turn-on-pbcopy))
 
 (use-package edit-server

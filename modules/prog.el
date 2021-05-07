@@ -576,6 +576,7 @@ is not visible. Otherwise delegates to regular Emacs next-error."
 (use-package eldoc
   :diminish eldoc-mode
   :commands (eldoc-mode)
+  :custom (eldoc-echo-area-use-multiline-p 3)
   :hook ((cider-clojure-interaction-mode cider-repl-mode eval-expression-minibuffer-setup ielm-mode prog-mode) . eldoc-mode))
 
 (use-package git-link
@@ -653,7 +654,7 @@ _g_  gfm      _m_ markdown
   ;; Use ivy-xref to display `xref.el' results.
   (setq xref-show-xrefs-function #'ivy-xref-show-xrefs))
 
-(when (display-graphic-p)
+(when (nin-terminal-p)
   (use-package flycheck-posframe
     :disabled t
     :straight t
@@ -804,7 +805,7 @@ _g_  gfm      _m_ markdown
   (direnv-show-paths-in-summary t)
   (direnv-use-faces-in-summary t))
 
-(when (display-graphic-p)
+(when (nin-terminal-p)
   (use-package vterm
     :straight t
     :commands (vterm)

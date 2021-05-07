@@ -13,6 +13,7 @@
                    (*linux* nil)
                    (t nil)))
 
+(setq max-mini-window-height 0.15)
 (require 'mode-local)
 (customize-set-variable 'inhibit-startup-screen t)
 (customize-set-variable 'inhibit-startup-message t)

@@ -78,6 +78,12 @@
       (eval-print-last-sexp)))
   (load bootstrap-file nil 'nomessage))
 
+(defun in-terminal-p ()
+ (or (not (display-graphic-p)) (daemonp)))
+
+(defun nin-terminal-p ()
+  (and (display-graphic-p) (not (daemonp))))
+
 
 ;; (straight-use-package 'auto-compile)
 ;; (auto-compile-on-save-mode 1)

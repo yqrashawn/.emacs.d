@@ -197,7 +197,7 @@ has been changed to THEME."
   :custom
   (doom-modeline-height 15)
   (doom-modeline-buffer-file-name-style 'auto)
-  (doom-modeline-icon (display-graphic-p))
+  (doom-modeline-icon (nin-terminal-p))
   (doom-modeline-mu4e t)
   (doom-modeline-major-mode-icon t)
   (doom-modeline-major-mode-color-icon t)

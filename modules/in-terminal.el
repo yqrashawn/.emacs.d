@@ -44,7 +44,7 @@
   :defer t
   :commands (emamux:tmux-run-command emamux:check-tmux-running)
   :init
-  (when (not (display-graphic-p))
+  (when (in-terminal-p)
     (defun yq/tmux-command (&rest args)
       (message "yq/tmux-command")
       (emamux:check-tmux-running)

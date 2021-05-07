@@ -234,19 +234,15 @@
     (deactivate-mark)
     (narrow-to-region beg end))
   (define-key evil-motion-state-map "gm" #'evil-narrow-operator)
-  (unless (display-graphic-p)
-    (defvar +keybindings-to-remap
-      (string-to-list
-       "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-={}{};'\\:\"|,./<>?~+[]"))
-    (dolist (key +keybindings-to-remap)
-      (let ((s (char-to-string key)))
-        (define-key input-decode-map (vector ? ?@ ?@ key) (kbd (format "s-%s" s)))))
+  (defvar +keybindings-to-remap
+    (string-to-list
+     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-={}{};'\\:\"|,./<>?~+[]"))
+  (dolist (key +keybindings-to-remap)
+    (let ((s (char-to-string key)))
+      (define-key input-decode-map (vector ? ?@ ?@ key) (kbd (format "s-%s" s)))
+      (define-key input-decode-map (vector ? ?@ ? key) (kbd (format "C-%s" s)))))
 
-    (dolist (key +keybindings-to-remap)
-      (let ((s (char-to-string key)))
-        (define-key input-decode-map (vector ? ?@ ? key) (kbd (format "C-%s" s)))))
-
-    (define-key input-decode-map (vector ? ?@ ? ?i) [\C-i])))
+  (define-key input-decode-map (vector ? ?@ ? ?i) [\C-i]))
 
 (use-package evil-nerd-commenter
   :straight t
@@ -460,7 +456,7 @@
   :defer t
   :after evil
   :init
-  (unless (display-graphic-p)
+  (when (in-terminal-p)
     (require 'evil-terminal-cursor-changer)
     (evil-terminal-cursor-changer-activate)))
 
