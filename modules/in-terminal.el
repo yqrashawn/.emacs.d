@@ -103,3 +103,6 @@
     (define-key input-decode-map (vector ? ?@ ? ?i) [C-i]))
 
 (add-hook 'tty-setup-hook #'setup-input-decode-map)
+
+(global-set-key (kbd "<mouse-4>") (kbd "<wheel-up>"))
+(global-set-key (kbd "<mouse-5>") (kbd "<wheel-down>"))
