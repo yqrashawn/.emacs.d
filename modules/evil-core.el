@@ -233,16 +233,7 @@
     (interactive "<R>")
     (deactivate-mark)
     (narrow-to-region beg end))
-  (define-key evil-motion-state-map "gm" #'evil-narrow-operator)
-  (defvar +keybindings-to-remap
-    (string-to-list
-     "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-={}{};'\\:\"|,./<>?~+[]"))
-  (dolist (key +keybindings-to-remap)
-    (let ((s (char-to-string key)))
-      (define-key input-decode-map (vector ? ?@ ?@ key) (kbd (format "s-%s" s)))
-      (define-key input-decode-map (vector ? ?@ ? key) (kbd (format "C-%s" s)))))
-
-  (define-key input-decode-map (vector ? ?@ ? ?i) [\C-i]))
+  (define-key evil-motion-state-map "gm" #'evil-narrow-operator))
 
 (use-package evil-nerd-commenter
   :straight t

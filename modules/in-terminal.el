@@ -87,3 +87,19 @@
 
 (with-eval-after-load 'org
   (evil-define-key 'normal org-mode-map (kbd "TAB") #'org-cycle))
+
+
+;; input-decode-map is reset for each terminal instance
+;; https://www.reddit.com/r/emacs/comments/4wnfnb/inputdecodemap_doesnt_work_for_terminal/
+(defun setup-input-decode-map ()
+    (defvar +keybindings-to-remap
+      (string-to-list
+       "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-={}{};'\\:\"|,./<>?~+[]"))
+    (dolist (key +keybindings-to-remap)
+      (let ((s (char-to-string key)))
+        (define-key input-decode-map (vector ? ?@ ?@ key) (kbd (format "s-%s" s)))
+        (define-key input-decode-map (vector ? ?@ ? key) (kbd (format "C-%s" s)))))
+
+    (define-key input-decode-map (vector ? ?@ ? ?i) [C-i]))
+
+(add-hook 'tty-setup-hook #'setup-input-decode-map)
