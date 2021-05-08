@@ -1195,7 +1195,9 @@ first."))
          (string-match-p "^ " name))))
   :bind
   (("C-M-S-s-j" . iflipb-next-buffer)
-   ("C-M-S-s-k" . iflipb-previous-buffer)))
+   ("C-x 9 j" . iflipb-next-buffer)
+   ("C-M-S-s-k" . iflipb-previous-buffer)
+   ("C-x 9 k" . iflipb-previous-buffer)))
 
 (use-package double-saber
   :straight t
