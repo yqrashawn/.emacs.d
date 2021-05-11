@@ -301,7 +301,8 @@ which is suitable for most programming languages such as C or Lisp."
   (push '("Promise" . ?Ṗ) prettify-symbols-alist)
   (push '("if" . ?␦) prettify-symbols-alist)
   (push '("let" . ?ḷ) prettify-symbols-alist)
-  (push '("setTimeout" . ?⌚) prettify-symbols-alist))
+  ;; (push '("setTimeout" . ?⌚) prettify-symbols-alist)
+  )
 
 (dolist (hook '(js-mode-hook js2-mode-hook rjsx-mode-hook typescript-mode-hook))
   (add-hook
