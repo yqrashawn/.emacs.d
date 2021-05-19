@@ -98,7 +98,7 @@
   (lsp-headerline-breadcrumb-enable nil)
   (lsp-file-watch-threshold 4000)
   (lsp-keep-workspace-alive nil)
-  (lsp-enable-semantic-highlighting t)
+  (lsp-enable-semantic-highlighting nil)
   (lsp-restart 'auto-restart)
   (lsp-imenu-sort-methods '(position))
   (lsp-symbol-highlighting-skip-current nil)
@@ -219,4 +219,5 @@
 
 (use-package bazel-mode
   :straight t
+  :disabled
   :commands (bazelrc-mode bazel-mode bazel-build-mode))
