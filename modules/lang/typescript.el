@@ -15,7 +15,8 @@ and 'typescript-formatter .")
 
 (use-package typescript-mode
   :straight t
-  :mode (("\\.ts\\'" . typescript-mode) ("\\.tsx\\'" . typescript-mode))
+  :mode (("\\.ts\\'" . typescript-mode) ;; ("\\.tsx\\'" . typescript-mode)
+         )
   :init
   (setq typescript-indent-level 2)
   (add-hook 'typescript-mode-hook 'enable-rjsx-feature-in-ts)

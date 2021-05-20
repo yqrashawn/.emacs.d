@@ -82,7 +82,12 @@
 (use-package rjsx-mode
   :straight t
   :defer t
-  :mode (("\\.js\\'" . rjsx-mode) ("\\.jsx\\'" . rjsx-mode) ("components\\/.*\\.js\\'" . rjsx-mode))
+  :mode (("\\.cjs\\'" . rjsx-mode)
+         ("\\.mjs\\'" . rjsx-mode)
+         ("\\.js\\'" . rjsx-mode)
+         ("\\.jsx\\'" . rjsx-mode)
+         ("\\.tsx\\'" . rjsx-mode)
+         ("components\\/.*\\.js\\'" . rjsx-mode))
   :commands (rjsx-delete-creates-full-tag rjsx-electric-gt rjsx-electric-lt rjsx-rename-tag-at-point)
   :config
   (defadvice js-jsx-indent-line (after js-jsx-indent-line-after-hack activate)
