@@ -27,7 +27,7 @@
 (yq/get-modules "lang/restclient.el")
 (yq/get-modules "lang/sql.el")
 (yq/get-modules "lang/plantuml.el")
-;; (yq/get-modules "lang/solidity.el")
+(yq/get-modules "lang/solidity.el")
 
 (use-package adoc-mode
   :straight t

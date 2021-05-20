@@ -2,11 +2,10 @@
   :straight t
   :mode "\\.sol\\'"
   :custom
-  (solidity-comment-style 'slash))
+  (solidity-comment-style 'star))
 
 (use-feature solidity-flycheck
   :load-path "straight/build/solidity-mode"
-  :disabled
   :custom
   (solidity-flycheck-solc-checker-active t)
   :defer t
@@ -15,7 +14,6 @@
 
 (use-feature company-solidity
   :load-path "straight/build/solidity-mode"
-  :disabled
   :defer t
   :init
   (spacemacs|add-company-backends
