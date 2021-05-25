@@ -96,7 +96,8 @@
 (straight-use-package 'use-package)
 
 (use-package org
-  :straight (:local-repo "~/org-mode/" :no-build t)
+  :straight (:local-repo "~/org-mode/" ;:no-build t
+)
   :defer t)
 
 (straight-use-package 'use-package-ensure-system-package)
@@ -177,7 +178,7 @@
 (yq/get-modules "better-default.el")
 (yq/get-modules "navigation.el")
 (yq/get-modules "edit.el")
-(yq/get-modules "lang/org2.el")
+;(yq/get-modules "lang/org2.el")
 (yq/get-modules "version-control.el")
 (yq/get-modules "prog.el")
 (yq/get-modules "dev.el")
