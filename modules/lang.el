@@ -116,6 +116,7 @@
                                    (list
                                     :name "@vsintellicode/typescript-intellicode-plugin"
                                     :location "~/.vscode/extensions/visualstudioexptteam. vscodeintellicode-1.2.11/")))
+  (lsp-eldoc-enable-hover nil)
   (lsp-signature-auto-activate t)
   (lsp-signature-doc-lines 1)
   :config

@@ -101,7 +101,7 @@
 
 (use-package prettier
   :straight t
-  :hook (after-init . global-prettier-mode)
+  ;; :hook (after-init . global-prettier-mode)
   :custom
   (prettier-editorconfig-flag t)
   :init

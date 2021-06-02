@@ -193,7 +193,7 @@ Available PROPS:
   (company-show-numbers-function 'yq//company-format-numbers)
   ;; (company-transformers '(spacemacs//company-transformer-cancel company-sort-by-occurrence)) ; lag
   (company-transformers '(spacemacs//company-transformer-cancel))
-  (company-frontends '(company-pseudo-tooltip-frontend company-echo-metadata-frontend))
+  (company-frontends '(company-echo-frontend))
   :init
   (with-eval-after-load 'fci-mode
     (defvar-local company-fci-mode-on-p nil)
@@ -232,7 +232,7 @@ Available PROPS:
 
   :config
   ;; Number the candidates (use M-1, M-2 etc to select completions).
-  (company-tng-mode +1)
+  ;; (company-tng-mode +1)
   ;; (setq company-frontends '(company-echo-strip-common-frontend))
   (setq company-active-map
         (let ((keymap (make-sparse-keymap)))
@@ -576,7 +576,7 @@ is not visible. Otherwise delegates to regular Emacs next-error."
 (use-package eldoc
   :diminish eldoc-mode
   :commands (eldoc-mode)
-  :custom (eldoc-echo-area-use-multiline-p 3)
+  :custom (eldoc-echo-area-use-multiline-p nil)
   :hook ((cider-clojure-interaction-mode cider-repl-mode eval-expression-minibuffer-setup ielm-mode prog-mode) . eldoc-mode))
 
 (use-package git-link
