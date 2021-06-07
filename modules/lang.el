@@ -142,7 +142,8 @@
   ;; temp fix company-lsp
   (defun yq/lsp-adjust-company-backends ()
     (setq-local company-backends (cons 'company-tabnine (cons 'company-capf (remove 'company-capf (remove 'company-tabnine company-backends)))))
-    (company-fuzzy-mode 0)
+    (when (boundp 'company-fuzzy-mode)
+      (company-fuzzy-mode 0))
     ;; (setq-local company-backends (cons 'company-lsp (remove 'company-capf (remove 'company-lsp company-backends))))
     )
   (add-hook 'lsp-after-open-hook 'yq/lsp-adjust-company-backends)

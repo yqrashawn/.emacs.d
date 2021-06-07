@@ -289,17 +289,20 @@ Available PROPS:
 
 (use-package company-statistics
   :straight t
-  :disabled
+  :disabled t
   :hook ((clojure-mode clojurescript-mode  emacs-lisp-mode) . company-statistics-mode))
 
 (use-package flx :straight t :defer t)
 
 (use-package company-fuzzy
   :straight t
+  :disabled t
   :after (company flx)
   :custom
   (company-fuzzy-sorting-backend 'flx)
+  :hook ((clojure-mode clojurescript-mode emacs-lisp-mode) . company-flx-mode)
   :config
+  (add-to-list 'company-fuzzy-history-backends 'company-tabnine)
   (global-company-fuzzy-mode 1)
   (add-to-list 'company-fuzzy-trigger-symbols ":")
   :config/el-patch
@@ -333,8 +336,8 @@ Available PROPS:
 
 (use-package company-flx
   :straight t
-  :disabled t
-  :hook ((clojure-mode clojurescript-mode emacs-lisp-mode) . company-flx-mode))
+  :hook ((;; clojure-mode clojurescript-mode
+          emacs-lisp-mode) . company-flx-mode))
 
 (use-package company-tabnine
   :straight t
@@ -1013,3 +1016,16 @@ _g_  gfm      _m_ markdown
               (cov-update)
               (cov-mode +1))))))
   :hook (prog-mode . +maybe-enable-cov-mode))
+
+(use-package tree-sitter-langs :straight t)
+
+(use-package tree-sitter
+  :straight t
+  :hook ((prog-mode text-mode) . (lambda ()
+                                   ;; Activate tree-sitter's improved syntax highlighting only if we are
+                                   ;; using a major-mode that has a compatible tree-sitter syntax parser
+                                   (if (and (boundp 'tree-sitter-major-mode-language-alist)
+                                            (assq major-mode tree-sitter-major-mode-language-alist))
+                                       (progn
+                                         (tree-sitter-mode)
+                                         (tree-sitter-hl-mode))))))
