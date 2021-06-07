@@ -7,6 +7,11 @@
 
 (yq/get-modules "counsel-funcs.el")
 
+(use-package orderless
+  :straight t
+  :init
+  (setq completion-styles '(orderless partial-completion)))
+
 (use-package ivy
   :straight (:host github :repo "abo-abo/swiper" :branch "master"
                    :files
@@ -20,6 +25,7 @@
   (ivy-height 16)
   (ivy-use-virtual-buffers t)
   :init
+  (setq-default ivy-re-builders-alist '((t . orderless-ivy-re-builder)))
   (define-key yq-s-map "b" 'ivy-switch-buffer)
   ;; http://pragmaticemacs.com/emacs/open-a-recent-directory-in-dired-revisited/
   (defun bjm/ivy-dired-recent-dirs ()
@@ -1304,3 +1310,50 @@ first."))
   :config
   (with-eval-after-load 'outline-minor-faces
     (add-hook 'prot-outline-minor-mode-enter-hook #'outline-minor-faces-add-font-lock-keywords)))
+
+
+
+(use-package 'selectrum
+  :straight t
+  :disabled
+  :custom
+  (selectrum-refine-candidates-function orderless-filter)
+  (selectrum-highlight-candidates-function orderless-highlight-matches)
+  :config
+  (let ((map selectrum-minibuffer-map))
+    (define-key map [remap keyboard-quit] #'abort-recursive-edit)
+    ;; This is bound in `minibuffer-local-map' by loading `delsel', so
+    ;; we have to account for it too.
+    (define-key map [remap minibuffer-keyboard-quit]
+      #'abort-recursive-edit)
+    ;; Override both the arrow keys and C-n/C-p.
+    ;; (define-key map [remap previous-line] #'selectrum-previous-candidate)
+    (define-key map "\C-k" #'selectrum-previous-candidate)
+    ;; (define-key map [remap next-line] #'selectrum-next-candidate)
+    (define-key map "\C-j" #'selectrum-next-candidate)
+    (define-key map [remap previous-line-or-history-element] #'selectrum-previous-candidate)
+    (define-key map "\C-p" #'selectrum-previous-candidate)
+    (define-key map [remap next-line-or-history-element] #'selectrum-next-candidate)
+    (define-key map "\C-n" #'selectrum-next-candidate)
+    (define-key map [remap exit-minibuffer] #'selectrum-select-current-candidate)
+    (define-key map "\C-l" #'selectrum-select-current-candidate)
+    (define-key map [remap scroll-down-command] #'selectrum-previous-page)
+    (define-key map [remap scroll-up-command] #'selectrum-next-page)
+    ;; Use `minibuffer-beginning-of-buffer' for Emacs >=27 and
+    ;; `beginning-of-buffer' for Emacs <=26.
+    (define-key map [remap minibuffer-beginning-of-buffer] #'selectrum-goto-beginning)
+    (define-key map [remap beginning-of-buffer] #'selectrum-goto-beginning)
+    (define-key map [remap end-of-buffer] #'selectrum-goto-end)
+    (define-key map [remap kill-ring-save] #'selectrum-kill-ring-save)
+    (define-key map [remap previous-matching-history-element] #'selectrum-select-from-history)
+    (define-key map [remap backward-kill-sexp] #'selectrum-backward-kill-sexp)
+    (define-key map (kbd "C-M-DEL") #'selectrum-backward-kill-sexp)
+    (define-key map (kbd "C-w") #'selectrum-backward-kill-sexp)
+    (define-key map (kbd "C-M-<backspace>") #'selectrum-backward-kill-sexp)
+    (define-key map (kbd "C-M-j") #'selectrum-submit-exact-input)
+    (define-key map (kbd "TAB") #'selectrum-insert-current-candidate)
+    (define-key map (kbd "M-q") 'selectrum-cycle-display-style)
+    (define-key map (kbd "M-i") 'selectrum-quick-insert)
+    (define-key map (kbd "M-m") 'selectrum-quick-select)
+    ;; Return the map.
+    map))

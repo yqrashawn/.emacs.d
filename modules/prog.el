@@ -158,30 +158,34 @@ Available PROPS:
         (when hooks
           (push `(add-hook ',mode-hook-name 'company-mode t) result))))
     ;; return the expanded macro in correct order
+    (when (boundp 'company-fuzzy-mode) (company-fuzzy-mode 1))
     (reverse result)))
 
 (setq +company-default-idle-delay 0.2)
 (defvar yq//company-numbers '(59 ?a ?s ?d ?f ?g ?h ?j ?k ?l))
 (defun yq//company-format-numbers (numbered)
   (format " %s" (char-to-string (nth (mod numbered 10) yq//company-numbers))))
-(defun spacemacs//company-transformer-cancel (candidates)
-  "Cancel completion if prefix is in the list `company-mode-completion-cancel-keywords'"
-  (unless (member company-prefix company-mode-completion-cancel-keywords)
-    candidates))
 
 (use-package company
   :straight t
+  :commands (company-complete-common company-complete-common-or-cycle company-manual-begin company-grab-line)
   :diminish company-mode
   :hook (after-init . global-company-mode)
   :custom
+  (company-frontends '(company-echo-frontend))
   (company-idle-delay +company-default-idle-delay)
   (company-selection-wrap-around t)
   (company-show-numbers t)
-  (company-minimum-prefix-length 1)
-  (company-require-match nil)
-  (company-dabbrev-ignore-case t)
+  (company-minimum-prefix-length 2)
+  (company-require-match 'never)
+  (company-global-modes '(not erc-mode
+                              message-mode
+                              help-mode
+                              gud-mode
+                              vterm-mode))
   (company-tooltip-align-annotations t)
   (company-tooltip-flip-when-above nil)
+  (company-dabbrev-ignore-case nil)
   (company-dabbrev-downcase nil)
   (company-dabbrev-minimum-length 2)
   (company-dabbrev-time-limit 1)
@@ -191,10 +195,13 @@ Available PROPS:
   (company-dabbrev-code-time-limit 1)
   (company-search-regexp-function 'company-search-flex-regexp)
   (company-show-numbers-function 'yq//company-format-numbers)
-  ;; (company-transformers '(spacemacs//company-transformer-cancel company-sort-by-occurrence)) ; lag
-  (company-transformers '(spacemacs//company-transformer-cancel))
-  (company-frontends '(company-echo-frontend))
   :init
+  (with-eval-after-load 'company-files
+    (add-to-list 'company-files--regexps "file:\\(\\(?:\\.\\{1,2\\}/\\|~/\\|/\\)[^\]\n]*\\)"))
+  (with-eval-after-load 'eldoc
+    ;; allow eldoc to trigger after completions
+    (eldoc-add-command 'company-complete-selection 'company-complete-common 'company-capf 'company-abort))
+
   (with-eval-after-load 'fci-mode
     (defvar-local company-fci-mode-on-p nil)
 
@@ -209,34 +216,13 @@ Available PROPS:
     (add-hook 'company-completion-started-hook 'company-turn-off-fci)
     (add-hook 'company-completion-finished-hook 'company-maybe-turn-on-fci)
     (add-hook 'company-completion-cancelled-hook 'company-maybe-turn-on-fci))
-
-  (defun +bind-company-active-map-key (_)
-    (interactive)
-    (evil-local-set-key 'insert (kbd "C-j") #'company-select-next)
-    (evil-local-set-key 'insert (kbd "C-k") #'company-select-previous)
-    (evil-local-set-key 'insert (kbd "C-r") #'company-show-doc-buffer)
-    (evil-local-set-key 'insert (kbd "RET") #'company-complete-selection)
-    (evil-local-set-key 'insert (kbd "C-l") #'company-complete-selection))
-
-  (defun +unbind-company-active-map-key (_)
-    (interactive)
-    (evil-local-set-key 'insert (kbd "C-j") nil)
-    (evil-local-set-key 'insert (kbd "C-k") nil)
-    (evil-local-set-key 'insert (kbd "C-r") nil)
-    (evil-local-set-key 'insert (kbd "RET") nil)
-    (evil-local-set-key 'insert (kbd "C-l") nil))
-
-  (add-hook 'company-completion-started-hook '+bind-company-active-map-key)
-  (add-hook 'company-completion-finished-hook '+unbind-company-active-map-key)
-  (add-hook 'company-completion-cancelled-hook '+unbind-company-active-map-key)
-
   :config
   ;; Number the candidates (use M-1, M-2 etc to select completions).
-  ;; (company-tng-mode +1)
-  ;; (setq company-frontends '(company-echo-strip-common-frontend))
-  (setq company-active-map
-        (let ((keymap (make-sparse-keymap)))
+  (company-tng-mode +1)
+
+  (let ((keymap company-active-map))
           (define-key keymap "\e\e\e" 'company-abort)
+          (define-key keymap "\C-w" #'evil-delete-backward-word)
           (define-key keymap "\C-g" 'company-abort)
           (define-key keymap (kbd "C-j") 'company-select-next)
           (define-key keymap (kbd "C-k") 'company-select-previous)
@@ -251,7 +237,8 @@ Available PROPS:
           (define-key keymap [up-mouse-1] 'ignore)
           (define-key keymap [up-mouse-3] 'ignore)
           (define-key keymap [return] #'newline-and-indent)
-          (define-key keymap (kbd "C-l") 'company-complete-selection)
+          (define-key keymap (kbd "C-l") (defl () (interactive) (let ((company-selection (or company-selection company-selection-default 0)))
+                                                                  (company-complete-selection))))
           (define-key keymap (kbd "C-m") #'newline-and-indent)
           (define-key keymap (kbd "RET") #'newline-and-indent)
           (define-key keymap [tab] 'company-complete-common)
@@ -265,14 +252,88 @@ Available PROPS:
             (define-key keymap (read-kbd-macro (format "M-%d" i)) 'company-complete-number))
           (dotimes (i 10)
             (define-key keymap (read-kbd-macro (format "C-x C-6 %d" i)) 'company-complete-number))
-          keymap)))
+          keymap)
+  ;; (setq company-active-map
+  ;;       (let ((keymap (make-sparse-keymap)))
+  ;;         (define-key keymap "\e\e\e" 'company-abort)
+  ;;         (define-key keymap "\C-g" 'company-abort)
+  ;;         (define-key keymap (kbd "C-j") 'company-select-next)
+  ;;         (define-key keymap (kbd "C-k") 'company-select-previous)
+  ;;         (define-key keymap (kbd "<down>") 'company-select-next-or-abort)
+  ;;         (define-key keymap (kbd "<up>") 'company-select-previous-or-abort)
+  ;;         (define-key keymap [remap scroll-up-command] 'company-next-page)
+  ;;         (define-key keymap [remap scroll-down-command] 'company-previous-page)
+  ;;         (define-key keymap [down-mouse-1] 'ignore)
+  ;;         (define-key keymap [down-mouse-3] 'ignore)
+  ;;         (define-key keymap [mouse-1] 'company-complete-mouse)
+  ;;         (define-key keymap [mouse-3] 'company-select-mouse)
+  ;;         (define-key keymap [up-mouse-1] 'ignore)
+  ;;         (define-key keymap [up-mouse-3] 'ignore)
+  ;;         (define-key keymap [return] #'newline-and-indent)
+  ;;         (define-key keymap (kbd "C-l") 'company-complete-selection)
+  ;;         (define-key keymap (kbd "C-m") #'newline-and-indent)
+  ;;         (define-key keymap (kbd "RET") #'newline-and-indent)
+  ;;         (define-key keymap [tab] 'company-complete-common)
+  ;;         ;; (define-key keymap (kbd "TAB") 'company-complete-common-or-cycle)
+  ;;         (define-key keymap (kbd "<f1>") 'company-show-doc-buffer)
+  ;;         (define-key keymap (kbd "C-r") 'company-show-doc-buffer)
+  ;;         ;; (define-key keymap "\C-w" 'company-show-location)
+  ;;         (define-key keymap "\C-s" 'company-search-candidates)
+  ;;         (define-key keymap "\C-\M-s" 'company-filter-candidates)
+  ;;         (dotimes (i 10)
+  ;;           (define-key keymap (read-kbd-macro (format "M-%d" i)) 'company-complete-number))
+  ;;         (dotimes (i 10)
+  ;;           (define-key keymap (read-kbd-macro (format "C-x C-6 %d" i)) 'company-complete-number))
+  ;;         keymap))
+  )
 
 (use-package company-statistics
   :straight t
+  :disabled
   :hook ((clojure-mode clojurescript-mode  emacs-lisp-mode) . company-statistics-mode))
+
+(use-package flx :straight t :defer t)
+
+(use-package company-fuzzy
+  :straight t
+  :after (company flx)
+  :custom
+  (company-fuzzy-sorting-backend 'flx)
+  :config
+  (global-company-fuzzy-mode 1)
+  (add-to-list 'company-fuzzy-trigger-symbols ":")
+  :config/el-patch
+  (defun company-fuzzy--pre-render (str &optional annotation-p)
+  "Prerender color with STR and flag ANNOTATION-P."
+  (unless annotation-p
+    (let* ((str-len (length str))
+           (prefix (or (company-fuzzy--backend-prefix-candidate str 'match)
+                       ""))
+           (cur-selection (el-patch-swap
+                            (nth company-selection company-candidates)
+                            (nth (or company-selection company-selection-default -1) company-candidates)))
+           (splitted-section (remove "" (split-string str " ")))
+           (process-selection (nth 0 splitted-section))
+           (selected (string= cur-selection process-selection))
+           (selected-face (if selected
+                              'company-tooltip-common-selection
+                            'company-tooltip-common))
+           (selected-common-face (if selected
+                                     'company-tooltip-selection
+                                   'company-tooltip))
+           (splitted-c (remove "" (split-string prefix ""))))
+      (set-text-properties 0 str-len nil str)
+      (font-lock-prepend-text-property 0 str-len 'face selected-common-face str)
+      (dolist (c splitted-c)
+        (let ((pos (company-fuzzy--string-match-p (regexp-quote c) str)))
+          (while (and (numberp pos) (< pos str-len))
+            (font-lock-prepend-text-property pos (1+ pos) 'face selected-face str)
+            (setq pos (company-fuzzy--string-match-p (regexp-quote c) str (1+ pos))))))))
+  str))
 
 (use-package company-flx
   :straight t
+  :disabled t
   :hook ((clojure-mode clojurescript-mode emacs-lisp-mode) . company-flx-mode))
 
 (use-package company-tabnine

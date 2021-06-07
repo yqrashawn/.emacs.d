@@ -497,7 +497,10 @@ This function is called by `org-babel-execute-src-block'."
   :disabled
   :after (org-roam company)
   :config
-  (push 'company-org-roam company-backends))
+  (push 'company-org-roam company-backends)
+  (when (boundp 'company-fuzzy-mode)
+    (company-fuzzy-mode 0)
+    (company-fuzzy-mode 1)))
 
 (use-package deft
   :straight t
