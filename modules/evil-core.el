@@ -253,26 +253,23 @@
   :diminish evil-snipe-mode
   :diminish evil-snipe-override-mode
   :diminish evil-snipe-local-mode
-  :init
-  (setq evil-snipe-scope 'whole-buffer)
-  (setq evil-snipe-enable-highlight t)
-  (setq evil-snipe-enable-incremental-highlight t)
-  (setq evil-snipe-auto-disable-substitute t)
-  (setq evil-snipe-show-prompt nil)
-  (setq evil-snipe-smart-case t)
+  :custom
+  (evil-snipe-scope 'whole-buffer)
+  (evil-snipe-enable-highlight t)
+  (evil-snipe-enable-incremental-highlight t)
+  (evil-snipe-show-prompt nil)
+  (evil-snipe-smart-case t)
   :config
   ;; remap s
   ;; use t as evil-snipe-s in normal mode
-  (evil-define-key* '(normal motion) evil-snipe-local-mode-map
-                    "s" nil
-                    "S" nil
-                    ;; "t" #'evil-snipe-s
-                    ;; "T" #'evil-snipe-S
-                    "t" nil
-                    "T" nil)
+  (evil-define-minor-mode-key 'motion 'evil-snipe-local-mode
+    "t" nil
+    "T" nil)
+  (evil-define-minor-mode-key '(normal motion) 'evil-snipe-local-mode
+      "s" nil
+      "S" nil)
   (yq/add-toggle evil-snipe :mode evil-snipe-mode)
   ;; (add-hook 'org-mode-hook 'yq/toggle-evil-snipe-off)
-  (setq evil-snipe-auto-disable-substitute nil)
   (evil-snipe-mode 1)
   (setq evil-snipe-repeat-scope 'whole-buffer)
   (evil-snipe-override-mode 1))
