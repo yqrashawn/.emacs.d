@@ -1019,13 +1019,18 @@ _g_  gfm      _m_ markdown
 
 (use-package tree-sitter-langs :straight t)
 
+(defun +tree-sitter-manybe-enable ()
+  (lambda ()
+    ;; Activate tree-sitter's improved syntax highlighting only if we are
+    ;; using a major-mode that has a compatible tree-sitter syntax parser
+    (if (and (boundp 'tree-sitter-major-mode-language-alist)
+             (assq major-mode tree-sitter-major-mode-language-alist))
+        (progn
+          (tree-sitter-mode)
+          (tree-sitter-hl-mode)))))
+
 (use-package tree-sitter
   :straight t
-  :hook ((prog-mode text-mode) . (lambda ()
-                                   ;; Activate tree-sitter's improved syntax highlighting only if we are
-                                   ;; using a major-mode that has a compatible tree-sitter syntax parser
-                                   (if (and (boundp 'tree-sitter-major-mode-language-alist)
-                                            (assq major-mode tree-sitter-major-mode-language-alist))
-                                       (progn
-                                         (tree-sitter-mode)
-                                         (tree-sitter-hl-mode))))))
+  :custom
+  (tree-sitter-hl-use-font-lock-keywords nil)
+  :hook ((prog-mode text-mode) . +tree-sitter-manybe-enable))
