@@ -255,9 +255,10 @@ file stored in the cache directory and `nil' to disable auto-saving.")
 (use-feature abbrev
   :diminish abbrev-mode
   :custom
+  (save-abbrevs 'silent)
   (abbrev-file-name (concat user-emacs-directory "abbrev_defs"))
   :init
-  (abbrev-mode 1)
+  (setq-default abbrev-mode t)
   :config
   (if (file-exists-p abbrev-file-name)
       (quietly-read-abbrev-file)))
