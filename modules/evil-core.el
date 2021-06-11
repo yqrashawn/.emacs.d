@@ -459,7 +459,11 @@
   :init
   (when (in-terminal-p)
     (require 'evil-terminal-cursor-changer)
-    (evil-terminal-cursor-changer-activate)))
+    (evil-terminal-cursor-changer-activate))
+  :config
+  (defun etcc--in-xterm? ()
+    "Running in iTerm."
+    t))
 
 (use-package evil-collection
   :straight t
