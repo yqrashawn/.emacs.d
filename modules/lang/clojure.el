@@ -26,8 +26,8 @@
 ;;; Code:
 (yq/get-modules "lang/clojure-funcs.el")
 
-(dolist (mode '(clojure-mode clojurescript-mode clojurec-mode))
-    (spacemacs/enable-flycheck mode))
+;; (dolist (mode '(clojure-mode clojurescript-mode clojurec-mode))
+;;     (spacemacs/enable-flycheck mode))
 
 (use-package clojure-mode
   :straight t
@@ -59,7 +59,8 @@
   (when clojure-enable-fancify-symbols
     (dolist (m '(clojure-mode clojurescript-mode clojurec-mode))
       (clojure/fancify-symbols m)
-      (spacemacs/enable-flycheck m))))
+      ;; (spacemacs/enable-flycheck m)
+      )))
 
 (use-package cider
   ;; :straight (:host github :repo "clojure-emacs/cider")

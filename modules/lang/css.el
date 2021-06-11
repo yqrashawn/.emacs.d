@@ -67,3 +67,6 @@
   (evil-define-key 'normal web-mode-map
     ",ss" 'showcss-mode
     ",ss" 'showcss/main))
+
+(straight-use-package
+ '(lsp-tailwindcss :type git :host github :repo "merrickluo/lsp-tailwindcss"))

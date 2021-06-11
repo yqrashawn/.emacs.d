@@ -646,6 +646,7 @@ If the universal prefix argument is used then kill the buffer too."
 (spacemacs/set-leader-keys "tn" 'yq/toggle-line-numbers)
 
 (use-feature savehist
+  :disabled
   :init
   ;; Minibuffer history
   (setq savehist-file (concat spacemacs-cache-directory "savehist")
@@ -657,6 +658,18 @@ If the universal prefix argument is used then kill the buffer too."
                                         extended-command-history)
         savehist-autosave-interval 60)
   (savehist-mode t))
+
+(use-package psession
+  :straight t
+  :custom
+  (psession-elisp-objects-default-directory (concat spacemacs-cache-directory "psession"))
+  :init
+  (psession-mode 1)
+  (psession-savehist-mode 1)
+  (psession-autosave-mode 1)
+  :config
+  (add-to-list 'psession-object-to-save-alist '(mark-ring . "mark-ring.el"))
+  (add-to-list 'psession-object-to-save-alist '(global-mark-ring . "global-mark-ring.el")))
 
 ;; recentf
 (use-feature recentf

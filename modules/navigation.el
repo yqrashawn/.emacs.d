@@ -602,11 +602,12 @@ repository, then the corresponding root is used instead."
 (use-package dired+
   :straight (:host github :repo "emacsmirror/dired-plus")
   :defer t
+  :custom
+  (diredp-hide-details-initially-flag nil)
   :init
   (with-eval-after-load 'dired
     (require 'dired+))
   (setq diredp-bind-problematic-terminal-keys (nin-terminal-p))
-  (setq diredp-hide-details-initially-flag nil)
   (evil-leader/set-key "fj" 'diredp-dired-recent-dirs)
   (evil-leader/set-key "fJ" 'diredp-dired-recent-dirs-other-window)
   (evil-define-key 'normal dired-mode-map "q" 'yq/kill-this-buffer)
