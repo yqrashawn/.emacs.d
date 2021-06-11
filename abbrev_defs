@@ -690,6 +690,7 @@
     ("originial" "original" nil :count 0)
     ("orignal" "original" nil :count 0)
     ("otehr" "other" nil :count 0)
+    ("optiona" "optional" nil :count 0)
     ("otu" "out" nil :count 0)
     ("outof" "out of" nil :count 0)
     ("overthe" "over the" nil :count 0)
