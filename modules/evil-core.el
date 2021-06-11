@@ -6,6 +6,7 @@
 
 (use-package undo-tree
   :straight (:host github :repo "emacsorphanage/undo-tree")
+  :disabled
   :diminish undo-tree-mode
   :defer t
   :custom
@@ -52,9 +53,16 @@
              (define-key evil-motion-state-map prefixed nil)
              (define-key evil-insert-state-map prefixed nil))))))))
 
+(use-package undo-fu-session
+  :straight t
+  :after undo-fu
+  :custom
+  (undo-fu-session-directory (concat spacemacs-cache-directory "undo-fu-session"))
+  (undo-fu-session-incompatible-files '("/COMMIT_EDITMSG\\'" "/git-rebase-todo\\'"))
+  :config (global-undo-fu-session-mode))
+
 (use-package undo-fu
   :straight t
-  :disabled
   :defer t)
 
 (require 'seq)
@@ -75,8 +83,8 @@
 (use-package evil
   :straight t
   :init
-  (require 'undo-tree)
-  (global-undo-tree-mode 1)
+  ;; (require 'undo-tree)
+  ;; (global-undo-tree-mode 1)
   (customize-set-variable 'evil-intercept-maps nil)
   (customize-set-variable 'evil-move-cursor-back nil)
   (customize-set-variable 'evil-want-C-u-scroll t)
@@ -87,7 +95,7 @@
   (customize-set-variable 'evil-shift-width 2)
   (customize-set-variable 'evil-show-paren-range 1)
   (customize-set-variable 'evil-ex-substitute-global t)
-  (customize-set-variable 'evil-undo-system 'undo-tree)
+  (customize-set-variable 'evil-undo-system 'undo-fu)
   (setq local-function-key-map (delq '(kp-tab . [9]) local-function-key-map))
   (setq evil-want-find-undo t)
   (setq evil-insert-state-cursor '(box "green"))
@@ -214,12 +222,17 @@
   (spacemacs/set-leader-keys "wl" 'evil-window-right)
   (spacemacs/set-leader-keys "rl" 'ivy-resume)
   (spacemacs/set-leader-keys "j" nil)
-  (spacemacs/set-leader-keys "j=" 'yq/indent-region-or-buffer)
+  (spacemacs/set-leader-keys
+    "j=" 'yq/indent-region-or-buffer
+    "jH" 'spacemacs/push-mark-and-goto-beginning-of-line
+    "jL" 'spacemacs/push-mark-and-goto-end-of-line
+    "jc" 'goto-last-change)
+  (spacemacs/set-leader-keys
+  "iK" 'spacemacs/evil-insert-line-above
+  "iJ" 'spacemacs/evil-insert-line-below
+  "iB" 'insert-buffer)
   (spacemacs/set-leader-keys "fj" 'dired-jump)
-  (spacemacs/set-leader-keys "jd" 'dired-jump)
   (spacemacs/set-leader-keys "tD" 'toggle-debug-on-error)
-  (spacemacs/set-leader-keys "jD" 'dired-jump-other-window)
-  (spacemacs/set-leader-keys "j=" 'yq/indent-region-or-buffer)
   (spacemacs/set-leader-keys "fev" #'view-lossage)
   (evil-define-minor-mode-key 'motion 'visual-line-mode "j" 'evil-next-visual-line)
   (evil-define-minor-mode-key 'motion 'visual-line-mode "k" 'evil-previous-visual-line)

@@ -5,23 +5,6 @@
 (defun spacemacs/system-is-mswindows ()
   (eq system-type 'windows-nt))
 
-(defvar spacemacs-indent-sensitive-modes
-  '(asm-mode
-    coffee-mode
-    elm-mode
-    haml-mode
-    haskell-mode
-    emacs-lisp-mode
-    clojure-mode
-    slim-mode
-    makefile-mode
-    makefile-bsdmake-mode
-    makefile-gmake-mode
-    makefile-imake-mode
-    python-mode
-    yaml-mode)
-  "Modes for which auto-indenting is suppressed.")
-
 (defun spacemacs/mplist-get (plist prop)
   "Get the values associated to PROP in PLIST, a modified plist.
 
@@ -71,6 +54,59 @@ current window."
                    (not (eq buffer current-buffer)))
                  (mapcar #'car (window-prev-buffers window))))))
 
+(defun spacemacs/push-mark-and-goto-beginning-of-line ()
+  "Push a mark at current location and go to the beginning of the line."
+  (interactive)
+  (push-mark (point))
+  (evil-beginning-of-line))
+
+(defun spacemacs/push-mark-and-goto-end-of-line ()
+  "Push a mark at current location and go to the end of the line."
+  (interactive)
+  (push-mark (point))
+  (evil-end-of-line))
+
+(defun spacemacs/evil-insert-line-above (count)
+  "Insert one or several lines above the current point's line without changing
+the current state and point position."
+  (interactive "p")
+  (dotimes (_ count) (save-excursion (evil-insert-newline-above))))
+
+(defun spacemacs/evil-insert-line-below (count)
+  "Insert one or several lines below the current point's line without changing
+the current state and point position."
+  (interactive "p")
+  (dotimes (_ count) (save-excursion (evil-insert-newline-below))))
+
+;; from Prelude
+(defcustom spacemacs-indent-sensitive-modes
+  '(asm-mode
+    coffee-mode
+    elm-mode
+    haml-mode
+    haskell-mode
+    slim-mode
+    makefile-mode
+    makefile-bsdmake-mode
+    makefile-gmake-mode
+    makefile-imake-mode
+    python-mode
+    yaml-mode)
+  "Modes for which auto-indenting is suppressed."
+  :type 'list
+  :group 'spacemacs)
+
+(defcustom spacemacs-yank-indent-modes '(latex-mode)
+  "Modes in which to indent regions that are yanked (or yank-popped).
+Only modes that don't derive from `prog-mode' should be listed here."
+  :type 'list
+  :group 'spacemacs)
+
+(defcustom spacemacs-yank-indent-threshold 1000
+  "Threshold (# chars) over which indentation does not automatically occur."
+  :type 'number
+  :group 'spacemacs)
+
 ;; indent on paste
 ;; from Prelude: https://github.com/bbatsov/prelude
 (defun spacemacs/yank-advised-indent-function (beg end)
@@ -78,37 +114,28 @@ current window."
   (if (<= (- end beg) spacemacs-yank-indent-threshold)
       (indent-region beg end nil)))
 
-(defcustom spacemacs-yank-indent-threshold 1000
-  "Threshold (# chars) over which indentation does not automatically occur."
-  :type 'number
-  :group 'spacemacs)
+(defun spacemacs//yank-indent-region (yank-func &rest args)
+  "If current mode is not one of spacemacs-indent-sensitive-modes
+indent yanked text (with universal arg don't indent)."
+  (evil-start-undo-step)
+  (prog1
+      (let ((prefix (car args))
+            (enable (and (not (member major-mode spacemacs-indent-sensitive-modes))
+                         (or (derived-mode-p 'prog-mode)
+                             (member major-mode spacemacs-yank-indent-modes)))))
+        (when (and enable (equal '(4) prefix))
+          (setq args (cdr args)))
+        (prog1
+            (apply yank-func args)
+          (when (and enable (not (equal '(4) prefix)))
+            (let ((transient-mark-mode nil)
+                  (save-undo buffer-undo-list))
+              (spacemacs/yank-advised-indent-function (region-beginning)
+                                                      (region-end))))))
+    (evil-end-undo-step)))
 
-(defmacro spacemacs|advise-commands (advice-name commands class &rest body)
-  "Apply advice named ADVICE-NAME to multiple COMMANDS.
-The body of the advice is in BODY."
-  `(progn
-     ,@(mapcar (lambda (command)
-                 `(defadvice ,command
-                      (,class ,(intern (format "%S-%s" command advice-name))
-                              activate)
-                    ,@body))
-               commands)))
-
-(spacemacs|advise-commands
- "indent" (yank yank-pop evil-paste-before evil-paste-after) around
- "If current mode is not one of spacemacs-indent-sensitive-modes
- indent yanked text (with universal arg don't indent)."
- (evil-start-undo-step)
- ad-do-it
- (if (and (not (equal '(4) (ad-get-arg 0)))
-          (not (member major-mode spacemacs-indent-sensitive-modes))
-          (or (derived-mode-p 'prog-mode)
-              (member major-mode spacemacs-indent-sensitive-modes)))
-     (let ((transient-mark-mode nil)
-           (save-undo buffer-undo-list))
-       (spacemacs/yank-advised-indent-function (region-beginning)
-                                               (region-end))))
- (evil-end-undo-step))
+(dolist (func '(yank yank-pop evil-paste-before evil-paste-after))
+  (advice-add func :around #'spacemacs//yank-indent-region))
 
 
 (defvar yq/toggles '()
