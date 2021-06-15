@@ -12,6 +12,7 @@
 (setq load-prefer-newer t)
 (setq debug-on-error t)
 (setq debug-on-quit t)
+(setq gc-cons-threshold most-positive-fixnum)
 
 ;; Remove the built-in version of Org from the load-path
 (require 'cl-seq)
@@ -224,8 +225,7 @@
 
 (defun +setup-gc ()
   (setq gc-cons-percentage 0.6)
-  (setq gc-cons-threshold (* 8 (expt 10 8))))
-(+setup-gc)
+  (setq gc-cons-threshold (* 8 (expt 10 5))))
 
 (defun my-minibuffer-setup-hook ()
   (setq gc-cons-threshold most-positive-fixnum))
@@ -233,6 +233,7 @@
   (+setup-gc))
 (add-hook 'minibuffer-setup-hook #'my-minibuffer-setup-hook)
 (add-hook 'minibuffer-exit-hook #'my-minibuffer-exit-hook)
+(+setup-gc)
 
 
 ;; (setq jit-lock-contextually 'syntax-driven
@@ -252,18 +253,6 @@
       jit-lock-stealth-load 300)
 
 ;; (setq font-lock-maximum-decoration nil)
-
-(defvar gc-timer nil)
-
-(defun maybe-gc ()
-  (let ((original gc-cons-threshold))
-    (+setup-gc)
-    (setq gc-timer (run-with-timer 2 nil #'schedule-maybe-gc))))
-
-(defun schedule-maybe-gc ()
-  (setq gc-timer (run-with-idle-timer 2 nil #'maybe-gc)))
-
-(schedule-maybe-gc)
 
 (setq debug-on-error nil)
 (setq debug-on-quit nil)
