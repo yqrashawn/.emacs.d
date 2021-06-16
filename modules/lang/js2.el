@@ -277,7 +277,10 @@
   (evil-define-key 'normal typescript-mode-map ",jj" '+jest-popup)
   (evil-define-key 'normal js2-mode-map ",jj" '+jest-popup)
   (evil-define-key 'normal typescript-mode-map ",jd" #'+jest-popup-debug)
-  (evil-define-key 'normal js2-mode-map ",jd" #'+jest-popup-debug))
+  (evil-define-key 'normal js2-mode-map ",jd" #'+jest-popup-debug)
+  :config
+  (evil-define-key 'normal jest-mode-map "\C-u" #'golden-ratio-scroll-screen-down)
+  (evil-define-key 'normal jest-mode-map "\C-d" #'golden-ratio-scroll-screen-up))
 
 ;; prettify symbols inside comments https://emacs.stackexchange.com/questions/47706/how-to-prettify-symbols-inside-comments
 (defun +js2-prettify-symbols-default-compose-p (start end _match)
