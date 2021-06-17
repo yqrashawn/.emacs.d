@@ -368,6 +368,7 @@
     (clojure/fancify-symbols 'cider-clojure-interaction-mode))
 
   (defadvice cider-jump-to-var (before add-evil-jump activate) (evil-set-jump))
+
   :config/el-patch
   ;; fix cljs company-capf args out of range error
   (defun cider-completion--parse-candidate-map (candidate-map)
@@ -384,7 +385,92 @@ Put type and ns properties on the candidate"
         (put-text-property 0 1 'ns ns candidate)
         (when (not (= (length candidate) 0))
           (put-text-property 0 1 'ns ns candidate)))
-      candidate)))
+      candidate))
+  (defun cider-eval-print-handler (&optional buffer)
+    "Make a handler for evaluating and printing result in BUFFER."
+    (nrepl-make-response-handler (or buffer (current-buffer))
+                                 (lambda (buffer value)
+                                   (with-current-buffer buffer
+                                     (insert
+                                      (if (derived-mode-p 'cider-clojure-interaction-mode)
+                                          (format "\n%s\n" (el-patch-swap value
+                                                                          (replace-regexp-in-string "," "" value)))
+                                        (el-patch-swap value
+                                                       (replace-regexp-in-string "," "" value))))))
+                                 (lambda (_buffer out)
+                                   (cider-emit-interactive-eval-output out))
+                                 (lambda (_buffer err)
+                                   (cider-emit-interactive-eval-err-output err))
+                                 '()))
+  (defun cider-insert-eval-handler (&optional buffer)
+    "Make an nREPL evaluation handler for the BUFFER.
+The handler simply inserts the result value in BUFFER."
+    (let ((eval-buffer (current-buffer)))
+      (nrepl-make-response-handler (or buffer eval-buffer)
+                                   (lambda (_buffer value)
+                                     (with-current-buffer buffer
+                                       (insert (el-patch-swap value
+                                                              (do
+                                                                  (print "kkk_")
+                                                                  (print value)
+                                                                  (replace-regexp-in-string "," "" value))))))
+                                   (lambda (_buffer out)
+                                     (cider-repl-emit-interactive-stdout out))
+                                   (lambda (_buffer err)
+                                     (cider-handle-compilation-errors err eval-buffer))
+                                   '())))
+  (defun cider-interactive-eval-handler (&optional buffer place)
+  "Make an interactive eval handler for BUFFER.
+PLACE is used to display the evaluation result.
+If non-nil, it can be the position where the evaluated sexp ends,
+or it can be a list with (START END) of the evaluated region.
+Update the cider-inspector buffer with the evaluation result
+when `cider-auto-inspect-after-eval' is non-nil."
+
+  (let* ((eval-buffer (current-buffer))
+         (beg (car-safe place))
+         (end (or (car-safe (cdr-safe place)) place))
+         (beg (when beg (copy-marker beg)))
+         (end (when end (copy-marker end)))
+         (fringed nil))
+    (nrepl-make-response-handler (or buffer eval-buffer)
+                                 (lambda (_buffer value)
+                                   (if beg
+                                       (unless fringed
+                                         (cider--make-fringe-overlays-for-region beg end)
+                                         (setq fringed t))
+                                     (cider--make-fringe-overlay end))
+                                   (cider--display-interactive-eval-result (el-patch-swap value
+                                                                                          (replace-regexp-in-string "," "" value)) end))
+                                 (lambda (_buffer out)
+                                   (cider-emit-interactive-eval-output out))
+                                 (lambda (_buffer err)
+                                   (cider-emit-interactive-eval-err-output err)
+                                   (cider-handle-compilation-errors err eval-buffer))
+                                 (when (and cider-auto-inspect-after-eval
+                                            (boundp 'cider-inspector-buffer)
+                                            (windowp (get-buffer-window cider-inspector-buffer 'visible)))
+                                   (lambda (buffer)
+                                     (cider-inspect-last-result)
+                                     (select-window (get-buffer-window buffer)))))))
+  (defun cider-popup-eval-handler (&optional buffer)
+    "Make a handler for printing evaluation results in popup BUFFER.
+This is used by pretty-printing commands."
+    (nrepl-make-response-handler
+     (or buffer (current-buffer))
+     (lambda (buffer value)
+       (cider-emit-into-popup-buffer buffer (ansi-color-apply (el-patch-swap
+                                                                value
+                                                                (replace-regexp-in-string "," "" value))) nil t))
+     (lambda (_buffer out)
+       (cider-emit-interactive-eval-output out))
+     (lambda (_buffer err)
+       (cider-emit-interactive-eval-err-output err))
+     nil
+     nil
+     nil
+     (lambda (buffer warning)
+       (cider-emit-into-popup-buffer buffer warning 'font-lock-warning-face t)))))
 
 (use-package clj-refactor
   :straight t
