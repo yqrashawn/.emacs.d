@@ -33,3 +33,4 @@ eshell
 /eln-cache
 /flycheck_init.el
 /.lsp-eslint-choices
+/devdocs-browser/

@@ -377,7 +377,6 @@ has been changed to THEME."
 (load-theme 'modus-vivendi t)
 ;; (load-theme 'modus-operandi t)
 
-
 (use-package fira-code-mode
   :straight t
   :disabled t

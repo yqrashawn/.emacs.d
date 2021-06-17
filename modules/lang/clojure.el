@@ -137,7 +137,14 @@
   (add-hook 'clojurescript-mode-hook (defl (company-flx-mode -1)))
   (add-hook 'clojurec-mode-hook (defl (company-flx-mode -1)))
   (add-hook 'cider-repl-mode-hook (defl (company-flx-mode -1)))
+
+  ;; https://philjackson.github.io/emacs/evil/cider/debugging/2021/06/06/using-the-cider-debugger-in-evil/
+  (defun my-cider-debug-toggle-insert-state ()
+    (if cider--debug-mode    ;; Checks if you're entering the debugger
+        (evil-insert-state)  ;; If so, turn on evil-insert-state
+      (evil-normal-state)))  ;; Otherwise, turn on normal-state
   :config
+  (add-hook 'cider--debug-mode-hook 'my-cider-debug-toggle-insert-state)
   ;; (dolist (mode '(clojure-mode clojurescript-mode cider-mode))
   ;;   (eval-after-load mode
   ;;     (font-lock-add-keywords

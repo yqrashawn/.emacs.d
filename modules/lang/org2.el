@@ -7,6 +7,8 @@
                              ("[X]" "☑")
                              ("[ ]" "☐")))
 
+  (add-hook 'org-open-at-point-functions #'doom-set-jump-h)
+
   ;; global keybindings
   (define-key global-map "\C-cl" 'org-store-link)
   (define-key global-map "\C-ca" 'org-agenda)
@@ -665,3 +667,11 @@ Wehn NO-FOCUS is t, it won't focus to the sidebar."
 (use-package org-sticky-header
   :straight t
   :hook (org-mode . org-sticky-header-mode))
+
+(use-package company-org-block
+  :straight t
+  :custom
+  (company-org-block-edit-style 'auto) ;; 'auto, 'prompt, or 'inline
+  :hook ((org-mode . (lambda ()
+                       (add-to-list (make-local-variable 'company-backends)
+                                    'company-org-block)))))

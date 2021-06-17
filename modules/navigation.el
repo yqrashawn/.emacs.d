@@ -385,6 +385,11 @@ repository, then the corresponding root is used instead."
   :straight t
   :commands (helpful-variable helpful-key helpful-function)
   :init
+  (global-set-key [remap describe-function] #'helpful-callable)
+  (global-set-key [remap describe-command]  #'helpful-command)
+  (global-set-key [remap describe-variable] #'helpful-variable)
+  (global-set-key [remap describe-key]      #'helpful-key)
+  (global-set-key [remap describe-symbol]   #'helpful-symbol)
   (spacemacs/set-leader-keys "hdV" 'helpful-variable)
   (spacemacs/set-leader-keys "hdv" 'describe-variable)
   (spacemacs/set-leader-keys "hdk" 'helpful-key)
@@ -1358,3 +1363,94 @@ first."))
     (define-key map (kbd "M-m") 'selectrum-quick-select)
     ;; Return the map.
     map))
+
+
+(use-package better-jumper
+  :straight t
+  :hook (after-init . better-jumper-mode)
+  :custom
+  (better-jumper-context 'window)
+  (better-jumper-new-window-behavior 'copy)
+  (better-jumper-add-jump-behavior 'replace)
+  (better-jumper-max-length 1000)
+  (better-jumper-use-evil-jump-advice t)
+  :init
+  (global-set-key [remap evil-jump-forward] #'better-jumper-jump-forward)
+  (global-set-key [remap evil-jump-backward] #'better-jumper-jump-backward)
+  (global-set-key [remap xref-pop-marker-stack] #'better-jumper-jump-backward)
+  :config
+  ;; from doom-emacs
+  (defun doom-set-jump-a (orig-fn &rest args)
+    "Set a jump point and ensure ORIG-FN doesn't set any new jump points."
+    (better-jumper-set-jump (if (markerp (car args)) (car args)))
+    (let ((evil--jumps-jumping t)
+          (better-jumper--jumping t))
+      (apply orig-fn args)))
+
+  (defun doom-set-jump-maybe-a (orig-fn &rest args)
+    "Set a jump point if ORIG-FN returns non-nil."
+    (let ((origin (point-marker))
+          (result
+           (let* ((evil--jumps-jumping t)
+                  (better-jumper--jumping t))
+             (apply orig-fn args))))
+      (unless result
+        (with-current-buffer (marker-buffer origin)
+          (better-jumper-set-jump
+           (if (markerp (car args))
+               (car args)
+             origin))))
+      result))
+  ;; Creates a jump point before killing a buffer. This allows you to undo
+  ;; killing a buffer easily (only works with file buffers though; it's not
+  ;; possible to resurrect special buffers).
+  (advice-add #'kill-current-buffer :around #'doom-set-jump-a)
+
+  ;; Create a jump point before jumping with imenu.
+  (advice-add #'imenu :around #'doom-set-jump-a)
+
+  (defun doom-set-jump-h ()
+    "Run `better-jumper-set-jump' but return nil, for short-circuiting hooks."
+    (better-jumper-set-jump)
+    nil)
+
+  (defun +ivy/jump-list ()
+    "Go to an entry in evil's (or better-jumper's) jumplist."
+    (interactive)
+    ;; REVIEW Refactor me
+    (let (buffers)
+      (unwind-protect
+          (ivy-read "jumplist: "
+                    (nreverse
+                     (delete-dups
+                      (delq
+                       nil
+                       (mapcar (lambda (mark)
+                                 (when mark
+                                   (cl-destructuring-bind (path pt _id) mark
+                                     (let ((buf (get-file-buffer path)))
+                                       (unless buf
+                                         (push (setq buf (find-file-noselect path t))
+                                               buffers))
+                                       (with-current-buffer buf
+                                         (goto-char pt)
+                                         (font-lock-fontify-region (line-beginning-position) (line-end-position))
+                                         (cons (format "%s:%d: %s"
+                                                       (buffer-name)
+                                                       (line-number-at-pos)
+                                                       (string-trim-right (or (thing-at-point 'line) "")))
+                                               (point-marker)))))))
+                               (cddr (better-jumper-jump-list-struct-ring
+                                      (better-jumper-get-jumps (better-jumper--get-current-context))))))))
+                    :sort nil
+                    :require-match t
+                    :action (lambda (cand)
+                              (let ((mark (cdr cand)))
+                                (delq! (marker-buffer mark) buffers)
+                                (mapc #'kill-buffer buffers)
+                                (setq buffers nil)
+                                (with-current-buffer (switch-to-buffer (marker-buffer mark))
+                                  (goto-char (marker-position mark)))))
+                    :caller '+ivy/jump-list)
+        (mapc #'kill-buffer buffers))))
+  (define-key yq-s-map "J" '+ivy/jump-list))

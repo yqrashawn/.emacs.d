@@ -51,6 +51,7 @@ sets `spacemacs-jump-handlers' in buffers of that mode."
                     (and (fboundp async) (funcall async))
                     (not (eq old-point (point)))
                     (not (equal old-buffer (current-buffer))))
+            (when better-jumper-local-mode (better-jumper-set-jump))
             (throw 'done t)))))
     (message "No jump handler was able to find this symbol.")))
 

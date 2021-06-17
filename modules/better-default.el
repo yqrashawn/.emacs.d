@@ -650,6 +650,7 @@ If the universal prefix argument is used then kill the buffer too."
   :init
   ;; Minibuffer history
   (setq savehist-file (concat spacemacs-cache-directory "savehist")
+        savehist-save-minibuffer-history t
         history-length 1024
         savehist-additional-variables '(mark-ring
                                         global-mark-ring
@@ -1726,6 +1727,8 @@ Info-mode:
   (global-set-key (kbd "M-l") #'aya-expand))
 
 (use-feature so-long
+  :custom
+  (so-long-threshold 400)
   :init
   (global-so-long-mode 1)
   (add-hook 'find-file-hook
@@ -1738,7 +1741,33 @@ Info-mode:
                                (search-forward-regexp ".\\{2000\\}" 50000 t)
                                (y-or-n-p
                                 "Very long lines detected - enable so-long-mode? "))
-                      (so-long-mode)))))))
+                      (so-long-mode))))))
+  :config
+  ;; Don't disable syntax highlighting and line numbers, or make the buffer
+  ;; read-only, in `so-long-minor-mode', so we can have a basic editing
+  ;; experience in them, at least. It will remain off in `so-long-mode',
+  ;; however, because long files have a far bigger impact on Emacs performance.
+  (delq! 'font-lock-mode so-long-minor-modes)
+  (delq! 'display-line-numbers-mode so-long-minor-modes)
+  (delq! 'buffer-read-only so-long-variable-overrides 'assq)
+  ;; ...but at least reduce the level of syntax highlighting
+  (add-to-list 'so-long-variable-overrides '(font-lock-maximum-decoration . 1))
+  ;; ...and insist that save-place not operate in large/long files
+  (add-to-list 'so-long-variable-overrides '(save-place-alist . nil))
+  ;; But disable everything else that may be unnecessary/expensive for large or
+  ;; wide buffers.
+  (appendq! so-long-minor-modes
+            '(flycheck-mode
+              spell-fu-mode
+              eldoc-mode
+              smartparens-mode
+              highlight-numbers-mode
+              better-jumper-local-mode
+              ws-butler-mode
+              auto-composition-mode
+              undo-tree-mode
+              highlight-indent-guides-mode
+              hl-fill-column-mode)))
 
 (use-package pcre2el
   :straight t
@@ -2029,3 +2058,28 @@ Version 2017-09-01"
 (setq-default cursor-in-non-selected-windows nil)
 (setq truncate-string-ellipsis "…")
 (global-set-key (kbd "C-x @ @ u") #'revert-buffer)
+
+;; used to reset the debug vars after debug-on-event
+(defun +yq/undebug-on-event ()
+  (interactive)
+  (setq debug-on-next-call nil)
+  (setq debug-on-quit nil)
+  (setq quit-flag nil)
+  (setq inhibit-quit nil))
+
+
+;; vertical over horizontal
+;; https://philjackson.github.io/emacs/widescreen/2021/06/06/wide-screen-emacs/
+(defun my-split-window-sensibly (&optional window)
+  "replacement `split-window-sensibly' function which prefers
+vertical splits"
+  (interactive)
+  (let ((window (or window (selected-window))))
+    (or (and (window-splittable-p window t)
+             (with-selected-window window
+               (split-window-right)))
+        (and (window-splittable-p window)
+             (with-selected-window window
+               (split-window-below))))))
+
+;; (setq split-window-preferred-function #'my-split-window-sensibly)
