@@ -266,7 +266,32 @@ the omniscience database.")
                      (if (memq major-mode '(clojure-mode clojurescript-mode))
                          (lispy--space-unless "\\s-\\|\\s(\\|[:?`]\\|\\\\")
                        (lispy--space-unless "\\s-\\|\\s(\\|[:?`']\\|\\\\")))
-      (insert "`"))))
+      (insert "`")))
+  (defun lispy--oneline (expr &optional ignore-comments)
+    "Remove newlines from EXPR.
+When IGNORE-COMMENTS is not nil, don't remove comments.
+Instead keep them, with a newline after each comment."
+    (lispy-mapcan-tree
+     (lambda (x y)
+       (cond ((el-patch-swap (equal x '(ly-raw newline))
+                             (or (equal x '(ly-raw newline))
+                                 (equal x '(ly-raw clojure-symbol ","))))
+              y)
+             ((lispy--raw-comment-p x)
+              (if (null ignore-comments)
+                  (progn
+                    (push x lispy--oneline-comments)
+                    y)
+                (if (equal (car y) '(ly-raw newline))
+                    (cons x y)
+                  `(,x (ly-raw newline) ,@y))))
+             ((and (lispy--raw-string-p x)
+                   (null ignore-comments))
+              (cons `(ly-raw string ,(replace-regexp-in-string "\n" "\\\\n" (cl-caddr x)))
+                    y))
+             (t
+              (cons x y))))
+     expr)))
 
 (use-package parinfer
   :straight (:host github :repo "yqrashawn/parinfer-mode")
