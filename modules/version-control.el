@@ -3,9 +3,11 @@
 
 (use-package git-commit
   :straight t
-  :config
-  ;; https://emacs.stackexchange.com/a/41405
-  (add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell))
+  :after (magit)
+  ;; :config
+  ;; ;; https://emacs.stackexchange.com/a/41405
+  ;; (add-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell)
+  )
 
 (use-package magit-popup
   :straight t)

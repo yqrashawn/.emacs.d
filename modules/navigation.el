@@ -1154,6 +1154,7 @@ first."))
 (use-package flyspell-correct
   :straight t
   :after flyspell
+  :disabled
   :bind (:map flyspell-mode-map ("C-;" . flyspell-correct-wrapper)))
 
 ;; (use-package flyspell-correct-ivy
@@ -1162,6 +1163,7 @@ first."))
 
 (use-package flyspell-correct-avy-menu
   :straight t
+  :disabled
   :after flyspell-correct)
 
 (use-package helm

@@ -1815,13 +1815,19 @@ Info-mode:
 
 (use-feature flyspell
   :defer t
+  :disabled
   :hook (;;(prog-mode . flyspell-prog-mode)
          ((git-commit-mode org-mode text-mode markdown-mode) . flyspell-mode)))
 
 (use-package auto-dictionary
   :straight t
   :defer t
+  :disabled
   :hook (flyspell-mode . auto-dictionary-mode))
+
+(use-package spell-fu
+  :straight t
+  :hook (after-init . global-spell-fu-mode))
 
 (use-package gcmh
   :straight t
