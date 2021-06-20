@@ -32,9 +32,11 @@
 (use-package clojure-mode
   :straight t
   :diminish (clojurescript-mode clojure-mode)
-  :mode ("\\\.clojure\\\'" . clojure-mode)
+  :magic ("^#![^\n]*/\\(clj\\|clojure\\|bb\\|lumo\\)" . clojure-mode)
   :custom
   (clojure-align-forms-automatically nil)
+  (clojure-verify-major-mode nil)
+  (clojure-toplevel-inside-comment-form t)
   (clojure-align-reader-conditionals t)
   (clojure-defun-indents '(fn-traced))
   :init
@@ -42,6 +44,14 @@
   ;; This regexp matches shebang expressions like `#!/usr/bin/env boot'
   (add-to-list 'magic-mode-alist '("#!.*boot\\s-*$" . clojure-mode))
   :config
+  ;; #_ is not a logical sexp
+  (defadvice! corgi/clojure--looking-at-non-logical-sexp (command)
+    :around #'clojure--looking-at-non-logical-sexp
+    "Return non-nil if text after point is \"non-logical\" sexp.
+\"Non-logical\" sexp are ^metadata and #reader.macros."
+    (comment-normalize-vars)
+    (comment-forward (point-max))
+    (looking-at-p "\\(?:#?\\^\\)\\|#:?:?[[:alpha:]]\\|#_"))
   (defun +setup-company-for-clojure ()
     (setq-local company-idle-delay 0.2)
     (setq-local evil-shift-width 1)
@@ -67,6 +77,8 @@
   :straight t
   :hook (clojure-mode . cider-mode)
   :custom
+  (cider-preferred-build-tool 'clojure-cli)
+  (nrepl-log-messages t)
   (cider-completion-annotations-include-ns 'always)
   (cider-connection-message-fn 'cider-random-tip)
   (cider-eldoc-display-context-dependent-info t)
@@ -80,7 +92,6 @@
       '(("length" 80)
         ("level" 20)
         ("right-margin" 80)))
-
   :init
   (require 'mode-local)
   (add-hook 'clojure-mode-hook (defl () (setq-mode-local clojure-mode company-idle-delay 0.2)))
@@ -143,7 +154,99 @@
     (if cider--debug-mode    ;; Checks if you're entering the debugger
         (evil-insert-state)  ;; If so, turn on evil-insert-state
       (evil-normal-state)))  ;; Otherwise, turn on normal-state
+
+  (defun corgi/cider-quit-all ()
+    "Quit all current CIDER REPLs."
+    (interactive)
+    (let ((repls (seq-remove (lambda (r)
+                               (equal r (get-buffer "*babashka-repl*")))
+                             (seq-mapcat #'cdr (sesman-current-sessions 'CIDER)))))
+      (seq-do #'cider--close-connection repls))
+    ;; if there are no more sessions we can kill all ancillary buffers
+    (cider-close-ancillary-buffers)
+    ;; need this to refresh sesman browser
+    (run-hooks 'sesman-post-command-hook))
   :config
+  ;; When asking for a "matching" REPL (clj/cljs), and no matching REPL is found,
+  ;; return any REPL that is there. This is so that cider-quit can be called
+  ;; repeatedly to close all REPLs in a process. It also means that , s s will go
+  ;; to any REPL if there is one open.
+  (defadvice! corgi/around-cider-current-repl (command &optional type ensure)
+    :around #'cider-current-repl
+    (let ((repl (or
+                 (if (not type)
+                     (or (funcall command nil)
+                         (funcall command 'any))
+                   (funcall command type))
+                 (get-buffer "*babashka-repl*"))))
+      (if (and ensure (null repl))
+          (cider--no-repls-user-error type)
+        repl)))
+  ;; This essentially redefines cider-repls. The main thing it does is return all
+  ;; REPLs by using sesman-current-sessions (plural) instead of
+  ;; sesman-current-session. It also falls back to the babashka repl if no repls
+  ;; are connected/linked, so we can always eval.
+  (defadvice! corgi/around-cider-repls (command &optional type ensure)
+    :around #'cider-repls
+    (let ((type (cond
+                 ((listp type)
+                  (mapcar #'cider-maybe-intern type))
+                 ((cider-maybe-intern type))))
+          (repls (delete-dups (seq-mapcat #'cdr (or (sesman-current-sessions 'CIDER)
+                                                    (when ensure
+                                                      (user-error "No linked %s sessions" system)))))))
+      (or (seq-filter (lambda (b)
+                        (and (cider--match-repl-type type b)
+                             (not (equal b (get-buffer "*babashka-repl*")))))
+                      repls)
+          (list (get-buffer "*babashka-repl*")))))
+
+  (defun corgi/cider-eval-last-sexp-and-replace ()
+    "Alternative to cider-eval-last-sexp-and-replace, but kills
+clojure logical sexp instead of ELisp sexp, and pprints the
+result."
+    (interactive)
+    (let ((last-sexp (cider-last-sexp)))
+      ;; we have to be sure the evaluation won't result in an error
+      (cider-nrepl-sync-request:eval last-sexp)
+      ;; seems like the sexp is valid, so we can safely kill it
+      (let ((opoint (point)))
+        (clojure-backward-logical-sexp)
+        (kill-region (point) opoint))
+      (cider-interactive-eval last-sexp
+                              (cider-eval-pprint-with-multiline-comment-handler
+                               (current-buffer)
+                               (set-marker (make-marker) (point))
+                               ""
+                               " "
+                               "")
+                              nil
+                              (cider--nrepl-print-request-map fill-column))))
+
+  (defun corgi/cider-pprint-eval-last-sexp-insert ()
+    (interactive)
+    (let ((cider-comment-prefix "")
+          (cider-comment-continued-prefix " ")
+          (cider-comment-postfix ""))
+      (cider-pprint-eval-last-sexp-to-comment)))
+
+  (defun corgi/cider-pprint-register (register)
+    "Evaluate a Clojure snippet stored in a register.
+Will ask for the register when used interactively. Put `#_clj' or
+`#_cljs' at the start of the snippet to force evaluation to go to
+a specific REPL type, no matter the mode (clojure-mode or
+clojurescript-mode) of the current buffer."
+    (interactive (list (register-read-with-preview "Eval register: ")))
+    (let ((reg (get-register register)))
+      (cond
+       ((string-match-p "^#_cljs" reg)
+        (with-current-buffer (car (cider-repls 'cljs))
+          (cider--pprint-eval-form reg)))
+       ((string-match-p "^#_clj" reg)
+        (with-current-buffer (car (cider-repls 'clj))
+          (cider--pprint-eval-form reg)))
+       (t
+        (cider--pprint-eval-form reg)))))
   (add-hook 'cider--debug-mode-hook 'my-cider-debug-toggle-insert-state)
   ;; (dolist (mode '(clojure-mode clojurescript-mode cider-mode))
   ;;   (eval-after-load mode
@@ -391,12 +494,21 @@ Put type and ns properties on the candidate"
   :straight t
   :diminish clj-refactor-mode
   :after (clojure-mode)
-  :hook (clojure-mode . clj-refactor-mode)
+  :hook ((clojurex-mode-hook
+          clojurescript-mode-hook
+          clojurec-mode-hook
+          clojure-mode-hook)
+         . clj-refactor-mode)
   :custom
   (cljr-hotload-dependencies t)
   :init
   (evil-define-key 'normal clojure-mode-map (kbd ", ESC") 'hydra-cljr-help-menu/body)
   :config
+  (setq cljr-cljc-clojure-test-declaration "[clojure.test :refer [deftest testing is are use-fixtures run-tests join-fixtures]]"
+        cljr-cljs-clojure-test-declaration "[clojure.test :refer [deftest testing is are use-fixtures run-tests join-fixtures]]"
+        cljr-clojure-test-declaration "[clojure.test :refer [deftest testing is are use-fixtures run-tests join-fixtures]]"
+        cljr-eagerly-build-asts-on-startup nil
+        cljr-warn-on-eval nil)
   (defhydra hydra-cljr-ns-menu (:color pink :hint nil :exit t)
     "
  Ns related refactorings
@@ -489,6 +601,23 @@ _b_: Back to previous Hydra
           (when (not (string-prefix-p "hydra" (symbol-name func)))
             (evil-define-key 'normal map
               (concat ",r" binding) func)))))))
+
+(use-package clj-ns-name
+  :straight (:host github :repo "plexus/plexmacs" :files ("clj-ns-name/clj-ns-name.el"))
+  :config
+  (clj-ns-name-install))
+
+(use-package pprint-to-buffer
+  :straight (:type git
+                   :host github
+                   :files ("pprint-to-buffer/pprint-to-buffer.el")
+                   :repo "plexus/plexmacs")
+  :after (cider)
+  :commands (pprint-to-buffer-last-sexp-to-current-buffer pprint-to-buffer-last-sexp))
+
+(use-package walkclj
+ :straight (:type git :host github :files ("walkclj.el") :repo "plexus/walkclj")
+ :disabled)
 
 (use-package cljr-ivy
   :straight t
