@@ -55,15 +55,33 @@
 
 (use-package undo-fu-session
   :straight t
-  :after undo-fu
+  :hook (undo-fu-mode . global-undo-fu-session-mode)
   :custom
   (undo-fu-session-directory (concat spacemacs-cache-directory "undo-fu-session"))
-  (undo-fu-session-incompatible-files '("/COMMIT_EDITMSG\\'" "/git-rebase-todo\\'"))
-  :config (global-undo-fu-session-mode))
+  (undo-fu-session-incompatible-files '("\\.gpg$" "/COMMIT_EDITMSG\\'" "/git-rebase-todo\\'")))
 
 (use-package undo-fu
   :straight t
-  :defer t)
+  :defer t
+  :hook (after-init . undo-fu-mode)
+  :init
+  (define-minor-mode undo-fu-mode
+    "Enables `undo-fu' for the current session."
+    :keymap (let ((map (make-sparse-keymap)))
+              (define-key map [remap undo] #'undo-fu-only-undo)
+              (define-key map [remap redo] #'undo-fu-only-redo)
+              (define-key map (kbd "C-_")     #'undo-fu-only-undo)
+              (define-key map (kbd "M-_")     #'undo-fu-only-redo)
+              (define-key map (kbd "C-M-_")   #'undo-fu-only-redo-all)
+              (define-key map (kbd "C-x r u") #'undo-fu-session-save)
+              (define-key map (kbd "C-x r U") #'undo-fu-session-recover)
+              map)
+    :init-value nil
+    :global t)
+  :config
+  (setq undo-limit 400000
+        undo-strong-limit 3000000
+        undo-outer-limit 3000000))
 
 (require 'seq)
 (defun yq/update-evil-insert-state-modes (mode-to-remove)
