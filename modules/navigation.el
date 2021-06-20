@@ -488,12 +488,15 @@ repository, then the corresponding root is used instead."
 
 (use-feature dired
   :defer t
+  :custom
+  (dired-listing-switches "-laGh1vt")
+  (dired-recursive-deletes 'always)
+  (dired-recursive-copies 'always)
+  (dired-auto-revert-buffer t)
+  (dired-hide-details-hide-symlink-targets nil)
+  (dired-dwim-target t)
   :init
-  (setq insert-directory-program "/usr/local/bin/gls"
-        dired-listing-switches "-laGh1vt"
-        dired-recursive-deletes 'always
-        dired-recursive-copies 'always
-        dired-auto-revert-buffer t)
+  (setq insert-directory-program "/usr/local/bin/gls")
   ;; https://www.emacswiki.org/emacs/EmacsSession which is easier to setup than "desktop.el"
   ;; See `session-globals-regexp' in "session.el".
   ;; If the variable is named like "*-history", it will be automaticlaly saved.
@@ -523,6 +526,8 @@ repository, then the corresponding root is used instead."
        (save-buffers-kill-terminal 't))))
   :config
   (require 'dired-aux)
+  (setq dired-vc-rename-file t
+        dired-create-destination-dirs 'always)
   (add-to-list 'dired-compress-file-suffixes '("\\.zip\\'" ".zip" "unzip"))
   (add-hook 'dired-mode-hook #'hl-line-mode)
   (evil-define-key 'normal dired-mode-map (kbd ";") 'avy-goto-subword-1)
@@ -533,10 +538,6 @@ repository, then the corresponding root is used instead."
   (evil-define-key 'normal dired-mode-map (kbd "G") #'evil-goto-line)
   ;; search file name only when focus is over file
   (setq dired-isearch-filenames 'dwim)
-  ;; when there is two dired buffer, Emacs will select another buffer
-  ;; as target buffer (target for copying files, for example).
-  ;; It's similar to windows commander.
-  (setq dired-dwim-target t)
   (defun ora-ediff-files ()
     (interactive)
     (let ((files (dired-get-marked-files))
@@ -584,6 +585,10 @@ repository, then the corresponding root is used instead."
   (setq wdired-allow-to-redirect-links t
         wdired-allow-to-change-permissions t
         wdired-create-parent-directories t))
+(use-package diredfl
+  :straight t
+  :after dired
+  :hook (dired-mode . diredfl-mode))
 (use-package dired-narrow
   :straight t
   :commands (dired-narrow-fuzzy))
@@ -591,10 +596,11 @@ repository, then the corresponding root is used instead."
   :straight (:host github :repo "yqrashawn/fd-dired")
   :commands (fd-dired)
   :init
-  (defun +fd-dired-advice (dir args)
+  (defadvice! +fd-dired-advice (dir args)
+    :before #'fd-dired
     (when (string= (expand-file-name "~/") (expand-file-name (projectile-project-root dir)))
       (setq-local fd-dired-pre-fd-args (concat fd-dired-pre-fd-args " -uuu "))))
-  (advice-add 'fd-dired :before '+fd-dired-advice)
+  (global-set-key [remap find-dired] #'fd-dired)
   (evil-define-key 'normal dired-mode-map "F" 'fd-dired)
   (define-key yq-s-map "8" 'fd-dired))
 (use-feature dired-x
@@ -603,7 +609,22 @@ repository, then the corresponding root is used instead."
              dired-jump-other-window
              dired-omit-mode)
   :custom
-  (dired-omit-files "^\\.?#\\|^\\.$\\|^\\.\\.$|^\.DS_Store$\\|^__MACOSX$\\|^\\.localized$"))
+  (dired-clean-confirm-killing-deleted-buffers nil)
+  (dired-omit-files "^\\.?#\\|^\\.$\\|^\\.\\.$\\|^\\.DS_Store$\\|^__MACOSX$\\|^\\.localized$")
+  :config
+  (when-let (cmd (cond (IS-MAC "open")
+                       (IS-LINUX "xdg-open")
+                       (IS-WINDOWS "start")))
+    (setq dired-guess-shell-alist-user
+          `(("\\.\\(?:docx\\|pdf\\|djvu\\|eps\\)\\'" ,cmd)
+            ("\\.\\(?:jpe?g\\|png\\|gif\\|xpm\\)\\'" ,cmd)
+            ("\\.\\(?:xcf\\)\\'" ,cmd)
+            ("\\.csv\\'" ,cmd)
+            ("\\.tex\\'" ,cmd)
+            ("\\.\\(?:mp4\\|mkv\\|avi\\|flv\\|rm\\|rmvb\\|ogv\\)\\(?:\\.part\\)?\\'" ,cmd)
+            ("\\.\\(?:mp3\\|flac\\)\\'" ,cmd)
+            ("\\.html?\\'" ,cmd)
+            ("\\.md\\'" ,cmd)))))
 (use-package dired+
   :straight (:host github :repo "emacsmirror/dired-plus")
   :defer t
@@ -656,6 +677,9 @@ repository, then the corresponding root is used instead."
 (use-package dired-git-info
   :straight (:host github :repo "clemera/dired-git-info")
   :commands (dired-git-info-mode)
+  :custom
+  (dgi-commit-message-format "%h %cs %s")
+  (dgi-auto-hide-details-p nil)
   :config
   (define-key dired-mode-map "(" 'dired-git-info-mode))
 

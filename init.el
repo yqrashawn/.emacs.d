@@ -110,6 +110,12 @@
   :init
   (benchmark-init/activate))
 
+(defun yq/get-modules (module-dir)
+  (let* ((el-file-path (concat user-emacs-directory "modules/" module-dir))
+         (elc-file-path (concat el-file-path "c")))
+    (if (file-exists-p elc-file-path)
+        (load-file elc-file-path)
+      (load-file el-file-path))))
 (yq/get-modules "helper.el")
 
 (setq-default comp-async-report-warnings-errors nil)
@@ -145,13 +151,6 @@
 
 (eval-when-compile
   (require 'el-patch))
-
-(defun yq/get-modules (module-dir)
-  (let* ((el-file-path (concat user-emacs-directory "modules/" module-dir))
-         (elc-file-path (concat el-file-path "c")))
-    (if (file-exists-p elc-file-path)
-        (load-file elc-file-path)
-      (load-file el-file-path))))
 
 (yq/get-modules "core-display-init.el")
 (yq/get-modules "evil-core.el")
