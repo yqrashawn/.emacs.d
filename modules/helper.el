@@ -24,6 +24,10 @@
 ;;  helper fns macros
 
 ;;; Code:
+(defconst IS-MAC     (eq system-type 'darwin))
+(defconst IS-LINUX   (eq system-type 'gnu/linux))
+(defconst IS-WINDOWS (memq system-type '(cygwin windows-nt ms-dos)))
+(defconst IS-BSD     (or IS-MAC (eq system-type 'berkeley-unix)))
 (defmacro def (name &rest body)
   (declare (indent 1) (debug t))
   `(defun ,name (&optional _arg)
