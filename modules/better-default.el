@@ -1821,9 +1821,7 @@ Info-mode:
   :disabled
   :hook (flyspell-mode . auto-dictionary-mode))
 
-(use-package spell-fu
-  :straight t
-  :hook (after-init . global-spell-fu-mode))
+(yq/get-modules "spell.el")
 
 (use-package gcmh
   :straight t
