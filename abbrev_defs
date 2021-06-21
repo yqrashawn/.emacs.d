@@ -803,6 +803,7 @@
     ("restaraunt" "restaurant" nil :count 0)
     ("restuarant" "restaurant" nil :count 0)
     ("reult" "result" nil :count 0)
+    ("resullt" "result" nil :count 0)
     ("reveiw" "review" nil :count 0)
     ("reveiwing" "reviewing" nil :count 0)
     ("rumers" "rumors" nil :count 0)
