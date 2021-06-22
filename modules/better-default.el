@@ -680,7 +680,7 @@ If the universal prefix argument is used then kill the buffer too."
   (recentf-max-saved-items 2000)
   (recentf-auto-cleanup 300)
   :init
-  (add-hook 'delete-terminal-functions 'recentf-save-list)
+  (add-hook 'delete-terminal-functions (defl ()  (ignore-errors (recentf-save-list))))
   (recentf-mode 1)
   :config
   (run-with-idle-timer 60 t 'recentf-save-list)
@@ -2083,3 +2083,9 @@ vertical splits"
                (split-window-below))))))
 
 ;; (setq split-window-preferred-function #'my-split-window-sensibly)
+
+
+(use-package explain-pause-mode
+  :straight (:type git :host github :repo "lastquestion/explain-pause-mode")
+  :init
+  (run-with-idle-timer 3 nil (defl () (explain-pause-mode 1))))
