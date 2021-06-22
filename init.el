@@ -214,7 +214,6 @@
 (add-hook 'minibuffer-setup-hook #'my-minibuffer-setup-hook)
 (add-hook 'minibuffer-exit-hook #'my-minibuffer-exit-hook)
 (run-with-idle-timer 5 nil '+setup-gc)
-(run-with-idle-timer 30 t #'garbage-collect)
 
 
 ;; (setq jit-lock-contextually 'syntax-driven

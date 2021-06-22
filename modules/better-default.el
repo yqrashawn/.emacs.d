@@ -1250,14 +1250,6 @@ otherwise it is scaled down."
         (let* ((default-directory dir))
           (byte-compile-file (file-truename f) t))))))
 
-;; idle garbage collection
-(defvar garbage-collection-timer nil
-  "Timer that you can cancel, performs garbage collection on idle.")
-
-(unless garbage-collection-timer
-  (setq garbage-collection-timer
-        (run-with-idle-timer 60 t 'garbage-collect)))
-
 ;; ibuffer
 (use-package ibuffer-vc
   :straight t
@@ -1824,10 +1816,12 @@ Info-mode:
 (yq/get-modules "spell.el")
 
 (use-package gcmh
-  :straight t
+  :straight (:host gitlab :repo "yantar92/gcmh")
   :diminish gcmh-mode
+  :custom
+  (gcmh-gc-safe-time 0.2)
   :init
-  (gcmh-mode 1))
+  (run-with-idle-timer 5 nil (defl () (gcmh-mode 1))))
 
 (use-package whitespace-cleanup-mode
   :straight t
