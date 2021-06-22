@@ -204,7 +204,8 @@
 
 (defun +setup-gc ()
   (setq gc-cons-percentage 0.6)
-  (setq gc-cons-threshold (* 8 (expt 10 5))))
+  ;; 100MB
+  (setq gc-cons-threshold (* 1024 1024 100)))
 
 (defun my-minibuffer-setup-hook ()
   (setq gc-cons-threshold most-positive-fixnum))
@@ -212,7 +213,8 @@
   (+setup-gc))
 (add-hook 'minibuffer-setup-hook #'my-minibuffer-setup-hook)
 (add-hook 'minibuffer-exit-hook #'my-minibuffer-exit-hook)
-(+setup-gc)
+(run-with-idle-timer 5 nil '+setup-gc)
+(run-with-idle-timer 30 t #'garbage-collect)
 
 
 ;; (setq jit-lock-contextually 'syntax-driven
