@@ -2081,5 +2081,6 @@ vertical splits"
 
 (use-package explain-pause-mode
   :straight (:type git :host github :repo "lastquestion/explain-pause-mode")
+  :disabled
   :init
   (run-with-idle-timer 3 nil (defl () (explain-pause-mode 1))))

@@ -75,7 +75,7 @@
 (use-package cider
   ;; :straight (:host github :repo "clojure-emacs/cider")
   :straight t
-  :hook (clojure-mode . cider-mode)
+  :hook ((clojure-mode clojurescript-mode clojurec-mode) . cider-mode)
   :custom
   (cider-preferred-build-tool 'clojure-cli)
   (nrepl-log-messages t)
