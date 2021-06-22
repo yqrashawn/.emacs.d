@@ -164,7 +164,8 @@
 (use-package eslintd-fix
   :straight t
   :defer t
-  :hook (rjsx-mode . eslintd-fix-mode)
+  :commands (eslintd-fix)
+  ;; :hook ((js2-mode rjsx-mode ) . eslintd-fix-mode)
   :custom (eslintd-fix-executable "eslint_d"))
 
 (use-package indium
@@ -318,3 +319,8 @@ which is suitable for most programming languages such as C or Lisp."
   (add-hook
    hook
    '+prettify-symbol-js))
+
+(use-package npm
+  :straight t
+  :disabled
+  :commands (npm))
