@@ -158,7 +158,8 @@
 
 (use-package spell-fu
   :straight t
-  :hook ((text-mode yaml-mode conf-mode prog-mode) . spell-fu-mode)
+  ;; :hook ((text-mode yaml-mode conf-mode prog-mode) . spell-fu-mode)
+  :hook ((text-mode git-commit-mode) . spell-fu-mode)
   :custom
   (spell-fu-idle-delay 2)
   (spell-fu-directory (concat spacemacs-cache-directory "spell-fu" ".emacs-spell-fu"))
@@ -207,6 +208,7 @@
           font-lock-variable-name-face)))
     "Faces in certain major modes that spell-fu will not spellcheck.")
   (global-set-key [remap ispell-word] #'+spell/correct)
+  (setq ispell-personal-dictionary (concat user-emacs-directory "ispell-personal-dictionary"))
   :config
   (defadvice! +spell--fix-face-detection-a (orig-fn &rest args)
     "`spell-fu--faces-at-point' uses face detection that won't penetrary
