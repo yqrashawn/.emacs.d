@@ -149,7 +149,7 @@
   :hook ((text-mode yaml-mode conf-mode prog-mode) . spell-fu-mode)
   :custom
   (spell-fu-idle-delay 1)
-  (spell-fu-directory (concat spacemacs-cache-directory "spell-fu" ".emacs-spell-fu"))
+  (spell-fu-directory (concat spacemacs-cache-directory "spell-fu/" ".emacs-spell-fu"))
   :preface
   (defvar +spell-correct-interface #'+spell-correct-ivy-fn)
   :init

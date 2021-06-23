@@ -1813,7 +1813,7 @@ Info-mode:
   :disabled
   :hook (flyspell-mode . auto-dictionary-mode))
 
-(yq/get-modules "spell.el")
+;; (yq/get-modules "spell.el")
 
 (use-package gcmh
   :straight t

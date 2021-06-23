@@ -1,10 +1,22 @@
-personal_ws-1.1 nil 9
+personal_ws-1.1 nil 21
 concat
 createAccount
+deleteAccountGroup
 disable
+discoverAccount
 eslint
+exportAccount
 exportAccountGroup
+generatePrivateKey
+getAccountGroup
 hd
+importAddress
+importMnemonic
+importPrivateKey
 line
+lispy
 next
 rpc
+sexp
+updateAccount
+updateAccountGroup
