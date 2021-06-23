@@ -371,6 +371,7 @@ has been changed to THEME."
   ;; (modus-themes-subtle-line-numbers t)
   ;; (modus-themes-paren-match 'intense-bo)
   :init
+  (modus-themes-load-themes)
   (setq yq/dark-theme 'modus-vivendi)
   (setq yq/light-theme 'modus-operandi))
 

@@ -43,10 +43,32 @@
   (clojure-align-reader-conditionals t)
   (clojure-defun-indents '(fn-traced))
   :init
+  (defun +setup-company-for-clojure ()
+    (setq-local company-idle-delay 0.2)
+    (setq-local evil-shift-width 1)
+    (setq-local company-backends '(company-capf (company-dabbrev-code company-gtags company-etags company-keywords) company-files company-dabbrev)))
+  (add-hook! clojure-mode
+    (defl () (require 'mode-local) (setq-mode-local clojure-mode company-idle-delay 0.2))
+    #'spacemacs//init-jump-handlers-clojure-mode)
+  (add-hook! clojurec-mode #'spacemacs//init-jump-handlers-clojurec-mode)
+  (add-hook! clojurescript-mode #'spacemacs//init-jump-handlers-clojurescript-mode)
+  (add-hook! (clojure-mode clojurescript-mode clojurec-mode) '+setup-company-for-clojure)
   (add-to-list 'auto-mode-alist '("\\.boot\\'" . clojure-mode))
   ;; This regexp matches shebang expressions like `#!/usr/bin/env boot'
   (add-to-list 'magic-mode-alist '("#!.*boot\\s-*$" . clojure-mode))
   :config
+  (dolist (map (list clojure-mode-map clojurescript-mode-map clojurec-mode-map))
+    (print map)
+    (evil-define-key* 'normal map
+      ;; refactorings from clojure-mode
+      ",rc#" 'clojure-convert-collection-to-set
+      ",rc'" 'clojure-convert-collection-to-quoted-list
+      ",rc(" 'clojure-convert-collection-to-list
+      ",rc:" 'clojure-toggle-keyword-string
+      ",rc[" 'clojure-convert-collection-to-vector
+      ",rc{" 'clojure-convert-collection-to-map
+      ",fl" 'clojure-align))
+
   ;; #_ is not a logical sexp
   (defadvice! corgi/clojure--looking-at-non-logical-sexp (command)
     :around #'clojure--looking-at-non-logical-sexp
@@ -55,20 +77,6 @@
     (comment-normalize-vars)
     (comment-forward (point-max))
     (looking-at-p "\\(?:#?\\^\\)\\|#:?:?[[:alpha:]]\\|#_"))
-  (defun +setup-company-for-clojure ()
-    (setq-local company-idle-delay 0.2)
-    (setq-local evil-shift-width 1)
-    (setq-local company-backends '(company-capf
-                                   (company-dabbrev-code
-                                    company-gtags
-                                    company-etags
-                                    company-keywords)
-                                   company-files
-                                   company-dabbrev)))
-
-  (add-hook 'clojure-mode-hook '+setup-company-for-clojure)
-  (dolist (map (list clojure-mode-map clojurec-mode-map clojurescript-mode-map))
-    (evil-define-key* 'normal map ",fl" 'clojure-align))
   (when clojure-enable-fancify-symbols
     (dolist (m '(clojure-mode clojurescript-mode clojurec-mode))
       (clojure/fancify-symbols m)
@@ -76,11 +84,8 @@
       )))
 
 (use-package cider
-  :straight (:host github :repo "clojure-emacs/cider")
-  :hook ((clojure-mode . cider-mode)
-         (clojurec-mode . cider-mode)
-         (clojurescript-mode . cider-mode)
-         (clojurex-mode . cider-mode))
+  :straight (:host :github :repo "clojure-emacs/cider")
+  :hook (clojure-mode clojurescript-mode clojurec-mode)
   :custom
   (cider-preferred-build-tool 'clojure-cli)
   (nrepl-log-messages t)
@@ -91,18 +96,27 @@
   (cider-special-mode-truncate-lines nil)
   (cider-debug-display-locals t)
   (cider-repl-wrap-history t)
-  (cider-stacktrace-default-filters '(tooling dup java))
+  (cider-repl-pop-to-buffer-on-connect nil)
+  (cider-stacktrace-default-filters '(tooling dup))
+  (cider-repl-display-in-current-window t)
+  (cider-save-file-on-load 'prompt)
+  ;; (cider-font-lock-dynamically '(macro core function var deprecated))
+  (cider-font-lock-dynamically nil)
   ;; don't kill the REPL when printing large data structures
-  (cider-print-options
-      '(("length" 80)
-        ("level" 20)
-        ("right-margin" 80)))
+  (cider-print-options '(("length" 80) ("level" 20) ("right-margin" 80)))
+  (cider-auto-select-error-buffer nil)
+  (cider-eval-result-prefix ";; => ")
+  (cider-repl-result-prefix ";; => ")
+  (cider-repl-use-clojure-font-lock t)
+  (cider-repl-use-pretty-printing t)
+  (cider-repl-wrap-history t)
+  (cider-repl-history-quit-action 'delete-and-restore)
+  (cider-repl-history-show-preview t)
+  (cider-repl-history-display-duplicates nil)
+  (cider-repl-history-highlight-inserted-item 'pulse)
+  (cider-repl-history-file (concat spacemacs-cache-directory "cider-repl-history"))
+  (nrepl-hide-special-buffers t)
   :init
-  (require 'mode-local)
-  (add-hook 'clojure-mode-hook (defl () (setq-mode-local clojure-mode company-idle-delay 0.2)))
-  (add-hook 'clojure-mode-hook #'spacemacs//init-jump-handlers-clojure-mode)
-  (add-hook 'clojurescript-mode-hook #'spacemacs//init-jump-handlers-clojurescript-mode)
-  (add-hook 'clojurec-mode-hook #'spacemacs//init-jump-handlers-clojurec-mode)
   ;; (customize-set-variable 'cider-default-repl-command 'lein)
   (spacemacs|add-company-backends
     :backends (company-capf)
@@ -111,53 +125,132 @@
     cider-repl-mode
     :after-hook t)
   (spacemacs|define-jump-handlers clojure-mode)
-  (add-to-list (intern (format "spacemacs-jump-handlers-%S" 'clojure-mode))
-               '(cider-find-dwim :async t))
+  (with-eval-after-load 'clojure-mode
+    (add-to-list (intern (format "spacemacs-jump-handlers-%S" 'clojure-mode))
+                 '(cider-find-dwim :async t)))
   (spacemacs/register-repl 'cider 'cider-jack-in "cider")
   (evil-define-key 'normal clojure-mode-map ",c" 'cider-cheatsheet)
-  (setq cider-font-lock-dynamically '(macro core function var))
-  (setq cider-font-lock-dynamically nil)
-  (setq cider-stacktrace-default-filters '(tooling dup)
-        cider-repl-pop-to-buffer-on-connect nil
-        cider-repl-display-in-current-window t
-        ;; cider-repl-display-in-current-window nil
-        cider-prompt-save-file-on-load nil
-        cider-auto-select-error-buffer nil
-        cider-save-file-on-load t
-        cider-eval-result-prefix ";; => "
-        cider-repl-result-prefix ";; => "
-        cider-repl-use-clojure-font-lock t
-        cider-repl-use-pretty-printing t
-        cider-repl-wrap-history t
-        cider-repl-history-quit-action 'delete-and-restore
-        cider-repl-history-show-preview t
-        cider-repl-history-display-duplicates nil
-        cider-repl-history-highlight-inserted-item t
-        cider-repl-history-file (concat spacemacs-cache-directory "cider-repl-history")
-        nrepl-hide-special-buffers t
-        cider-eldoc-display-context-dependent-info t)
-  (dolist (x '(spacemacs-jump-handlers-clojure-mode
-               spacemacs-jump-handlers-clojurec-mode
-               spacemacs-jump-handlers-clojurescript-mode
-               spacemacs-jump-handlers-clojurex-mode
-               spacemacs-jump-handlers-cider-repl-mode))
-    (add-to-list x 'spacemacs/clj-find-var))
-  (add-to-list 'evil-insert-state-modes 'cider-repl-mode)
-  (add-to-list 'evil-insert-state-modes 'cider--debug-mode)
-  (add-hook 'cider-mode-hook #'cider-company-enable-fuzzy-completion)
-  (add-hook 'cider-repl-mode-hook #'spacemacs//init-jump-handlers-cider-repl-mode)
-  (add-hook 'cider-repl-mode-hook #'cider-company-enable-fuzzy-completion)
-  (add-hook 'cider-repl-mode-hook '+setup-company-for-clojure)
-  (add-hook 'clojure-mode-hook (defl (company-flx-mode -1)))
-  (add-hook 'clojurescript-mode-hook (defl (company-flx-mode -1)))
-  (add-hook 'clojurec-mode-hook (defl (company-flx-mode -1)))
-  (add-hook 'cider-repl-mode-hook (defl (company-flx-mode -1)))
+  (with-eval-after-load 'cojure-mode
+    (dolist (x '(spacemacs-jump-handlers-clojure-mode
+                 spacemacs-jump-handlers-clojurec-mode
+                 spacemacs-jump-handlers-clojurescript-mode
+                 spacemacs-jump-handlers-clojurex-mode
+                 spacemacs-jump-handlers-cider-repl-mode))
+      (add-to-list x 'spacemacs/clj-find-var)))
+  (pushnew! evil-insert-state-modes 'cider-repl-mode)
+  (add-hook! 'cider-mode-hook #'cider-company-enable-fuzzy-completion)
+  (add-hook! 'cider-repl-mode-hook
+             #'spacemacs//init-jump-handlers-cider-repl-mode
+             #'cider-company-enable-fuzzy-completion
+             '+setup-company-for-clojure)
+  (defun +bind-clj-key (maps)
+    (dolist (map maps)
+      (evil-define-key* 'normal map
+        ",c" 'cider-cheatsheet
+        ",qr" 'sesman-restart
+        ",qq" 'sesman-quit
+        ",ha" 'cider-apropos
+        ",hc" 'cider-clojuredocs
+        ",hw" 'cider-clojuredocs-web
+        ",hg" 'cider-grimoire
+        ",hh" 'cider-doc
+        ",hj" 'cider-javadoc
+        ",hn" 'cider-browse-ns
+
+        ",e;" 'cider-eval-defun-to-comment
+        ",eb" 'cider-eval-buffer
+        ",ee" 'cider-eval-last-sexp
+        ",ef" 'cider-eval-defun-at-point
+        ",em" 'cider-macroexpand-1
+        ",eM" 'cider-macroexpand-all
+        ",eP" 'cider-pprint-eval-last-sexp
+        ",er" 'cider-eval-region
+        ",ew" 'cider-eval-last-sexp-and-replace
+
+        ",=" 'cider-format-buffer
+        ",fb" 'cider-format-buffer
+
+        ",gb" 'cider-pop-back
+        ",gc" 'cider-classpath
+        ",ge" 'cider-jump-to-compilation-error
+        ",gn" 'cider-find-ns
+        ",gN" 'cider-browse-ns-all
+        ",gr" 'cider-find-resource
+        ",gs" 'cider-browse-spec
+        ",gS" 'cider-browse-spec-all
+        ;; find deps function of current function
+        ",gd" 'cider-find-dwim
+        ;; ",gd" 'cider-xref-fn-deps-select
+        ;; find current function usage
+        ",gu" 'cider-xref-fn-refs-select
+
+        ",'" 'cider-jack-in
+        ",\"" 'cider-jack-in-clojurescript
+        ",ja" 'cider-jack-in-clj&cljs
+        ",sb" 'cider-load-buffer
+        ",sB" 'spacemacs/cider-send-buffer-in-repl-and-focus
+        ",sc" (if (eq map 'cider-repl-mode)
+                  'cider-repl-clear-buffer
+                'cider-connect)
+        ",sC" 'cider-find-and-clear-repl-output
+        ",se" 'spacemacs/cider-send-last-sexp-to-repl
+        ",sE" 'spacemacs/cider-send-last-sexp-to-repl-focus
+        ",sf" 'spacemacs/cider-send-function-to-repl
+        ",sF" 'spacemacs/cider-send-function-to-repl-focus
+        ",si" 'cider-jack-in
+        ",sI" 'cider-jack-in-clojurescript
+        ",sn" 'spacemacs/cider-send-ns-form-to-repl
+        ",sN" 'spacemacs/cider-send-ns-form-to-repl-focus
+        ",so" 'cider-repl-switch-to-other
+        ",sq" 'cider-quit
+        ",sr" 'spacemacs/cider-send-region-to-repl
+        ",sR" 'spacemacs/cider-send-region-to-repl-focus
+        ",ss" (if (eq map 'cider-repl-mode)
+                  'cider-switch-to-last-clojure-buffer
+                'cider-switch-to-repl-buffer)
+        ",sx" 'cider-ns-refresh
+        ",sX" 'cider-restart
+        ",rn" 'cider-ns-reload
+        ",rN" 'cider-ns-reload-all
+
+        ",Te" 'cider-enlighten-mode
+        ",Tf" 'spacemacs/cider-toggle-repl-font-locking
+        ",Tp" 'spacemacs/cider-toggle-repl-pretty-printing
+        ",Tt" 'cider-auto-test-mode
+
+        ",ta" 'spacemacs/cider-test-run-all-tests
+        ",tb" 'cider-test-show-report
+        ",tl" 'spacemacs/cider-test-run-loaded-tests
+        ",tn" 'spacemacs/cider-test-run-ns-tests
+        ",tp" 'spacemacs/cider-test-run-project-tests
+        ",tr" 'spacemacs/cider-test-rerun-failed-tests
+        ",tt" 'spacemacs/cider-test-run-focused-test
+
+        ",tv" 'cider-toggle-trace-var
+        ;; ",tn" 'cider-toggle-trace-ns
+        ",db" 'cider-debug-defun-at-point
+        ",de" 'spacemacs/cider-display-error-buffer
+        ",dv" 'cider-inspect
+        ",il" 'cider-inspect-last-result
+        ",is" 'cider-inspect-last-sexp
+        ",iD" 'cider-inspect-defun-at-point
+        ",bs" 'cider-browse-spec
+        ",bS" 'cider-browse-spec-all
+
+        ;; profile
+        ",p+" 'cider-profile-samples
+        ",pc" 'cider-profile-clear
+        ",pn" 'cider-profile-ns-toggle
+        ",ps" 'cider-profile-var-summary
+        ",pS" 'cider-profile-summary
+        ",pt" 'cider-profile-toggle
+        ",pv" 'cider-profile-var-profiled-p)))
 
   ;; https://philjackson.github.io/emacs/evil/cider/debugging/2021/06/06/using-the-cider-debugger-in-evil/
   (defun my-cider-debug-toggle-insert-state ()
-    (if cider--debug-mode    ;; Checks if you're entering the debugger
-        (evil-insert-state)  ;; If so, turn on evil-insert-state
-      (evil-normal-state)))  ;; Otherwise, turn on normal-state
+    (if cider--debug-mode   ;; Checks if you're entering the debugger
+        (evil-insert-state) ;; If so, turn on evil-insert-state
+      (evil-normal-state))) ;; Otherwise, turn on normal-state
 
   (defun corgi/cider-quit-all ()
     "Quit all current CIDER REPLs."
@@ -172,118 +265,8 @@
     (run-hooks 'sesman-post-command-hook))
 
   :config
-  (dolist (map (list clojure-mode-map
-                     clojurec-mode-map
-                     clojurescript-mode-map
-                     cider-repl-mode-map))
-
-    (evil-define-key* 'normal map
-      ",qr" 'sesman-restart
-      ",qq" 'sesman-quit
-      ",ha" 'cider-apropos
-      ",hc" 'cider-clojuredocs
-      ",hw" 'cider-clojuredocs-web
-      ",hg" 'cider-grimoire
-      ",hh" 'cider-doc
-      ",hj" 'cider-javadoc
-      ",hn" 'cider-browse-ns
-
-      ",e;" 'cider-eval-defun-to-comment
-      ",eb" 'cider-eval-buffer
-      ",ee" 'cider-eval-last-sexp
-      ",ef" 'cider-eval-defun-at-point
-      ",em" 'cider-macroexpand-1
-      ",eM" 'cider-macroexpand-all
-      ",eP" 'cider-pprint-eval-last-sexp
-      ",er" 'cider-eval-region
-      ",ew" 'cider-eval-last-sexp-and-replace
-
-      ",=" 'cider-format-buffer
-      ",fb" 'cider-format-buffer
-
-      ",gb" 'cider-pop-back
-      ",gc" 'cider-classpath
-      ",ge" 'cider-jump-to-compilation-error
-      ",gn" 'cider-find-ns
-      ",gN" 'cider-browse-ns-all
-      ",gr" 'cider-find-resource
-      ",gs" 'cider-browse-spec
-      ",gS" 'cider-browse-spec-all
-      ;; find deps function of current function
-      ",gd" 'cider-find-dwim
-      ;; ",gd" 'cider-xref-fn-deps-select
-      ;; find current function usage
-      ",gu" 'cider-xref-fn-refs-select
-
-      ",'" 'cider-jack-in
-      ",\"" 'cider-jack-in-clojurescript
-      ",ja" 'cider-jack-in-clj&cljs
-      ",sb" 'cider-load-buffer
-      ",sB" 'spacemacs/cider-send-buffer-in-repl-and-focus
-      ",sc" (if (eq map 'cider-repl-mode)
-                'cider-repl-clear-buffer
-              'cider-connect)
-      ",sC" 'cider-find-and-clear-repl-output
-      ",se" 'spacemacs/cider-send-last-sexp-to-repl
-      ",sE" 'spacemacs/cider-send-last-sexp-to-repl-focus
-      ",sf" 'spacemacs/cider-send-function-to-repl
-      ",sF" 'spacemacs/cider-send-function-to-repl-focus
-      ",si" 'cider-jack-in
-      ",sI" 'cider-jack-in-clojurescript
-      ",sn" 'spacemacs/cider-send-ns-form-to-repl
-      ",sN" 'spacemacs/cider-send-ns-form-to-repl-focus
-      ",so" 'cider-repl-switch-to-other
-      ",sq" 'cider-quit
-      ",sr" 'spacemacs/cider-send-region-to-repl
-      ",sR" 'spacemacs/cider-send-region-to-repl-focus
-      ",ss" (if (eq map 'cider-repl-mode)
-                'cider-switch-to-last-clojure-buffer
-              'cider-switch-to-repl-buffer)
-      ",sx" 'cider-ns-refresh
-      ",sX" 'cider-restart
-      ",rn" 'cider-ns-reload
-      ",rN" 'cider-ns-reload-all
-
-      ",Te" 'cider-enlighten-mode
-      ",Tf" 'spacemacs/cider-toggle-repl-font-locking
-      ",Tp" 'spacemacs/cider-toggle-repl-pretty-printing
-      ",Tt" 'cider-auto-test-mode
-
-      ",ta" 'spacemacs/cider-test-run-all-tests
-      ",tb" 'cider-test-show-report
-      ",tl" 'spacemacs/cider-test-run-loaded-tests
-      ",tn" 'spacemacs/cider-test-run-ns-tests
-      ",tp" 'spacemacs/cider-test-run-project-tests
-      ",tr" 'spacemacs/cider-test-rerun-failed-tests
-      ",tt" 'spacemacs/cider-test-run-focused-test
-
-      ",tv" 'cider-toggle-trace-var
-      ;; ",tn" 'cider-toggle-trace-ns
-      ",db" 'cider-debug-defun-at-point
-      ",de" 'spacemacs/cider-display-error-buffer
-      ",dv" 'cider-inspect
-      ",il" 'cider-inspect-last-result
-      ",is" 'cider-inspect-last-sexp
-      ",iD" 'cider-inspect-defun-at-point
-      ",bs" 'cider-browse-spec
-      ",bS" 'cider-browse-spec-all
-
-      ;; profile
-      ",p+" 'cider-profile-samples
-      ",pc" 'cider-profile-clear
-      ",pn" 'cider-profile-ns-toggle
-      ",ps" 'cider-profile-var-summary
-      ",pS" 'cider-profile-summary
-      ",pt" 'cider-profile-toggle
-      ",pv" 'cider-profile-var-profiled-p
-
-      ;; refactorings from clojure-mode
-      ",rc#" 'clojure-convert-collection-to-set
-      ",rc'" 'clojure-convert-collection-to-quoted-list
-      ",rc(" 'clojure-convert-collection-to-list
-      ",rc:" 'clojure-toggle-keyword-string
-      ",rc[" 'clojure-convert-collection-to-vector
-      ",rc{" 'clojure-convert-collection-to-map))
+  (with-eval-after-load 'clojure-mode (+bind-clj-key (list clojure-mode-map clojurec-mode-map clojurescript-mode-map)))
+  (+bind-clj-key (list cider-repl-mode-map))
   (defadvice! +cider-add-to-alist (orig-fn alist name version)
     :around #'cider-add-to-alist
     (if (not (= alist 'cider-jack-in-dependencies))
@@ -371,7 +354,7 @@ clojurescript-mode) of the current buffer."
           (cider--pprint-eval-form reg)))
        (t
         (cider--pprint-eval-form reg)))))
-  (add-hook 'cider--debug-mode-hook 'my-cider-debug-toggle-insert-state)
+  (add-hook! 'cider--debug-mode-hook 'my-cider-debug-toggle-insert-state)
   (define-key cider-repl-mode-map (kbd "s-k") 'cider-quit)
 
   ;; cider-repl-mode only

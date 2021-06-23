@@ -174,7 +174,7 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
   (lispy-outline "^;;\\(;+\\|[^#]\\|\\*+\\)")
   :init
   (defun +clj-file-p ()
-    (or cider-mode (memq major-mode '(clojure-mode clojurescript-mode clojurec-mode))))
+    (memq major-mode '(clojure-mode clojurescript-mode clojurec-mode)))
   (add-hook! 'eval-expression-minibuffer-setup-hook
     (defun doom-init-lispy-in-eval-expression-h ()
       "Enable `lispy-mode' in the minibuffer for `eval-expression'."
@@ -208,7 +208,7 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
   (defadvice! +lispy-down (a) :after #'lispy-down (call-interactively #'lispy-tab))
   (defadvice! +lispy-tab (orig-fn)
     :around #'lispy-tab
-    (if (or cider-mode (memq major-mode '(clojure-mode clojurescript-mode clojurec-mode)))
+    (if (memq major-mode '(clojure-mode clojurescript-mode clojurec-mode))
         (and (functionp #'clojure-align) (call-interactively #'clojure-align))
       (call-interactively orig-fn)))
   (add-hook 'lispy-mode-hook #'turn-off-smartparens-mode)
