@@ -76,7 +76,7 @@
       )))
 
 (use-package cider
-  :straight (:host :github :repo "clojure-emacs/cider")
+  :straight (:host github :repo "clojure-emacs/cider")
   :hook ((clojure-mode . cider-mode)
          (clojurec-mode . cider-mode)
          (clojurescript-mode . cider-mode)

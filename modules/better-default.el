@@ -680,7 +680,7 @@ If the universal prefix argument is used then kill the buffer too."
   (recentf-max-saved-items 2000)
   (recentf-auto-cleanup 300)
   :init
-  (add-hook 'delete-terminal-functions (defl ()  (ignore-errors (recentf-save-list))))
+  (add-hook 'delete-terminal-functions (defl (a) (ignore-errors (recentf-save-list))))
   (recentf-mode 1)
   :config
   (run-with-idle-timer 60 t 'recentf-save-list)
