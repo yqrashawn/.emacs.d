@@ -31,7 +31,10 @@
 
 (use-package clojure-mode
   :straight t
-  :diminish (clojurescript-mode clojure-mode)
+  :diminish (clojure-mode
+             clojurec-mode
+             clojurescript-mode
+             clojurex-mode)
   :magic ("^#![^\n]*/\\(clj\\|clojure\\|bb\\|lumo\\)" . clojure-mode)
   :custom
   (clojure-align-forms-automatically nil)
@@ -74,7 +77,10 @@
 
 (use-package cider
   :straight (:host :github :repo "clojure-emacs/cider")
-  :hook ((clojure-mode clojurescript-mode clojurec-mode) . cider-mode)
+  :hook ((clojure-mode . cider-mode)
+         (clojurec-mode . cider-mode)
+         (clojurescript-mode . cider-mode)
+         (clojurex-mode . cider-mode))
   :custom
   (cider-preferred-build-tool 'clojure-cli)
   (nrepl-log-messages t)
@@ -371,10 +377,10 @@ clojurescript-mode) of the current buffer."
   ;; cider-repl-mode only
   (define-key cider-repl-mode-map (kbd "C-c C-l") 'cider-repl-clear-buffer)
   (evil-define-key 'normal cider-repl-mode-map ",," 'cider-repl-handle-shortcut)
-  (evil-define-key 'insert cider-repl-mode-map (kbd "RET" ) 'cider-repl-closing-return)
-  (evil-define-key 'insert cider-repl-mode-map (kbd "C-n" ) 'cider-repl-next-input)
-  (evil-define-key 'insert cider-repl-mode-map (kbd "C-p" ) 'cider-repl-previous-input)
-  (evil-define-key 'insert cider-repl-mode-map (kbd "<C-return>" ) 'newline-and-indent)
+  (evil-define-key 'insert cider-repl-mode-map (kbd "RET") 'cider-repl-closing-return)
+  (evil-define-key 'insert cider-repl-mode-map (kbd "C-n") 'cider-repl-next-input)
+  (evil-define-key 'insert cider-repl-mode-map (kbd "C-p") 'cider-repl-previous-input)
+  (evil-define-key 'insert cider-repl-mode-map (kbd "<C-return>") 'newline-and-indent)
 
   ;; add support for golden-ratio
   (with-eval-after-load 'golden-ratio
@@ -395,18 +401,18 @@ clojurescript-mode) of the current buffer."
     (kbd "C-j") 'cider-stacktrace-next-cause
     (kbd "C-k") 'cider-stacktrace-previous-cause
     (kbd "TAB") 'cider-stacktrace-cycle-current-cause
-    (kbd "0")   'cider-stacktrace-cycle-all-causes
-    (kbd "1")   'cider-stacktrace-cycle-cause-1
-    (kbd "2")   'cider-stacktrace-cycle-cause-2
-    (kbd "3")   'cider-stacktrace-cycle-cause-3
-    (kbd "4")   'cider-stacktrace-cycle-cause-4
-    (kbd "5")   'cider-stacktrace-cycle-cause-5
-    (kbd "a")   'cider-stacktrace-toggle-all
-    (kbd "c")   'cider-stacktrace-toggle-clj
-    (kbd "d")   'cider-stacktrace-toggle-duplicates
-    (kbd "J")   'cider-stacktrace-toggle-java
-    (kbd "r")   'cider-stacktrace-toggle-repl
-    (kbd "T")   'cider-stacktrace-toggle-tooling)
+    (kbd "0") 'cider-stacktrace-cycle-all-causes
+    (kbd "1") 'cider-stacktrace-cycle-cause-1
+    (kbd "2") 'cider-stacktrace-cycle-cause-2
+    (kbd "3") 'cider-stacktrace-cycle-cause-3
+    (kbd "4") 'cider-stacktrace-cycle-cause-4
+    (kbd "5") 'cider-stacktrace-cycle-cause-5
+    (kbd "a") 'cider-stacktrace-toggle-all
+    (kbd "c") 'cider-stacktrace-toggle-clj
+    (kbd "d") 'cider-stacktrace-toggle-duplicates
+    (kbd "J") 'cider-stacktrace-toggle-java
+    (kbd "r") 'cider-stacktrace-toggle-repl
+    (kbd "T") 'cider-stacktrace-toggle-tooling)
 
   ;; open cider-doc directly and close it with q
   (setq cider-prompt-for-symbol nil)
@@ -442,16 +448,16 @@ clojurescript-mode) of the current buffer."
     (kbd "C-j") 'cider-test-next-result
     (kbd "C-k") 'cider-test-previous-result
     (kbd "RET") 'cider-test-jump
-    (kbd "d")   'cider-test-ediff
-    (kbd "e")   'cider-test-stacktrace
-    (kbd "q")   'cider-popup-buffer-quit
-    (kbd "r")   'cider-test-rerun-tests
-    (kbd "t")   'cider-test-run-test
-    (kbd "T")   'cider-test-run-ns-tests)
+    (kbd "d") 'cider-test-ediff
+    (kbd "e") 'cider-test-stacktrace
+    (kbd "q") 'cider-popup-buffer-quit
+    (kbd "r") 'cider-test-rerun-tests
+    (kbd "t") 'cider-test-run-test
+    (kbd "T") 'cider-test-run-ns-tests)
 
   (evil-define-key* 'normal cider-repl-mode-map
-                    (kbd "C-j") 'cider-repl-next-input
-                    (kbd "C-k") 'cider-repl-previous-input)
+    (kbd "C-j") 'cider-repl-next-input
+    (kbd "C-k") 'cider-repl-previous-input)
 
   (when clojure-enable-fancify-symbols
     (clojure/fancify-symbols 'cider-repl-mode)

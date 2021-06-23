@@ -185,6 +185,23 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
       (local-set-key (vector 'remap (lookup-key lispy-mode-map (kbd "TAB"))) #'completion-at-point)))
   (yq/add-toggle lispy :mode lispy-mode)
   :config
+  ;; make lispy-eval works in babashka repl
+  (defadvice! +lispy-eval (orig-fn &rest args)
+    :around #'lispy-eval
+    (if (and (memq major-mode '(clojure-mode)) (functionp 'cider--babashka-version) (cider--babashka-version))
+        (if (and lispy-mode (lispy-left-p))
+            (save-excursion
+              (call-interactively 'lispy-different)
+              (call-interactively 'cider-eval-last-sexp))
+          (call-interactively 'cider-eval-last-sexp))
+      (apply orig-fn args)))
+  (defadvice! +lispy-eval-and-insert (func &rest args)
+    :around #'lispy-eval-and-insert
+    (if (and (memq major-mode '(clojure-mode)) (functionp 'cider--babashka-version) (cider--babashka-version))
+        (progn
+          ;; (setq current-prefix-arg '(1))
+          (call-interactively 'cider-pprint-eval-last-sexp))
+      (apply func args)))
   (defadvice! +lispy-right (a) :after #'lispy-right (call-interactively #'lispy-tab))
   (defadvice! +lispy-left (a) :after #'lispy-left (call-interactively #'lispy-tab))
   (defadvice! +lispy-up (a) :after #'lispy-up (call-interactively #'lispy-tab))
