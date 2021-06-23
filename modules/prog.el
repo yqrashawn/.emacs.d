@@ -1035,4 +1035,9 @@ _g_  gfm      _m_ markdown
   :straight t
   :custom
   (tree-sitter-hl-use-font-lock-keywords nil)
-  :hook ((prog-mode text-mode) . +tree-sitter-manybe-enable))
+  :hook ((prog-mode text-mode) . +tree-sitter-manybe-enable)
+  :config
+  (pushnew! tree-sitter-major-mode-language-alist
+            '(clojure-mode . clojure)
+            '(clojurescript-mode . clojure)
+            '(clojurec-mode . clojure)))
