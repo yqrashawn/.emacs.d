@@ -144,10 +144,27 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
       (add-to-list jumpl 'elisp-def))))
 
 (use-package lispy
-  :straight t
+  :straight (:host github :repo "abo-abo/lispy"
+                   :files (:defaults "lispy-clojure.clj"
+                                     "lispy-clojure.cljs"
+                                     "lispy-python.py"
+                                     "lispy-clojure-test.clj"))
   :diminish lispy " ʪ"
-  :hook ((ielm-mode lisp-mode clojure-mode emacs-lisp-mode cider-repl-mode clojurescript-mode) . lispy-mode)
+  :hook ((ielm-mode
+          lisp-mode
+          clojure-mode
+          clojurec-mode
+          scheme-mode
+          racket-mode
+          hy-mode
+          lfe-mode
+          dune-mode
+          fennel-mode
+          emacs-lisp-mode
+          cider-repl-mode
+          clojurescript-mode) . lispy-mode)
   :custom
+  (lispy-close-quotes-at-end-p t)
   (lispy-eval-display-style 'overlay)
   (lispy-visit-method 'projectile)
   (lispy-safe-copy t)
@@ -156,25 +173,28 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
   (lispy-safe-actions-no-pull-delimiters-into-comments t)
   (lispy-outline "^;;\\(;+\\|[^#]\\|\\*+\\)")
   :init
+  (defun +clj-file-p ()
+    (or cider-mode (memq major-mode '(clojure-mode clojurescript-mode clojurec-mode))))
+  (add-hook! 'eval-expression-minibuffer-setup-hook
+    (defun doom-init-lispy-in-eval-expression-h ()
+      "Enable `lispy-mode' in the minibuffer for `eval-expression'."
+      (lispy-mode)
+      ;; When `lispy-key-theme' has `parinfer', the TAB key doesn't do
+      ;; completion, neither (kbd "<tab>"/"TAB"/"C-i")/[tab]/"\C-i" works in
+      ;; terminal as tested so remapping is used as a workaround
+      (local-set-key (vector 'remap (lookup-key lispy-mode-map (kbd "TAB"))) #'completion-at-point)))
   (yq/add-toggle lispy :mode lispy-mode)
   :config
-  (defadvice! +lispy-eval (orig-fn &rest args)
-    :around #'lispy-eval
-    (if (memq major-mode '(clojure-mode clojurescript-mode cider-repl-mode))
-        (if (and lispy-mode (lispy-left-p))
-            (save-excursion
-              (call-interactively 'lispy-different)
-              (call-interactively 'cider-eval-last-sexp))
-          (call-interactively 'cider-eval-last-sexp))
-      (apply orig-fn args)))
-
-  (defadvice! +lispy-eval-and-insert (func &rest args)
-    :around #'lispy-eval-and-insert
-    (if (memq major-mode '(clojure-mode clojurescript-mode cider-repl-mode))
-        (progn
-          ;; (setq current-prefix-arg '(1))
-          (call-interactively 'cider-pprint-eval-last-sexp))
-      (apply func args)))
+  (defadvice! +lispy-right (a) :after #'lispy-right (call-interactively #'lispy-tab))
+  (defadvice! +lispy-left (a) :after #'lispy-left (call-interactively #'lispy-tab))
+  (defadvice! +lispy-up (a) :after #'lispy-up (call-interactively #'lispy-tab))
+  (defadvice! +lispy-down (a) :after #'lispy-down (call-interactively #'lispy-tab))
+  (defadvice! +lispy-tab (orig-fn)
+    :around #'lispy-tab
+    (if (or cider-mode (memq major-mode '(clojure-mode clojurescript-mode clojurec-mode)))
+        (and (functionp #'clojure-align) (call-interactively #'clojure-align))
+      (call-interactively orig-fn)))
+  (add-hook 'lispy-mode-hook #'turn-off-smartparens-mode)
   (with-eval-after-load 'semantic
     (defvar-mode-local emacs-lisp-mode semanticdb-find-default-throttle
       '(project omniscience)
@@ -196,6 +216,7 @@ the omniscience database.")
   ;; semantic db recursive load error
   ;; https://github.com/syl20bnr/spacemacs/issues/12843
   ;; (require 'semantic/db-file)
+
   (use-package ccc                      ; for cursor style
     :straight t
     :init
@@ -208,17 +229,7 @@ the omniscience database.")
                  (ccc-set-buffer-local-cursor-color "green")))))
     :config
     (add-hook 'post-command-hook '+lispy-update-cursor-style))
-  (defun conditionally-enable-lispy ()
-    (when (eq this-command 'eval-expression)
-      (lispy-mode 1)))
-  (add-hook 'minibuffer-setup-hook 'conditionally-enable-lispy)
 
-  ;; bug fix
-  ;; (advice-add
-  ;;  #'special-lispy-eval
-  ;;  :before (lambda ()
-  ;;            (or (fboundp 'cider--make-overlay)
-  ;;                (require 'cider))))
   (defhydra lh-knight ()
     "knight"
     ("j" lispy-knight-down)
@@ -235,7 +246,6 @@ the omniscience database.")
   (define-key lispy-mode-map (kbd "C-x C-6 w") #'lispy-arglist-inline)
   ;; (evil-define-key 'insert lispy-mode-map (kbd "C-k") 'lispy-kill)
   (evil-define-key 'insert lispy-mode-map (kbd "C-d") 'lispy-delete)
-  ;; (evil-define-key 'insert lispy-mode-map (kbd "C-r") 'undo-tree-redo)
   (evil-define-key 'insert lispy-mode-map (kbd "C-r") #'undo-fu-only-redo)
   (evil-define-key 'insert lispy-mode-map (kbd "C-e") 'lispy-move-end-of-line)
   (with-eval-after-load 'emacs-lisp-mode
@@ -393,18 +403,10 @@ Instead keep them, with a newline after each comment."
   (evil-define-key 'insert parinfer-mode-map (kbd "C-e") #'lispy-move-end-of-line)
   (evil-define-key 'normal parinfer-mode-map "si" #'lispy-mark-symbol))
 
-(use-package parinfer-rust-mode
-  :straight (:host github :repo "justinbarclay/parinfer-rust-mode")
-  :disabled
-  :hook ((clojure-mode . parinfer-rust-mode)
-         (emacs-lisp-mode . parinfer-rust-mode)
-         (lisp-mode . parinfer-rust-mode)))
-
 (use-package lispyville
   :straight (:host github :repo "noctuid/lispyville")
   :after (lispy)
   :diminish lispyville-mode
-  :commands (lispyville-mode)
   :hook (lispy-mode . lispyville-mode)
   :custom
   (lispyville-motions-put-into-special t)
@@ -425,6 +427,16 @@ Instead keep them, with a newline after each comment."
      mark-special
      mark-toggle))
   :config
+  ;; REVIEW Delete this once https://github.com/noctuid/lispyville/pull/297 is merged
+  (defadvice! +lispy--fix-lispyville-end-of-defun-a (_)
+    "lispyville-end-of-defun doesn't go to the next defun when
+point is already at the end of a defun, whereas
+lispyville-beginning-of-defun does."
+    :before #'lispyville-end-of-defun
+    (when (<= (- (line-end-position)
+                 (point))
+              1)
+      (forward-line)))
   ;; (lispyville-set-key-theme)
   (lispy-define-key lispy-mode-map "v" #'lispyville-toggle-mark-type)
   (lispy-define-key lispy-mode-map "m" #'lispy-view)
@@ -449,7 +461,7 @@ Instead keep them, with a newline after each comment."
               (lispy-bind-variable)))
     (kbd "M-RET") #'lispyville-wrap-round
     "{" (defl (lispyville-insert-at-beginning-of-list 1) (insert " ") (backward-char))
-    "}" (defl (lispyville-insert-at-end-of-list) (insert "")))
+    "}" (defl (lispyville-insert-at-end-of-list 1) (insert "")))
   (lispyville--define-key 'insert
     (kbd "M-RET") #'lispyville-wrap-round
     (kbd "C-r") #'lispyville-backward-up-list)
@@ -465,11 +477,11 @@ Instead keep them, with a newline after each comment."
   (define-key evil-inner-text-objects-map "f" 'evil-textobj-anyblock-inner-block)
   (define-key evil-outer-text-objects-map "f" 'evil-textobj-anyblock-a-block))
 
-
 (use-package eval-sexp-fu
   :straight t
   :commands (eval-sexp-fu-flash-mode)
   :hook (emacs-lisp-mode . eval-sexp-fu-flash-mode))
+
 
 (use-package highlight-defined
   :straight t
@@ -565,6 +577,13 @@ Instead keep them, with a newline after each comment."
 (use-package highlight-function-calls
   :straight t
   :hook ((emacs-lisp-mode) . highlight-function-calls-mode))
+
+(use-package parinfer-rust-mode
+  :straight (:host github :repo "justinbarclay/parinfer-rust-mode")
+  :disabled
+  :hook ((clojure-mode . parinfer-rust-mode)
+         (emacs-lisp-mode . parinfer-rust-mode)
+         (lisp-mode . parinfer-rust-mode)))
 
 (use-package highlight-stages
   :straight t

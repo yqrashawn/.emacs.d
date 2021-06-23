@@ -73,8 +73,7 @@
       )))
 
 (use-package cider
-  ;; :straight (:host github :repo "clojure-emacs/cider")
-  :straight t
+  :straight (:host :github :repo "clojure-emacs/cider")
   :hook ((clojure-mode clojurescript-mode clojurec-mode) . cider-mode)
   :custom
   (cider-preferred-build-tool 'clojure-cli)
@@ -110,7 +109,6 @@
                '(cider-find-dwim :async t))
   (spacemacs/register-repl 'cider 'cider-jack-in "cider")
   (evil-define-key 'normal clojure-mode-map ",c" 'cider-cheatsheet)
-
   (setq cider-font-lock-dynamically '(macro core function var))
   (setq cider-font-lock-dynamically nil)
   (setq cider-stacktrace-default-filters '(tooling dup)
@@ -166,7 +164,127 @@
     (cider-close-ancillary-buffers)
     ;; need this to refresh sesman browser
     (run-hooks 'sesman-post-command-hook))
+
   :config
+  (dolist (map (list clojure-mode-map
+                     clojurec-mode-map
+                     clojurescript-mode-map
+                     cider-repl-mode-map))
+
+    (evil-define-key* 'normal map
+      ",qr" 'sesman-restart
+      ",qq" 'sesman-quit
+      ",ha" 'cider-apropos
+      ",hc" 'cider-clojuredocs
+      ",hw" 'cider-clojuredocs-web
+      ",hg" 'cider-grimoire
+      ",hh" 'cider-doc
+      ",hj" 'cider-javadoc
+      ",hn" 'cider-browse-ns
+
+      ",e;" 'cider-eval-defun-to-comment
+      ",eb" 'cider-eval-buffer
+      ",ee" 'cider-eval-last-sexp
+      ",ef" 'cider-eval-defun-at-point
+      ",em" 'cider-macroexpand-1
+      ",eM" 'cider-macroexpand-all
+      ",eP" 'cider-pprint-eval-last-sexp
+      ",er" 'cider-eval-region
+      ",ew" 'cider-eval-last-sexp-and-replace
+
+      ",=" 'cider-format-buffer
+      ",fb" 'cider-format-buffer
+
+      ",gb" 'cider-pop-back
+      ",gc" 'cider-classpath
+      ",ge" 'cider-jump-to-compilation-error
+      ",gn" 'cider-find-ns
+      ",gN" 'cider-browse-ns-all
+      ",gr" 'cider-find-resource
+      ",gs" 'cider-browse-spec
+      ",gS" 'cider-browse-spec-all
+      ;; find deps function of current function
+      ",gd" 'cider-find-dwim
+      ;; ",gd" 'cider-xref-fn-deps-select
+      ;; find current function usage
+      ",gu" 'cider-xref-fn-refs-select
+
+      ",'" 'cider-jack-in
+      ",\"" 'cider-jack-in-clojurescript
+      ",ja" 'cider-jack-in-clj&cljs
+      ",sb" 'cider-load-buffer
+      ",sB" 'spacemacs/cider-send-buffer-in-repl-and-focus
+      ",sc" (if (eq map 'cider-repl-mode)
+                'cider-repl-clear-buffer
+              'cider-connect)
+      ",sC" 'cider-find-and-clear-repl-output
+      ",se" 'spacemacs/cider-send-last-sexp-to-repl
+      ",sE" 'spacemacs/cider-send-last-sexp-to-repl-focus
+      ",sf" 'spacemacs/cider-send-function-to-repl
+      ",sF" 'spacemacs/cider-send-function-to-repl-focus
+      ",si" 'cider-jack-in
+      ",sI" 'cider-jack-in-clojurescript
+      ",sn" 'spacemacs/cider-send-ns-form-to-repl
+      ",sN" 'spacemacs/cider-send-ns-form-to-repl-focus
+      ",so" 'cider-repl-switch-to-other
+      ",sq" 'cider-quit
+      ",sr" 'spacemacs/cider-send-region-to-repl
+      ",sR" 'spacemacs/cider-send-region-to-repl-focus
+      ",ss" (if (eq map 'cider-repl-mode)
+                'cider-switch-to-last-clojure-buffer
+              'cider-switch-to-repl-buffer)
+      ",sx" 'cider-ns-refresh
+      ",sX" 'cider-restart
+      ",rn" 'cider-ns-reload
+      ",rN" 'cider-ns-reload-all
+
+      ",Te" 'cider-enlighten-mode
+      ",Tf" 'spacemacs/cider-toggle-repl-font-locking
+      ",Tp" 'spacemacs/cider-toggle-repl-pretty-printing
+      ",Tt" 'cider-auto-test-mode
+
+      ",ta" 'spacemacs/cider-test-run-all-tests
+      ",tb" 'cider-test-show-report
+      ",tl" 'spacemacs/cider-test-run-loaded-tests
+      ",tn" 'spacemacs/cider-test-run-ns-tests
+      ",tp" 'spacemacs/cider-test-run-project-tests
+      ",tr" 'spacemacs/cider-test-rerun-failed-tests
+      ",tt" 'spacemacs/cider-test-run-focused-test
+
+      ",tv" 'cider-toggle-trace-var
+      ;; ",tn" 'cider-toggle-trace-ns
+      ",db" 'cider-debug-defun-at-point
+      ",de" 'spacemacs/cider-display-error-buffer
+      ",dv" 'cider-inspect
+      ",il" 'cider-inspect-last-result
+      ",is" 'cider-inspect-last-sexp
+      ",iD" 'cider-inspect-defun-at-point
+      ",bs" 'cider-browse-spec
+      ",bS" 'cider-browse-spec-all
+
+      ;; profile
+      ",p+" 'cider-profile-samples
+      ",pc" 'cider-profile-clear
+      ",pn" 'cider-profile-ns-toggle
+      ",ps" 'cider-profile-var-summary
+      ",pS" 'cider-profile-summary
+      ",pt" 'cider-profile-toggle
+      ",pv" 'cider-profile-var-profiled-p
+
+      ;; refactorings from clojure-mode
+      ",rc#" 'clojure-convert-collection-to-set
+      ",rc'" 'clojure-convert-collection-to-quoted-list
+      ",rc(" 'clojure-convert-collection-to-list
+      ",rc:" 'clojure-toggle-keyword-string
+      ",rc[" 'clojure-convert-collection-to-vector
+      ",rc{" 'clojure-convert-collection-to-map))
+  (defadvice! +cider-add-to-alist (orig-fn alist name version)
+    :around #'cider-add-to-alist
+    (if (not (= alist 'cider-jack-in-dependencies))
+        (apply orig-fn alist name version)
+      (cond ((string= name "com.cemerick/pomegranate")
+             (apply orig-fn alist "clj-commons/pomegranate" "1.2.1"))
+            (t (apply orig-fn alist name version)))))
   ;; When asking for a "matching" REPL (clj/cljs), and no matching REPL is found,
   ;; return any REPL that is there. This is so that cider-quit can be called
   ;; repeatedly to close all REPLs in a process. It also means that , s s will go
@@ -248,139 +366,8 @@ clojurescript-mode) of the current buffer."
        (t
         (cider--pprint-eval-form reg)))))
   (add-hook 'cider--debug-mode-hook 'my-cider-debug-toggle-insert-state)
-  ;; (dolist (mode '(clojure-mode clojurescript-mode cider-mode))
-  ;;   (eval-after-load mode
-  ;;     (font-lock-add-keywords
-  ;;      mode '(("(\\(fn\\)[\[[:space:]]"  ; anon funcs 1
-  ;;              (0 (progn (compose-region (match-beginning 1)
-  ;;                                      (match-end 1) "λ")
-  ;;                      nil)))
-  ;;             ("\\(#\\)("                ; anon funcs 2
-  ;;              (0 (progn (compose-region (match-beginning 1)
-  ;;                                      (match-end 1) "ƒ")
-  ;;                      nil)))
-  ;;             ("\\(#\\){"                 ; sets
-  ;;              (0 (progn (compose-region (match-beginning 1)
-  ;;                                      (match-end 1) "∈")
-  ;;                      nil)))))))
   (define-key cider-repl-mode-map (kbd "s-k") 'cider-quit)
-  (dolist (map (list clojure-mode-map
-                     clojurec-mode-map
-                     clojurescript-mode-map
-                     cider-repl-mode-map))
 
-    (evil-define-key* 'normal map
-                      ",qr" 'sesman-restart
-                      ",qq" 'sesman-quit
-                      ",ha" 'cider-apropos
-                      ",hc" 'cider-clojuredocs
-                      ",hw" 'cider-clojuredocs-web
-                      ",hg" 'cider-grimoire
-                      ",hh" 'cider-doc
-                      ",hj" 'cider-javadoc
-                      ",hn" 'cider-browse-ns
-
-                      ",e;" 'cider-eval-defun-to-comment
-                      ",eb" 'cider-eval-buffer
-                      ",ee" 'cider-eval-last-sexp
-                      ",ef" 'cider-eval-defun-at-point
-                      ",em" 'cider-macroexpand-1
-                      ",eM" 'cider-macroexpand-all
-                      ",eP" 'cider-pprint-eval-last-sexp
-                      ",er" 'cider-eval-region
-                      ",ew" 'cider-eval-last-sexp-and-replace
-
-                      ",="  'cider-format-buffer
-                      ",fb" 'cider-format-buffer
-
-                      ",gb" 'cider-pop-back
-                      ",gc" 'cider-classpath
-                      ",ge" 'cider-jump-to-compilation-error
-                      ",gn" 'cider-find-ns
-                      ",gN" 'cider-browse-ns-all
-                      ",gr" 'cider-find-resource
-                      ",gs" 'cider-browse-spec
-                      ",gS" 'cider-browse-spec-all
-                      ;; find deps function of current function
-                      ",gd" 'cider-find-dwim
-                      ;; ",gd" 'cider-xref-fn-deps-select
-                      ;; find current function usage
-                      ",gu" 'cider-xref-fn-refs-select
-
-                      ",'"  'cider-jack-in
-                      ",\"" 'cider-jack-in-clojurescript
-                      ",ja"  'cider-jack-in-clj&cljs
-                      ",sb" 'cider-load-buffer
-                      ",sB" 'spacemacs/cider-send-buffer-in-repl-and-focus
-                      ",sc" (if (eq map 'cider-repl-mode)
-                                'cider-repl-clear-buffer
-                              'cider-connect)
-                      ",sC" 'cider-find-and-clear-repl-output
-                      ",se" 'spacemacs/cider-send-last-sexp-to-repl
-                      ",sE" 'spacemacs/cider-send-last-sexp-to-repl-focus
-                      ",sf" 'spacemacs/cider-send-function-to-repl
-                      ",sF" 'spacemacs/cider-send-function-to-repl-focus
-                      ",si" 'cider-jack-in
-                      ",sI" 'cider-jack-in-clojurescript
-                      ",sn" 'spacemacs/cider-send-ns-form-to-repl
-                      ",sN" 'spacemacs/cider-send-ns-form-to-repl-focus
-                      ",so" 'cider-repl-switch-to-other
-                      ",sq" 'cider-quit
-                      ",sr" 'spacemacs/cider-send-region-to-repl
-                      ",sR" 'spacemacs/cider-send-region-to-repl-focus
-                      ",ss" (if (eq map 'cider-repl-mode)
-                                'cider-switch-to-last-clojure-buffer
-                              'cider-switch-to-repl-buffer)
-                      ",sx" 'cider-ns-refresh
-                      ",sX" 'cider-restart
-                      ",rn" 'cider-ns-reload
-                      ",rN" 'cider-ns-reload-all
-
-                      ",Te" 'cider-enlighten-mode
-                      ",Tf" 'spacemacs/cider-toggle-repl-font-locking
-                      ",Tp" 'spacemacs/cider-toggle-repl-pretty-printing
-                      ",Tt" 'cider-auto-test-mode
-
-                      ",ta" 'spacemacs/cider-test-run-all-tests
-                      ",tb" 'cider-test-show-report
-                      ",tl" 'spacemacs/cider-test-run-loaded-tests
-                      ",tn" 'spacemacs/cider-test-run-ns-tests
-                      ",tp" 'spacemacs/cider-test-run-project-tests
-                      ",tr" 'spacemacs/cider-test-rerun-failed-tests
-                      ",tt" 'spacemacs/cider-test-run-focused-test
-
-                      ",tv" 'cider-toggle-trace-var
-                      ;; ",tn" 'cider-toggle-trace-ns
-                      ",db" 'cider-debug-defun-at-point
-                      ",de" 'spacemacs/cider-display-error-buffer
-                      ",dv" 'cider-inspect
-                      ",il" 'cider-inspect-last-result
-                      ",is" 'cider-inspect-last-sexp
-                      ",iD" 'cider-inspect-defun-at-point
-                      ",bs" 'cider-browse-spec
-                      ",bS" 'cider-browse-spec-all
-
-                      ;; profile
-                      ",p+" 'cider-profile-samples
-                      ",pc" 'cider-profile-clear
-                      ",pn" 'cider-profile-ns-toggle
-                      ",ps" 'cider-profile-var-summary
-                      ",pS" 'cider-profile-summary
-                      ",pt" 'cider-profile-toggle
-                      ",pv" 'cider-profile-var-profiled-p
-
-                      ;; refactorings from clojure-mode
-                      ",rc#" 'clojure-convert-collection-to-set
-                      ",rc'" 'clojure-convert-collection-to-quoted-list
-                      ",rc(" 'clojure-convert-collection-to-list
-                      ",rc:" 'clojure-toggle-keyword-string
-                      ",rc[" 'clojure-convert-collection-to-vector
-                      ",rc{" 'clojure-convert-collection-to-map))
-
-  ;; (add-hook 'cider-connected-hook (lambda ()
-  ;;                                   (interactive)
-  ;;                                   (cider-load-file
-  ;;                                    (expand-file-name "lispy-clojure.clj" lispy-site-directory))))
   ;; cider-repl-mode only
   (define-key cider-repl-mode-map (kbd "C-c C-l") 'cider-repl-clear-buffer)
   (evil-define-key 'normal cider-repl-mode-map ",," 'cider-repl-handle-shortcut)
@@ -504,6 +491,11 @@ Put type and ns properties on the candidate"
   :init
   (evil-define-key 'normal clojure-mode-map (kbd ", ESC") 'hydra-cljr-help-menu/body)
   :config
+  ;; lispy-clojure file
+  (defadvice! +cljr--ensure-no-dashes-in-filename (orig-fn &rest args)
+    :around #'cljr--ensure-no-dashes-in-filename
+    (when (not (string-match-p "lispy-clojure" (buffer-file-name)))
+              (apply orig-fn args)))
   (setq cljr-cljc-clojure-test-declaration "[clojure.test :refer [deftest testing is are use-fixtures run-tests join-fixtures]]"
         cljr-cljs-clojure-test-declaration "[clojure.test :refer [deftest testing is are use-fixtures run-tests join-fixtures]]"
         cljr-clojure-test-declaration "[clojure.test :refer [deftest testing is are use-fixtures run-tests join-fixtures]]"
