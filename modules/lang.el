@@ -81,21 +81,17 @@
 ;; no real time syntax check
 (use-package lsp-mode
   :straight t
-  :init
-  (defun lsp-eslint-fix-before-save ()
-    (add-hook 'before-save-hook #'lsp-eslint-fix-all nil 'make-it-local))
-  (defun +lsp-organize-imports ()
-    (add-hook 'before-save-hook #'lsp-organize-imports nil 'make-it-local))
-  :hook (((json-mode dockerfile-mode shell-script-mode web-mode css-mode typescript-mode js2-mode rjsx-mode ;; clojure-mode clojurec-mode clojurescript-mode
-                     ) . lsp-deferred)
-         ;; ((typescript-mode js2-mode js-mode rjsx-mode) . +lsp-organize-imports)
-         ;; ((typescript-mode js2-mode js-mode rjsx-mode) . lsp-eslint-fix-before-save)
-         )
+  :commands (lsp-install-server)
   :custom
+  (lsp-session-file (concat spacemacs-cache-directory "lsp-session"))
+  (lsp-intelephense-storage-path (concat spacemacs-cache-directory "lsp-intelephense/"))
   ;; lsp-mode
+  (lsp-enable-folding nil)
+  (lsp-enable-text-document-color nil)
+  (lsp-enable-on-type-formatting nil)
+  (lsp-headerline-breadcrumb-enable nil)
   (lsp-diagnostics-provider :flymake)
   (lsp-before-save-edits nil)
-  (lsp-headerline-breadcrumb-enable nil)
   (lsp-file-watch-threshold 4000)
   (lsp-keep-workspace-alive nil)
   (lsp-enable-semantic-highlighting nil)
@@ -110,7 +106,6 @@
   (lsp-eslint-package-manager "yarn")
   (lsp-eslint-auto-fix-on-save t)
   (lsp-eslint-run "onSave")
-  (lsp-enable-on-type-formatting nil)
   (lsp-disabled-clients '(javascript-typescript-langserver))
   (lsp-clients-typescript-plugins (vector
                                    (list
@@ -119,10 +114,101 @@
   (lsp-eldoc-enable-hover nil)
   (lsp-signature-auto-activate t)
   (lsp-signature-doc-lines 1)
+  :hook (((json-mode dockerfile-mode shell-script-mode web-mode css-mode typescript-mode js2-mode rjsx-mode ;; clojure-mode clojurec-mode clojurescript-mode
+                     ) . lsp-deferred)
+         ;; ((typescript-mode js2-mode js-mode rjsx-mode) . +lsp-organize-imports)
+         ;; ((typescript-mode js2-mode js-mode rjsx-mode) . lsp-eslint-fix-before-save)
+         )
+  :init
+  (defun lsp-eslint-fix-before-save ()
+    (add-hook 'before-save-hook #'lsp-eslint-fix-all nil 'make-it-local))
+  (defun +lsp-organize-imports ()
+    (add-hook 'before-save-hook #'lsp-organize-imports nil 'make-it-local))
+  (defvar +lsp--default-read-process-output-max nil)
+  (defvar +lsp--default-gcmh-high-cons-threshold nil)
+  (defvar +lsp--optimization-init-p nil)
+
+  (define-minor-mode +lsp-optimization-mode
+    "Deploys universal GC and IPC optimizations for `lsp-mode' and `eglot'."
+    :global t
+    :init-value nil
+    (if (not +lsp-optimization-mode)
+        (setq-default read-process-output-max +lsp--default-read-process-output-max
+                      gcmh-high-cons-threshold +lsp--default-gcmh-high-cons-threshold
+                      +lsp--optimization-init-p nil)
+      ;; Only apply these settings once!
+      (unless +lsp--optimization-init-p
+        (setq +lsp--default-read-process-output-max
+              ;; DEPRECATED Remove check when 26 support is dropped
+              (if (boundp 'read-process-output-max)
+                  (default-value 'read-process-output-max))
+              +lsp--default-gcmh-high-cons-threshold
+              (default-value 'gcmh-high-cons-threshold))
+        ;; `read-process-output-max' is only available on recent development
+        ;; builds of Emacs 27 and above.
+        (setq-default read-process-output-max (* 1024 1024))
+        ;; REVIEW LSP causes a lot of allocations, with or without Emacs 27+'s
+        ;;        native JSON library, so we up the GC threshold to stave off
+        ;;        GC-induced slowdowns/freezes. Doom uses `gcmh' to enforce its
+        ;;        GC strategy, so we modify its variables rather than
+        ;;        `gc-cons-threshold' directly.
+        (setq-default gcmh-high-cons-threshold (* 2 +lsp--default-gcmh-high-cons-threshold))
+        (gcmh-set-high-threshold)
+        (setq +lsp--optimization-init-p t))))
   :config
-  ;; (defun +trucate-lsp-lv-message (func  &rest args)
-  ;;   (when (and (car args) (not (string= (car args) "any"))) (apply func args)))
-  ;; (advice-add #'lsp-lv-message :around '+trucate-lsp-lv-message)
+  (defadvice! +lsp--respect-user-defined-checkers-a (orig-fn &rest args)
+    "Ensure user-defined `flycheck-checker' isn't overwritten by `lsp'."
+    :around #'lsp-diagnostics-flycheck-enable
+    (if flycheck-checker
+        (let ((old-checker flycheck-checker))
+          (apply orig-fn args)
+          (setq-local flycheck-checker old-checker))
+      (apply orig-fn args)))
+
+  (add-hook! 'lsp-mode-hook
+    (defun +lsp-display-guessed-project-root-h ()
+      "Log what LSP things is the root of the current project."
+      ;; Makes it easier to detect root resolution issues.
+      (when-let (path (buffer-file-name (buffer-base-buffer)))
+        (if-let (root (lsp--calculate-root (lsp-session) path))
+            (lsp--info "Guessed project root is %s" (abbreviate-file-name root))
+          (lsp--info "Could not guess project root."))))
+    #'+lsp-optimization-mode)
+
+  (defvar +lsp-defer-shutdown 3
+    "If non-nil, defer shutdown of LSP servers for this many seconds after last
+workspace buffer is closed.
+
+This delay prevents premature server shutdown when a user still intends on
+working on that project after closing the last buffer, or when programmatically
+killing and opening many LSP/eglot-powered buffers.")
+
+  (defvar +lsp--deferred-shutdown-timer nil)
+  (defadvice! +lsp-defer-server-shutdown-a (orig-fn &optional restart)
+    "Defer server shutdown for a few seconds.
+This gives the user a chance to open other project files before the server is
+auto-killed (which is a potentially expensive process). It also prevents the
+server getting expensively restarted when reverting buffers."
+    :around #'lsp--shutdown-workspace
+    (if (or lsp-keep-workspace-alive
+            restart
+            (null +lsp-defer-shutdown)
+            (= +lsp-defer-shutdown 0))
+        (prog1 (funcall orig-fn restart)
+          (+lsp-optimization-mode -1))
+      (when (timerp +lsp--deferred-shutdown-timer)
+        (cancel-timer +lsp--deferred-shutdown-timer))
+      (setq +lsp--deferred-shutdown-timer
+            (run-at-time
+             (if (numberp +lsp-defer-shutdown) +lsp-defer-shutdown 3)
+             nil (lambda (workspace)
+                   (with-lsp-workspace workspace
+                     (unless (lsp--workspace-buffers workspace)
+                       (let ((lsp-restart 'ignore))
+                         (funcall orig-fn))
+                       (+lsp-optimization-mode -1))))
+             lsp--cur-workspace))))
+
   (add-to-list #'lsp-file-watch-ignored "[/\\\\]conflux-portal[/\\\]builds$")
   (add-to-list #'lsp-file-watch-ignored "[/\\\\]conflux-portal[/\\\]dist$")
   (add-to-list #'lsp-file-watch-ignored "[/\\\\]coverage$")

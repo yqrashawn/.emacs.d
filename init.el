@@ -9,7 +9,6 @@
 ;;                               (time-subtract after-init-time before-init-time)))
 ;;                      gcs-done)))
 ;; Always load newest byte code
-(setq load-prefer-newer t)
 (setq debug-on-error t)
 (setq debug-on-quit t)
 (setq gc-cons-threshold most-positive-fixnum)
@@ -198,23 +197,7 @@
   :straight t
   :commands (global-command-log-mode))
 
-;; (use-package zpresent)
-
 (global-set-key (kbd "M-0") 'delete-frame)
-
-(defun +setup-gc ()
-  (setq gc-cons-percentage 0.6)
-  ;; 100MB
-  (setq gc-cons-threshold (* 1024 1024 100)))
-
-(defun my-minibuffer-setup-hook ()
-  (setq gc-cons-threshold most-positive-fixnum))
-(defun my-minibuffer-exit-hook ()
-  (+setup-gc))
-(add-hook 'minibuffer-setup-hook #'my-minibuffer-setup-hook)
-(add-hook 'minibuffer-exit-hook #'my-minibuffer-exit-hook)
-(run-with-idle-timer 5 nil '+setup-gc)
-
 
 ;; (setq jit-lock-contextually 'syntax-driven
 ;;       jit-lock-context-time 2.0
@@ -223,14 +206,14 @@
 ;;       jit-lock-stealth-time nil
 ;;       jit-lock-stealth-load 200)
 
-(setq jit-lock-contextually 'syntax-driven
-      jit-lock-context-time 0.2
-      jit-lock-stealth-nice 0.1
-      ;; jit-lock-antiblink-grace 1
-      ;; jit-lock-chunk-size 1000
-      ;; jit-lock-defer-time 0.25
-      ;; jit-lock-stealth-time 0.25
-      jit-lock-stealth-load 300)
+;; (setq jit-lock-contextually 'syntax-driven
+;;       jit-lock-context-time 0.2
+;;       jit-lock-stealth-nice 0.1
+;;       ;; jit-lock-antiblink-grace 1
+;;       ;; jit-lock-chunk-size 1000
+;;       ;; jit-lock-defer-time 0.25
+;;       ;; jit-lock-stealth-time 0.25
+;;       jit-lock-stealth-load 300)
 
 ;; (setq font-lock-maximum-decoration nil)
 

@@ -142,26 +142,13 @@
             '(":\\(PROPERTIES\\|LOGBOOK\\):" . ":END:")
             '("#\\+BEGIN_SRC" . "#\\+END_SRC")
             '("#\\+BEGIN_EXAMPLE" . "#\\+END_EXAMPLE"))
-
-  ;; Enable either aspell, hunspell or enchant.
-  ;;   If no module flags are given, enable either aspell, hunspell or enchant
-  ;;     if their binary is found.
-  ;;   If one of the flags `+aspell', `+hunspell' or `+enchant' is given,
-  ;;     only enable that spell checker.
-  (pcase (cond ((executable-find "hunspell")  'hunspell)
-               ((executable-find "enchant-2") 'enchant))
-    (`hunspell
-     (setq ispell-program-name "hunspell"))
-
-    (`enchant
-     (setq ispell-program-name "enchant-2"))))
+  (setq ispell-program-name (or (executable-find "hunspell") (executable-find "enchant-2") (executable-find "aspell"))))
 
 (use-package spell-fu
   :straight t
-  ;; :hook ((text-mode yaml-mode conf-mode prog-mode) . spell-fu-mode)
-  :hook ((text-mode git-commit-mode) . spell-fu-mode)
+  :hook ((text-mode yaml-mode conf-mode prog-mode) . spell-fu-mode)
   :custom
-  (spell-fu-idle-delay 2)
+  (spell-fu-idle-delay 1)
   (spell-fu-directory (concat spacemacs-cache-directory "spell-fu" ".emacs-spell-fu"))
   :preface
   (defvar +spell-correct-interface #'+spell-correct-ivy-fn)
@@ -208,7 +195,9 @@
           font-lock-variable-name-face)))
     "Faces in certain major modes that spell-fu will not spellcheck.")
   (global-set-key [remap ispell-word] #'+spell/correct)
-  (setq ispell-personal-dictionary (concat user-emacs-directory "ispell-personal-dictionary"))
+  (define-key evil-normal-state-map "z7" #'+spell/add-word)
+  (setq ispell-personal-dictionary (concat user-emacs-directory "ispell-personal-dictionary")
+        ispell-dictionary "en_US")
   :config
   (defadvice! +spell--fix-face-detection-a (orig-fn &rest args)
     "`spell-fu--faces-at-point' uses face detection that won't penetrary

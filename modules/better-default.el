@@ -1718,7 +1718,7 @@ Info-mode:
   :custom
   (so-long-threshold 400)
   :init
-  (global-so-long-mode 1)
+  (run-with-idle-timer 10 nil #'global-so-long-mode 1)
   (add-hook 'find-file-hook
             (defun my-find-file-care-about-long-lines ()
               (save-excursion
@@ -1816,12 +1816,13 @@ Info-mode:
 (yq/get-modules "spell.el")
 
 (use-package gcmh
-  :straight (:host gitlab :repo "yantar92/gcmh")
+  :straight t
   :diminish gcmh-mode
   :custom
-  (gcmh-gc-safe-time 0.2)
+  (gcmh-idle-delay 5)
+  (gcmh-high-cons-threshold (* 16 1024 1024))
   :init
-  (run-with-idle-timer 5 nil (defl () (gcmh-mode 1))))
+  (run-with-idle-timer 2 nil (defl () (gcmh-mode 1))))
 
 (use-package whitespace-cleanup-mode
   :straight t

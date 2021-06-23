@@ -1,6 +1,6 @@
 (menu-bar-mode -1)
 (tool-bar-mode -1)
 (scroll-bar-mode -1)
-(setq gc-cons-threshold 134217728)
-(setq gc-cons-percentage 0.6)
+(setq gc-cons-threshold most-positive-fixnum)
 (setq comp-speed 2)
+(setq load-prefer-newer t)
