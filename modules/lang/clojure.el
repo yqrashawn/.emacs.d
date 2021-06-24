@@ -85,23 +85,32 @@
 
 (use-package cider
   :straight (:host :github :repo "clojure-emacs/cider")
-  :hook (clojure-mode clojurescript-mode clojurec-mode)
+  :hook ((clojure-mode clojurescript-mode clojurec-mode) . cider-mode)
   :custom
+  (cider-inspector-page-size 64)
+  (cider-inspector-max-atom-length 1000)
+  (cider-inspector-max-coll-size 20)
+  (cider-default-cljs-repl 'shadow)
   (cider-preferred-build-tool 'clojure-cli)
   (nrepl-log-messages t)
   (cider-completion-annotations-include-ns 'always)
   (cider-connection-message-fn 'cider-random-tip)
   (cider-eldoc-display-context-dependent-info t)
   (cider-print-fn 'fipp)
+  (cider-print-quota (* 1024 1024 10))  ;; 10MB
+  (cider-print-buffer-size (* 1024 4))
+  (cider-debug-display-locals t)
   (cider-special-mode-truncate-lines nil)
   (cider-debug-display-locals t)
   (cider-repl-wrap-history t)
   (cider-repl-pop-to-buffer-on-connect nil)
   (cider-stacktrace-default-filters '(tooling dup))
   (cider-repl-display-in-current-window t)
-  (cider-save-file-on-load 'prompt)
-  ;; (cider-font-lock-dynamically '(macro core function var deprecated))
-  (cider-font-lock-dynamically nil)
+  (cider-save-file-on-load nil)
+  (cider-ns-save-files-on-refresh nil)
+  (nrepl-sync-request-timeout 3)
+  (cider-font-lock-dynamically '(macro core function var deprecated))
+  ;; (cider-font-lock-dynamically nil)
   ;; don't kill the REPL when printing large data structures
   (cider-print-options '(("length" 80) ("level" 20) ("right-margin" 80)))
   (cider-auto-select-error-buffer nil)
@@ -115,7 +124,7 @@
   (cider-repl-history-display-duplicates nil)
   (cider-repl-history-highlight-inserted-item 'pulse)
   (cider-repl-history-file (concat spacemacs-cache-directory "cider-repl-history"))
-  (nrepl-hide-special-buffers t)
+  (nrepl-hide-special-buffers nil)
   :init
   ;; (customize-set-variable 'cider-default-repl-command 'lein)
   (spacemacs|add-company-backends
