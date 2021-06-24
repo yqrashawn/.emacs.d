@@ -1662,27 +1662,9 @@ Info-mode:
 
 (use-package terminal-here
   :straight t
-  :commands (terminal-here terminal-here-launch terminal-here-project-launch)
-  :config
-  (defun terminal-here-default-terminal-command (_dir)
-    "Pick a good default command to use for DIR."
-    (cond
-     ((eq system-type 'darwin)
-      (list
-       "/Applications/Alacritty.app/Contents/MacOS/alacritty"
-       ;; "-e"
-       ;; "setup-emacs-alacritty"
-       "-t"
-       "emacs-temp-alacritty"
-       "--working-directory"
-       (expand-file-name _dir)))
-
-     ;; From http://stackoverflow.com/a/13509208/874671
-     ((memq system-type '(windows-nt ms-dos cygwin))
-      (list "cmd.exe" "/C" "start" "cmd.exe"))
-
-     ;; Probably X11!
-     (t '("x-terminal-emulator")))))
+  :commands (terminal-here terminal-here-project-launch)
+  :custom
+  (terminal-here-mac-terminal-command 'kitty))
 
 ;; echo window shadow <cgwindowid> 0 | nc 127.0.0.1 5050
 
