@@ -164,7 +164,7 @@ Requires smartparens because all movement is done using `sp-forward-symbol'."
           cider-repl-mode
           clojurescript-mode) . lispy-mode)
   :custom
-  (lispy-close-quotes-at-end-p t)
+  (lispy-close-quotes-at-end-p nil)
   (lispy-eval-display-style 'overlay)
   (lispy-visit-method 'projectile)
   (lispy-safe-copy t)
