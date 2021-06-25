@@ -51,7 +51,28 @@
   (spacemacs/set-leader-keys "gs" #'magit-status)
   (spacemacs/set-leader-keys "gS" (defl (setq current-prefix-arg '(1))
                                     (call-interactively #'magit-status)))
+  (defun th/magit-eldoc-for-commit (_callback)
+    (let ((commit (magit-commit-at-point)))
+      (when commit
+        (with-temp-buffer
+          (magit-git-insert "show"
+                            "--format=format:%s (%cn<%ce> %cr)"
+                            (format "--stat=%d" (window-width))
+                            commit)
+          (goto-char (point-min))
+          (put-text-property (point-min)
+                             (line-end-position)
+                             'face 'bold)
+          (buffer-string)))))
   :config
+  (defun th/magit-eldoc-setup ()
+    (add-hook 'eldoc-documentation-functions
+              #'th/magit-eldoc-for-commit nil t)
+    (eldoc-mode 1))
+  (add-hook 'magit-status-mode-hook #'th/magit-eldoc-setup)
+  (add-hook 'magit-log-mode-hook #'th/magit-eldoc-setup)
+  (eldoc-add-command 'magit-next-line)
+  (eldoc-add-command 'magit-previous-line)
   (transient-define-argument magit-merge:--strategy-option ()
     :description "Strategy Option"
     :class 'transient-option
