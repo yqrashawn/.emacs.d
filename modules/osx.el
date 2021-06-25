@@ -20,7 +20,7 @@
 (use-package osx-trash
   :straight t
   :if (and (spacemacs/system-is-mac)
-	   (not (boundp 'mac-system-move-file-to-trash-use-finder)))
+           (not (boundp 'mac-system-move-file-to-trash-use-finder)))
   :init (osx-trash-setup))
 
 (use-package pbcopy

@@ -497,47 +497,27 @@ repository, then the corresponding root is used instead."
   (dired-dwim-target t)
   :init
   (setq insert-directory-program "/usr/local/bin/gls")
-  ;; https://www.emacswiki.org/emacs/EmacsSession which is easier to setup than "desktop.el"
-  ;; See `session-globals-regexp' in "session.el".
-  ;; If the variable is named like "*-history", it will be automaticlaly saved.
-  (defvar my-dired-directory-history nil "Recent directories accessed by dired.")
-  (defvar binary-file-name-regexp "\\.\\(avi\\|pdf\\|mp[34g]\\|mkv\\|exe\\|3gp\\|rmvb\\|rm\\)$"
+  (defvar +binary-file-name-regexp "\\.\\(avi\\|pdf\\|mp[34g]\\|mkv\\|exe\\|3gp\\|rmvb\\|rm\\)$"
     "Is binary file name?")
-  ;; avoid accidently edit huge media file in dired
-  (defadvice dired-find-file (around dired-find-file-hack activate)
+  (defadvice! +dired-find-file (orig)
+    :around #'dired-find-file
     (let* ((file (dired-get-file-for-visit)))
-      (cond
-       ((string-match-p binary-file-name-regexp file)
-        ;; confirm before open big file
-        (if (yes-or-no-p "Edit binary file?") ad-do-it))
-       (t
-        (when (file-directory-p file)
-          (add-to-list 'my-dired-directory-history file))
-        ad-do-it))))
-  (defun my-dired-frame (directory)
-    "Open up a dired frame which closes on exit."
-    (interactive)
-    (switch-to-buffer (dired directory))
-    (local-set-key
-     (kbd "C-x C-c")
-     (lambda ()
-       (interactive)
-       (kill-this-buffer)
-       (save-buffers-kill-terminal 't))))
+      (cond ((string-match-p +binary-file-name-regexp file)
+             ;; confirm before open big file
+             (when (yes-or-no-p "Edit binary file?") (call-interactively orig))))))
   :config
   (require 'dired-aux)
   (setq dired-vc-rename-file t
-        dired-create-destination-dirs 'always)
+        dired-create-destination-dirs 'always
+        dired-isearch-filenames 'dwim)
   (add-to-list 'dired-compress-file-suffixes '("\\.zip\\'" ".zip" "unzip"))
-  (add-hook 'dired-mode-hook #'hl-line-mode)
+  (add-hook! dired-mode #'hl-line-mode)
   (evil-define-key 'normal dired-mode-map (kbd ";") 'avy-goto-subword-1)
   (evil-define-key 'normal dired-mode-map (kbd "g") nil)
   (evil-define-key 'normal dired-mode-map (kbd "gg") #'evil-goto-first-line)
   (evil-define-key 'normal dired-mode-map (kbd "gr") #'revert-buffer)
   (evil-define-key 'normal dired-mode-map (kbd "gG") #'dired-do-chgrp)
   (evil-define-key 'normal dired-mode-map (kbd "G") #'evil-goto-line)
-  ;; search file name only when focus is over file
-  (setq dired-isearch-filenames 'dwim)
   (defun ora-ediff-files ()
     (interactive)
     (let ((files (dired-get-marked-files))
@@ -560,21 +540,12 @@ repository, then the corresponding root is used instead."
   (evil-define-key 'normal dired-mode-map "e" 'ora-ediff-files)
   (evil-define-key 'normal dired-mode-map "\\" 'dired-do-async-shell-command)
   (put 'dired-find-alternate-file 'disabled nil)
-  (add-hook 'dired-mode-hook
+  (add-hook! dired-mode
             (lambda ()
               (evil-define-key 'normal dired-mode-map (kbd "h")
                 (lambda () (interactive) (find-alternate-file "..")))))
-  (defadvice dired-advertised-find-file (around dired-subst-directory activate)
-    "Replace current buffer if file is a directory."
-    (interactive)
-    (let ((orig (current-buffer))
-          (filename (dired-get-filename)))
-      ad-do-it
-      (when (and (file-directory-p filename)
-                 (not (eq (current-buffer) orig)))
-        (kill-buffer orig))))
   (evil-define-key 'normal dired-mode-map
-    "l" 'dired-find-file
+    "l" #'dired-find-file
     "s" yq-s-map
     "f" #'dired-narrow-fuzzy))
 

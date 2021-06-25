@@ -281,6 +281,7 @@ file stored in the cache directory and `nil' to disable auto-saving.")
 (use-feature files
   :custom
   (backup-directory-alist `(("." . "~/.emacs.d/.cache/.backups")))
+  (trash-directory (concat spacemacs-cache-directory "trash"))
   (version-control t)
   (backup-by-copying t)
   (backup-by-copying-when-mismatch t)
@@ -680,7 +681,7 @@ If the universal prefix argument is used then kill the buffer too."
   (recentf-max-saved-items 2000)
   (recentf-auto-cleanup 300)
   :init
-  (add-hook 'delete-terminal-functions (defl (a) (ignore-errors (recentf-save-list))))
+  (add-hook! 'delete-terminal-functions (lambda (&rest a) (recentf-save-list)))
   (recentf-mode 1)
   :config
   (run-with-idle-timer 60 t 'recentf-save-list)
