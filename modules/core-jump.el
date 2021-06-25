@@ -74,5 +74,4 @@ sets `spacemacs-jump-handlers' in buffers of that mode."
 (with-eval-after-load 'evil
   (evil-set-command-property 'spacemacs/jump-to-definition :jump t))
 
-
 (provide 'core-jump)
