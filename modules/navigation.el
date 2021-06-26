@@ -1294,7 +1294,9 @@ first."))
   :after outline
   :bind (:map outline-minor-mode-map
               ([tab] . bicycle-cycle)
-              ([S-tab] . bicycle-cycle-global)))
+              ([S-tab] . bicycle-cycle)
+              ("C-i" . bicycle-cycle)
+              ("<backtab>" . bicycle-cycle-global)))
 
 (use-package find-file-in-project
   :straight t
@@ -1313,8 +1315,6 @@ first."))
   :config
   (with-eval-after-load 'outline-minor-faces
     (add-hook 'prot-outline-minor-mode-enter-hook #'outline-minor-faces-add-font-lock-keywords)))
-
-
 
 (use-package 'selectrum
   :straight t
@@ -1360,7 +1360,6 @@ first."))
     (define-key map (kbd "M-m") 'selectrum-quick-select)
     ;; Return the map.
     map))
-
 
 (use-package better-jumper
   :straight t

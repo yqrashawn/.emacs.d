@@ -462,8 +462,7 @@ file stored in the cache directory and `nil' to disable auto-saving.")
   (remove-hook 'kill-buffer-query-functions 'server-kill-buffer-query-function))
 (add-hook 'server-visit-hook 'server-remove-kill-buffer-hook)
 
-(add-hook 'prog-mode-hook #'hs-minor-mode)
-(add-hook 'prog-mode-hook #'outline-minor-mode)
+(add-hook! prog-mode #'hs-minor-mode #'outline-minor-mode)
 (add-hook 'org-mode-hook #'hs-minor-mode)
 
 
