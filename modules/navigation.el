@@ -421,10 +421,10 @@ repository, then the corresponding root is used instead."
 (use-package projectile
   :straight t
   :defer t
+  :hook (after-init . projectile-mode)
   :diminish projectile-mode
   :init
-  (projectile-mode +1)
-  (setq projectile-project-search-path '("~/workspace/" "~/.emacs.d/straight/repos/"))
+  ;(setq projectile-project-search-path '("~/workspace/" "~/.emacs.d/straight/repos/"))
   (setq projectile-completion-system 'ivy)
   :config
   (defun yank-file-relative-path ()
@@ -456,8 +456,9 @@ repository, then the corresponding root is used instead."
 (use-package counsel-projectile
   :straight t
   :defer t
+  :hook (projectile-mode . counsel-projectile-mode)
   :init
-  (counsel-projectile-mode +1)
+  ;; (counsel-projectile-mode +1)
   (spacemacs/set-leader-keys "p" nil)
   (spacemacs/set-leader-keys "pb" 'counsel-projectile-switch-to-buffer)
   (define-key yq-s-map "B" 'counsel-projectile-switch-to-buffer)

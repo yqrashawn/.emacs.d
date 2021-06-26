@@ -109,6 +109,7 @@
   :init
   (benchmark-init/activate))
 
+(setq native-comp-async-report-warnings-errors nil)
 (defun yq/get-modules (module-dir)
   (let* ((el-file-path (concat user-emacs-directory "modules/" module-dir))
          (elc-file-path (concat el-file-path "c")))
@@ -150,6 +151,8 @@
 
 (eval-when-compile
   (require 'el-patch))
+
+(setq-default evil-want-keybinding nil)
 
 (yq/get-modules "core-display-init.el")
 (yq/get-modules "evil-core.el")
@@ -198,22 +201,6 @@
   :commands (global-command-log-mode))
 
 (global-set-key (kbd "M-0") 'delete-frame)
-
-;; (setq jit-lock-contextually 'syntax-driven
-;;       jit-lock-context-time 2.0
-;;       jit-lock-chunk-size 1000
-;;       jit-lock-defer-time 0
-;;       jit-lock-stealth-time nil
-;;       jit-lock-stealth-load 200)
-
-;; (setq jit-lock-contextually 'syntax-driven
-;;       jit-lock-context-time 0.2
-;;       jit-lock-stealth-nice 0.1
-;;       ;; jit-lock-antiblink-grace 1
-;;       ;; jit-lock-chunk-size 1000
-;;       ;; jit-lock-defer-time 0.25
-;;       ;; jit-lock-stealth-time 0.25
-;;       jit-lock-stealth-load 300)
 
 ;; (setq font-lock-maximum-decoration nil)
 
