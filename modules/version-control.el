@@ -118,7 +118,7 @@
 
   (defun +marsam/add-pull-request-refs ()
     (dolist (remote (magit-list-remotes))
-            (marsam/add-pull-request-refs remote)))
+      (marsam/add-pull-request-refs remote)))
   ;; (add-hook 'magit-mode-hook 'marsam/add-pull-request-refs)
   (add-hook 'magit-mode-hook '+marsam/add-pull-request-refs)
   (let ((maps (list magit-status-mode-map magit-log-mode-map magit-reflog-mode-map magit-diff-mode-map)))
@@ -154,16 +154,16 @@ requiring confirmation."
        (list (if (or current-prefix-arg (not default))
                  (el-patch-swap
                    (magit-completing-read "Stage file" choices
-                                      nil t nil nil default)
+                                          nil t nil nil default)
                    (progn (set-transient-map yq-s-map) nil))
-             default))))
+               default))))
     (el-patch-swap
       (magit-with-toplevel
         (magit-stage-1 nil (list file)))
       (if (and (eq (length (list file)) 1) (eq (car (list file)) nil))
-         nil
-       (magit-with-toplevel
-         (magit-stage-1 nil (list file)))))))
+          nil
+        (magit-with-toplevel
+          (magit-stage-1 nil (list file)))))))
 
 
 (use-package evil-magit :straight t :after magit :disabled t)

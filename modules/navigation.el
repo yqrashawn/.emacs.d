@@ -14,9 +14,9 @@
 
 (use-package ivy
   :straight (:host github :repo "abo-abo/swiper" :branch "master"
-                   :files
-                   (:defaults (:exclude "swiper.el" "counsel.el" "ivy-hydra.el") "doc/ivy-help.org")
-                   :upstream (:host github :repo "abo-abo/swiper"))
+             :files
+             (:defaults (:exclude "swiper.el" "counsel.el" "ivy-hydra.el") "doc/ivy-help.org")
+             :upstream (:host github :repo "abo-abo/swiper"))
   :diminish ivy-mode
   :defer t
   :custom
@@ -214,7 +214,7 @@
                   (select-window (active-minibuffer-window)))))))))
 
     (defhydra hydra-ivy (:hint nil
-                               :color pink)
+                         :color pink)
       "
 ^ ^ ^ ^ ^ ^ | ^Call^      ^ ^  | ^Cancel^ | ^Options^ | Action _w_/_s_/_a_: %-14s(ivy-action-name)
 ^-^-^-^-^-^-+-^-^---------^-^--+-^-^------+-^-^-------+-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^---------------------------
@@ -256,8 +256,8 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
 
 (use-package swiper
   :straight (:host github :repo "abo-abo/swiper" :branch "master"
-                   :files ("swiper.el")
-                   :upstream (:host github :repo "abo-abo/swiper"))
+             :files ("swiper.el")
+             :upstream (:host github :repo "abo-abo/swiper"))
   :defer t
   :bind
   ("C-s" . #'swiper-isearch)
@@ -304,26 +304,8 @@ _h_ ^+^ _l_ | _d_one      ^ ^  |          | _m_: matcher %-5s(ivy--matcher-desc)
   (define-key yq-s-map "l" 'spacemacs/counsel-jump-in-buffer)
   (define-key yq-s-map "j" #'counsel-recentf)
   (global-set-key (kbd "C-x C-r") #'counsel-recentf)
-
-  (defun +counsel-fzf-rg-files (&optional input dir)
-    "Run `fzf' in tandem with `ripgrep' to find files in the
-present directory.  If invoked from inside a version-controlled
-repository, then the corresponding root is used instead."
-    (interactive)
-    (let* ((vc (or (ignore-errors (vc-root-dir)) default-directory))
-           (process-environment
-            (if (eq (expand-file-name vc) (expand-file-name "~/"))
-                (cons (concat "FZF_DEFAULT_COMMAND=rg -Sn --color never --files --no-follow --hidden -uu") process-environment)
-              (cons (concat "FZF_DEFAULT_COMMAND=rg -Sn --color never --files --no-follow --hidden")
-                    process-environment))))
-      (if dir
-          (counsel-fzf input dir)
-        (counsel-fzf input vc))))
-
-  ;; (define-key yq-s-map "m" #'+counsel-fzf-rg-files)
-  (spacemacs/set-leader-keys "sm" (lambda () (interactive) (let ((current-prefix-arg '(1))) (call-interactively 'counsel-fzf))))
   (define-key yq-s-map (kbd "SPC") 'counsel-M-x)
-  (define-key evil-normal-state-map (kbd "M-y" ) 'counsel-yank-pop)
+  (define-key evil-normal-state-map (kbd "M-y") 'counsel-yank-pop)
   :config
   (setq counsel-grep-base-command
         "rg -i -M 120 --no-heading --line-number --color never %s %s")

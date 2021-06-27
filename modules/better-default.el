@@ -524,7 +524,6 @@ If the universal prefix argument is used then kill the buffer too."
       (kill-buffer-and-window)
     (delete-window)))
 
-(get-buffer-window "*Help*")
 (use-package mwim
   :straight t
   :commands (mwim-beginning-of-code-or-line mwim-end-of-code-or-line)

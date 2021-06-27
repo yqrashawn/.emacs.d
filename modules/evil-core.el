@@ -115,7 +115,7 @@
   (customize-set-variable 'evil-ex-substitute-global t)
   (customize-set-variable 'evil-undo-system 'undo-fu)
   (setq local-function-key-map (delq '(kp-tab . [9]) local-function-key-map))
-  (setq evil-want-find-undo t)
+  (setq evil-want-fine-undo t)
   (setq evil-insert-state-cursor '(box "green"))
   (evil-mode 1)
   :config
