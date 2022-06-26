@@ -1,3 +1,5 @@
+Migrated to https://github.com/yqrashawn/yqdotfiles/tree/master/.doom.d
+
 * .emasc.d
 My personal emacs configuration. Using [[https://github.com/raxod502/straight.el][straight.el]] as package manager.
 
